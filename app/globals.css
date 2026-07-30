@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+/* ===== פונט פולין (Polin) - הוטמע מקבצי הלקוח, 3 משקלים ===== */
+@font-face {
+  font-family: "Polin";
+  src: url("/fonts/Polin-Light.woff2") format("woff2"),
+       url("/fonts/Polin-Light.woff") format("woff"),
+       url("/fonts/Polin-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Polin";
+  src: url("/fonts/Polin-Regular.woff2") format("woff2"),
+       url("/fonts/Polin-Regular.woff") format("woff"),
+       url("/fonts/Polin-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Polin";
+  src: url("/fonts/Polin-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================================
+   טוקנים - זמניים! להחלפה כשיגיעו הצבעים/פונטים מדניאל
+   כל הצבעים/פונטים דרך המשתנים האלה בלבד - לא hardcoded בקומפוננטות
+   ========================================================= */
+:root {
+  /* צבעים - פלייסהולדר ניטרלי בהשראת שיש/עץ, להחלפה */
+  --color-bg: #faf9f7;
+  --color-fg: #1c1a17;
+  --color-primary: #6b5d4f;
+  --color-accent: #a68a64;
+  --color-muted: #8a8377;
+  --color-border: #e4e0d9;
+
+  /* צבעים אמיתיים מהפיגמה (Header) - מאומת ב-2026-07-30 */
+  --color-header-bg: #242323; /* פחם כהה - רקע ה-Header */
+  --color-gold: #ddb143; /* זהב/חרדל - כפתור "לחיוג מהיר" */
+  --color-gold-text: #000000; /* טקסט על גבי הזהב */
+
+  /* טיפוגרפיה - פונט פולין (Polin) מהלקוח */
+  --font-display: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
+  --font-body: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
+
+  /* ===== סקאלת גדלי טקסט - נשאבה מהפיגמה (14/16/40) =====
+     ב-rem (÷16). להוסיף גדלים כשיופיעו בעיצוב - לא להמציא חדשים */
+  --fs-sm: 0.875rem;   /* 14px - טקסט משני/עינית (Light) */
+  --fs-base: 1rem;     /* 16px - גוף טקסט + ניווט */
+  --fs-h1: 2.5rem;     /* 40px - כותרת ראשית (Bold) */
+
+  /* גובה שורה - ב-em בלבד (חוק פיתוח). 1.11 מהפיגמה */
+  --lh-tight: 1.11em;
+  --lh-body: 1.6em;
+
+  /* ===== סקאלת ריווחים אחידה - חוזרת בכל האתר =====
+     בסיס 8px. אופקי ב-vw דרך side-padding, פנימי ברם */
+  --space-1: 0.5rem;   /* 8 */
+  --space-2: 1rem;     /* 16 */
+  --space-3: 1.5rem;   /* 24 */
+  --space-4: 2rem;     /* 32 */
+  --space-5: 2.5rem;   /* 40 */
+
+  /* ===== אנימציות - משך + easing אחידים בכל האתר ===== */
+  --dur: 0.25s;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* חוקי בניה קבועים - סטודיו רזניק */
+  --side-padding: 5vw;
+  --section-min-height: 80vh;
+  --header-height: 4.5rem; /* 72px - גובה בר הניווט */
+}
+
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+}
+
+/* ===== חוק: רוחב מלא, בלי max-width ===== */
+.container-full {
+  width: 100%;
+  padding-inline: var(--side-padding);
+}
+
+/* ===== חוק: כל סקשן לפחות 80vh ===== */
+.section {
+  min-height: var(--section-min-height);
+  width: 100%;
+  padding-inline: var(--side-padding);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* גרסה לסקשנים שלא צריכים ריכוז אנכי (למשל גלריה ארוכה) */
+.section-auto {
+  min-height: var(--section-min-height);
+  width: 100%;
+  padding-inline: var(--side-padding);
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   HEADER - בר ניווט ראשי
+   מבוסס פיגמה (פחם/זהב) + מפת אתר (dropdown למטבחים)
+   ========================================================= */
+.header {
+  width: 100%;
+  padding-block: var(--space-2);
+}
+
+.header__bar {
+  background: var(--color-header-bg);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2vw;
+  height: var(--header-height);
+  padding-inline: 1.5vw;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 55%;
+}
+.header__logo-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8vw;
+}
+
+.header__item--has-menu {
+  position: relative;
+}
+
+.header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: #fff;
+  font-size: var(--fs-base);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+.header__link:hover {
+  color: var(--color-gold);
+}
+
+.header__caret {
+  width: 0;
+  height: 0;
+  border-inline: 0.25rem solid transparent;
+  border-top: 0.3rem solid currentColor;
+  transition: transform var(--dur) var(--ease);
+}
+.header__item--has-menu:hover .header__caret {
+  transform: rotate(180deg);
+}
+
+/* Dropdown - מטבחים */
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  min-width: 14rem;
+  background: var(--color-header-bg);
+  border-radius: 0.75rem;
+  padding: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.5rem);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease),
+    visibility var(--dur) var(--ease);
+  z-index: 50;
+}
+.header__dropdown.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.header__dropdown-link {
+  color: #fff;
+  font-size: var(--fs-base);
+  line-height: var(--lh-tight);
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.header__dropdown-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-gold);
+}
+
+/* CTA - כפתור לחיוג מהיר */
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: var(--color-gold);
+  color: var(--color-gold-text);
+  border-radius: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: var(--fs-base);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.header__cta:hover {
+  opacity: 0.9;
+}
+
+/* מובייל - נטפל בו יחד בהמשך. כרגע מסתירים ניווט מתחת ל-900px */
+@media (max-width: 900px) {
+  .header__nav {
+    display: none;
+  }
+}
