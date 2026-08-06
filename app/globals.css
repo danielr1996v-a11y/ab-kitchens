@@ -32,13 +32,13 @@
    כל הצבעים/פונטים דרך המשתנים האלה בלבד - לא hardcoded בקומפוננטות
    ========================================================= */
 :root {
-  /* צבעים - פלייסהולדר ניטרלי בהשראת שיש/עץ, להחלפה */
-  --color-bg: #faf9f7;
-  --color-fg: #1c1a17;
-  --color-primary: #6b5d4f;
-  --color-accent: #a68a64;
-  --color-muted: #8a8377;
-  --color-border: #e4e0d9;
+  /* צבעים - בסיס לבן נקי וגוונים ניטרליים.
+     ללא גוונים חמים/חומים - הצבע היחיד באתר הוא הזהב של המותג. */
+  --color-bg: #ffffff;
+  --color-fg: #1a1a1a;
+  --color-muted: #767676;
+  --color-border: #e7e7e7;
+  --color-surface: #f0f0f0; /* רקע סקשן אודות, לפי הפיגמה */
 
   /* צבעים אמיתיים מהפיגמה (Header) - מאומת ב-2026-07-30 */
   --color-header-bg: #242323; /* פחם כהה - רקע ה-Header */
@@ -53,7 +53,9 @@
      ב-rem (÷16). להוסיף גדלים כשיופיעו בעיצוב - לא להמציא חדשים */
   --fs-sm: 0.875rem;   /* 14px - טקסט משני/עינית (Light) */
   --fs-base: 1rem;     /* 16px - גוף טקסט + ניווט */
+  --fs-sub: clamp(1.125rem, 1.5vw, 1.5rem); /* 18-24px - תת-כותרת */
   --fs-h1: 2.5rem;     /* 40px - כותרת ראשית (Bold) */
+  --fs-display: clamp(1.5rem, 3vw, 3.25rem); /* כותרת גדולה רספונסיבית - 3vw */
 
   /* גובה שורה - ב-em בלבד (חוק פיתוח). 1.11 מהפיגמה */
   --lh-tight: 1.11em;
@@ -66,13 +68,19 @@
   --space-3: 1.5rem;   /* 24 */
   --space-4: 2rem;     /* 32 */
   --space-5: 2.5rem;   /* 40 */
+  --space-6: 4rem;     /* 64 */
+  --space-7: 5.5rem;   /* 88 */
 
   /* ===== אנימציות - משך + easing אחידים בכל האתר ===== */
   --dur: 0.25s;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  /* תנועה איטית ורכה - למעברים שאמורים להיות כמעט בלתי מורגשים */
+  --dur-slow: 0.9s;
+  --ease-soft: cubic-bezier(0.32, 0, 0.16, 1);
 
   /* חוקי בניה קבועים - סטודיו רזניק */
   --side-padding: 5vw;
+  --section-gap: 5vw; /* ריווח אנכי בין סקשנים */
   --section-min-height: 80vh;
   --header-height: 4.5rem; /* 72px - גובה בר הניווט */
 }
@@ -138,15 +146,19 @@ h1, h2, h3, h4 {
 
 /* =========================================================
    HEADER - בר ניווט ראשי
-   מבוסס פיגמה (פחם/זהב) + מפת אתר (dropdown למטבחים)
+   דביק: נשאר במקומו בגלילה. מרחף מעל תמונת ה-Hero לפי העיצוב.
    ========================================================= */
 .header {
   width: 100%;
   padding-block: var(--space-2);
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 100;
 }
 
 .header__bar {
-  background: var(--color-header-bg);
+  background: #fff;
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -154,13 +166,21 @@ h1, h2, h3, h4 {
   gap: 2vw;
   height: var(--header-height);
   padding-inline: 1.5vw;
+  /* צל עדין מאוד - מפריד את הבר הלבן מהתמונה שמתחתיו */
+  box-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.4s var(--ease-soft);
+}
+
+/* בגלילה הצל מעמיק קלות - רמז שהבר מרחף מעל התוכן */
+.header--scrolled .header__bar {
+  box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.09);
 }
 
 .header__logo {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  height: 55%;
+  height: 72%;
 }
 .header__logo-img {
   height: 100%;
@@ -182,11 +202,12 @@ h1, h2, h3, h4 {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  color: #fff;
+  color: var(--color-fg);
   font-size: var(--fs-base);
+  font-weight: 400; /* Regular */
   line-height: var(--lh-tight);
   white-space: nowrap;
-  transition: color var(--dur) var(--ease);
+  transition: color 0.4s var(--ease-soft);
 }
 .header__link:hover {
   color: var(--color-gold);
@@ -203,43 +224,6 @@ h1, h2, h3, h4 {
   transform: rotate(180deg);
 }
 
-/* Dropdown - מטבחים */
-.header__dropdown {
-  position: absolute;
-  top: calc(100% + 0.75rem);
-  right: 0;
-  min-width: 14rem;
-  background: var(--color-header-bg);
-  border-radius: 0.75rem;
-  padding: var(--space-1);
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-0.5rem);
-  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease),
-    visibility var(--dur) var(--ease);
-  z-index: 50;
-}
-.header__dropdown.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-.header__dropdown-link {
-  color: #fff;
-  font-size: var(--fs-base);
-  line-height: var(--lh-tight);
-  padding: 0.625rem 0.75rem;
-  border-radius: 0.5rem;
-  white-space: nowrap;
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.header__dropdown-link:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-gold);
-}
 
 /* CTA - כפתור לחיוג מהיר */
 .header__cta {
@@ -251,6 +235,7 @@ h1, h2, h3, h4 {
   border-radius: 0.5rem;
   padding: 0.625rem 1.25rem;
   font-size: var(--fs-base);
+  font-weight: 700; /* Bold */
   line-height: var(--lh-tight);
   white-space: nowrap;
   flex-shrink: 0;
@@ -265,4 +250,1981 @@ h1, h2, h3, h4 {
   .header__nav {
     display: none;
   }
+}
+
+/* =========================================================
+   HERO - באנר ראשי, ה-Header מרחף מעליו
+   תמונה ברוחב מלא, שומרת על פרופורציית העיצוב
+   ========================================================= */
+.hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1417 / 589; /* פרופורציית התמונה המקורית מהעיצוב */
+  overflow: hidden;
+  background: var(--color-header-bg); /* מונע הבזק לבן לפני טעינת התמונה */
+}
+
+/* כל שקופית - שכבה בגודל מלא. אנימציה על opacity+transform בלבד (compositor) */
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  will-change: opacity, transform;
+}
+.hero__slide--animated {
+  opacity: 0;
+  animation-name: heroKenBurns;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+.hero__img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* נגישות + מכשירים חלשים: ללא אנימציה, מציגים את התמונה הראשונה בלבד */
+@media (prefers-reduced-motion: reduce) {
+  .hero__slide--animated {
+    animation: none;
+    opacity: 0;
+  }
+  .hero__slide--animated:first-of-type {
+    opacity: 1;
+  }
+}
+
+/* עמודים ללא Hero: דוחפים את התוכן מתחת ל-Header המרחף,
+   כדי שלא ייחתך. חישוב לפי גובה הבר + הריווח סביבו. */
+main > *:first-child:not(.hero) {
+  padding-top: calc(var(--header-height) + var(--space-2) * 2);
+}
+
+/* =========================================================
+   בלוק סקשן כללי - 5vw בצדדים, 5vw בין סקשנים
+   כל סקשן באתר יורש מכאן (עקביות ריווחים)
+   ========================================================= */
+.section-block {
+  width: 100%;
+  padding-inline: var(--side-padding);
+  padding-block: var(--section-gap);
+  /* מונע מהסקשן להיחבא מתחת ל-Header הדביק בגלילה לעוגן */
+  scroll-margin-top: calc(var(--header-height) + var(--space-2) * 2);
+}
+
+/* =========================================================
+   LINK-ARROW - קריאה לפעולה בסגנון טיפוגרפי, לא כפתור.
+   רכיב משותף לכל האתר: טקסט + חץ שזז בעדינות, וקו תחתון שנפתח.
+   ========================================================= */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  white-space: nowrap;
+  padding-bottom: 0.25rem;
+  transition: color 0.4s var(--ease-soft);
+}
+
+/* קו תחתון שנפתח מימין לשמאל - כיוון הקריאה */
+.link-arrow::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-soft);
+}
+.link-arrow:hover::after,
+.link-arrow:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* החץ - מצביע שמאלה, כיוון ה"קדימה" בעברית */
+.link-arrow__icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  transition: transform 0.4s var(--ease-soft);
+}
+.link-arrow:hover .link-arrow__icon,
+.link-arrow:focus-visible .link-arrow__icon {
+  transform: translateX(-0.25rem);
+}
+
+/* גרסה בהירה - מעל תמונות ורקעים כהים */
+.link-arrow--light {
+  color: #fff;
+}
+
+/* =========================================================
+   ABOUT - נבנה לפי הפיגמה (node 2002:3521)
+   קנבס מקור: 1325x528. עמודות 476 / 447 עם רווח 30px,
+   מרכז אנכי, רקע #f0f0f0 עם טקסטורה עדינה.
+   ========================================================= */
+.about {
+  position: relative;
+  width: 100%;
+  background: var(--color-surface);
+  padding-inline: var(--side-padding);
+  padding-block: var(--section-gap);
+  min-height: 33rem; /* 528px מהפיגמה */
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* טקסטורה עדינה מעל הרקע - 33% אטימות לפי הפיגמה */
+.about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/images/marble-light.webp");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.33;
+  pointer-events: none;
+}
+
+.about__inner {
+  display: grid;
+  /* 476 / 447 מהפיגמה */
+  grid-template-columns: 476fr 447fr;
+  gap: 1.875rem; /* 30px */
+  align-items: start;
+  width: 100%;
+  max-width: 59.5rem; /* 952px - רוחב התוכן בפיגמה */
+  margin-inline: auto;
+}
+
+/* ===== עמודה ימנית: לוגו + כותרת ===== */
+.about__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.75rem; /* 28px מהפיגמה */
+}
+
+.about__logo {
+  width: 9.8125rem; /* 157px */
+  height: auto;
+}
+
+.about__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-header-bg);
+  margin: 0;
+}
+/* השורה השנייה עולה מעט אחרי הראשונה - נותן תחושה של
+   משפט שנפרש, ולא של בלוק שקופץ בבת אחת. */
+.about__title-line2 {
+  transition-delay: 0.12s;
+}
+/* הלוגו נחשף ראשון, ברכות, לפני שהכותרת עולה */
+.about__logo {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.7s var(--ease-soft), transform 0.7s var(--ease-soft);
+}
+.about__head.is-visible .about__logo {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__logo,
+  .about__title-line2 {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ===== עמודה שמאלית: פסקאות + קישור ===== */
+.about__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5em;
+}
+
+.about__paragraph {
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: var(--lh-tight);
+  color: var(--color-header-bg);
+  margin: 0;
+}
+
+/* הקישור בזהב, לפי הפיגמה. שומר על שפת ה-link-arrow של האתר:
+   קו תחתון שנפתח בעדינות במקום קו קבוע. */
+.about__cta {
+  position: relative;
+  align-self: flex-start;
+  font-size: var(--fs-base);
+  font-weight: 500;
+  line-height: var(--lh-tight);
+  color: var(--color-gold);
+  padding-bottom: 0.25rem;
+  margin-top: 0.375rem;
+}
+.about__cta::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-soft);
+}
+.about__cta:hover::after,
+.about__cta:focus-visible::after {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .about {
+    min-height: 0;
+  }
+  .about__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    max-width: none;
+  }
+  .about__head {
+    gap: var(--space-2);
+  }
+}
+
+/* =========================================================
+   SCROLL CUE - סימן גלילה בתחתית ה-Hero
+   קו דק + שברון, תנועה עדינה מאוד כלפי מטה
+   ========================================================= */
+.scroll-cue {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color var(--dur) var(--ease);
+}
+.scroll-cue:hover {
+  color: var(--color-gold);
+}
+
+/* הקו הדק - נמתח ונעלם כלפי מטה */
+.scroll-cue__line {
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    currentColor 55%,
+    transparent
+  );
+  animation: scrollLine 2.8s var(--ease) infinite;
+}
+
+.scroll-cue__chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  animation: scrollChevron 2.8s var(--ease) infinite;
+}
+
+@keyframes scrollLine {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(-0.25rem) scaleY(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0.25rem) scaleY(1);
+  }
+}
+
+@keyframes scrollChevron {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(-0.15rem);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0.15rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue__line,
+  .scroll-cue__chevron {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .scroll-cue {
+    bottom: 1rem;
+  }
+  .scroll-cue__line {
+    height: 1.75rem;
+  }
+}
+
+/* =========================================================
+   STYLES SECTION - "בחרו את הסגנון שלכם" / Bento Grid
+   קומפוזיציה: שתי שורות, בכל שורה כרטיס רחב (70%) וכרטיס צר (30%)
+   ========================================================= */
+/* ===== כוריאוגרפיה: כותרת -> קו זהב -> קוביות ===== */
+.styles {
+  --seq-title: 0s;
+  --seq-rule: 0.45s;
+  --seq-cards: 0.75s;
+}
+
+.styles__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+/* Mask Reveal - הטקסט נחשף מאחורי קו בלתי נראה */
+.reveal-mask {
+  display: block;
+  overflow: hidden;
+  /* מרווח לאותיות יורדות (ן, ק, ך) כדי שלא ייחתכו */
+  padding-bottom: 0.12em;
+}
+.reveal-mask__inner {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--seq-title);
+}
+.is-visible .reveal-mask__inner {
+  transform: translateY(0);
+}
+
+/* קו זהב שנמתח מתחת לכותרת - מימין לשמאל (כיוון הקריאה) */
+.styles__rule {
+  display: block;
+  width: 4.5rem;
+  height: 2px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--seq-rule);
+}
+.styles.is-visible .styles__rule {
+  transform: scaleX(1);
+}
+
+.bento {
+  --bento-gap: 1.5vw;
+  /* גובה השורה נגזר מגובה המסך ולא מרוחבו, כדי שכל הרשת
+     תיכנס במסך אחד גם בצג רחב. clamp שומר על מינימום קריא. */
+  --bento-row: clamp(11rem, 36vh, 23rem);
+  --bento-radius: 1rem;
+
+  display: grid;
+  grid-template-columns: 70fr 30fr;
+  grid-auto-rows: var(--bento-row);
+  gap: var(--bento-gap);
+}
+
+.bento__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--bento-radius);
+  display: block;
+  background: var(--color-header-bg);
+
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition-delay: calc(var(--seq-cards) + var(--i) * 0.09s);
+}
+.styles.is-visible .bento__card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bento__media {
+  position: absolute;
+  inset: 0;
+}
+.bento__img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.8s var(--ease);
+}
+.bento__card:hover .bento__img {
+  transform: scale(1.06);
+}
+
+/* שכבה 1 - החשכה מלמטה, לקריאות התווית */
+.bento__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(20, 19, 19, 0.72),
+    rgba(20, 19, 19, 0.2) 42%,
+    rgba(20, 19, 19, 0.02) 70%
+  );
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* שכבה 2 - ברק אלכסוני עם נגיעת זהב. נותן עומק ומונע שיטוח */
+.bento__sheen {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      120% 90% at 88% 8%,
+      rgba(221, 177, 67, 0.22),
+      transparent 55%
+    ),
+    linear-gradient(
+      215deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 38%,
+      rgba(20, 19, 19, 0.28) 100%
+    );
+  opacity: 0.75;
+  transition: opacity 0.6s var(--ease);
+}
+.bento__card:hover .bento__sheen {
+  opacity: 1;
+}
+
+/* תווית הסגנון - טקסט נקי על התמונה, בלי רקע ובלי צל */
+.bento__label {
+  position: absolute;
+  bottom: 1.5rem;
+  inset-inline-start: 1.5rem; /* ב-RTL זה הצד הימני */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+  padding-bottom: 0.25rem;
+}
+
+/* קו תחתון דק שנפתח בהובר - אותה שפה כמו link-arrow */
+.bento__label::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-soft);
+}
+.bento__card:hover .bento__label::after {
+  transform: scaleX(1);
+}
+
+.bento__card:hover .link-arrow__icon {
+  transform: translateX(-0.25rem);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .bento {
+    --bento-gap: 3vw;
+    --bento-row: 55vw;
+    grid-template-columns: 1fr; /* עמודה אחת - שומר על יחס תמונה נכון */
+  }
+  .bento__label {
+    bottom: 1rem;
+    inset-inline-start: 1rem;
+    padding: 0.625rem 1.125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento__card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .bento__img,
+  .bento__sheen {
+    transition: none;
+  }
+  .reveal-mask__inner {
+    transform: none;
+    transition: none;
+  }
+  .styles__rule {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
+
+/* =========================================================
+   VALUES - "מה שמוביל אותנו" / סקשן נעול (Pinned)
+   הסקשן ננעל במקום, הערכים מתחלפים בתוכו בזמן הגלילה
+   ========================================================= */
+.values {
+  --values-step: 60vh; /* כמה גלילה לכל ערך - נמוך = תגובתי יותר */
+  --values-count: 4;
+  --values-visual-h: 58vh;
+  width: 100%;
+  padding-inline: var(--side-padding);
+  scroll-margin-top: calc(var(--header-height) + var(--space-2) * 2);
+}
+
+/* המסלול - גובהו קובע כמה זמן הסקשן נעול */
+.values__track {
+  position: relative;
+  height: calc(100vh + (var(--values-count) - 1) * var(--values-step));
+}
+
+/* סמנים בלתי-נראים לאורך המסלול */
+.values__marker {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--i) * var(--values-step));
+  height: var(--values-step);
+  pointer-events: none;
+}
+
+/* האלמנט הנעול - נשאר במסך לאורך כל המסלול */
+.values__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  /* מרווח עליון שמפנה מקום ל-Header הדביק */
+  padding-top: calc(var(--header-height) + var(--space-2) * 2);
+  padding-bottom: var(--space-4);
+}
+
+.values__header {
+  margin: 0 auto;
+  max-width: 46rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.values__title {
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-2);
+}
+.values__intro {
+  font-size: var(--fs-sub);
+  font-weight: 300;
+  line-height: 1.5em;
+  color: var(--color-muted);
+  margin: 0;
+}
+.values__intro .reveal-mask__inner {
+  transition-delay: 0.25s;
+}
+
+.values__grid {
+  display: grid;
+  grid-template-columns: 52fr 48fr;
+  gap: 4vw;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ===== התמונה ===== */
+.values__media {
+  grid-column: 1;
+  position: relative;
+  height: var(--values-visual-h);
+  max-height: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--color-header-bg);
+}
+.values__frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.03);
+  filter: blur(3px);
+  transition: opacity var(--dur-slow) var(--ease-soft),
+    transform 1.4s var(--ease-soft), filter var(--dur-slow) var(--ease-soft);
+  will-change: opacity, transform;
+}
+.values__frame.is-active {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+.values__img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ===== הערכים - כולם באותו מקום, מתחלפים בהצלבה ===== */
+.values__stack {
+  grid-column: 2;
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 16rem;
+}
+
+.value {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(calc(-50% + 1.25rem));
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-soft),
+    transform var(--dur-slow) var(--ease-soft);
+}
+.value.is-active {
+  opacity: 1;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.value__number {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: clamp(2.5rem, 3.5vw, 4rem);
+  font-weight: 700;
+  line-height: 1em;
+  color: var(--color-gold);
+  font-variant-numeric: tabular-nums;
+}
+.value__number::after {
+  content: "";
+  width: 3rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.value__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+.value__text {
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* מילים מודגשות. הפונט מציע 300/400/700 בלבד, ולכן הקפיצה היא ל-700 -
+   אבל היא לבדה חדה מדי על גוף במשקל 300. הכהיית הצבע לטקסט הראשי
+   היא מה שגורם להדגשה להיקרא כהדגשה ולא כרעש. */
+.value__text strong {
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+/* ===== מחוון התקדמות ===== */
+.values__progress {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+.values__dot {
+  width: 1.75rem;
+  height: 2px;
+  background: var(--color-border);
+  transition: background var(--dur-slow) var(--ease-soft);
+}
+.values__dot.is-active {
+  background: var(--color-gold);
+}
+
+/* גרסת המובייל מוסתרת בדסקטופ */
+.values__mobile {
+  display: none;
+}
+
+/* ===== מובייל: בלי נעילה - זרימה רגילה ===== */
+@media (max-width: 900px) {
+  .values__track {
+    display: none;
+  }
+  .values__mobile {
+    display: block;
+    padding-block: var(--section-gap);
+  }
+  .values__mobile .values__header {
+    text-align: right;
+    margin-bottom: var(--space-5);
+  }
+  .values__mobile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .value--mobile {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: none;
+  }
+  .value__number {
+    font-size: 2.25rem;
+  }
+  .value__mobile-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+    background: var(--color-header-bg);
+  }
+  .value__title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .values__frame {
+    transition: opacity 0.2s linear;
+    transform: none;
+    filter: none;
+  }
+  .value {
+    transition: opacity 0.2s linear;
+  }
+}
+
+/* =========================================================
+   TRUSTED BY - "סומכים עלינו" / קרוסלת לוגואים אינסופית
+   שתי קבוצות, כל אחת ברוחב מינימלי של המסך, נעות ב--100% מעצמן.
+   כך אף פעם לא נוצר חלל, בכל רוחב מסך ובכל גודל לוגו.
+   ========================================================= */
+.trusted {
+  --logo-w: clamp(11rem, 15vw, 18rem);
+  --logo-h: clamp(3.5rem, 4.5vw, 5.5rem);
+  --logo-gap: 4vw;
+  --marquee-duration: 60s;
+  --marquee-fade: 10%;
+  text-align: center;
+}
+
+.trusted__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-5);
+}
+
+/* ===== שלוש שורות לפי קטגוריה ===== */
+.trusted__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.trusted__row {
+  width: 100%;
+}
+
+/* ===== המרקיזה ===== */
+.marquee {
+  --marquee-dur: 34s;
+  display: flex;
+  gap: var(--logo-gap);
+  overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  direction: ltr; /* כיוון תנועה עקבי, ללא תלות ב-RTL של הדף */
+  /* דהייה בקצוות - הלוגואים נכנסים ויוצאים בלי חיתוך חד */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: var(--logo-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 100%;
+  flex-shrink: 0;
+  justify-content: space-around;
+  animation-duration: var(--marquee-dur);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* שני כיווני תנועה - מתחלפים בין השורות */
+.marquee--rtl .marquee__group {
+  animation-name: marqueeRtl;
+}
+.marquee--ltr .marquee__group {
+  animation-name: marqueeLtr;
+}
+
+@keyframes marqueeRtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--logo-gap)));
+  }
+}
+@keyframes marqueeLtr {
+  from {
+    transform: translateX(calc(-100% - var(--logo-gap)));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* עצירה בהובר - נותן ללקוח לקרוא שם של ספק */
+.marquee:hover .marquee__group {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* כל הלוגואים יושבים על קנבס זהה (360x128) עם התוכן ממורכז,
+   ולכן מספיק לקבוע גודל אחד וכולם מיושרים מושלם. */
+.marquee__logo {
+  width: 11.25rem; /* 180px */
+  aspect-ratio: 360 / 128;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.55;
+  filter: grayscale(1);
+  transition: opacity 0.4s var(--ease-soft), filter 0.4s var(--ease-soft);
+}
+.marquee__item:hover .marquee__logo {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
+@media (max-width: 700px) {
+  .trusted__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+  .marquee__logo {
+    width: 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__group {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
+}
+
+
+/* =========================================================
+   TESTIMONIALS - "בואו תשמעו את הלקוחות שלנו"
+   רקע שיש לבן אלגנטי, כרטיסים לבנים עם צל עדין
+   ========================================================= */
+.testimonials {
+  position: relative;
+  width: 100%;
+  padding-block: var(--section-gap);
+  background-image: url("/images/marble-light.webp");
+  background-size: cover;
+  background-position: center;
+  isolation: isolate;
+}
+
+/* שכבה בהירה מעל הטקסטורה - מרככת את הוורידים כדי שהכרטיסים
+   יישארו הגורם הדומיננטי, והטקסטורה תישאר רמז ולא רעש */
+.testimonials::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.3),
+    rgba(255, 255, 255, 0.14) 45%,
+    rgba(255, 255, 255, 0.34)
+  );
+}
+
+.testimonials__inner {
+  padding-inline: var(--side-padding);
+}
+
+.testimonials__header {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+.testimonials__title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-1);
+}
+.testimonials__source {
+  font-size: var(--fs-sub);
+  font-weight: 300;
+  line-height: 1.5em;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* ===== הסליידר ===== */
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.5vw;
+}
+
+.slider__track {
+  display: flex;
+  gap: 1.5vw;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0.25rem 1rem; /* מקום לצל שלא ייחתך */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* מסתירים סרגל - יש חצים */
+  flex: 1;
+}
+.slider__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== כרטיס המלצה ===== */
+.review {
+  flex: 0 0 calc((100% - 3vw) / 3);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  background: #fff;
+  border-radius: 0.875rem;
+  padding: var(--space-3);
+  /* צל בסגנון כרטיסי גוגל - שלוש שכבות:
+     טבעת דקה שמפרידה לבן-על-לבן, צל צמוד, וצל רך ורחב */
+  box-shadow: 0 0 0 1px rgba(20, 19, 19, 0.04),
+    0 1px 2px rgba(20, 19, 19, 0.06),
+    0 0.625rem 1.75rem rgba(20, 19, 19, 0.09);
+}
+
+.stars {
+  display: inline-flex;
+  gap: 0.125rem;
+  color: var(--color-gold);
+}
+.stars__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.review__text {
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-fg);
+  margin: 0;
+  flex: 1;
+}
+
+.review__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+}
+.review__avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-header-bg);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.review__name {
+  font-size: var(--fs-base);
+  font-weight: 400;
+}
+
+/* ===== חצי הניווט ===== */
+.slider__arrow {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-fg);
+  box-shadow: 0 1px 2px rgba(20, 19, 19, 0.05);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color 0.4s var(--ease-soft);
+}
+.slider__arrow svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.slider__arrow:hover {
+  border-color: var(--color-fg);
+}
+
+@media (max-width: 900px) {
+  .review {
+    flex: 0 0 85%;
+  }
+  .slider__arrow {
+    display: none; /* במובייל מחליקים באצבע */
+  }
+  .slider,
+  .slider__track {
+    gap: 4vw;
+  }
+}
+
+/* =========================================================
+   עמודים פנימיים - בסיס עד שהתוכן ייבנה
+   ========================================================= */
+.page-title {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-2);
+  padding-top: calc(var(--header-height) + var(--space-4));
+}
+.page-note {
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+/* יעדי עוגן - שומרים על ה-id מהאתר הישן */
+.anchor-target {
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
+  margin-top: var(--space-5);
+}
+.anchor-target h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+
+/* מוסתר ויזואלית אך זמין לקוראי מסך.
+   היה חסר בפרויקט מאז המעבר מ-Tailwind, מה שגרם לכותרות
+   שאמורות להיות נסתרות להופיע על המסך. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   FOOTER - נבנה לפי הפיגמה (node 2022:1255)
+   רקע אפור-בהיר עם טקסטורה, ארבע עמודות,
+   טופס על כרטיס לבן מרחף.
+   ========================================================= */
+.footer {
+  position: relative;
+  background: var(--color-surface);
+  padding-block: var(--space-7) var(--space-3);
+  padding-inline: var(--side-padding);
+  isolation: isolate;
+  overflow: hidden;
+}
+/* טקסטורה עדינה - 25% לפי הפיגמה */
+.footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/images/marble-light.webp");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* ב-RTL העמודה הראשונה היא הימנית: מותג · ניווט · מטבחים · טופס.
+   flex ולא grid: העמודות נמדדות לפי תוכנן, הטופס לוקח את היתרה,
+   והמרווח ביניהן זהה לחלוטין - זה מה ששומר על קצב אחיד. */
+.footer__inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--space-5);
+  width: 100%;
+}
+.footer__brand,
+.footer__col {
+  flex: 0 0 auto;
+}
+
+
+/* ===== מותג ופרטי קשר ===== */
+.footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.footer__logo-img {
+  width: 9.5rem; /* 152px מהפיגמה */
+  height: auto;
+}
+.footer__contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5625rem; /* 25px */
+}
+.footer__contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem; /* 20px */
+  font-size: 1.25rem; /* 20px */
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  transition: color 0.4s var(--ease-soft);
+}
+.footer__contact-link svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  color: var(--color-header-bg);
+}
+a.footer__contact-link:hover {
+  color: var(--color-gold);
+}
+.footer__contact-link--underline span {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.footer__contact-link--static {
+  cursor: default;
+}
+
+/* ===== טורי ניווט ===== */
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.1875rem; /* 19px */
+}
+.footer__title {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  margin: 0;
+}
+.footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+}
+.footer__link {
+  font-size: 0.9375rem; /* 15px */
+  font-weight: 300;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  white-space: nowrap;
+  transition: color 0.4s var(--ease-soft);
+}
+.footer__link:hover {
+  color: var(--color-gold);
+}
+
+/* ===== כרטיס הטופס ===== */
+.footer__form-card {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  /* תקרה כדי שהטופס לא יימתח לרוחב חסר פרופורציה במסך רחב */
+  max-width: 40rem;
+  min-width: 0;
+  background: #fff;
+  padding: var(--space-4);
+  /* צל מרובד מהפיגמה - עומק בלי כבדות */
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1),
+    0 0.9375rem 0.9375rem rgba(0, 0, 0, 0.09),
+    0 2.0625rem 1.25rem rgba(0, 0, 0, 0.05),
+    0 3.6875rem 1.5rem rgba(0, 0, 0, 0.01);
+}
+.footer__form-intro {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  margin: 0 0 var(--space-4);
+}
+
+.footer__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) 3.5625rem; /* 57px מהפיגמה */
+  margin-bottom: var(--space-4);
+}
+
+/* שדה בקו תחתון בלבד, ללא מסגרת - לפי העיצוב */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.field__label {
+  font-size: 1.125rem;
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+}
+.field__input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--color-header-bg);
+  background: none;
+  padding: 0.375rem 0;
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  color: var(--color-fg);
+  transition: border-color 0.3s var(--ease-soft);
+}
+.field__input:focus {
+  outline: none;
+  border-bottom-color: var(--color-gold);
+}
+.field__input:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+.footer__submit {
+  min-width: 6.8125rem; /* 109px */
+  height: 3.3125rem; /* 53px */
+  padding-inline: var(--space-3);
+  border: 0;
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  cursor: pointer;
+  transition: opacity 0.3s var(--ease-soft);
+}
+.footer__submit:hover {
+  opacity: 0.88;
+}
+
+/* ===== שורה תחתונה ===== */
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-5);
+  padding-top: var(--space-2);
+  border-top: 1px solid rgba(20, 19, 19, 0.08);
+}
+.footer__copy,
+.footer__legal {
+  font-size: 0.8125rem;
+  font-weight: 300;
+  line-height: 1.5em;
+  color: var(--color-muted);
+  margin: 0;
+}
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+}
+.footer__legal .footer__link {
+  font-size: 0.8125rem;
+  color: var(--color-muted);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) {
+  .footer__inner {
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+  /* הטופס עולה לראש ותופס שורה מלאה - הוא העיקר */
+  .footer__form-card {
+    order: -1;
+    flex-basis: 100%;
+    max-width: none;
+  }
+}
+@media (max-width: 700px) {
+  .footer__inner {
+    flex-direction: column;
+  }
+  .footer__brand,
+  .footer__col {
+    width: 100%;
+  }
+  .footer__fields {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .footer__contact-link {
+    font-size: var(--fs-base);
+  }
+  .footer__submit {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   DEV INSPECTOR - כלי פנימי בלבד, לא מוצג ללקוח
+   שורת כותרת ירוקה-ליים "בחר אלמנט" + גוף כהה, בהשראת הפניה ששלח דניאל
+   ========================================================= */
+/* כפתור צף קבוע - תמיד למטה, בכל ביקור, עד שמכבים ב-Ctrl+Alt+D */
+.dev-trigger {
+  position: fixed;
+  bottom: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #c9e94a;
+  color: #14161c;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+  transition: background 0.3s var(--ease-soft), transform 0.3s var(--ease-soft);
+}
+.dev-trigger:hover {
+  transform: translateY(-2px);
+}
+.dev-trigger.is-active {
+  background: #2f6fed;
+  color: #fff;
+}
+
+.dev-panel {
+  position: fixed;
+  bottom: 1.25rem;
+  inset-inline-end: 1.25rem;
+  z-index: 9999;
+  width: 21rem;
+  max-width: calc(100vw - 2.5rem);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.45);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  line-height: 1.5em;
+}
+
+/* שורת הכותרת - ירוק-ליים, תואם לרפרנס */
+.dev-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  background: #c9e94a;
+  color: #14161c;
+  padding: 0.625rem 0.75rem;
+}
+.dev-panel__title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.dev-panel__icon-btn {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(20, 22, 28, 0.1);
+  color: #14161c;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.3s var(--ease-soft);
+  flex-shrink: 0;
+}
+.dev-panel__icon-btn:hover {
+  background: rgba(20, 22, 28, 0.2);
+}
+
+/* הגוף - כהה */
+.dev-panel__body {
+  background: #14161c;
+  color: #fff;
+  padding: 0.875rem;
+}
+
+.dev-panel__hint {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+.dev-panel__kbd {
+  display: inline-block;
+  margin-top: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.dev-panel__info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.625rem;
+  margin: 0 0 0.75rem;
+}
+.dev-panel__info dt {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+.dev-panel__info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.dev-panel__info code {
+  color: #8fb8ff;
+  font-size: 0.75rem;
+}
+.dev-panel__text,
+.dev-panel__styles {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+}
+
+.dev-panel__note {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.375rem;
+  color: #fff;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  resize: vertical;
+  margin-bottom: 0.625rem;
+}
+.dev-panel__note::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.dev-panel__note:focus {
+  outline: none;
+  border-color: #2f6fed;
+}
+
+.dev-panel__copy {
+  width: 100%;
+  background: #2f6fed;
+  color: #fff;
+  border: 0;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.3s var(--ease-soft);
+}
+.dev-panel__copy:hover {
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   MEGA MENU - תפריט "מטבחים" כקטלוג ויזואלי
+   ארבעה בלוקים: תמונה נופית + כותרת לצידה, כל בלוק לחיץ במלואו
+   ========================================================= */
+
+/* עוטף שמגשר בין הקישור לתפריט, כדי שהעכבר לא "יפול" בדרך.
+   pointer-events: none חיוני - בלעדיו האזור הרחב הזה נחשב חלק מהפריט,
+   וכל תזוזת עכבר בקרבתו הייתה פותחת את התפריט. */
+.header__menu-wrap {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 50%;
+  transform: translateX(50%);
+  padding-top: 0.75rem;
+  z-index: 60;
+  pointer-events: none;
+}
+/* רק התפריט הפתוח מקבל עכבר בחזרה */
+.mega.is-open {
+  pointer-events: auto;
+}
+
+.mega {
+  --mega-thumb: 5.5rem;   /* 88px - תמונה מרובעת */
+  --mega-radius: 0.5rem;
+
+  width: max-content;
+  max-width: 90vw;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.04),
+    0 1.5rem 3.5rem rgba(20, 19, 19, 0.11);
+  padding: var(--space-3);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.625rem);
+  transition: opacity 0.25s var(--ease-soft), transform 0.25s var(--ease-soft),
+    visibility 0s linear 0.25s;
+}
+.mega.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.25s var(--ease-soft), transform 0.25s var(--ease-soft),
+    visibility 0s;
+}
+
+/* שתי עמודות - מרווח נדיב בין הבלוקים */
+.mega__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: var(--space-2) var(--space-3);
+}
+
+/* ===== בלוק קטגוריה ===== */
+.mega__card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.375rem;
+  border-radius: var(--mega-radius);
+  transition: background 0.25s var(--ease-soft);
+}
+.mega__card:hover,
+.mega__card:focus-visible {
+  background: rgba(20, 19, 19, 0.02);
+}
+
+.mega__thumb {
+  position: relative;
+  display: block;
+  width: var(--mega-thumb);
+  height: var(--mega-thumb);
+  flex-shrink: 0;
+  border-radius: 0; /* פינות ישרות, לפי הבקשה */
+  overflow: hidden;
+  background: var(--color-border);
+  box-shadow: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.06);
+  transition: box-shadow 0.25s var(--ease-soft);
+}
+.mega__card:hover .mega__thumb,
+.mega__card:focus-visible .mega__thumb {
+  box-shadow: 0 0.625rem 1.5rem rgba(20, 19, 19, 0.14);
+}
+
+.mega__img {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.25s var(--ease-soft);
+}
+.mega__card:hover .mega__img,
+.mega__card:focus-visible .mega__img {
+  transform: scale(1.03);
+}
+
+/* ===== כותרת + חץ ===== */
+.mega__text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mega__title {
+  font-size: var(--fs-base);
+  font-weight: 500;
+  line-height: 1.25em;
+  color: var(--color-fg);
+  /* שבירה לשתי שורות במקום שורה אחת ארוכה - חוסך רוחב משמעותי */
+  max-width: 7rem;
+  transition: color 0.25s var(--ease-soft);
+}
+.mega__card:hover .mega__title,
+.mega__card:focus-visible .mega__title {
+  color: var(--color-gold);
+}
+
+.mega__arrow {
+  display: inline-flex;
+  color: var(--color-gold);
+  opacity: 0;
+  transform: translateX(0.375rem);
+  transition: opacity 0.25s var(--ease-soft), transform 0.25s var(--ease-soft);
+}
+.mega__arrow svg {
+  width: 1rem;
+  height: 1rem;
+}
+.mega__card:hover .mega__arrow,
+.mega__card:focus-visible .mega__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== טאבלט ומובייל: כרטיסים נערמים ===== */
+@media (max-width: 1100px) {
+  .mega__grid {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media (max-width: 900px) {
+  .header__menu-wrap {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+    transform: none;
+  }
+  .mega {
+    --mega-thumb: 4.5rem;
+    padding: var(--space-2);
+  }
+  .mega__grid {
+    grid-template-columns: auto;
+  }
+  .mega__grid {
+    gap: var(--space-2);
+  }
+  .mega__card {
+    gap: var(--space-2);
+    padding: 0.375rem;
+  }
+  .mega__title {
+    font-size: var(--fs-base);
+  }
+  .mega__text {
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega,
+  .mega__img,
+  .mega__title,
+  .mega__arrow,
+  .mega__thumb {
+    transition-duration: 0.01s;
+  }
+  .mega {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   LEAD BANNER - לפי הפיגמה (node 2016:144)
+   קנבס מקור 1325x528. תמונה 716 (54%) + פאנל כהה 612 (46%).
+   ========================================================= */
+.lead {
+  display: grid;
+  grid-template-columns: 46fr 54fr; /* פאנל / תמונה, לפי הפיגמה */
+  width: 100%;
+  min-height: 33rem; /* 528px */
+  background: var(--color-surface);
+}
+
+/* ===== הפאנל הכהה ===== */
+.lead__panel {
+  position: relative;
+  background: var(--color-header-bg);
+  display: flex;
+  align-items: center;
+  padding-inline: var(--side-padding); /* 5vw - זהה לשאר האתר */
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* טקסטורה עדינה מאוד מעל הפאנל - 7% לפי הפיגמה */
+.lead__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("/images/marble-light.webp");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.lead__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 30.1875rem; /* 483px מהפיגמה */
+  color: #fff;
+}
+
+/* ===== טיפוגרפיה ===== */
+.lead__title {
+  font-size: var(--fs-h1); /* 40px */
+  line-height: var(--lh-tight);
+  margin: 0;
+}
+.lead__title-bold {
+  font-weight: 700;
+}
+.lead__title-light {
+  font-weight: 300;
+}
+
+.lead__subtitle {
+  font-size: var(--fs-sub); /* 20px בפיגמה */
+  font-weight: 300;
+  line-height: var(--lh-tight);
+  margin: 0.8125rem 0 0; /* 13px gap מהפיגמה */
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* קישור מודגש עם קו תחתון, לפי הפיגמה.
+   הקו נסוג בהובר - אותה שפה כמו שאר הקישורים באתר. */
+.lead__cta {
+  position: relative;
+  align-self: flex-start;
+  margin-top: 2.5rem; /* 40px מהפיגמה */
+  font-size: var(--fs-base);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: #fff;
+  padding-bottom: 0.25rem;
+}
+.lead__cta::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-soft);
+}
+.lead__cta:hover::after,
+.lead__cta:focus-visible::after {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ===== התמונה ===== */
+.lead__media {
+  position: relative;
+  min-height: 33rem;
+  /* חיוני: בלי זה הזום של השקופית גולש מעבר לגבול העמודה
+     ונכנס אל הפאנל הכהה שלצידה. */
+  overflow: hidden;
+}
+/* שכבת שקופית. ההצלבה נעשית באטימות בלבד, עם זום עדין מאוד
+   של 3.5% שנמשך על פני כל המחזור - זה מה שנותן את התחושה
+   האיטית והרגועה במקום החלפה חדה. */
+.lead__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  /* מונע קו תפר בקצוות בזמן הזום */
+  backface-visibility: hidden;
+  animation-name: leadFade;
+  animation-timing-function: var(--ease-soft);
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+}
+/* השקופית הראשונה גלויה עוד לפני שהאנימציה מתחילה,
+   כדי שלא יהיה הבזק ריק בטעינה */
+.lead__slide:first-child {
+  opacity: 1;
+}
+
+.lead__img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* מכבדים העדפת תנועה מופחתת - מציגים תמונה אחת קבועה */
+@media (prefers-reduced-motion: reduce) {
+  .lead__slide {
+    animation: none;
+    opacity: 0;
+  }
+  .lead__slide:first-child {
+    opacity: 1;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .lead {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  /* התמונה עוברת מעל הטקסט - היא הפותחת את הסיפור במסך צר */
+  .lead__media {
+    order: -1;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .lead__panel {
+    padding-inline: var(--side-padding);
+    padding-block: var(--space-5);
+  }
+  .lead__content {
+    max-width: none;
+  }
+}
+
+/* =========================================================
+   עמודים משפטיים - תקנון, פרטיות, נגישות
+   ========================================================= */
+.legal {
+  max-width: 48rem;
+}
+.legal__intro {
+  font-size: var(--fs-sub);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-fg);
+  margin: 0 0 var(--space-4);
+}
+.legal__heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin: var(--space-4) 0 var(--space-1);
+}
+.legal__text,
+.legal__list {
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.7em;
+  color: var(--color-fg);
+  margin: 0;
+}
+.legal__list {
+  padding-inline-start: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.legal__text a,
+.legal__list a {
+  color: var(--color-gold);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.legal__note {
+  font-size: var(--fs-sm);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
+  margin-top: var(--space-5);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
 }

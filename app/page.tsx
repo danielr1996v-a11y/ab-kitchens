@@ -1,3 +1,21 @@
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import StyleGrid from "@/components/StyleGrid";
+import Values from "@/components/Values";
+import LeadBanner from "@/components/LeadBanner";
+import Testimonials from "@/components/Testimonials";
+import TrustedBy from "@/components/TrustedBy";
+
 export default function HomePage() {
-  return null;
+  return (
+    <>
+      <Hero />
+      <About />
+      <StyleGrid />
+      <TrustedBy />
+      <Values />
+      <LeadBanner />
+      <Testimonials />
+    </>
+  );
 }

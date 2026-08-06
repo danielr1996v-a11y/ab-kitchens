@@ -9,28 +9,314 @@ export const site = {
   email: "bk0552775488@gmail.com",
   address: "בית ישראל 2, ירושלים",
   whatsappNumber: "972552775488", // ללא 0 מוביל, בפורמט בינלאומי
+  tagline: "נגרות ושיש למטבח",
+  // שעות פעילות - אומתו מול פרופיל Google Business
+  hours: [
+    { days: "ראשון - חמישי", time: "10:00 - 18:00" },
+  ],
+  social: [
+    {
+      id: "facebook" as const,
+      label: "פייסבוק",
+      href: "https://www.facebook.com/profile.php?id=100066265492507",
+    },
+    {
+      id: "instagram" as const,
+      label: "אינסטגרם",
+      href: "https://www.instagram.com/ab_kitchen_design",
+    },
+  ],
 };
 
+/**
+ * נתיבים בעברית - זהים לאתר הישן.
+ * זו החלטת SEO מכוונת: URL שלא משתנה = אפס אובדן דירוג.
+ * אין לשנות נתיב שכבר מאונדקס בגוגל בלי בדיקת השפעה.
+ */
 export const kitchenTypes = [
-  { href: "/kitchens/classic", label: "מטבחים קלאסיים" },
-  { href: "/kitchens/modern", label: "מטבחים מודרניים" },
-  { href: "/kitchens/rustic", label: "מטבחים כפריים" },
-  { href: "/kitchens/custom", label: "מטבח בהתאמה אישית" },
+  {
+    href: "/גלריה/קלאסי",
+    label: "מטבח קלאסי",
+    image: "/images/style-classic.webp",
+  },
+  {
+    href: "/גלריה/מודרני",
+    label: "מטבח מודרני",
+    image: "/images/style-modern.webp",
+  },
+  {
+    href: "/גלריה/כפרי",
+    label: "מטבח כפרי",
+    image: "/images/style-country.webp",
+  },
+  {
+    href: "/גלריה/בהתאמה-אישית",
+    label: "מטבח בהתאמה אישית",
+    image: "/images/style-modern.webp", // זמני
+  },
 ];
 
 export const nav = [
   { href: "/", label: "דף הבית" },
-  { href: "/kitchens", label: "מטבחים", children: kitchenTypes },
-  { href: "/stone", label: "שיש" },
-  { href: "/articles", label: "מאמרים וסרטונים" },
-  { href: "/designers", label: "המעצבים שלנו" },
-  { href: "/about", label: "אודות" },
+  { href: "/גלריה", label: "מטבחים", children: kitchenTypes },
+  { href: "/שיש-למטבח", label: "שיש" },
+  { href: "/מאמרים-וטיפים", label: "מאמרים וסרטונים" },
+  { href: "/המעצבים-שלנו", label: "המעצבים שלנו" },
+  { href: "/אודותינו", label: "אודות" },
   { href: "/contact", label: "יצירת קשר" },
+];
+
+/** קישורי הפוטר - כולל העמודים המשפטיים שחובה עליהם בישראל */
+export const footerLinks = [
+  { href: "/המלצות", label: "המלצות" },
+  { href: "/תקנון-ומדיניות-פרטיות", label: "תקנון" },
+  { href: "/מדיניות-פרטיות", label: "מדיניות פרטיות" },
+  { href: "/הצהרת-נגישות", label: "הצהרת נגישות" },
 ];
 
 export const quickDial = {
   label: "לחיוג מהיר",
 };
+
+/**
+ * Hero - סליידשואו רקע. כל שדה כאן יהפוך לשדה בממשק הניהול.
+ * הוספה/הסרה של תמונות = הוספה/הסרה מהמערך. הסדר במערך = סדר התצוגה.
+ */
+export const heroSlideshow = {
+  enabled: true, // הפעלה/כיבוי של האנימציה
+  displaySeconds: 8, // כמה זמן כל תמונה מוצגת
+  transitionSeconds: 2, // משך המעבר בין תמונות
+  slides: [
+    {
+      image: "/images/hero-country.webp",
+      alt: "מטבח כפרי בגווני קרם עם מדפי עץ ואי שיש - א. בית המטבחים",
+    },
+    {
+      image: "/images/hero-modern.webp",
+      alt: "מטבח מודרני עם ארונות עץ אגוז ואי מרכזי - א. בית המטבחים",
+    },
+  ],
+  // סימן גלילה בתחתית הבאנר
+  scrollIndicator: {
+    enabled: true,
+    label: "גלול", // טקסט נגישות (לא מוצג)
+    targetId: "about", // לאן גוללים בלחיצה
+  },
+};
+
+
+/**
+ * באנר "מובילים את תחום המטבחים" - לפי הפיגמה (node 2016:144).
+ * שתי עמודות: תמונה (54%) ופאנל כהה (46%) עם טקסט וקישור.
+ * הכותרת מורכבת משני חלקים בעלי משקל שונה, בדיוק כמו בעיצוב.
+ */
+export const leadBanner = {
+  /* רוטציית תמונות. הזמנים נשלטים מכאן, והקומפוננטה גוזרת מהם
+     את האנימציה - שינוי כאן משנה את הקצב בלי נגיעה בקוד. */
+  displaySeconds: 3,
+  transitionSeconds: 2, // מעבר ארוך במכוון - הצלבה רכה ולא החלפה
+  slides: [
+    { image: "/images/style-modern.webp", alt: "מטבח מודרני עם אי שיש מרכזי" },
+    { image: "/images/lead-2.webp", alt: "מטבח לבן עם אי מרכזי ותאורה תלויה" },
+    { image: "/images/lead-3.webp", alt: "מטבח לבן עם חיפוי שיש ומשטח עבודה" },
+  ],
+  titleBold: "מובילים את תחום המטבחים",
+  titleLight: "עם ניסיון של מעל 30 שנה!",
+  subtitle: "הופכים את החזון שלכם למציאות",
+  ctaText: "צפו במטבחים שלנו",
+  ctaHref: "/גלריה",
+};
+
+/**
+ * סקשן "מה שמוביל אותנו" - ערכים עם תמונה דביקה.
+ * כל ערך מנוהל בנפרד. הוספת ערך = הוספת אובייקט למערך,
+ * המספור (01, 02...) מחושב אוטומטית לפי הסדר.
+ */
+export const values = {
+  title: "מהפגישה הראשונה ועד ההתקנה בבית",
+  intro: "ארבעה עקרונות שמלווים כל עבודה שיוצא דרכנו",
+  items: [
+    {
+      id: "supplier",
+      title: "אנחנו הספק, לא מתווך",
+      // מתוך הבריף: "החברה אינה מתווכת בין הלקוח למפעל. בית המטבחים היא המפעל עצמו."
+      description:
+        "בית המטבחים **אינה מתווכת** בין הלקוח למפעל - היא **המפעל עצמו**.\nתכנון, ייצור, נגרות, שיש והתקנה מבוצעים **ישירות על ידינו**, ללא תלות בגורמים חיצוניים.",
+      image: "/images/hero-1.webp",
+      alt: "המפעל של א. בית המטבחים",
+      enabled: true,
+    },
+    {
+      id: "certified",
+      title: "מעבדים מורשים של חברות השיש",
+      // מתוך הבריף: רשימת המשמעויות עבור הלקוח
+      description:
+        "אנחנו **מעבד מורשה** של חברות השיש, ולא עובדים דרך מעבדים חיצוניים.\nהמשמעות עבורכם: בקרת איכות מלאה, התאמה מדויקת, גימור מקצועי ו**אחריות על העבודה**.",
+      image: "/images/style-modern.webp",
+      alt: "עיבוד שיש במפעל",
+      enabled: true,
+    },
+    {
+      id: "one-roof",
+      title: "הכל תחת קורת גג אחת",
+      // מתוך הבריף: "במקום לעבוד מול מספר בעלי מקצוע"
+      description:
+        "מטבח, שיש, פרזול, נגרות, עיצוב והתקנה - **במקום אחד**.\nבמקום לעבוד מול מספר בעלי מקצוע, אתם מקבלים את כל השירות **מגורם אחד**.",
+      image: "/images/style-country.webp",
+      alt: "מטבח שלם מתוצרת א. בית המטבחים",
+      enabled: true,
+    },
+    {
+      id: "second-gen",
+      title: "דור שני, ליווי אישי",
+      // מתוך הבריף: "כמעט 10 שנות ניסיון", "דור שני בענף", "שירות גם לאחר ההתקנה"
+      description:
+        "**דור שני** בענף המטבחים, עם **מאות מטבחים** שתוכננו ויוצרו לאורך השנים.\nמלווים אתכם אישית לאורך כל הדרך - **וגם אחרי ההתקנה**.",
+      image: "/images/hero-3.webp",
+      alt: "ליווי אישי לאורך התהליך",
+      enabled: true,
+    },
+  ],
+};
+
+/**
+ * פוטר - לפי הפיגמה (node 2022:1255).
+ * טופס יצירת קשר על כרטיס לבן, שני טורי ניווט, ופרטי קשר עם אייקונים.
+ */
+export const footerNew = {
+  formIntro: "לתיאום פגישת ייעוץ מלאו את הטופס ונחזור אליכם בהקדם",
+  fields: [
+    { id: "firstName", label: "שם פרטי", type: "text", autoComplete: "given-name" },
+    { id: "lastName", label: "שם משפחה", type: "text", autoComplete: "family-name" },
+    { id: "email", label: "אימייל", type: "email", autoComplete: "email" },
+    { id: "phone", label: "טלפון", type: "tel", autoComplete: "tel" },
+  ],
+  submitLabel: "שליחה",
+  kitchensTitle: "המטבחים שלנו",
+  navTitle: "ניווט באתר",
+};
+
+/**
+ * סקשן "סומכים עלינו" - שלוש שורות לפי קטגוריה.
+ *
+ * ⚠️ ה-src של הלוגואים הוא זמני (SVG פלייסהולדר). השמות אמיתיים,
+ * מתוך תיקיות הדרייב. עם קבלת קבצי הלוגו יש להחליף ל-/logos/*.webp
+ * ולמחוק את קבצי הפלייסהולדר.
+ *
+ * הכיוון מתחלף בין השורות כדי שהמרקיזה תרגיש חיה ולא מכנית.
+ */
+export const trustedBy = {
+  title: "סומכים עלינו",
+  groups: [
+    {
+      id: "carpentry",
+      label: "נגרות",
+      direction: "rtl" as const,
+      logos: [
+        { src: "/logos/avrabuch.webp", name: "אברבוך" },
+        { src: "/logos/domicile.webp", name: "דומיסיל" },
+        { src: "/logos/orard.webp", name: "אורארד" },
+        { src: "/logos/formix.webp", name: "פורמיקס" },
+        { src: "/logos/nilson.webp", name: "נילסון" },
+        { src: "/logos/birman.webp", name: "בירמן" },
+      ],
+    },
+    {
+      id: "stone",
+      label: "שיש",
+      direction: "ltr" as const,
+      logos: [
+        { src: "/logos/caesarstone.webp", name: "אבן קיסר" },
+        { src: "/logos/novo.webp", name: "נובו" },
+        { src: "/logos/flurim.webp", name: "פלורים" },
+        { src: "/logos/grandmassimo.webp", name: "גראנד מסימו" },
+        { src: "/logos/lumixstone.webp", name: "לומיקס סטון" },
+        { src: "/logos/polostone.webp", name: "פולוסטון" },
+      ],
+    },
+    {
+      id: "hardware",
+      label: "פרזול וסניטריה",
+      direction: "rtl" as const,
+      logos: [
+        { src: "/logos/blum.webp", name: "בלום" },
+        { src: "/logos/aquatop.webp", name: "אקווטופ" },
+        { src: "/logos/blanco.webp", name: "בלאנקו" },
+        { src: "/logos/niga.webp", name: "ניגא" },
+        { src: "/logos/carlos.webp", name: "קארלוס" },
+        { src: "/logos/shoni.webp", name: "שוני" },
+      ],
+    },
+  ],
+};
+
+/**
+ * סקשן "בחרו את הסגנון שלכם" - Bento Grid.
+ * כל כרטיס מנוהל בנפרד. size קובע את רוחבו בשורה (wide = 70%, narrow = 30%),
+ * כך שהלקוח יוכל לשנות את הקומפוזיציה בלי נגיעה בקוד.
+ * הוספת כרטיס = הוספת אובייקט למערך.
+ */
+export const styleSection = {
+  title: "בחרו את הסגנון שלכם",
+  cards: [
+    {
+      id: "custom",
+      title: "בהתאמה אישית",
+      href: "/גלריה/בהתאמה-אישית",
+      image: "/images/hero-1.webp", // זמני - עד שיגיעו תמונות הסגנונות
+      alt: "מטבח בהתאמה אישית",
+      size: "wide" as const,
+      enabled: true,
+    },
+    {
+      id: "modern",
+      title: "מודרני",
+      href: "/גלריה/מודרני",
+      image: "/images/style-modern.webp",
+      alt: "מטבח מודרני בגווני קרם עם אי שיש ותאורה תלויה",
+      size: "narrow" as const,
+      enabled: true,
+    },
+    {
+      id: "classic",
+      title: "קלאסי",
+      href: "/גלריה/קלאסי",
+      image: "/images/style-classic.webp",
+      alt: "מטבח קלאסי לבן עם אי שיש ופרטי זהב",
+      size: "wide" as const,
+      enabled: true,
+    },
+    {
+      id: "rustic",
+      title: "כפרי",
+      href: "/גלריה/כפרי",
+      image: "/images/style-rustic.webp",
+      alt: "מטבח כפרי עם ארונות קרם וחיפוי עץ מחורץ",
+      size: "narrow" as const,
+      enabled: true,
+    },
+  ],
+};
+
+/**
+ * סקשן אודות - נבנה מחדש לפי הפיגמה (node 2002:3521).
+ * מבנה: לוגו + כותרת בעמודה הימנית, פסקאות + קישור בעמודה השמאלית.
+ * הערה: העיצוב החדש אינו כולל את נגן הווידאו שהיה כאן קודם.
+ */
+export const about = {
+  // הלוגו הכהה מה-Header, לפי ההנחיה - ולא הלוגו שבפיגמה
+  logo: "/logo-dark.png",
+  logoAlt: "א. בית המטבחים",
+  title: "מלווים ומתכננים\nאת מטבח חלומותיכם",
+  paragraphs: [
+    "א. בית המטבחים מוביל את תחום המטבחים האיכותיים בישראל עם ניסיון של מעל 30 שנה ודור שני בענף, תוך שילוב ייחודי של מסורת וחדשנות. המטבחים שלנו משלבים עיצוב מרהיב, איכות בלתי מתפשרת וטכנולוגיה מתקדמת, המאפשרים לכם ליהנות מחוויית בישול ואירוח יוצאת דופן לאורך שנים.",
+    "אנו מזמינים אתכם לגלות את המגוון הרחב של המטבחים שלנו, החל ממטבחים מודרניים ועד לעיצובים קלאסיים וכפריים. בא. בית המטבחים, אנו מתמחים ביצירת פתרונות מותאמים אישית, המשלבים את הניסיון רב השנים שלנו עם הטרנדים העדכניים ביותר בעולם המטבחים.",
+  ],
+  ctaText: "קראו עוד עלינו",
+  ctaHref: "/אודותינו",
+};
+
+
 
 export const hero = {
   eyebrow: `${site.name} · דור שני בענף המטבחים`,
