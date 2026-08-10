@@ -2956,14 +2956,6 @@ a.footer__contact-link:hover {
   display: none;
 }
 
-/* ===== הפס במגע =====
-   התווית לא נפתחת ליד הנקודה במובייל אלא כאן, כי יש נקודות
-   ב-x=8% וב-x=84% ותוויות באורך 24 תווים - ליד הנקודה הן היו
-   גולשות מהתמונה. בפס הן לעולם לא גולשות. */
-.khot__bar {
-  display: none;
-}
-
 @media (max-width: 1100px) {
   /* הנקודות פעילות גם במגע. אזור הלחיצה מוגדל ל-44px דרך ריפוד
      שקוף, בזמן שהנקודה הנראית נשארת קטנה - מטרת מגע תקנית בלי
@@ -2971,27 +2963,31 @@ a.footer__contact-link:hover {
   .khot__point {
     padding: 0.9375rem;
   }
-  /* התווית שליד הנקודה מוחלפת בפס */
-  .khot__label {
-    display: none;
-  }
-  .khot__bar {
-    display: block;
-    margin-top: var(--space-2);
-    padding: 0.625rem 0.875rem;
-    border-radius: 0.625rem;
-    background: var(--color-surface);
-    color: var(--color-muted);
-    font-size: var(--fs-base);
+
+  /* התווית נפתחת בלחיצה, תמיד 1rem מתחת לנקודה - גם לנקודות
+     שבדסקטופ פותחות כלפי מעלה, כי במגע האצבע מסתירה את מה
+     שמתחתיה ולא את מה שמעליה. */
+  .khot__point .khot__label,
+  .khot__point--top .khot__label,
+  .khot__point--bottom .khot__label {
+    top: calc(50% + 1rem);
+    bottom: auto;
+    left: 50%;
+    /* --anchor נקבע בקומפוננטה לפי x: נקודה בקצה מיישרת את
+       התווית פנימה במקום למרכז אותה, ולכן היא לא גולשת */
+    transform: translateX(var(--anchor, -50%)) translateY(0.25rem);
+    font-size: var(--fs-base); /* 16px */
+    max-width: 60vw;
+    white-space: normal;
     text-align: center;
-    transition: color 0.25s var(--ease-soft);
+    line-height: 1.3em;
   }
-  /* כשנבחרה נקודה - הטקסט מודגש וכהה, כדי שברור שזו תשובה
-     ולא ההנחיה */
-  .khot:has(.khot__point.is-active) .khot__bar {
-    color: var(--color-fg);
-    font-weight: 700;
+  .khot__point.is-active .khot__label {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(var(--anchor, -50%)) translateY(0);
   }
+
   /* הנקודה הפעילה נצבעת בזהב הפעולה ומפסיקה לפעום - היא כבר
      נבחרה, ואין סיבה שתמשיך למשוך תשומת לב */
   .khot__point.is-active .khot__dot {
@@ -3002,6 +2998,7 @@ a.footer__contact-link:hover {
     animation: none;
     opacity: 0;
   }
+
   /* הרשימה הייתה הגיבוי כשהנקודות היו מוסתרות. עכשיו הן עובדות
      והתוכן זהה, ולכן היא מיותרת (חוק 6) */
   .kpage__list--fallback {

@@ -9,17 +9,20 @@ type Point = { x: number; y: number; label: string; pos: "top" | "bottom" };
 /**
  * Hotspots - התמונה עם הנקודות הפועמות.
  *
- * הנקודות היו מוסתרות לגמרי מתחת ל-1100px, כי תווית שנפתחת ליד
- * נקודה בקצה התמונה גולשת מהמסך (יש נקודות ב-x=8% ו-x=84%,
- * ותוויות באורך 24 תווים).
+ * במגע התווית נפתחת ישירות מתחת לנקודה שנלחצה.
  *
- * הפתרון: במגע הנקודות פעילות, אבל התווית לא נפתחת לידן אלא
- * בפס קבוע מתחת לתמונה - שם היא לעולם לא גולשת, בלי קשר למיקום
- * הנקודה או לאורך הטקסט. בדסקטופ הריחוף נשאר בדיוק כמו שהיה.
+ * הבעיה שזה פותר: יש נקודות ב-x=8% וב-x=84%, ותווית באורך 24
+ * תווים שמרוכזת עליהן גולשת מהתמונה. לכן כל נקודה מקבלת עוגן
+ * לפי מיקומה - נקודה בקצה שמאל מיישרת את התווית ימינה וההפך,
+ * ורק נקודה במרכז מרכזת אותה.
  *
  * client component בגלל ה-state של הנקודה הפעילה. KitchenPage
  * נשאר server.
  */
+
+/** לאן ליישר את התווית כדי שלא תגלוש מהתמונה */
+const anchorFor = (x: number) =>
+  x < 25 ? "-1.25rem" : x > 75 ? "calc(-100% + 1.25rem)" : "-50%";
 export default function Hotspots({
   image,
   alt,
@@ -50,7 +53,13 @@ export default function Hotspots({
             className={`khot__point khot__point--${p.pos}${
               active === i ? " is-active" : ""
             }`}
-            style={{ "--x": `${p.x}%`, "--y": `${p.y}%` } as React.CSSProperties}
+            style={
+              {
+                "--x": `${p.x}%`,
+                "--y": `${p.y}%`,
+                "--anchor": anchorFor(p.x),
+              } as React.CSSProperties
+            }
             aria-pressed={active === i}
             onClick={() => setActive(active === i ? null : i)}
           >
@@ -59,12 +68,6 @@ export default function Hotspots({
           </button>
         ))}
       </ParallaxImage>
-
-      {/* הפס מוצג רק במגע. aria-live כדי שקורא מסך יכריז על
-          התווית שנבחרה, ולא רק יראה אותה */}
-      <figcaption className="khot__bar" aria-live="polite">
-        {active === null ? "לחצו על הנקודות כדי לגלות" : points[active].label}
-      </figcaption>
     </figure>
   );
 }
