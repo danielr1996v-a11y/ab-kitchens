@@ -4,6 +4,7 @@ import { kitchenPages, kitchenProcess, heroSlideshow } from "@/lib/content";
 import LeadBanner from "./LeadBanner";
 import Reveal from "./Reveal";
 import ParallaxImage from "./ParallaxImage";
+import Hotspots from "./Hotspots";
 import { renderRichText } from "@/lib/richText";
 
 /**
@@ -94,32 +95,11 @@ export default function KitchenPage({ styleKey }: { styleKey: string }) {
                   הרשימה; במובייל היא מוצגת בלי נקודות והרשימה
                   חוזרת מתחתיה, כי שם אין ריחוף. */}
               {block.hotspots && (
-                <figure className="khot">
-                  {/* התמונה והנקודות יחד בשכבת הפרלקס, כדי שהנקודות
-                      יישארו נעולות על הפריטים שהן מסמנות */}
-                  <ParallaxImage>
-                    <Image
-                      src={block.hotspots.image}
-                      alt={block.hotspots.alt}
-                      fill
-                      sizes="(max-width: 1100px) 100vw, 75vw"
-                      className="khot__img"
-                    />
-                    {block.hotspots.points.map((p) => (
-                      <button
-                        type="button"
-                        className={`khot__point khot__point--${p.pos}`}
-                        key={p.label}
-                        style={
-                          { "--x": `${p.x}%`, "--y": `${p.y}%` } as React.CSSProperties
-                        }
-                      >
-                        <span className="khot__dot" aria-hidden="true" />
-                        <span className="khot__label">{p.label}</span>
-                      </button>
-                    ))}
-                  </ParallaxImage>
-                </figure>
+                <Hotspots
+                  image={block.hotspots.image}
+                  alt={block.hotspots.alt}
+                  points={block.hotspots.points}
+                />
               )}
 
               {block.items && (
