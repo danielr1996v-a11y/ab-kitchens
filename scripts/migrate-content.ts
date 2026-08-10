@@ -4,9 +4,14 @@
  * הרצה:  npx tsx scripts/migrate-content.ts
  * דרישות: NEXT_PUBLIC_SANITY_PROJECT_ID + SANITY_API_TOKEN ב-.env.local
  *
- * ניתן להרצה חוזרת: המסמך נכתב עם _id קבוע (page.home) דרך
+ * ניתן להרצה חוזרת: המסמך נכתב עם _id קבוע (homePage) דרך
  * createOrReplace, והתמונות מזוהות לפי שם הקובץ - הרצה שנייה
  * מחליפה, לא מכפילה.
+ *
+ * ⚠️ המזהה חייב להיות בלי נקודה. ה-ACL הציבורי של Sanity הוא
+ * filter: _id in path("*"), ו-"*" מתאים רק למקטע אחד - כך Sanity
+ * מחריג טיוטות (drafts.foo). מזהה כמו "page.home" נופל מחוץ לכלל
+ * הציבורי, והאתר מקבל null בקריאה אנונימית.
  *
  * הסקריפט קורא את התוכן מ-lib/content.ts עצמו - לא העתקה ידנית -
  * כך שאם התוכן השתנה מאז, המיגרציה לוקחת את העדכני.
@@ -110,7 +115,7 @@ async function main() {
   for (const s of leadBanner.slides) leadSlides.push({ ...(await img(s.image, s.alt)), _key: basename(s.image) });
 
   const doc = {
-    _id: "page.home",
+    _id: "homePage",
     _type: "page",
     title: "דף הבית",
     slug: { _type: "slug", current: "/" },
@@ -142,7 +147,7 @@ async function main() {
 
   console.log("\nכותב את מסמך דף הבית...");
   await client.createOrReplace(doc);
-  console.log(`✅ הסתיים. ${uploaded.size} תמונות, מסמך אחד (page.home).`);
+  console.log(`✅ הסתיים. ${uploaded.size} תמונות, מסמך אחד (homePage).`);
 }
 
 main().catch((e) => {

@@ -1,4 +1,4 @@
-import imageUrlBuilder, { type SanityImageSource } from "@sanity/image-url";
+import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 import { client } from "./client";
 
 /**
@@ -8,7 +8,7 @@ import { client } from "./client";
  * (למשל להירו במובייל) תישאר סביב הנקודה שהוא בחר - זה הפתרון
  * לבעיית ה"הירו חותך 76% מהתמונה" שנמדדה.
  */
-const builder = client ? imageUrlBuilder(client) : null;
+const builder = client ? createImageUrlBuilder(client) : null;
 
 export function urlFor(source: SanityImageSource) {
   if (!builder) throw new Error("Sanity לא מוגדר - אין NEXT_PUBLIC_SANITY_PROJECT_ID");

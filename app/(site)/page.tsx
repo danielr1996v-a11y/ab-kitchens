@@ -1,13 +1,31 @@
 import SectionRenderer from "@/components/SectionRenderer";
 import { homeSections } from "@/lib/sections";
+import { sanityFetch } from "@/lib/sanity/live";
+import { homeQuery, adaptHome } from "@/lib/sanity/queries";
 
 /**
  * דף הבית.
  *
- * הסקשנים מגיעים כנתון ולא כרשימת JSX קבועה, כדי שסדר והסתרה
- * יהיו ניתנים לשליטה ממערכת הניהול בלי לגעת בקוד. כרגע המקור הוא
- * content.ts; בהמשך תוחלף שורה אחת בשאילתה.
+ * התוכן מגיע מ-Sanity (sanityFetch - מתעדכן חי, בלי בנייה),
+ * והאדפטר ממיר אותו ל-Section[] שהקומפוננטות מכירות.
+ *
+ * שתי רשתות ביטחון, שתיהן נופלות ל-homeSections מהקוד:
+ * - אין env (סביבה בלי חשבון Sanity) - sanityFetch הוא null
+ * - יש חיבור אבל אין מסמך / שגיאה - האדפטר מחזיר null
+ * האתר לעולם לא מציג עמוד ריק בגלל תקלת CMS.
  */
-export default function HomePage() {
-  return <SectionRenderer sections={homeSections} />;
+export default async function HomePage() {
+  let sections = homeSections;
+
+  if (sanityFetch) {
+    try {
+      const { data } = await sanityFetch({ query: homeQuery });
+      sections = adaptHome(data) ?? homeSections;
+    } catch {
+      // Sanity לא זמין - האתר ממשיך מהקוד. עדיף עמוד נכון מאתמול
+      // מאשר שגיאה של עכשיו.
+    }
+  }
+
+  return <SectionRenderer sections={sections} />;
 }

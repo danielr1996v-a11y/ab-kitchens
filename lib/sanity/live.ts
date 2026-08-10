@@ -16,12 +16,19 @@ import { isConfigured } from "@/sanity/env";
  * ממשיך לרוץ מ-lib/content.ts. הבדיקה הזו היא מה ששומר על בילד
  * ירוק בלי env.
  */
-const token = process.env.SANITY_API_TOKEN;
+/* טוקן אמיתי הוא ארוך מאוד. הבדיקה מסננת את ה-placeholder ("...")
+   שיושב ב-.env.local עד שדניאל מדביק את האמיתי - עדיף בלי טוקן
+   (עובד לתוכן ציבורי) מאשר עם טוקן שבור. */
+const raw = process.env.SANITY_API_TOKEN;
+const token = raw && raw.length > 20 ? raw : undefined;
 
 export const { sanityFetch, SanityLive } = isConfigured && client
   ? defineLive({
       client,
       serverToken: token,
-      browserToken: token,
+      /* לעולם לא הטוקן: browserToken נשלח לדפדפן של כל גולש.
+         טוקן Editor כאן היה מאפשר לכל אחד לערוך את האתר.
+         false = תצוגת טיוטה חיה עובדת רק דרך ה-Studio - מספיק. */
+      browserToken: false,
     })
   : { sanityFetch: null, SanityLive: null };

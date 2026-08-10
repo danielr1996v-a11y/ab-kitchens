@@ -30,8 +30,9 @@ const nextConfig: NextConfig = {
     // והתמונה הראשית מוגשת מטושטשת מהמתוכנן.
     qualities: [75, 90],
     remotePatterns: [
-      { protocol: "https", hostname: "img.youtube.com" },
-      { protocol: "https", hostname: "i.ytimg.com" },
+      /* תמונות התוכן מגיעות מ-CDN של Sanity אחרי המיגרציה.
+         ערכי YouTube הישנים נמחקו - שריד מ-VideoPlayer שהוסר (חוק 6). */
+      { protocol: "https", hostname: "cdn.sanity.io" },
     ],
   },
 
