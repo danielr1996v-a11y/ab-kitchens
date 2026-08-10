@@ -15,15 +15,18 @@ import { trustedBy } from "@/lib/content";
  *
  * ביצועים: transform בלבד, בלי JavaScript.
  */
-export default function TrustedBy() {
+
+export type TrustedByProps = { content?: typeof trustedBy };
+
+export default function TrustedBy({ content = trustedBy }: TrustedByProps = {}) {
   return (
     <section className="section-block trusted" aria-labelledby="trusted-title">
       <h2 className="trusted__title" id="trusted-title">
-        {trustedBy.title}
+        {content.title}
       </h2>
 
       <div className="trusted__rows">
-        {trustedBy.groups.map((group, gi) => (
+        {content.groups.map((group, gi) => (
           <div className="trusted__row" key={group.id} role="group" aria-label={group.label}>
             <div
               className={`marquee marquee--${group.direction}`}

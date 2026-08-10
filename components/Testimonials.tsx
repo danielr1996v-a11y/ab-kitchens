@@ -1,6 +1,9 @@
 "use client";
 
 import { useRef } from "react";
+import { testimonials } from "@/lib/content";
+
+export type Review = (typeof testimonials)[number];
 
 /**
  * Testimonials - "בואו תשמעו את הלקוחות שלנו" עם רקע שיש וסליידר כרטיסים.
@@ -9,27 +12,6 @@ import { useRef } from "react";
  * היתרון: החלקה באצבע עובדת מעצמה במובייל, המקלדת עובדת, והגלילה
  * חלקה בלי ספריית קרוסלה.
  */
-
-const reviews = [
-  {
-    id: "r1",
-    name: "לקוח מרוצה",
-    text: "אברהם מבית המטבחים התקין לנו שיש באופן מקצועי, מהיר, יסודי ומאוד אדיב. הופתענו לטובה כשהגיע למדידה והקדים בזמן, השיש היה מוכן להתקנה אחרי ימים ספורים וגם ההתקנה הייתה מהירה ויסודית.",
-    rating: 5,
-  },
-  {
-    id: "r2",
-    name: "לקוח מרוצה",
-    text: "היה מצוין לגמרי! הוא היה מאוד זמין וגמיש בזמנים, הגיע בזמן, עשה עבודה יפה ונתן מחיר טוב.",
-    rating: 5,
-  },
-  {
-    id: "r3",
-    name: "לקוח מרוצה",
-    text: "שירות מעולה! הייתי מאוד מרוצה, אני שמח שבחרתי בבית המטבחים. המחיר היה הוגן, היחס מהמם, ומהירות העבודה הייתה הרבה יותר מהר ממה שציפיתי.",
-    rating: 5,
-  },
-];
 
 function Stars({ count }: { count: number }) {
   return (
@@ -49,7 +31,11 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-export default function Testimonials() {
+export default function Testimonials({
+  reviews = testimonials,
+}: {
+  reviews?: Review[];
+} = {}) {
   const trackRef = useRef<HTMLUListElement>(null);
 
   const scrollByCard = (direction: 1 | -1) => {

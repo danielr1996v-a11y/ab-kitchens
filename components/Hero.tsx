@@ -10,7 +10,10 @@ import { heroSlideshow } from "@/lib/content";
  * העיתוי נגזר מההגדרות ב-content, כך שהלקוח יוכל לשנות מספר תמונות
  * וזמנים מממשק הניהול - ה-keyframes מחושבים אוטומטית בהתאם.
  */
-export default function Hero() {
+
+export type HeroProps = { slideshow?: typeof heroSlideshow };
+
+export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
   const { slides, displaySeconds, transitionSeconds, enabled, scrollIndicator } =
     heroSlideshow;
   const count = slides.length;

@@ -12,8 +12,11 @@ import Reveal from "./Reveal";
  * המידות נלקחו ישירות מהפיגמה ומתורגמות ליחסי fr, כך שהפרופורציה
  * נשמרת בכל רוחב מסך ולא רק ב-1325px של הקנבס.
  */
-export default function About() {
-  const [titleLine1, titleLine2] = about.title.split("\n");
+
+export type AboutProps = { content?: typeof about };
+
+export default function About({ content = about }: AboutProps = {}) {
+  const [titleLine1, titleLine2] = content.title.split("\n");
 
   return (
     <section className="about" id="about" aria-labelledby="about-title">
@@ -23,8 +26,8 @@ export default function About() {
             כל שורה במסכה משלה, כדי שהן יעלו בזו אחר זו. */}
         <Reveal className="about__head">
           <Image
-            src={about.logo}
-            alt={about.logoAlt}
+            src={content.logo}
+            alt={content.logoAlt}
             width={1640}
             height={460}
             className="about__logo"
@@ -43,14 +46,14 @@ export default function About() {
 
         {/* עמודה שמאלית - טקסט וקישור */}
         <div className="about__body">
-          {about.paragraphs.map((text) => (
+          {content.paragraphs.map((text) => (
             <p className="about__paragraph" key={text.slice(0, 24)}>
               {text}
             </p>
           ))}
 
-          <Link href={about.ctaHref} className="about__cta">
-            {about.ctaText}
+          <Link href={content.ctaHref} className="about__cta">
+            {content.ctaText}
           </Link>
         </div>
       </div>

@@ -16,7 +16,10 @@ import { styleSection } from "@/lib/content";
  * ההופעה בגלילה נעשית ב-IntersectionObserver (מובנה בדפדפן, בלי ספריות),
  * וההשהיה המדורגת מוזרקת כמשתנה CSS לכל כרטיס.
  */
-export default function StyleGrid() {
+
+export type StyleGridProps = { content?: typeof styleSection };
+
+export default function StyleGrid({ content = styleSection }: StyleGridProps = {}) {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -38,7 +41,7 @@ export default function StyleGrid() {
     return () => observer.disconnect();
   }, []);
 
-  const cards = styleSection.cards.filter((card) => card.enabled);
+  const cards = content.cards.filter((card) => card.enabled);
 
   return (
     <section
@@ -49,7 +52,7 @@ export default function StyleGrid() {
     >
       <h2 className="styles__title" id="styles-title">
         <span className="reveal-mask">
-          <span className="reveal-mask__inner">{styleSection.title}</span>
+          <span className="reveal-mask__inner">{content.title}</span>
         </span>
         <span className="styles__rule" aria-hidden="true" />
       </h2>

@@ -19,8 +19,11 @@ import { renderRichText, renderHighlight } from "@/lib/richText";
  * מובייל: הנעילה מבוטלת. סקשן נעול במסך קטן מרגיש כמו תקלה,
  * ולכן שם הערכים זורמים רגיל, כל אחד עם התמונה שלו.
  */
-export default function Values() {
-  const items = values.items.filter((item) => item.enabled);
+
+export type ValuesProps = { content?: typeof values };
+
+export default function Values({ content = values }: ValuesProps = {}) {
+  const items = content.items.filter((item) => item.enabled);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -86,12 +89,12 @@ export default function Values() {
           <header className="values__header">
             <h2 className="values__title" id="values-title">
               <span className="reveal-mask">
-                <span className="reveal-mask__inner">{renderHighlight(values.title)}</span>
+                <span className="reveal-mask__inner">{renderHighlight(content.title)}</span>
               </span>
             </h2>
             <p className="values__intro">
               <span className="reveal-mask">
-                <span className="reveal-mask__inner">{values.intro}</span>
+                <span className="reveal-mask__inner">{content.intro}</span>
               </span>
             </p>
           </header>
@@ -149,8 +152,8 @@ export default function Values() {
       {/* מובייל: זרימה רגילה, כל ערך עם התמונה שלו */}
       <div className="values__mobile">
         <header className="values__header">
-          <h2 className="values__title">{renderHighlight(values.title)}</h2>
-          <p className="values__intro">{values.intro}</p>
+          <h2 className="values__title">{renderHighlight(content.title)}</h2>
+          <p className="values__intro">{content.intro}</p>
         </header>
         <ol className="values__mobile-list">
           {items.map((item, i) => (
