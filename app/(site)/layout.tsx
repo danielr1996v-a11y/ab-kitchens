@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
+import SanityBridge from "@/components/SanityBridge";
 
 /**
  * הלייאאוט של האתר עצמו - הדר, פוטר וכפתור צף.
@@ -28,6 +29,8 @@ export default function SiteLayout({
       </ViewTransition>
       <Footer />
       <WhatsAppButton />
+      {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
+      <SanityBridge />
     </>
   );
 }
