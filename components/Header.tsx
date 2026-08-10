@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import { nav, quickDial, styleSection, headerSocial } from "@/lib/content";
+import {
+  nav,
+  quickDial,
+  styleSection,
+  headerSocial,
+  kitchenTypes,
+  site,
+  whatsappHref,
+} from "@/lib/content";
 import MegaMenu from "./MegaMenu";
 import Icon from "./Icon";
 
@@ -20,6 +29,7 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
@@ -67,6 +77,13 @@ export default function Header() {
   // סגירה בניווט: ב-App Router הקומפוננטה לא נטענת מחדש בין עמודים,
   // ולכן בלי זה התפריט היה נשאר פתוח אחרי מעבר.
   const closeMobile = () => setMobileOpen(false);
+
+  /* הנתיבים בתוכן הם בעברית והדפדפן מקודד אותם, ולכן משווים
+     אחרי decode. "/" מושווה מדויק כדי שדף הבית לא ייצבע בכל עמוד. */
+  const isCurrent = (href: string) => {
+    const here = decodeURIComponent(pathname ?? "");
+    return href === "/" ? here === "/" : here.startsWith(href);
+  };
 
   const open = (href: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -171,43 +188,112 @@ export default function Header() {
         </button>
       </div>
 
-      {/* ===== תפריט מובייל ===== */}
-      <div className={`mnav${mobileOpen ? " mnav--open" : ""}`}>
-        <div className="mnav__panel" id="mobile-nav" ref={panelRef}>
+      {/* ===== תפריט מובייל - מסך מלא ===== */}
+      <div
+        className={`mnav${mobileOpen ? " mnav--open" : ""}`}
+        id="mobile-nav"
+        ref={panelRef}
+      >
+        <div className="mnav__inner">
+          <div className="mnav__top">
+            <Link href="/" className="mnav__logo" onClick={closeMobile}>
+              {/* הגרסה הבהירה של הלוגו - נמדדה 216/255 מול 68 של
+                  logo-dark, ולכן היא זו שנראית על הפחם */}
+              <Image
+                src="/logo.png"
+                alt={site.name}
+                width={1640}
+                height={460}
+                className="mnav__logo-img"
+              />
+            </Link>
+          </div>
+
           <nav aria-label="ניווט מובייל">
             <ul className="mnav__list">
-              {nav.map((item) => (
-                <li key={item.href} className="mnav__item">
-                  <Link href={item.href} className="mnav__link" onClick={closeMobile}>
+              {nav.map((item, i) => (
+                <li
+                  key={item.href}
+                  className="mnav__item"
+                  style={{ "--i": i } as React.CSSProperties}
+                >
+                  <Link
+                    href={item.href}
+                    className="mnav__link"
+                    onClick={closeMobile}
+                    aria-current={isCurrent(item.href) ? "page" : undefined}
+                  >
                     {item.label}
                   </Link>
-
-                  {/* תתי-הקטגוריות פתוחות תמיד: במגע אין ריחוף,
-                      ואקורדיון היה מוסיף לחיצה מיותרת על 3 פריטים */}
-                  {item.children && (
-                    <ul className="mnav__sub">
-                      {item.children.map((child) => (
-                        <li key={child.href}>
-                          <Link
-                            href={child.href}
-                            className="mnav__sub-link"
-                            onClick={closeMobile}
-                          >
-                            {child.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </li>
               ))}
             </ul>
           </nav>
 
-          <a href="tel:0552775488" className="mnav__cta" onClick={closeMobile}>
-            <Icon id="phone" />
-            <span>055-2775488</span>
-          </a>
+          {/* הקטגוריות כקלפים מצולמים במקום שלוש שורות טקסט:
+              זה מה שהמותג מוכר, וזה גם מקצר את התפריט */}
+          <div className="mnav__styles">
+            <p className="mnav__label">הסגנונות שלנו</p>
+            <ul className="mnav__cards">
+              {kitchenTypes.map((c, i) => (
+                <li key={c.href} style={{ "--i": nav.length + i } as React.CSSProperties}>
+                  <Link href={c.href} className="mnav__card" onClick={closeMobile}>
+                    <Image
+                      src={c.image}
+                      alt=""
+                      fill
+                      sizes="33vw"
+                      className="mnav__card-img"
+                    />
+                    <span className="mnav__card-name">
+                      {c.label.replace("מטבח ", "")}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mnav__foot">
+            <div className="mnav__actions">
+              <a
+                href={`tel:${site.phone1.replace(/-/g, "")}`}
+                className="mnav__action mnav__action--call"
+                onClick={closeMobile}
+              >
+                <Icon id="phone" />
+                <span>{site.phone1}</span>
+              </a>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mnav__action mnav__action--wa"
+                onClick={closeMobile}
+              >
+                <Icon id="whatsapp" />
+                <span>וואטסאפ</span>
+              </a>
+            </div>
+
+            <ul className="mnav__social">
+              {headerSocial
+                .filter((s) => s.id !== "whatsapp")
+                .map((s) => (
+                  <li key={s.id}>
+                    <a
+                      href={s.href}
+                      className="mnav__social-link"
+                      aria-label={s.label}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon id={s.id} />
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </div>
       </div>
     </header>

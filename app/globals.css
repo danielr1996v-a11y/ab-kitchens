@@ -314,106 +314,226 @@ h1, h2, h3, h4 {
   background: var(--color-surface);
 }
 
-/* שכבת הכיסוי - מכהה את העמוד ומבהירה שהפאנל הוא המוקד */
+/* ===== מסך מלא על רקע פחם =====
+   רקע כהה ולא כרטיס לבן: זה הצבע של בר הניווט ושל פאנל ה-CTA,
+   והוא מה שהופך את התפריט מחלונית שצפה מלמעלה לרגע מכוון. */
 .mnav {
   position: fixed;
   inset: 0;
-  z-index: 99; /* מתחת ל-header (100) כדי שהמבורגר יישאר לחיץ */
-  background: rgba(26, 26, 26, 0.45);
+  z-index: 101; /* מעל ה-header - התפריט משתלט על המסך */
+  background: var(--color-header-bg);
   opacity: 0;
   /* visibility ולא display: כך אנימציית הפתיחה רצה, והפאנל עדיין
      יוצא מעץ הנגישות כשהוא סגור. ההשהיה גורמת לו להיעלם רק בסוף. */
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.35s var(--ease-soft), visibility 0s linear 0.35s;
+  overflow-y: auto;
+  overscroll-behavior: contain; /* גלילה בתפריט לא מגלגלת את העמוד */
+  transition: opacity 0.4s var(--ease-soft), visibility 0s linear 0.4s;
 }
 .mnav--open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 0.35s var(--ease-soft), visibility 0s;
+  transition: opacity 0.4s var(--ease-soft), visibility 0s;
 }
 
-/* הפאנל עצמו - נכנס מימין, מתחת לבר הצף */
-.mnav__panel {
-  position: absolute;
-  top: calc(var(--header-height) + var(--space-2) * 2);
-  inset-inline-end: var(--side-padding);
-  inset-inline-start: var(--side-padding);
-  max-height: calc(100vh - var(--header-height) - var(--space-2) * 3);
-  overflow-y: auto;
-  overscroll-behavior: contain; /* גלילה בפאנל לא מגלגלת את העמוד */
-  background: #fff;
-  border-radius: 1rem;
-  padding: var(--space-3);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.18);
-  transform: translateY(-0.75rem);
-  opacity: 0;
-  transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
-}
-.mnav--open .mnav__panel {
-  transform: translateY(0);
-  opacity: 1;
+.mnav__inner {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--side-padding) var(--space-3);
+  color: #fff;
 }
 
+/* שורת הלוגו - בגובה בר הניווט, כך שהמבורגר שמעליה נשאר
+   בדיוק במקומו והמעבר לא "קופץ" */
+.mnav__top {
+  display: flex;
+  align-items: center;
+  height: var(--header-height);
+  flex-shrink: 0;
+}
+.mnav__logo {
+  display: flex;
+  height: 60%;
+}
+.mnav__logo-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ===== הניווט הראשי ===== */
 .mnav__list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 .mnav__item + .mnav__item {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 .mnav__link {
   display: block;
-  padding-block: var(--space-2);
-  font-size: 1.125rem;
+  padding-block: 0.75rem;
+  /* גדול ואוורירי - הטיפוגרפיה היא מה שנושא את התפריט */
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 6vw, 1.75rem);
   font-weight: 400;
-  color: var(--color-fg);
+  line-height: 1.2;
+  color: #fff;
   text-decoration: none;
+  transition: color 0.25s var(--ease);
 }
 .mnav__link:hover,
 .mnav__link:focus-visible {
+  color: var(--color-gold);
+}
+/* העמוד הנוכחי בזהב הלוגו, עם קו קצר שמסמן מיקום */
+.mnav__link[aria-current="page"] {
   color: var(--color-logo-gold);
+  font-weight: 700;
 }
 
-/* תתי-קטגוריות - נסוגות פנימה כדי שההיררכיה תיקרא במבט */
-.mnav__sub {
-  list-style: none;
+.mnav__label {
   margin: 0 0 var(--space-2);
-  padding-inline-start: var(--space-2);
-  border-inline-start: 2px solid var(--color-border);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.5);
 }
-.mnav__sub-link {
+
+/* ===== שלושת הסגנונות כקלפים מצולמים ===== */
+.mnav__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mnav__card {
+  position: relative;
   display: block;
-  padding-block: 0.4375rem;
-  font-size: var(--fs-base);
-  font-weight: 300;
-  color: var(--color-muted);
+  aspect-ratio: 1 / 1;
+  border-radius: 0.625rem;
+  overflow: hidden;
   text-decoration: none;
 }
-.mnav__sub-link:hover,
-.mnav__sub-link:focus-visible {
-  color: var(--color-fg);
+.mnav__card-img {
+  object-fit: cover;
+}
+/* שכבת הכהיה - בלעדיה שם לבן על צילום בהיר לא נקרא */
+.mnav__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent 65%);
+}
+.mnav__card-name {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 0.5rem;
+  text-align: center;
+  color: #fff;
+  font-size: var(--fs-base);
+  font-weight: 700;
 }
 
-/* חיוג - הפעולה העיקרית במובייל, ולכן היא מודגשת בתחתית */
-.mnav__cta {
+/* ===== פעולות ורשתות ===== */
+.mnav__foot {
+  margin-top: auto; /* נדבק לתחתית גם כשהתוכן קצר */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+.mnav__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.mnav__action {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: var(--space-3);
-  padding-block: var(--space-2);
+  min-height: 3rem; /* מטרת מגע */
   border-radius: 0.625rem;
-  background: var(--color-gold);
-  color: var(--color-fg);
+  font-size: var(--fs-base);
   font-weight: 700;
   text-decoration: none;
 }
-.mnav__cta svg {
+.mnav__action svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+/* חיוג הוא הפעולה הראשית, וואטסאפ משנית במתאר */
+.mnav__action--call {
+  background: var(--color-gold);
+  color: var(--color-fg);
+}
+.mnav__action--wa {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+.mnav__action--wa:hover,
+.mnav__action--wa:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mnav__social {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mnav__social-link {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+}
+.mnav__social-link svg {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+.mnav__social-link:hover,
+.mnav__social-link:focus-visible {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* כניסה מדורגת - כל פריט עולה אחרי הקודם. --i מגיע מהמרקאפ */
+.mnav__item,
+.mnav__cards li {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+.mnav--open .mnav__item,
+.mnav--open .mnav__cards li {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.45s var(--ease-soft), transform 0.45s var(--ease-soft);
+  transition-delay: calc(var(--i, 0) * 40ms + 120ms);
+}
+
+/* המבורגר הופך ל-X מעל התפריט הפתוח */
+.header__burger[aria-expanded="true"] {
+  position: relative;
+  z-index: 102;
+  color: #fff;
+}
+.header__burger[aria-expanded="true"]:hover,
+.header__burger[aria-expanded="true"]:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
 }
 
 @media (max-width: 900px) {
@@ -434,10 +554,17 @@ h1, h2, h3, h4 {
 
 @media (prefers-reduced-motion: reduce) {
   .mnav,
-  .mnav__panel {
+  .mnav__item,
+  .mnav__cards li {
     transition: none;
   }
+  .mnav__item,
+  .mnav__cards li {
+    opacity: 1;
+    transform: none;
+  }
 }
+
 
 /* =========================================================
    HERO - באנר ראשי, ה-Header מרחף מעליו
