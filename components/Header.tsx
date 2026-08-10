@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { nav, quickDial, styleSection } from "@/lib/content";
+import { nav, quickDial, styleSection, headerSocial } from "@/lib/content";
 import MegaMenu from "./MegaMenu";
+import Icon from "./Icon";
 
 /**
  * Header - בר ניווט ראשי, דביק.
@@ -92,7 +93,26 @@ export default function Header() {
           )}
         </nav>
 
-        <a href="tel:055-2775488" className="header__cta">
+        {/* רשתות - נשארות גלויות גם במובייל, שם הניווט מוסתר
+            ואלה אמצעי הפנייה היחידים שנותרים */}
+        <ul className="header__social">
+          {headerSocial.map((item) => (
+            <li key={item.id}>
+              <a
+                href={item.href}
+                className="header__social-link"
+                aria-label={item.label}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon id={item.id} />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* במסך צר הטקסט מוסתר ונשאר אייקון בלבד, ולכן צריך שם נגיש */}
+        <a href="tel:055-2775488" className="header__cta" aria-label={quickDial.label}>
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
             <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.2c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1z" />
           </svg>

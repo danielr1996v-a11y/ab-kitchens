@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { leadBanner } from "@/lib/content";
+import { leadBanner, leadForm } from "@/lib/content";
 
 /**
  * LeadBanner - באנר דו-עמודתי לפי הפיגמה (node 2016:144).
@@ -11,7 +11,11 @@ import { leadBanner } from "@/lib/content";
  * התמונה מתחלפת ברוטציה. האנימציה היא CSS טהור עם השהיה מדורגת -
  * בלי JS, בלי state, בלי טיימרים. אותה טכניקה בדיוק כמו ב-Hero.
  */
-export default function LeadBanner() {
+/**
+ * withForm: מחליף את הכותרת המשנית והקישור בטופס קצר.
+ * ברירת המחדל false, כדי שדף הבית יישאר בדיוק כפי שהוא.
+ */
+export default function LeadBanner({ withForm = false }: { withForm?: boolean }) {
   const { slides, displaySeconds, transitionSeconds } = leadBanner;
   const count = slides.length;
 
@@ -32,11 +36,45 @@ export default function LeadBanner() {
             <span className="lead__title-light">{leadBanner.titleLight}</span>
           </h2>
 
-          <p className="lead__subtitle">{leadBanner.subtitle}</p>
+          {withForm ? (
+            <>
+              <p className="lead__subtitle">
+                {leadForm.titleLight}
+                <br />
+                <strong className="lead__subtitle-bold">{leadForm.titleBold}</strong>
+              </p>
 
-          <Link href={leadBanner.ctaHref} className="lead__cta">
-            {leadBanner.ctaText}
-          </Link>
+              {/* ⚠️ ללא יעד, בדיוק כמו הטופס בפוטר. פנייה תיעלם. */}
+              <form className="lead__form" action="#" method="post">
+                {leadForm.fields.map((f) => (
+                  <div className="lead__field" key={f.id}>
+                    <label className="lead__label" htmlFor={`lead-${f.id}`}>
+                      {f.label}
+                    </label>
+                    <input
+                      id={`lead-${f.id}`}
+                      name={f.id}
+                      type={f.type}
+                      autoComplete={f.autoComplete}
+                      required
+                      className="lead__input"
+                    />
+                  </div>
+                ))}
+                <button type="submit" className="lead__submit">
+                  {leadForm.submitLabel}
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <p className="lead__subtitle">{leadBanner.subtitle}</p>
+
+              <Link href={leadBanner.ctaHref} className="lead__cta">
+                {leadBanner.ctaText}
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

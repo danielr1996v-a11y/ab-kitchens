@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import SmoothScroll from "@/components/SmoothScroll";
-import Schema from "@/components/Schema";
 import Analytics from "@/components/Analytics";
 import DevInspector from "@/components/DevInspector";
 import { site } from "@/lib/content";
@@ -38,15 +33,12 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <Schema />
+        {/* הדר, פוטר וכפתור צף עברו ל-app/(site)/layout.tsx.
+            כאן נשאר רק מה שחייב לחול גם על עמוד "בקרוב". */}
         <Analytics />
-        <SmoothScroll />
-        <Header />
-        <main className="flex-1 flex flex-col">{children}</main>
-        <Footer />
+        {children}
         {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}
         <DevInspector />
-        <WhatsAppButton />
       </body>
     </html>
   );

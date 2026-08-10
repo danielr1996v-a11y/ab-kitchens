@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { ViewTransition } from "react";
 import { styleSection } from "@/lib/content";
 
 /**
@@ -61,21 +62,27 @@ export default function StyleGrid() {
             className={`bento__card bento__card--${card.size}`}
             style={{ "--i": i } as React.CSSProperties}
           >
+            {/* שם ייחודי לכל סגנון: שם משותף אחד לשלושת הכרטיסים
+                היה יוצר התנגשות והדפדפן לא היה יודע מי מורף */}
+            <ViewTransition name={`kitchen-shot-${card.id}`}>
             <div className="bento__media">
               <Image
                 src={card.image}
                 alt={card.alt}
                 fill
                 sizes={
-                  card.size === "wide"
-                    ? "(max-width: 900px) 90vw, 63vw"
-                    : "(max-width: 900px) 90vw, 27vw"
+                  {
+                    full: "(max-width: 900px) 90vw, 90vw",
+                    wide: "(max-width: 900px) 90vw, 63vw",
+                    narrow: "(max-width: 900px) 90vw, 27vw",
+                  }[card.size]
                 }
                 className="bento__img"
               />
               <span className="bento__overlay" aria-hidden="true" />
               <span className="bento__sheen" aria-hidden="true" />
             </div>
+            </ViewTransition>
             <span className="bento__label">
               <span className="bento__label-text">{card.title}</span>
               <svg

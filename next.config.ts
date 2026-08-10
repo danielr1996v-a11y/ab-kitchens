@@ -18,6 +18,13 @@ import type { NextConfig } from "next";
 const heb = (path: string) => encodeURI(path);
 
 const nextConfig: NextConfig = {
+  // מעברים בין עמודים דרך React ViewTransition.
+  // ⚠️ עדיין experimental ב-Next 16 - לבדוק בשדרוג גרסה.
+  // בדפדפן ללא תמיכה האתר עובד רגיל, פשוט בלי אנימציה.
+  experimental: {
+    viewTransition: true,
+  },
+
   images: {
     // ה-Hero מבקש quality={90}. בלי שהערך מופיע כאן Next נופל חזרה ל-75
     // והתמונה הראשית מוגשת מטושטשת מהמתוכנן.
@@ -34,7 +41,6 @@ const nextConfig: NextConfig = {
       { source: heb("/גלריה/קלאסי"), destination: "/gallery/classic" },
       { source: heb("/גלריה/מודרני"), destination: "/gallery/modern" },
       { source: heb("/גלריה/כפרי"), destination: "/gallery/rustic" },
-      { source: heb("/גלריה/בהתאמה-אישית"), destination: "/gallery/custom" },
       { source: heb("/אודותינו"), destination: "/about" },
       { source: heb("/המלצות"), destination: "/testimonials" },
       { source: heb("/מאמרים-וטיפים"), destination: "/articles" },
@@ -53,6 +59,10 @@ const nextConfig: NextConfig = {
     return [
       // עמוד המחשבון נדחה לשלב ב'. עד אז מפנים ליצירת קשר כדי למנוע 404.
       { source: heb("/מחשבון"), destination: "/contact", permanent: false },
+      // הקטגוריה "בהתאמה אישית" הוסרה לבקשת הלקוח. מפנים לגלריה
+      // הראשית כדי לא לאבד תנועה מהנתיב שהיה מאונדקס.
+      // permanent: false במכוון - ההחלטה הפיכה.
+      { source: heb("/גלריה/בהתאמה-אישית"), destination: heb("/גלריה"), permanent: false },
     ];
   },
 };

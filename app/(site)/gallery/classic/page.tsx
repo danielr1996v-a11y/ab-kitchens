@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import KitchenPage from "@/components/KitchenPage";
 
 export const metadata: Metadata = {
   title: "מטבחים קלאסיים | א. בית המטבחים",
@@ -12,10 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return (
-    <section className="section-block">
-      <h1 className="page-title">מטבחים קלאסיים</h1>
-      <p className="page-note">התוכן של העמוד הזה ייבנה בהמשך, סקשן אחר סקשן.</p>
-    </section>
-  );
+  return <KitchenPage styleKey="classic" />;
 }

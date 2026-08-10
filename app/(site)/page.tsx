@@ -12,8 +12,8 @@ export default function HomePage() {
       <Hero />
       <About />
       <StyleGrid />
-      <TrustedBy />
       <Values />
+      <TrustedBy />
       <LeadBanner />
       <Testimonials />
     </>

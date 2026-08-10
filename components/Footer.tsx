@@ -82,35 +82,35 @@ export default function Footer() {
           </ul>
         </nav>
 
-        {/* ===== טופס - שמאל ===== */}
-        <div className="footer__form-card">
-          <p className="footer__form-intro">{footerNew.formIntro}</p>
+        {/* ===== שעות ומענה - שמאל =====
+            הטופס הוסר מכאן: הוא כפל את הטופס שכבר קיים למעלה
+            בכל עמוד, ובפוטר הוא גם היה ללא יעד. */}
+        <div className="footer__col">
+          <h3 className="footer__title">{footerNew.hoursTitle}</h3>
+          <ul className="footer__list">
+            {site.hours.map((h) => (
+              <li key={h.days} className="footer__hours">
+                <span>{h.days}</span>
+                <span className="footer__hours-time">{h.time}</span>
+              </li>
+            ))}
+          </ul>
 
-          {/* ⚠️ הטופס עדיין ללא יעד. נדרש endpoint או שירות טפסים. */}
-          <form className="footer__form" action="#" method="post">
-            <div className="footer__fields">
-              {footerNew.fields.map((f) => (
-                <div className="field" key={f.id}>
-                  <label className="field__label" htmlFor={`f-${f.id}`}>
-                    {f.label}
-                    <span aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    id={`f-${f.id}`}
-                    name={f.id}
-                    type={f.type}
-                    autoComplete={f.autoComplete}
-                    required
-                    className="field__input"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <button type="submit" className="footer__submit">
-              {footerNew.submitLabel}
-            </button>
-          </form>
+          <ul className="footer__social">
+            {site.social.map((s) => (
+              <li key={s.id}>
+                <a
+                  href={s.href}
+                  className="footer__social-link"
+                  aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon id={s.id} />
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 

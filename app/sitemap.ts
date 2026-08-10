@@ -16,7 +16,6 @@ const routes: Array<{
   { path: "/גלריה/קלאסי", priority: 0.8, freq: "monthly" },
   { path: "/גלריה/מודרני", priority: 0.8, freq: "monthly" },
   { path: "/גלריה/כפרי", priority: 0.8, freq: "monthly" },
-  { path: "/גלריה/בהתאמה-אישית", priority: 0.8, freq: "monthly" },
   { path: "/שיש-למטבח", priority: 0.8, freq: "monthly" },
   { path: "/contact", priority: 0.8, freq: "monthly" },
   { path: "/מאמרים-וטיפים", priority: 0.7, freq: "weekly" },
