@@ -19,7 +19,10 @@ const FEATURED = styleSection.cards.find((c) => c.id === "modern");
 export default function Header() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
 
   // מאזין גלילה קליל: passive + סף יחיד, בלי חישובים בכל פריים
   useEffect(() => {
@@ -29,6 +32,41 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  /**
+   * התפריט פתוח: נועלים את גלילת הרקע, סוגרים ב-Escape, ומחזירים
+   * את הפוקוס לכפתור כשנסגר - אחרת המקלדת "נופלת" לתחילת העמוד.
+   * גם לחיצה מחוץ לפאנל סוגרת.
+   */
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMobileOpen(false);
+      toggleRef.current?.focus(); // אחרת הפוקוס נופל לתחילת העמוד
+    };
+    const onPointer = (e: PointerEvent) => {
+      const t = e.target as Node;
+      if (panelRef.current?.contains(t) || toggleRef.current?.contains(t)) return;
+      setMobileOpen(false);
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [mobileOpen]);
+
+  // סגירה בניווט: ב-App Router הקומפוננטה לא נטענת מחדש בין עמודים,
+  // ולכן בלי זה התפריט היה נשאר פתוח אחרי מעבר.
+  const closeMobile = () => setMobileOpen(false);
 
   const open = (href: string) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -118,6 +156,59 @@ export default function Header() {
           </svg>
           <span>{quickDial.label}</span>
         </a>
+
+        {/* מבורגר - מוצג רק מתחת ל-900px, שם header__nav מוסתר */}
+        <button
+          ref={toggleRef}
+          type="button"
+          className="header__burger"
+          aria-label={mobileOpen ? "סגירת התפריט" : "פתיחת התפריט"}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-nav"
+          onClick={() => setMobileOpen((v) => !v)}
+        >
+          <Icon id={mobileOpen ? "close" : "menu"} />
+        </button>
+      </div>
+
+      {/* ===== תפריט מובייל ===== */}
+      <div className={`mnav${mobileOpen ? " mnav--open" : ""}`}>
+        <div className="mnav__panel" id="mobile-nav" ref={panelRef}>
+          <nav aria-label="ניווט מובייל">
+            <ul className="mnav__list">
+              {nav.map((item) => (
+                <li key={item.href} className="mnav__item">
+                  <Link href={item.href} className="mnav__link" onClick={closeMobile}>
+                    {item.label}
+                  </Link>
+
+                  {/* תתי-הקטגוריות פתוחות תמיד: במגע אין ריחוף,
+                      ואקורדיון היה מוסיף לחיצה מיותרת על 3 פריטים */}
+                  {item.children && (
+                    <ul className="mnav__sub">
+                      {item.children.map((child) => (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            className="mnav__sub-link"
+                            onClick={closeMobile}
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <a href="tel:0552775488" className="mnav__cta" onClick={closeMobile}>
+            <Icon id="phone" />
+            <span>055-2775488</span>
+          </a>
+        </div>
       </div>
     </header>
   );

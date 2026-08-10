@@ -4,7 +4,9 @@ export type IconId =
   | "phone"
   | "mail"
   | "whatsapp"
-  | "pin";
+  | "pin"
+  | "menu"
+  | "close";
 
 /**
  * Icon - ספריית האייקונים של האתר.
@@ -97,6 +99,28 @@ export default function Icon({ id }: { id: IconId }) {
             strokeLinejoin="round"
           />
           <circle cx="12" cy="10" r="2.6" strokeWidth="1.5" />
+        </svg>
+      );
+
+    case "menu":
+      return (
+        <svg {...common}>
+          <path
+            d="M4 7h16M4 12h16M4 17h16"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      );
+
+    case "close":
+      return (
+        <svg {...common}>
+          <path
+            d="M6 6l12 12M18 6L6 18"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
         </svg>
       );
   }

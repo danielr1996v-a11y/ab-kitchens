@@ -283,10 +283,159 @@ h1, h2, h3, h4 {
   opacity: 0.9;
 }
 
-/* מובייל - נטפל בו יחד בהמשך. כרגע מסתירים ניווט מתחת ל-900px */
+/* =========================================================
+   תפריט מובייל
+   מתחת ל-900px הניווט האופקי לא נכנס לבר, ולכן הוא מתחלף
+   במבורגר שפותח פאנל. הפאנל נפתח מימין - כיוון הקריאה.
+   ========================================================= */
+
+/* המבורגר קיים רק במובייל. בדסקטופ יש ניווט אמיתי בבר */
+.header__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0.625rem;
+  background: transparent;
+  color: var(--color-fg);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.header__burger svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.header__burger:hover,
+.header__burger:focus-visible {
+  background: var(--color-surface);
+}
+
+/* שכבת הכיסוי - מכהה את העמוד ומבהירה שהפאנל הוא המוקד */
+.mnav {
+  position: fixed;
+  inset: 0;
+  z-index: 99; /* מתחת ל-header (100) כדי שהמבורגר יישאר לחיץ */
+  background: rgba(26, 26, 26, 0.45);
+  opacity: 0;
+  /* visibility ולא display: כך אנימציית הפתיחה רצה, והפאנל עדיין
+     יוצא מעץ הנגישות כשהוא סגור. ההשהיה גורמת לו להיעלם רק בסוף. */
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-soft), visibility 0s linear 0.35s;
+}
+.mnav--open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.35s var(--ease-soft), visibility 0s;
+}
+
+/* הפאנל עצמו - נכנס מימין, מתחת לבר הצף */
+.mnav__panel {
+  position: absolute;
+  top: calc(var(--header-height) + var(--space-2) * 2);
+  inset-inline-end: var(--side-padding);
+  inset-inline-start: var(--side-padding);
+  max-height: calc(100vh - var(--header-height) - var(--space-2) * 3);
+  overflow-y: auto;
+  overscroll-behavior: contain; /* גלילה בפאנל לא מגלגלת את העמוד */
+  background: #fff;
+  border-radius: 1rem;
+  padding: var(--space-3);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.18);
+  transform: translateY(-0.75rem);
+  opacity: 0;
+  transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
+}
+.mnav--open .mnav__panel {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mnav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mnav__item + .mnav__item {
+  border-top: 1px solid var(--color-border);
+}
+.mnav__link {
+  display: block;
+  padding-block: var(--space-2);
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.mnav__link:hover,
+.mnav__link:focus-visible {
+  color: var(--color-logo-gold);
+}
+
+/* תתי-קטגוריות - נסוגות פנימה כדי שההיררכיה תיקרא במבט */
+.mnav__sub {
+  list-style: none;
+  margin: 0 0 var(--space-2);
+  padding-inline-start: var(--space-2);
+  border-inline-start: 2px solid var(--color-border);
+}
+.mnav__sub-link {
+  display: block;
+  padding-block: 0.4375rem;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.mnav__sub-link:hover,
+.mnav__sub-link:focus-visible {
+  color: var(--color-fg);
+}
+
+/* חיוג - הפעולה העיקרית במובייל, ולכן היא מודגשת בתחתית */
+.mnav__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--space-3);
+  padding-block: var(--space-2);
+  border-radius: 0.625rem;
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font-weight: 700;
+  text-decoration: none;
+}
+.mnav__cta svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 @media (max-width: 900px) {
   .header__nav {
     display: none;
+  }
+  .header__burger {
+    display: inline-flex;
+  }
+}
+
+/* בדסקטופ הפאנל לא קיים כלל, גם אם המצב נשאר פתוח בשינוי גודל */
+@media (min-width: 901px) {
+  .mnav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mnav,
+  .mnav__panel {
+    transition: none;
   }
 }
 
