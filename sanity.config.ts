@@ -28,9 +28,12 @@ export default defineConfig({
       title: "עמודים",
       structure: (S) =>
         S.list()
+          // id חובה לכל רשימה - בלעדיו ה-Studio זורק
+          // "`id` is required for lists" ולא מציג כלום
+          .id("content")
           .title("תוכן")
           .items([
-            S.documentTypeListItem("page").title("עמודים"),
+            S.documentTypeListItem("page").id("pages").title("עמודים"),
           ]),
     }),
     presentationTool({
