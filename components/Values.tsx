@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { values } from "@/lib/content";
-import { renderRichText } from "@/lib/richText";
+import { renderRichText, renderHighlight } from "@/lib/richText";
 
 /**
  * Values - "מה שמוביל אותנו" כסקשן נעול (Pinned Section).
@@ -86,7 +86,7 @@ export default function Values() {
           <header className="values__header">
             <h2 className="values__title" id="values-title">
               <span className="reveal-mask">
-                <span className="reveal-mask__inner">{values.title}</span>
+                <span className="reveal-mask__inner">{renderHighlight(values.title)}</span>
               </span>
             </h2>
             <p className="values__intro">
@@ -149,7 +149,7 @@ export default function Values() {
       {/* מובייל: זרימה רגילה, כל ערך עם התמונה שלו */}
       <div className="values__mobile">
         <header className="values__header">
-          <h2 className="values__title">{values.title}</h2>
+          <h2 className="values__title">{renderHighlight(values.title)}</h2>
           <p className="values__intro">{values.intro}</p>
         </header>
         <ol className="values__mobile-list">

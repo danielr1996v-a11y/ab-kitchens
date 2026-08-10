@@ -84,3 +84,26 @@ export function renderRichText(text: string, wordsPerLine = 0): ReactNode {
 
   return output;
 }
+
+/**
+ * renderHighlight - מסמן קטע טקסט במרקר.
+ *
+ * תחביר: ==טקסט== יעטוף ב-<mark class="mark">.
+ * נבחר תחביר שונה מ-** כדי ששני הסימונים יוכלו לחיות זה לצד זה.
+ *
+ * האנימציה עצמה ב-CSS, ומופעלת כשהסקשן העוטף מקבל is-visible.
+ */
+export function renderHighlight(text: string): ReactNode {
+  const parts = text.split(/(==.+?==)/g);
+
+  return parts.map((part, i) => {
+    if (part.startsWith("==") && part.endsWith("==")) {
+      return (
+        <mark className="mark" key={i}>
+          {part.slice(2, -2)}
+        </mark>
+      );
+    }
+    return <Fragment key={i}>{part}</Fragment>;
+  });
+}

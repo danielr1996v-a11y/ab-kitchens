@@ -6,8 +6,22 @@ import type { NextConfig } from "next";
  * לא תומך בשמות תיקיות בעברית ב-static generation.
  * ה-rewrites למטה מגשרים בין השניים - הגולש וגוגל רואים עברית בלבד.
  */
+
+/**
+ * ⚠️ קריטי: Next משווה את ה-source מול הנתיב **המקודד** שמגיע מהדפדפן,
+ * ולא מול הנתיב המפוענח. source בעברית גולמית לעולם לא יתאים, וכל
+ * הנתיבים העבריים יחזירו 404 - גם מקומית וגם בפרודקשן.
+ *
+ * heb() מקודד בזמן ה-build, כך שהעברית נשארת קריאה כאן בקוד
+ * ובכל זאת ההשוואה מתבצעת נכון. אין להסיר את העטיפה הזו.
+ */
+const heb = (path: string) => encodeURI(path);
+
 const nextConfig: NextConfig = {
   images: {
+    // ה-Hero מבקש quality={90}. בלי שהערך מופיע כאן Next נופל חזרה ל-75
+    // והתמונה הראשית מוגשת מטושטשת מהמתוכנן.
+    qualities: [75, 90],
     remotePatterns: [
       { protocol: "https", hostname: "img.youtube.com" },
       { protocol: "https", hostname: "i.ytimg.com" },
@@ -16,29 +30,29 @@ const nextConfig: NextConfig = {
 
   async rewrites() {
     return [
-      { source: "/גלריה", destination: "/gallery" },
-      { source: "/גלריה/קלאסי", destination: "/gallery/classic" },
-      { source: "/גלריה/מודרני", destination: "/gallery/modern" },
-      { source: "/גלריה/כפרי", destination: "/gallery/rustic" },
-      { source: "/גלריה/בהתאמה-אישית", destination: "/gallery/custom" },
-      { source: "/אודותינו", destination: "/about" },
-      { source: "/המלצות", destination: "/testimonials" },
-      { source: "/מאמרים-וטיפים", destination: "/articles" },
-      { source: "/מטבחים-מודרניים", destination: "/articles/modern" },
-      { source: "/מטבחים-כפריים", destination: "/articles/rustic" },
-      { source: "/שיש-למטבח", destination: "/stone" },
-      { source: "/מטבחים---כל-מה-שרצית-לדעת", destination: "/articles/guide" },
-      { source: "/המעצבים-שלנו", destination: "/designers" },
-      { source: "/תקנון-ומדיניות-פרטיות", destination: "/terms" },
-      { source: "/מדיניות-פרטיות", destination: "/privacy" },
-      { source: "/הצהרת-נגישות", destination: "/accessibility" },
+      { source: heb("/גלריה"), destination: "/gallery" },
+      { source: heb("/גלריה/קלאסי"), destination: "/gallery/classic" },
+      { source: heb("/גלריה/מודרני"), destination: "/gallery/modern" },
+      { source: heb("/גלריה/כפרי"), destination: "/gallery/rustic" },
+      { source: heb("/גלריה/בהתאמה-אישית"), destination: "/gallery/custom" },
+      { source: heb("/אודותינו"), destination: "/about" },
+      { source: heb("/המלצות"), destination: "/testimonials" },
+      { source: heb("/מאמרים-וטיפים"), destination: "/articles" },
+      { source: heb("/מטבחים-מודרניים"), destination: "/articles/modern" },
+      { source: heb("/מטבחים-כפריים"), destination: "/articles/rustic" },
+      { source: heb("/שיש-למטבח"), destination: "/stone" },
+      { source: heb("/מטבחים---כל-מה-שרצית-לדעת"), destination: "/articles/guide" },
+      { source: heb("/המעצבים-שלנו"), destination: "/designers" },
+      { source: heb("/תקנון-ומדיניות-פרטיות"), destination: "/terms" },
+      { source: heb("/מדיניות-פרטיות"), destination: "/privacy" },
+      { source: heb("/הצהרת-נגישות"), destination: "/accessibility" },
     ];
   },
 
   async redirects() {
     return [
       // עמוד המחשבון נדחה לשלב ב'. עד אז מפנים ליצירת קשר כדי למנוע 404.
-      { source: "/מחשבון", destination: "/contact", permanent: false },
+      { source: heb("/מחשבון"), destination: "/contact", permanent: false },
     ];
   },
 };

@@ -43,6 +43,9 @@
   /* צבעים אמיתיים מהפיגמה (Header) - מאומת ב-2026-07-30 */
   --color-header-bg: #242323; /* פחם כהה - רקע ה-Header */
   --color-gold: #ddb143; /* זהב/חרדל - כפתור "לחיוג מהיר" */
+  /* זהב הלוגו - נמדד מ-logo-dark.png. חם וכהה יותר מזהב הממשק,
+     ומשמש היכן שרוצים את הגוון של המותג עצמו ולא את צבע הפעולה. */
+  --color-logo-gold: #aa8347;
   --color-gold-text: #000000; /* טקסט על גבי הזהב */
 
   /* טיפוגרפיה - פונט פולין (Polin) מהלקוח */
@@ -1528,6 +1531,7 @@ a.footer__contact-link:hover {
 }
 
 /* ===== כרטיס הטופס ===== */
+/* הטופס יושב ישירות על רקע הפוטר - בלי כרטיס לבן ובלי צל */
 .footer__form-card {
   flex: 0 1 auto;
   display: flex;
@@ -1535,13 +1539,6 @@ a.footer__contact-link:hover {
   /* תקרה כדי שהטופס לא יימתח לרוחב חסר פרופורציה במסך רחב */
   max-width: 40rem;
   min-width: 0;
-  background: #fff;
-  padding: var(--space-4);
-  /* צל מרובד מהפיגמה - עומק בלי כבדות */
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1),
-    0 0.9375rem 0.9375rem rgba(0, 0, 0, 0.09),
-    0 2.0625rem 1.25rem rgba(0, 0, 0, 0.05),
-    0 3.6875rem 1.5rem rgba(0, 0, 0, 0.01);
 }
 .footer__form-intro {
   font-size: 1.125rem; /* 18px */
@@ -2227,4 +2224,54 @@ a.footer__contact-link:hover {
   margin-top: var(--space-5);
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-border);
+}
+
+/* =========================================================
+   MARK - מרקר בגוון הלוגו
+
+   הצבע נגזר מ---color-logo-gold, שנמדד מקובץ הלוגו עצמו
+   (#aa8347) ולא מזהב הממשק - כך המרקר נושא את גוון המותג.
+   ========================================================= */
+.mark {
+  /* שומר על הביטוי כיחידה אחת - מרקר שנקטע באמצע נראה שבור */
+  white-space: nowrap;
+  color: inherit;
+  padding-inline: 0.14em;
+
+  /* גיבוי לדפדפנים ללא color-mix */
+  background-image: linear-gradient(
+    to top,
+    rgba(170, 131, 71, 0.24) 0.3em,
+    transparent 0.3em
+  );
+  background-repeat: no-repeat;
+  background-position: right bottom; /* RTL - מתחיל מימין */
+  background-size: 0% 100%;
+
+  /* איטי ורך: מאיץ בעדינות ונרגע לאורך רוב הדרך,
+     כך שזה מרגיש כמו משיחת יד ולא כמו פס שנפתח. */
+  transition: background-size 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@supports (background: color-mix(in srgb, red 24%, transparent)) {
+  .mark {
+    background-image: linear-gradient(
+      to top,
+      color-mix(in srgb, var(--color-logo-gold) 24%, transparent) 0.3em,
+      transparent 0.3em
+    );
+  }
+}
+
+/* ההשהיה מחכה שהכותרת תסיים לעלות מהמסכה */
+.is-visible .mark {
+  background-size: 100% 100%;
+  transition-delay: 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark {
+    transition: none;
+    background-size: 100% 100%;
+  }
 }
