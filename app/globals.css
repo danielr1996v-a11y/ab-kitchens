@@ -3973,7 +3973,7 @@ a.footer__contact-link:hover {
 
 /* הקו האנכי מהרפרנס - מפריד את הטקסט מקצה הכרטיס */
 .dcta__text {
-  order: 1;
+  order: 0; /* ב-RTL order נמוך = ימין. הטקסט מימין, הכפתור משמאל */
   max-width: 32rem;
   padding-inline-start: var(--space-4);
   border-inline-start: 2px solid var(--color-gold);
@@ -4003,7 +4003,7 @@ a.footer__contact-link:hover {
 
 /* הכפתור בצד הנגדי, כמו ברפרנס. מלבני ולא מעוגל - שם הוא כזה. */
 .dcta__btn {
-  order: 0;
+  order: 1;
   flex-shrink: 0;
   padding: 1rem 2.25rem;
   border: 0;
