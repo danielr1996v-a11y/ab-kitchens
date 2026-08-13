@@ -4365,10 +4365,15 @@ a.footer__contact-link:hover {
 }
 
 .footer__inner {
-  /* המותג ראשון ב-DOM ולכן מימין, ואחריו העמודות */
-  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
-  gap: 3vw;
+  /* המותג ראשון ב-DOM ולכן מימין, ואחריו ארבע עמודות:
+     ניווט · המטבחים · מידע · דברו איתנו */
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.2fr;
+  gap: 2.5vw;
   align-items: start;
+}
+/* שעות הפעילות יושבות תחת המותג ולא כעמודה נפרדת */
+.footer__hours-block {
+  margin-top: var(--space-4);
 }
 
 .footer__logo-img {
@@ -4477,6 +4482,10 @@ a.footer__contact-link:hover {
   .footer__inner {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-4) var(--space-3);
+  }
+  /* המותג תופס את שתי העמודות - הלוגו והרשתות צריכים רוחב */
+  .footer__brand {
+    grid-column: 1 / -1;
   }
 }
 @media (max-width: 560px) {

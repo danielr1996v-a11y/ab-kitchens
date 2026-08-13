@@ -43,6 +43,19 @@ export default function Footer() {
               </li>
             ))}
           </ul>
+
+          {/* שעות פעילות יושבות תחת המותג, כמו ברפרנס */}
+          <div className="footer__hours-block">
+            <h3 className="footer__title">{footerNew.hoursTitle}</h3>
+            <ul className="footer__list">
+              {site.hours.map((h) => (
+                <li key={h.days} className="footer__hours">
+                  <span>{h.days}</span>
+                  <span className="footer__hours-time">{h.time}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* ===== ניווט באתר ===== */}
@@ -73,21 +86,20 @@ export default function Footer() {
           </ul>
         </nav>
 
-        {/* ===== שעות ומענה - שמאל =====
-            הטופס הוסר מכאן: הוא כפל את הטופס שכבר קיים למעלה
-            בכל עמוד, ובפוטר הוא גם היה ללא יעד. */}
-        <div className="footer__col">
-          <h3 className="footer__title">{footerNew.hoursTitle}</h3>
+        {/* ===== מידע - העמודים המשפטיים =====
+            עלו מפס התחתית לעמודה משלהם, כמו ברפרנס. */}
+        <nav className="footer__col">
+          <h3 className="footer__title">{footerNew.infoTitle}</h3>
           <ul className="footer__list">
-            {site.hours.map((h) => (
-              <li key={h.days} className="footer__hours">
-                <span>{h.days}</span>
-                <span className="footer__hours-time">{h.time}</span>
+            {footerLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="footer__link">
+                  {l.label}
+                </Link>
               </li>
             ))}
           </ul>
-
-        </div>
+        </nav>
 
         {/* ===== דברו איתנו - שמאל ===== */}
         <div className="footer__col">
@@ -117,18 +129,11 @@ export default function Footer() {
       </div>
 
       <div className="footer__bottom">
+        {/* רק זכויות יוצרים. הקישורים המשפטיים עלו לעמודת "מידע"
+            ואין טעם להציג אותם פעמיים. */}
         <p className="footer__copy">
           © {new Date().getFullYear()} {site.name}. כל הזכויות שמורות.
         </p>
-        <ul className="footer__legal">
-          {footerLinks.map((l) => (
-            <li key={l.href}>
-              <Link href={l.href} className="footer__link">
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </div>
     </footer>
   );
