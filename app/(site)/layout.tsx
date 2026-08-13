@@ -1,7 +1,7 @@
 import { ViewTransition } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import FloatingActions from "@/components/FloatingActions";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
 import SanityBridge from "@/components/SanityBridge";
@@ -28,7 +28,7 @@ export default function SiteLayout({
         <main className="flex-1 flex flex-col">{children}</main>
       </ViewTransition>
       <Footer />
-      <WhatsAppButton />
+      <FloatingActions />
       {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
       <SanityBridge />
     </>
