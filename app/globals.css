@@ -3717,3 +3717,221 @@ a.footer__contact-link:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   עמוד "המעצבים שלנו" - פתיח לפי הרפרנס
+   טקסט מימין, תמונה משמאל (היפוך RTL של הרפרנס).
+   העיקרון שמחזיק את העיצוב: התמונה לא יושבת בתוך הפריים אלא
+   בורחת ממנו - נשפכת עד קצה המסך, מעוגלת רק בצד הפנימי,
+   והעיגול הכהה חוצה את הגבול שלה.
+   ========================================================= */
+.dhero {
+  background: var(--color-surface);
+  padding: calc(var(--header-height) + var(--space-5)) var(--side-padding)
+    var(--space-5);
+}
+
+.dhero__inner {
+  display: grid;
+  grid-template-columns: 42fr 58fr;
+  align-items: center;
+  column-gap: 4vw;
+}
+/* עמודת התמונה: התמונה ומתחתיה הנקודות, בדיוק כמו ברפרנס */
+.dhero__media-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ===== טקסט ===== */
+.dhero__text {
+  /* מסודר ב-grid לפי סדר ה-DOM: הטקסט ראשון ולכן בעמודה הראשונה,
+     שהיא ימין ב-RTL */
+  order: 0;
+}
+.dhero__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  /* גדול מאוד ובשורות צמודות, כמו ברפרנס */
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05em;
+  letter-spacing: -0.02em;
+}
+.dhero__line {
+  display: block;
+}
+/* השורה האחרונה קלה - נותנת לכותרת מדרג במקום גוש אחד */
+.dhero__line--light {
+  font-weight: 300;
+}
+
+.dhero__lead {
+  margin: 0 0 var(--space-4);
+  max-width: 24rem;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
+}
+
+/* הכפתור הכהה מהרפרנס */
+.dhero__cta {
+  display: inline-block;
+  padding: 0.9375rem 2rem;
+  border-radius: 2rem;
+  background: var(--color-header-bg);
+  color: #fff;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  text-decoration: none;
+  transition: background 0.25s var(--ease);
+}
+.dhero__cta:hover,
+.dhero__cta:focus-visible {
+  background: #3a3736;
+}
+
+.dhero__swatches {
+  display: flex;
+  gap: 0.625rem;
+  list-style: none;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+}
+.dhero__swatch {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* ===== התמונה - יוצאת מהפריים =====
+   margin שלילי בצד החיצוני מושך אותה עד קצה המסך. הערך שווה
+   בדיוק ל-side-padding, ולכן היא נוגעת בקצה בלי ליצור גלילה. */
+.dhero__media {
+  position: relative;
+  height: 68vh;
+  min-height: 22rem;
+  margin-inline-end: calc(var(--side-padding) * -1);
+  /* עיגול רק בצד הפנימי - הצד החיצוני נחתך בקצה המסך,
+     וזה מה שיוצר את התחושה שהמטבח ממשיך מעבר למסגרת */
+  border-radius: 1.5rem 0 0 1.5rem;
+  overflow: hidden;
+  background: var(--color-header-bg);
+}
+.dhero__img {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease-soft);
+}
+.dhero__img.is-active {
+  opacity: 1;
+}
+
+/* העיגול הכהה - יושב על גבול התמונה וחוצה אותו */
+.dhero__badge {
+  position: absolute;
+  /* הצד הפנימי של התמונה (זה שפונה לטקסט). ב-RTL זה inline-start,
+     והטרנספורם דוחף חצי ממנו החוצה - כך הוא חוצה את הגבול. */
+  inset-inline-start: 0;
+  bottom: var(--space-4);
+  transform: translateX(50%);
+  z-index: 2;
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+  background: var(--color-header-bg);
+  color: #fff;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+}
+.dhero__badge-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.dhero__badge-star {
+  color: var(--color-gold);
+  font-size: 1rem;
+}
+.dhero__badge-note {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 300;
+  opacity: 0.75;
+}
+
+/* ===== נקודות הסליידר ===== */
+.dhero__dots {
+  display: flex;
+  gap: 0.5rem;
+  /* מיושרות לצד הפנימי של התמונה, לא לקצה המסך */
+  justify-content: flex-start;
+  padding-inline-start: 0;
+}
+.dhero__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background 0.25s var(--ease), width 0.25s var(--ease);
+}
+.dhero__dot.is-active {
+  width: 1.5rem;
+  border-radius: 1rem;
+  background: var(--color-header-bg);
+}
+
+@media (max-width: 900px) {
+  .dhero {
+    padding-block: calc(var(--header-height) + var(--space-3)) var(--space-5);
+  }
+  /* במובייל התמונה עולה למעלה - היא הדבר שמושך את העין,
+     והכותרת נקראת מיד אחריה */
+  .dhero__inner {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-4);
+  }
+  /* במובייל התמונה עולה למעלה - היא מה שמושך את העין */
+  .dhero__media-col {
+    order: -1;
+  }
+  .dhero__media {
+    height: 46vh;
+    min-height: 16rem;
+    /* בורחת לשני הצדדים - קצה אל קצה */
+    margin-inline: calc(var(--side-padding) * -1);
+    border-radius: 0;
+  }
+  .dhero__badge {
+    width: 5rem;
+    height: 5rem;
+    bottom: var(--space-2);
+    inset-inline-end: var(--side-padding);
+    transform: none;
+  }
+  .dhero__badge-value {
+    font-size: 1.25rem;
+  }
+  .dhero__lead {
+    max-width: none;
+  }
+  .dhero__dots {
+    justify-content: center;
+  }
+}
