@@ -4444,6 +4444,9 @@ a.footer__contact-link:hover {
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  /* אותו גודל כמו שאר קישורי הפוטר. כלל ישן קבע כאן 1.25rem
+     מהתקופה שבה פרטי הקשר ישבו בעמודת המותג ולא כעמודה. */
+  font-size: 0.9375rem;
   color: #fff;
   text-decoration: none;
   transition: color 0.2s var(--ease);
@@ -4463,6 +4466,7 @@ a.footer__contact-link:hover {
   display: flex;
   justify-content: space-between;
   gap: var(--space-2);
+  font-size: 0.9375rem; /* זהה לשאר הפוטר */
   color: #fff;
 }
 .footer__hours-time {
