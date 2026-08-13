@@ -4023,6 +4023,10 @@ a.footer__contact-link:hover {
    לפי הרפרנס: חלונית רחבה ומרווחת, לא כרטיס צר. שדות בשתי
    עמודות עם קו תחתון בלבד, וכפתור בפינה השמאלית התחתונה. */
 .dmodal {
+  /* המרכוז המובנה של <dialog> מסתמך על margin:auto, ו-preflight
+     של Tailwind מאפס margin על הכל. בלי השורה הזו החלונית נצמדת
+     לצד במקום לרחף במרכז. */
+  margin: auto;
   width: min(52rem, calc(100vw - 2rem));
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
