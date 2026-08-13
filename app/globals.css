@@ -4269,3 +4269,214 @@ a.footer__contact-link:hover {
     width: 100%;
   }
 }
+
+/* =========================================================
+   כפתור אחיד לכל האתר
+   כל כפתורי הפעולה בתוכן מקבלים בדיוק את הסגנון של הכפתור
+   בסקשן "פגישה עם מעצב/ת": זהב, פינות חדות, בולד.
+
+   הבלוק הזה בסוף הקובץ בכוונה - הוא דורס את ההגדרות
+   הישנות של כל אחד מהם בלי שצריך למחוק אותן אחת אחת.
+
+   לא נכללים כאן, ובכוונה:
+   .header__cta   גלולה קטנה בבר, לא כפתור תוכן
+   .fab__btn      עיגולי החיוג והוואטסאפ הצפים
+   .mnav__action  פעולות בתוך תפריט המובייל
+   .cform__alt, .dmodal__alt  קישורי משנה, לא כפתורים
+   ========================================================= */
+.about__cta,
+.lead__cta,
+.lead__submit,
+.soon__submit,
+.cform__submit,
+.dhero__cta,
+.dcta__btn,
+.dmodal__submit,
+.kpage__cta {
+  display: inline-block;
+  align-self: flex-start;
+  width: auto;
+  flex: 0 0 auto;
+  padding: 1rem 2.25rem;
+  border: 0;
+  border-radius: 0; /* פינות חדות */
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.2s var(--ease);
+}
+
+.about__cta:hover,
+.lead__cta:hover,
+.lead__submit:hover,
+.soon__submit:hover,
+.cform__submit:hover,
+.dhero__cta:hover,
+.dcta__btn:hover,
+.dmodal__submit:hover,
+.kpage__cta:hover,
+.about__cta:focus-visible,
+.lead__cta:focus-visible,
+.lead__submit:focus-visible,
+.soon__submit:focus-visible,
+.cform__submit:focus-visible,
+.dhero__cta:focus-visible,
+.dcta__btn:focus-visible,
+.dmodal__submit:focus-visible,
+.kpage__cta:focus-visible {
+  filter: brightness(1.07);
+  background: var(--color-gold);
+  color: var(--color-fg);
+  opacity: 1;
+}
+
+/* הקו התחתון שהיה מתחת לקישורי הטקסט - מיותר עכשיו כשהם
+   כפתורים מלאים */
+.about__cta::after,
+.lead__cta::after {
+  content: none;
+}
+
+@media (max-width: 900px) {
+  /* בטופס הקצר של העמוד הזמני הכפתור נשאר ברוחב מלא */
+  .soon__submit {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   פוטר כהה - לפי הרפרנס שדניאל שלח
+   רקע פחם, כותרות לבנות, קישורים אפורים, ורשתות בריבועים
+   עם מסגרת. הבלוק בסוף הקובץ ודורס את הגרסה הבהירה.
+   ========================================================= */
+.footer {
+  background: #323232;
+  color: #fff;
+}
+/* הטקסטורה הבהירה שהייתה ברקע לא מתאימה לפחם */
+.footer::before {
+  content: none;
+}
+
+.footer__inner {
+  /* המותג ראשון ב-DOM ולכן מימין, ואחריו העמודות */
+  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  gap: 3vw;
+  align-items: start;
+}
+
+.footer__logo-img {
+  /* הגרסה הבהירה של הלוגו, שנמדדה 216/255 */
+  max-width: 13rem;
+  height: auto;
+}
+
+.footer__title {
+  color: #fff;
+  font-weight: 700;
+}
+
+.footer__link {
+  color: #fff;
+  transition: opacity 0.2s var(--ease);
+}
+.footer__link:hover,
+.footer__link:focus-visible {
+  color: #fff;
+  opacity: 0.75;
+}
+
+/* רשתות בריבועים עם מסגרת, כמו בצילום */
+.footer__social {
+  display: flex;
+  gap: 0.625rem;
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+.footer__social-link {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.375rem;
+  color: #fff;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.footer__social-link svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.footer__social-link:hover,
+.footer__social-link:focus-visible {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+/* פרטי קשר - האייקון בזהב, הטקסט אפור */
+.footer__contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.footer__contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.footer__contact-link svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: var(--color-gold);
+}
+.footer__contact-link:not(.footer__contact-link--static):hover,
+.footer__contact-link:not(.footer__contact-link--static):focus-visible {
+  color: #fff;
+}
+
+.footer__hours {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  color: #fff;
+}
+.footer__hours-time {
+  font-variant-numeric: tabular-nums;
+}
+
+/* קו דק מפריד, כמו בצילום */
+.footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.footer__copy {
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .footer__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) var(--space-3);
+  }
+}
+@media (max-width: 560px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+  }
+}

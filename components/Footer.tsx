@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="footer__brand">
           <Link href="/" className="footer__logo">
             <Image
-              src="/logo-dark.png"
+              src="/logo.png"
               alt={site.name}
               width={1640}
               height={460}
@@ -28,29 +28,20 @@ export default function Footer() {
             />
           </Link>
 
-          <ul className="footer__contact">
-            <li>
-              <a
-                href={`tel:${site.phone1.replace(/-/g, "")}`}
-                className="footer__contact-link"
-              >
-                <Icon id="phone" />
-                <span>{site.phone1}</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href={`mailto:${site.email}`}
-                className="footer__contact-link footer__contact-link--underline"
-              >
-                <Icon id="mail" />
-                <span>{site.email}</span>
-              </a>
-            </li>
-            <li className="footer__contact-link footer__contact-link--static">
-              <Icon id="pin" />
-              <span>{site.address}</span>
-            </li>
+          <ul className="footer__social">
+            {site.social.map((sc) => (
+              <li key={sc.id}>
+                <a
+                  href={sc.href}
+                  className="footer__social-link"
+                  aria-label={sc.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon id={sc.id} />
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -96,20 +87,31 @@ export default function Footer() {
             ))}
           </ul>
 
-          <ul className="footer__social">
-            {site.social.map((s) => (
-              <li key={s.id}>
-                <a
-                  href={s.href}
-                  className="footer__social-link"
-                  aria-label={s.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon id={s.id} />
-                </a>
-              </li>
-            ))}
+        </div>
+
+        {/* ===== דברו איתנו - שמאל ===== */}
+        <div className="footer__col">
+          <h3 className="footer__title">דברו איתנו</h3>
+          <ul className="footer__contact">
+            <li>
+              <a
+                href={`tel:${site.phone1.replace(/-/g, "")}`}
+                className="footer__contact-link"
+              >
+                <Icon id="phone" />
+                <span>{site.phone1}</span>
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`} className="footer__contact-link">
+                <Icon id="mail" />
+                <span>{site.email}</span>
+              </a>
+            </li>
+            <li className="footer__contact-link footer__contact-link--static">
+              <Icon id="pin" />
+              <span>{site.address}</span>
+            </li>
           </ul>
         </div>
       </div>
