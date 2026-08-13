@@ -4378,8 +4378,12 @@ a.footer__contact-link:hover {
 }
 
 .footer__title {
+  /* היו 20px - גדול מדי לכותרת עמודה בפוטר, והתחרה בקישורים
+     שמתחתיה. 16px נותן היררכיה בלי לצעוק. */
+  font-size: var(--fs-base);
   color: #fff;
   font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .footer__link {
