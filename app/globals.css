@@ -3721,39 +3721,30 @@ a.footer__contact-link:hover {
 /* =========================================================
    עמוד "המעצבים שלנו" - פתיח לפי הרפרנס
    טקסט מימין, תמונה משמאל (היפוך RTL של הרפרנס).
-   העיקרון שמחזיק את העיצוב: התמונה לא יושבת בתוך הפריים אלא
-   בורחת ממנו - נשפכת עד קצה המסך, מעוגלת רק בצד הפנימי,
-   והעיגול הכהה חוצה את הגבול שלה.
+
+   הפרט המרכזי: השיש חורג מהמסגרת פנימה לאזור הטקסט.
+   שתי שכבות של אותו צילום על אותה גיאומטריה בדיוק - אחת חתוכה
+   על ידי המסגרת, השנייה לא, עם clip-path שמשאיר רק את האי.
+   אין תפר כי שתיהן על אותו לוח.
    ========================================================= */
 .dhero {
+  --spill: 5vw; /* כמה השיש חורג מעבר לקצה המסגרת */
   background: var(--color-surface);
   padding: calc(var(--header-height) + var(--space-5)) var(--side-padding)
-    var(--space-5);
+    var(--space-6);
 }
 
 .dhero__inner {
   display: grid;
-  grid-template-columns: 42fr 58fr;
+  grid-template-columns: 44fr 56fr;
   align-items: center;
-  column-gap: 4vw;
-}
-/* עמודת התמונה: התמונה ומתחתיה הנקודות, בדיוק כמו ברפרנס */
-.dhero__media-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  column-gap: 2vw;
 }
 
 /* ===== טקסט ===== */
-.dhero__text {
-  /* מסודר ב-grid לפי סדר ה-DOM: הטקסט ראשון ולכן בעמודה הראשונה,
-     שהיא ימין ב-RTL */
-  order: 0;
-}
 .dhero__title {
   margin: 0 0 var(--space-3);
   font-family: var(--font-display);
-  /* גדול מאוד ובשורות צמודות, כמו ברפרנס */
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: 700;
   line-height: 1.05em;
@@ -3769,7 +3760,7 @@ a.footer__contact-link:hover {
 
 .dhero__lead {
   margin: 0 0 var(--space-4);
-  max-width: 24rem;
+  max-width: 22rem;
   font-size: var(--fs-base);
   font-weight: 300;
   line-height: 1.6em;
@@ -3807,37 +3798,64 @@ a.footer__contact-link:hover {
   border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-/* ===== התמונה - יוצאת מהפריים =====
-   margin שלילי בצד החיצוני מושך אותה עד קצה המסך. הערך שווה
-   בדיוק ל-side-padding, ולכן היא נוגעת בקצה בלי ליצור גלילה. */
-.dhero__media {
+/* ===== במה: מסגרת + שכבת החריגה + עיגול =====
+   ב-RTL inline-end הוא שמאל (הקצה החיצוני) ו-inline-start הוא
+   ימין (הצד הפנימי, זה שפונה לטקסט). */
+.dhero__stage {
   position: relative;
-  height: 68vh;
+  height: 66vh;
   min-height: 22rem;
+  /* נשפכת עד קצה המסך בצד החיצוני */
   margin-inline-end: calc(var(--side-padding) * -1);
-  /* עיגול רק בצד הפנימי - הצד החיצוני נחתך בקצה המסך,
-     וזה מה שיוצר את התחושה שהמטבח ממשיך מעבר למסגרת */
-  border-radius: 1.5rem 0 0 1.5rem;
+}
+
+/* המסגרת - חותכת את הלוח */
+.dhero__media {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  /* עיגול רק בצד הפנימי. הצד החיצוני נחתך בקצה המסך. */
+  border-radius: 0 1.5rem 1.5rem 0;
   background: var(--color-header-bg);
+}
+
+/* הלוח - רחב מהמסגרת ב---spill, ומעוגן לקצה החיצוני.
+   שתי השכבות משתמשות בו, ולכן הן מיושרות פיקסל לפיקסל. */
+.dhero__plate {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: calc(100% + var(--spill));
+}
+.dhero__spill .dhero__plate {
+  width: 100%; /* ההורה כבר ברוחב הלוח */
 }
 .dhero__img {
   object-fit: cover;
   object-position: center;
-  opacity: 0;
-  transition: opacity 0.7s var(--ease-soft);
-}
-.dhero__img.is-active {
-  opacity: 1;
 }
 
-/* העיגול הכהה - יושב על גבול התמונה וחוצה אותו */
+/* שכבת החריגה - לא חתוכה על ידי המסגרת.
+   ה-clip-path מכויל למשטח האי ב-real-modern-3: הקו העליון עולה
+   משמאל לימין, בדיוק כמו קצה השיש בצילום. */
+.dhero__spill {
+  position: absolute;
+  /* חייבת להיות ברוחב הלוח ולא ברוחב המסגרת: ה-clip-path נמדד
+     ביחס לתיבה הזו, ולכן אם היא נעצרת בקצה המסגרת - אין מה שיחרוג. */
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: calc(100% + var(--spill));
+  pointer-events: none;
+  clip-path: polygon(0% 78%, 100% 56%, 100% 100%, 0% 100%);
+  /* צל דק מתחת לחלק החורג - בלעדיו הוא נראה מודבק ולא מונח */
+  filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.18));
+}
+
+/* העיגול הכהה - יושב על הגבול הפנימי וחוצה אותו */
 .dhero__badge {
   position: absolute;
-  /* הצד הפנימי של התמונה (זה שפונה לטקסט). ב-RTL זה inline-start,
-     והטרנספורם דוחף חצי ממנו החוצה - כך הוא חוצה את הגבול. */
   inset-inline-start: 0;
-  bottom: var(--space-4);
+  bottom: var(--space-5);
   transform: translateX(50%);
   z-index: 2;
   width: 6.5rem;
@@ -3873,56 +3891,33 @@ a.footer__contact-link:hover {
   opacity: 0.75;
 }
 
-/* ===== נקודות הסליידר ===== */
-.dhero__dots {
-  display: flex;
-  gap: 0.5rem;
-  /* מיושרות לצד הפנימי של התמונה, לא לקצה המסך */
-  justify-content: flex-start;
-  padding-inline-start: 0;
-}
-.dhero__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.18);
-  cursor: pointer;
-  transition: background 0.25s var(--ease), width 0.25s var(--ease);
-}
-.dhero__dot.is-active {
-  width: 1.5rem;
-  border-radius: 1rem;
-  background: var(--color-header-bg);
-}
-
 @media (max-width: 900px) {
   .dhero {
+    --spill: 0px; /* אין לאן לחרוג כשהתמונה תופסת את כל הרוחב */
     padding-block: calc(var(--header-height) + var(--space-3)) var(--space-5);
   }
-  /* במובייל התמונה עולה למעלה - היא הדבר שמושך את העין,
-     והכותרת נקראת מיד אחריה */
   .dhero__inner {
     grid-template-columns: 1fr;
     row-gap: var(--space-4);
   }
-  /* במובייל התמונה עולה למעלה - היא מה שמושך את העין */
-  .dhero__media-col {
+  /* התמונה עולה למעלה - היא מה שמושך את העין */
+  .dhero__stage {
     order: -1;
-  }
-  .dhero__media {
     height: 46vh;
     min-height: 16rem;
-    /* בורחת לשני הצדדים - קצה אל קצה */
     margin-inline: calc(var(--side-padding) * -1);
+  }
+  .dhero__media {
     border-radius: 0;
+  }
+  .dhero__spill {
+    display: none; /* בלי חריגה - היא מתקיימת רק מול הטקסט */
   }
   .dhero__badge {
     width: 5rem;
     height: 5rem;
     bottom: var(--space-2);
-    inset-inline-end: var(--side-padding);
+    inset-inline-start: var(--side-padding);
     transform: none;
   }
   .dhero__badge-value {
@@ -3930,8 +3925,5 @@ a.footer__contact-link:hover {
   }
   .dhero__lead {
     max-width: none;
-  }
-  .dhero__dots {
-    justify-content: center;
   }
 }

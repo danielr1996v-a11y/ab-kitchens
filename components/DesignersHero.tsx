@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { designersPage } from "@/lib/content";
@@ -9,15 +6,42 @@ import { designersPage } from "@/lib/content";
  * הפתיח של עמוד "המעצבים שלנו" - לפי הרפרנס שדניאל שלח.
  *
  * הפריסה הפוכה לרפרנס כי האתר RTL: הטקסט מימין (צד ההתחלה)
- * והתמונה משמאל. בלי ההיפוך הקריאה הייתה מתחילה מהתמונה.
+ * והתמונה משמאל.
  *
- * client component בגלל הסליידר. הנקודות ברפרנס דקורטיביות -
- * כאן הן עובדות באמת ומחליפות בין שלושה צילומים של אברהם.
+ * ===== הפרט שמחזיק את העיצוב =====
+ * ברפרנס הספה חורגת מהמסגרת ונכנסת לאזור הטקסט. כאן השיש עושה
+ * את זה, בלי קובץ חתוך: שתי שכבות של אותו צילום, על אותה גיאומטריה
+ * בדיוק, כך שאין תפר -
+ *
+ *   1. dhero__media  - המסגרת. overflow:hidden חותך את התמונה
+ *   2. dhero__spill  - אותה תמונה בדיוק, לא חתוכה על ידי המסגרת,
+ *                      עם clip-path שמשאיר רק את משטח האי
+ *
+ * הלוח (dhero__plate) רחב מהמסגרת ב---spill, ולכן החלק של האי
+ * שנמצא מעבר לקצה המסגרת נחשף בשכבה השנייה - והשיש "יוצא החוצה".
+ *
+ * server component: אין כאן state, רק שכבות.
  */
 export default function DesignersHero() {
-  const [active, setActive] = useState(0);
-  const { titleLines, lead, ctaText, ctaHref, slides, swatches, badge } =
+  const { titleLines, lead, ctaText, ctaHref, hero, swatches, badge } =
     designersPage;
+
+  /* אותה תמונה בשתי השכבות. priority רק על הראשונה - הדפדפן
+     משתמש באותו קובץ פעמיים ולא מוריד אותו כפול. */
+  const plate = (priority: boolean) => (
+    <div className="dhero__plate">
+      <Image
+        src={hero.image}
+        alt={priority ? hero.alt : ""}
+        aria-hidden={!priority}
+        fill
+        priority={priority}
+        quality={90}
+        sizes="(max-width: 900px) 100vw, 60vw"
+        className="dhero__img"
+      />
+    </div>
+  );
 
   return (
     <section className="dhero">
@@ -43,8 +67,8 @@ export default function DesignersHero() {
             {ctaText}
           </Link>
 
-          {/* דגימות הגימורים. aria-hidden כי הן ויזואליות בלבד -
-              הבחירה האמיתית נעשית בפגישה, לא כאן */}
+          {/* דגימות הגימורים. ויזואליות בלבד - הבחירה האמיתית
+              נעשית בפגישה, ולכן aria-hidden */}
           <ul className="dhero__swatches" aria-hidden="true">
             {swatches.map((s) => (
               <li
@@ -58,20 +82,13 @@ export default function DesignersHero() {
         </div>
 
         {/* ===== תמונה - שמאל ב-RTL ===== */}
-        <div className="dhero__media-col">
-        <div className="dhero__media">
-          {slides.map((s, i) => (
-            <Image
-              key={s.image}
-              src={s.image}
-              alt={s.alt}
-              fill
-              priority={i === 0}
-              quality={90}
-              sizes="(max-width: 900px) 100vw, 55vw"
-              className={`dhero__img${i === active ? " is-active" : ""}`}
-            />
-          ))}
+        <div className="dhero__stage">
+          <div className="dhero__media">{plate(true)}</div>
+
+          {/* השכבה שחורגת. aria-hidden כי זו אותה תמונה שוב */}
+          <div className="dhero__spill" aria-hidden="true">
+            {plate(false)}
+          </div>
 
           {/* העיגול הכהה מהרפרנס. שם היה מחיר - כאן הדירוג
               האמיתי מגוגל, כי מחיר על מטבח בהתאמה אישית מטעה */}
@@ -83,22 +100,6 @@ export default function DesignersHero() {
               {badge.value}
             </span>
             <span className="dhero__badge-note">{badge.note}</span>
-          </div>
-        </div>
-
-          {/* הנקודות יושבות מתחת לתמונה, כמו ברפרנס */}
-          <div className="dhero__dots" role="tablist" aria-label="בחירת תמונה">
-            {slides.map((s, i) => (
-              <button
-                key={s.image}
-                type="button"
-                role="tab"
-                aria-selected={i === active}
-                aria-label={`תמונה ${i + 1} מתוך ${slides.length}`}
-                className={`dhero__dot${i === active ? " is-active" : ""}`}
-                onClick={() => setActive(i)}
-              />
-            ))}
           </div>
         </div>
       </div>
