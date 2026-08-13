@@ -4020,28 +4020,63 @@ a.footer__contact-link:hover {
 }
 
 /* ===== הפופאפ =====
-   לפי הרפרנס: חלונית רחבה ומרווחת, לא כרטיס צר. שדות בשתי
-   עמודות עם קו תחתון בלבד, וכפתור בפינה השמאלית התחתונה. */
+   חלונית רחבה ומרווחת לפי הרפרנס, עם פתיחה רכה.
+
+   הגדלים לפי הבקשה של דניאל (0.8vw תווית / 3vw כותרת / 1vw טקסט),
+   אבל דרך clamp: vw טהור נותן 3px לתווית ב-390 - בלתי קריא.
+   ה-vw נשאר האמצע, והרצפה מגינה על המובייל.
+   ========================================================= */
 .dmodal {
   /* המרכוז המובנה של <dialog> מסתמך על margin:auto, ו-preflight
-     של Tailwind מאפס margin על הכל. בלי השורה הזו החלונית נצמדת
-     לצד במקום לרחף במרכז. */
+     של Tailwind מאפס margin על הכל. */
   margin: auto;
-  width: min(52rem, calc(100vw - 2rem));
+  width: min(54rem, calc(100vw - 2rem));
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
-  padding: var(--space-6) var(--space-6) var(--space-5);
+  padding: var(--space-6) var(--space-6) var(--space-6);
   border: 0;
-  border-radius: 0.5rem;
+  /* פינות חדות, כמו בצילום - לא כרטיס מעוגל */
+  border-radius: 0;
   background: var(--color-bg);
   color: var(--color-fg);
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.32);
+
+  /* פתיחה רכה: עולה מעט, גדל מעט, ונפתח. allow-discrete הוא מה
+     שמאפשר להנפיש אלמנט שעובר מ-display:none - בלעדיו הוא פשוט
+     מופיע. @starting-style קובע מאיפה הוא מתחיל. */
+  opacity: 0;
+  transform: translateY(1rem) scale(0.97);
+  transition: opacity 0.45s var(--ease-soft), transform 0.45s var(--ease-soft),
+    overlay 0.45s allow-discrete, display 0.45s allow-discrete;
 }
-.dmodal::backdrop {
-  background: rgba(26, 26, 26, 0.55);
+.dmodal[open] {
+  opacity: 1;
+  transform: none;
+}
+@starting-style {
+  .dmodal[open] {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.97);
+  }
 }
 
-/* הסגירה בפינה השמאלית העליונה, כמו ברפרנס */
+/* הרקע מיטשטש ולא רק מכהה - זה מה שנותן את תחושת העומק */
+.dmodal::backdrop {
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-soft), overlay 0.45s allow-discrete,
+    display 0.45s allow-discrete;
+}
+.dmodal[open]::backdrop {
+  opacity: 1;
+}
+@starting-style {
+  .dmodal[open]::backdrop {
+    opacity: 0;
+  }
+}
+
 .dmodal__close {
   position: absolute;
   top: var(--space-3);
@@ -4055,6 +4090,7 @@ a.footer__contact-link:hover {
   background: transparent;
   color: var(--color-fg);
   cursor: pointer;
+  transition: background 0.2s var(--ease);
 }
 .dmodal__close:hover,
 .dmodal__close:focus-visible {
@@ -4065,15 +4101,15 @@ a.footer__contact-link:hover {
   height: 1.5rem;
 }
 
-/* עינית עם קו קצר. ב-RTL ה-::after נופל משמאל לטקסט,
-   בדיוק כמו הקו הירוק ברפרנס. */
+/* עינית עם קו קצר. ב-RTL ה-::after נופל משמאל לטקסט. */
 .dmodal__eyebrow {
   display: flex;
   align-items: center;
   gap: 0.875rem;
   margin: 0 0 var(--space-2);
-  font-size: var(--fs-base);
+  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
   font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--color-fg);
 }
 .dmodal__eyebrow::after {
@@ -4084,50 +4120,68 @@ a.footer__contact-link:hover {
   flex-shrink: 0;
 }
 
+/* 3vw */
 .dmodal__title {
   margin: 0 0 var(--space-3);
-  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-size: clamp(1.5rem, 3vw, 2.75rem);
   font-weight: 700;
   line-height: 1.15em;
   text-wrap: balance;
 }
+
+/* 1vw, שחור ובולד */
 .dmodal__lead {
-  margin: 0 0 var(--space-6);
+  margin: 0 0 var(--space-5);
   max-width: 36rem;
-  font-size: var(--fs-sub);
-  font-weight: 300;
+  font-size: clamp(0.9375rem, 1vw, 1.125rem);
+  font-weight: 700;
   line-height: 1.6em;
-  color: var(--color-muted);
+  color: var(--color-fg);
 }
 
-/* שתי עמודות, כמו ברפרנס */
 .dmodal__form {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-5) var(--space-4);
+  gap: var(--space-4);
 }
+/* ריתמוס הרפרנס: שדה ברוחב מלא, ואז שניים זה לצד זה */
+.dmodal__field--wide {
+  grid-column: 1 / -1;
+}
+
+/* 0.8vw */
 .dmodal__label {
   display: block;
   margin-bottom: 0.5rem;
-  font-size: var(--fs-sub);
-  font-weight: 300;
+  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
+  font-weight: 400;
   color: var(--color-muted);
 }
-/* קו תחתון בלבד - בלי מסגרת ובלי רקע */
+
+/* שדה עם רקע וצללה פנימית - כך ברור שזה שדה למילוי,
+   במקום קו תחתון שנקרא כקישוט */
 .dmodal__input {
   width: 100%;
-  padding: 0.375rem 0;
-  border: 0;
-  border-bottom: 1px solid var(--color-border);
-  border-radius: 0;
-  background: transparent;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
   font: inherit;
-  font-size: var(--fs-sub);
+  font-size: clamp(0.9375rem, 1vw, 1.125rem);
   color: var(--color-fg);
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.dmodal__input::placeholder {
+  color: var(--color-muted);
 }
 .dmodal__input:focus {
   outline: 0;
-  border-bottom-color: var(--color-gold);
+  border-color: var(--color-gold);
+  background: var(--color-bg);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04),
+    0 0 0 3px rgba(221, 177, 67, 0.18);
 }
 
 /* הכפתור בפינה השמאלית התחתונה. ב-RTL flex-end הוא שמאל. */
@@ -4135,17 +4189,20 @@ a.footer__contact-link:hover {
   grid-column: 1 / -1;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  /* ב-RTL flex-start הוא ימין - שם הכפתור יושב בצילום,
+     מיושר לקצה הימני של התוכן */
+  justify-content: flex-start;
   gap: var(--space-3);
   margin-top: var(--space-2);
 }
 .dmodal__submit {
-  padding: 1.125rem 2.5rem;
+  padding: 1rem 3rem;
   border: 0;
+  border-radius: 0;
   background: var(--color-gold);
   color: var(--color-fg);
   font: inherit;
-  font-size: var(--fs-base);
+  font-size: clamp(0.9375rem, 1vw, 1.125rem);
   font-weight: 700;
   cursor: pointer;
   transition: filter 0.2s var(--ease);
@@ -4158,7 +4215,7 @@ a.footer__contact-link:hover {
   border: 0;
   background: transparent;
   font: inherit;
-  font-size: var(--fs-base);
+  font-size: clamp(0.8125rem, 0.9vw, 1rem);
   color: var(--color-muted);
   cursor: pointer;
   text-decoration: underline;
@@ -4166,6 +4223,16 @@ a.footer__contact-link:hover {
 .dmodal__alt:hover,
 .dmodal__alt:focus-visible {
   color: var(--color-fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dmodal,
+  .dmodal::backdrop {
+    transition: none;
+  }
+  .dmodal {
+    transform: none;
+  }
 }
 
 @media (max-width: 900px) {

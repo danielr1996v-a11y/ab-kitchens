@@ -830,9 +830,12 @@ export const designerCta = {
     title: "כמה פרטים ונחזור אליכם",
     lead: "שיחה בחינם עם המעצב/ת שלנו, כדי שתקבלו את הבחירה הכי טובה עבורכם.",
     /* שני שדות בלבד. כל שדה נוסף מוריד המרה, והשאר נברר בשיחה. */
+    /* ריתמוס הרפרנס: שדה ברוחב מלא ואז שניים זה לצד זה.
+       שלושה שדות בסך הכל - השאר נברר בשיחה. */
     fields: [
-      { id: "name", label: "שם מלא", type: "text", autoComplete: "name" },
-      { id: "phone", label: "נייד", type: "tel", autoComplete: "tel" },
+      { id: "name", label: "שם מלא", type: "text", autoComplete: "name", wide: true },
+      { id: "phone", label: "נייד", type: "tel", autoComplete: "tel", wide: false },
+      { id: "city", label: "עיר (לא חובה)", type: "text", autoComplete: "address-level2", wide: false },
     ],
     submitLabel: "קבלו שיחה מהמעצב/ת",
     altLabel: "או שלחו בוואטסאפ",

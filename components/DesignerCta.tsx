@@ -94,7 +94,10 @@ export default function DesignerCta() {
 
         <form className="dmodal__form" onSubmit={sendMail}>
           {modal.fields.map((f) => (
-            <div className="dmodal__field" key={f.id}>
+            <div
+              className={`dmodal__field${f.wide ? " dmodal__field--wide" : ""}`}
+              key={f.id}
+            >
               <label className="dmodal__label" htmlFor={`d-${f.id}`}>
                 {f.label}
               </label>
@@ -103,7 +106,7 @@ export default function DesignerCta() {
                 name={f.id}
                 type={f.type}
                 autoComplete={f.autoComplete}
-                required
+                required={f.id !== "city"}
                 className="dmodal__input"
                 value={values[f.id] ?? ""}
                 onChange={(e) => set(f.id, e.target.value)}
@@ -111,14 +114,15 @@ export default function DesignerCta() {
             </div>
           ))}
 
-          {/* שורה משלה ברוחב מלא, כדי שהכפתור יישב בפינה
-              השמאלית התחתונה כמו ברפרנס */}
+          {/* שורה משלה ברוחב מלא. הכפתור מיושר לקצה הימני של
+              התוכן, כמו בצילום */}
           <div className="dmodal__actions">
-            <button type="button" className="dmodal__alt" onClick={sendWhatsApp}>
-              {modal.altLabel}
-            </button>
+            {/* הראשי ראשון ב-DOM כדי שיישב מימין ב-RTL */}
             <button type="submit" className="dmodal__submit">
               {modal.submitLabel}
+            </button>
+            <button type="button" className="dmodal__alt" onClick={sendWhatsApp}>
+              {modal.altLabel}
             </button>
           </div>
         </form>
