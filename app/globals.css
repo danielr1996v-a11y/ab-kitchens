@@ -4484,3 +4484,10 @@ a.footer__contact-link:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* הכלל המשותף לכפתורים קובע align-self: flex-start, שנחוץ
+   במיכלים שהם עמודה. כאן המיכל ממורכז אנכית, ולכן הכפתור
+   חוזר למרכז ולא נדבק לראש הכרטיס. */
+.dcta__btn {
+  align-self: center;
+}
