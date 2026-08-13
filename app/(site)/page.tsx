@@ -1,5 +1,6 @@
 import SectionRenderer from "@/components/SectionRenderer";
 import { homeSections } from "@/lib/sections";
+import DesignerCta from "@/components/DesignerCta";
 import { sanityFetch } from "@/lib/sanity/live";
 import { homeQuery, adaptHome } from "@/lib/sanity/queries";
 
@@ -27,5 +28,13 @@ export default async function HomePage() {
     }
   }
 
-  return <SectionRenderer sections={sections} />;
+  /* ה-CTA אינו בלוק CMS בשלב הזה - הוא סקשן קבוע בסוף העמוד.
+     לכן הוא מרונדר כאן ולא דרך SectionRenderer, שאחרת היה
+     נעלם כשהתוכן מגיע מ-Sanity ולא כולל אותו. */
+  return (
+    <>
+      <SectionRenderer sections={sections} />
+      <DesignerCta />
+    </>
+  );
 }

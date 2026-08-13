@@ -3923,3 +3923,244 @@ a.footer__contact-link:hover {
     max-width: none;
   }
 }
+
+/* =========================================================
+   CTA "פגישה עם מעצב/ת" + הפופאפ
+   לפי הרפרנס: כרטיס עם מרווח מהצדדים (לא רוחב מלא), צילום
+   עם שכבת פחם, טקסט בצד וקו אנכי מבדיל.
+   הירוק שברפרנס הוא הצבע של המותג שלהם. אצלנו הזהב.
+   ========================================================= */
+.dcta {
+  padding: var(--section-gap) var(--side-padding);
+  background: var(--color-bg);
+}
+
+.dcta__card {
+  position: relative;
+  min-height: 26rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--color-header-bg);
+}
+.dcta__img {
+  object-fit: cover;
+  object-position: center;
+}
+/* שכבת המותג. גרדיאנט ולא צבע אחיד: כהה יותר בצד הטקסט
+   ושקוף יותר בצד השני, כך שהמטבח נשאר נראה. */
+.dcta__card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to left,
+    rgba(36, 35, 35, 0.94) 0%,
+    rgba(36, 35, 35, 0.86) 42%,
+    rgba(36, 35, 35, 0.55) 100%
+  );
+}
+
+.dcta__body {
+  position: relative;
+  z-index: 1;
+  min-height: inherit;
+  padding: var(--space-6) var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+/* הקו האנכי מהרפרנס - מפריד את הטקסט מקצה הכרטיס */
+.dcta__text {
+  order: 1;
+  max-width: 32rem;
+  padding-inline-start: var(--space-4);
+  border-inline-start: 2px solid var(--color-gold);
+  text-align: start;
+  color: #fff;
+}
+.dcta__eyebrow {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-base);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
+}
+.dcta__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.dcta__lead {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* הכפתור בצד הנגדי, כמו ברפרנס. מלבני ולא מעוגל - שם הוא כזה. */
+.dcta__btn {
+  order: 0;
+  flex-shrink: 0;
+  padding: 1rem 2.25rem;
+  border: 0;
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.2s var(--ease);
+}
+.dcta__btn:hover,
+.dcta__btn:focus-visible {
+  filter: brightness(1.07);
+}
+
+/* ===== הפופאפ ===== */
+.dmodal {
+  width: min(34rem, calc(100vw - 2rem));
+  padding: var(--space-5);
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.3);
+}
+.dmodal::backdrop {
+  background: rgba(26, 26, 26, 0.6);
+}
+
+.dmodal__close {
+  position: absolute;
+  top: var(--space-2);
+  /* ב-RTL הסגירה בצד שמאל, כמו ברפרנס */
+  left: var(--space-2);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-fg);
+  cursor: pointer;
+}
+.dmodal__close:hover,
+.dmodal__close:focus-visible {
+  background: var(--color-surface);
+}
+.dmodal__close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* עינית עם קו קצר לצידה - הפרט מהרפרנס */
+.dmodal__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-logo-gold);
+}
+.dmodal__eyebrow::after {
+  content: "";
+  width: 2.5rem;
+  height: 2px;
+  background: var(--color-gold);
+}
+.dmodal__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+}
+.dmodal__lead {
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
+}
+
+.dmodal__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.dmodal__label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+/* שדה עם קו תחתון בלבד, כמו ברפרנס */
+.dmodal__input {
+  width: 100%;
+  padding: 0.5rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--fs-base);
+  color: var(--color-fg);
+}
+.dmodal__input:focus {
+  outline: 0;
+  border-bottom-color: var(--color-gold);
+}
+
+.dmodal__submit {
+  padding: 1rem;
+  border: 0;
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dmodal__submit:hover,
+.dmodal__submit:focus-visible {
+  filter: brightness(1.07);
+}
+.dmodal__alt {
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.dmodal__alt:hover {
+  color: var(--color-fg);
+}
+
+@media (max-width: 900px) {
+  .dcta__card {
+    min-height: 0;
+  }
+  /* הכפתור יורד מתחת לטקסט - זה לצד זה נמעך במסך צר */
+  .dcta__body {
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-5) var(--space-3);
+    gap: var(--space-4);
+  }
+  .dcta__text {
+    order: 0;
+  }
+  .dcta__btn {
+    order: 1;
+    width: 100%;
+  }
+  .dmodal {
+    padding: var(--space-4) var(--space-3);
+  }
+}
