@@ -111,12 +111,16 @@ export default function DesignerCta() {
             </div>
           ))}
 
-          <button type="submit" className="dmodal__submit">
-            {modal.submitLabel}
-          </button>
-          <button type="button" className="dmodal__alt" onClick={sendWhatsApp}>
-            {modal.altLabel}
-          </button>
+          {/* שורה משלה ברוחב מלא, כדי שהכפתור יישב בפינה
+              השמאלית התחתונה כמו ברפרנס */}
+          <div className="dmodal__actions">
+            <button type="button" className="dmodal__alt" onClick={sendWhatsApp}>
+              {modal.altLabel}
+            </button>
+            <button type="submit" className="dmodal__submit">
+              {modal.submitLabel}
+            </button>
+          </div>
         </form>
       </dialog>
     </section>
