@@ -1529,169 +1529,168 @@ main > *:first-child:not(.hero) {
    TESTIMONIALS - "בואו תשמעו את הלקוחות שלנו"
    רקע שיש לבן אלגנטי, כרטיסים לבנים עם צל עדין
    ========================================================= */
+/* =========================================================
+   המלצות - לפי הרפרנס שדניאל שלח
+   רשת של כרטיסים ולא סליידר: הסליידר הקודם הסתיר שתיים מתוך
+   שלוש. הכוכבים בזהב של המותג ולא בירוק של הרפרנס.
+   בלי תאריכים - לא ממציאים "לפני חודשיים".
+   ========================================================= */
 .testimonials {
   position: relative;
   width: 100%;
-  padding-block: var(--section-gap);
-  background-image: url("/images/marble-light.webp");
-  background-size: cover;
-  background-position: center;
-  isolation: isolate;
-}
-
-/* שכבה בהירה מעל הטקסטורה - מרככת את הוורידים כדי שהכרטיסים
-   יישארו הגורם הדומיננטי, והטקסטורה תישאר רמז ולא רעש */
-.testimonials::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.3),
-    rgba(255, 255, 255, 0.14) 45%,
-    rgba(255, 255, 255, 0.34)
-  );
+  padding: var(--section-gap) var(--side-padding);
+  background: var(--color-bg);
 }
 
 .testimonials__inner {
-  padding-inline: var(--side-padding);
+  width: 100%;
 }
 
+/* הכותרת מימין ותג הדירוג משמאל, כמו ברפרנס */
 .testimonials__header {
-  text-align: right; /* עברית - תמיד לימין */
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
   margin-bottom: var(--space-5);
 }
+
+/* עינית עם קו קצר. ב-RTL ה-::after נופל משמאל לטקסט. */
+.testimonials__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+.testimonials__eyebrow::after {
+  content: "";
+  width: 3.5rem;
+  height: 2px;
+  background: var(--color-gold);
+  flex-shrink: 0;
+}
+
 .testimonials__title {
+  margin: 0;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
-  margin: 0 0 var(--space-1);
-}
-.testimonials__source {
-  font-size: var(--fs-sub);
-  font-weight: 300;
-  line-height: 1.5em;
-  color: var(--color-muted);
-  margin: 0;
 }
 
-/* ===== הסליידר ===== */
-.slider {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1.5vw;
-}
-
-.slider__track {
-  display: flex;
-  gap: 1.5vw;
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0.25rem 1rem; /* מקום לצל שלא ייחתך */
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none; /* מסתירים סרגל - יש חצים */
-  flex: 1;
-}
-.slider__track::-webkit-scrollbar {
-  display: none;
-}
-
-/* ===== כרטיס המלצה ===== */
-.review {
-  flex: 0 0 calc((100% - 3vw) / 3);
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  background: #fff;
-  border-radius: 0.875rem;
-  padding: var(--space-3);
-  /* צל בסגנון כרטיסי גוגל - שלוש שכבות:
-     טבעת דקה שמפרידה לבן-על-לבן, צל צמוד, וצל רך ורחב */
-  box-shadow: 0 0 0 1px rgba(20, 19, 19, 0.04),
-    0 1px 2px rgba(20, 19, 19, 0.06),
-    0 0.625rem 1.75rem rgba(20, 19, 19, 0.09);
-}
-
-.stars {
-  display: inline-flex;
-  gap: 0.125rem;
-  color: var(--color-gold);
-}
-.stars__icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.review__text {
-  font-size: var(--fs-base);
-  font-weight: 300;
-  line-height: 1.6em;
-  color: var(--color-fg);
-  margin: 0;
-  flex: 1;
-}
-
-.review__footer {
+/* ===== תג הדירוג ===== */
+.gscore {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
 }
-.review__avatar {
+.gscore__logo {
   width: 2.25rem;
   height: 2.25rem;
+  flex-shrink: 0;
+}
+.gscore__value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.gscore__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.gscore__count {
+  font-size: var(--fs-sm);
+  font-weight: 300;
+  color: var(--color-muted);
+}
+
+/* ===== הכוכבים - זהב, לא ירוק ===== */
+.stars {
+  display: inline-flex;
+  gap: 0.1875rem;
+  color: var(--color-gold);
+}
+.stars__icon {
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+/* ===== רשת הכרטיסים ===== */
+.reviews {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5vw;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  /* צל עדין מאוד - מרים את הכרטיס מהרקע בלי להכביד */
+  box-shadow: 0 0.125rem 0.75rem rgba(26, 26, 26, 0.05);
+}
+
+/* השם והכוכבים למעלה, עם עיגול האות - בדיוק כמו ברפרנס */
+.review__head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.review__avatar {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--color-header-bg);
   color: #fff;
-  display: grid;
-  place-items: center;
+  font-family: var(--font-display);
   font-size: var(--fs-base);
   font-weight: 700;
-  flex-shrink: 0;
+}
+.review__who {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 .review__name {
+  margin: 0;
   font-size: var(--fs-base);
-  font-weight: 400;
+  font-weight: 700;
+  line-height: 1.2;
 }
-
-/* ===== חצי הניווט ===== */
-.slider__arrow {
-  width: 3rem;
-  height: 3rem;
-  flex-shrink: 0;
-  border: 1px solid var(--color-border);
-  border-radius: 50%;
-  background: #fff;
-  color: var(--color-fg);
-  box-shadow: 0 1px 2px rgba(20, 19, 19, 0.05);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: border-color 0.4s var(--ease-soft);
-}
-.slider__arrow svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-.slider__arrow:hover {
-  border-color: var(--color-fg);
+.review__text {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: 1.6em;
+  color: var(--color-muted);
 }
 
 @media (max-width: 900px) {
-  .review {
-    flex: 0 0 85%;
+  .testimonials__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
   }
-  .slider__arrow {
-    display: none; /* במובייל מחליקים באצבע */
-  }
-  .slider,
-  .slider__track {
-    gap: 4vw;
+  /* עמודה אחת - שלושה כרטיסים על 390px נמעכים */
+  .reviews {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
 }
 

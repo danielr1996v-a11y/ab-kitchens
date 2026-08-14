@@ -8,6 +8,10 @@ export const site = {
   phone2: "055-7799043",
   email: "bk0552775488@gmail.com",
   address: "בית ישראל 2, ירושלים",
+  /* דירוג Google - מאומת מול פרופיל העסק.
+     ⚠️ מספר הביקורות עשוי לעלות. לעדכן כשדניאל בודק. */
+  googleRating: 5.0,
+  googleReviews: 11,
   whatsappNumber: "972552775488", // ללא 0 מוביל, בפורמט בינלאומי
   tagline: "נגרות ושיש למטבח",
   // שעות פעילות - אומתו מול פרופיל Google Business
