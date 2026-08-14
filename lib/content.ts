@@ -46,6 +46,12 @@ export const headerSocial = [
 ];
 
 /**
+ * הרשתות בפוטר - כולל וואטסאפ, בניגוד ל-site.social שהוא
+ * הרשתות בלבד. אותה רשימה כמו בהדר.
+ */
+export const footerSocial = headerSocial;
+
+/**
  * נתיבים בעברית - זהים לאתר הישן.
  * זו החלטת SEO מכוונת: URL שלא משתנה = אפס אובדן דירוג.
  * אין לשנות נתיב שכבר מאונדקס בגוגל בלי בדיקת השפעה.
@@ -54,7 +60,7 @@ export const kitchenTypes = [
   {
     href: "/גלריה/קלאסי",
     label: "מטבח קלאסי",
-    image: "/images/style-classic.webp",
+    image: "/images/real-classic-5.webp",
   },
   {
     href: "/גלריה/מודרני",
@@ -284,8 +290,8 @@ export const styleSection = {
       id: "classic",
       title: "קלאסי",
       href: "/גלריה/קלאסי",
-      image: "/images/style-classic.webp",
-      alt: "מטבח קלאסי לבן עם אי שיש ופרטי זהב",
+      image: "/images/real-classic-5.webp",
+      alt: "מטבח קלאסי בגוון קרם עם חיפוי שיש ותנורים בנויים",
       size: "narrow" as const,
       enabled: true,
     },
@@ -410,9 +416,10 @@ export const contactPage = {
   eyebrow: "יצירת קשר",
   title: "בואו נדבר על המטבח שלכם",
   lead: "פגישה עם מעצב/ת ללא עלות. השאירו פרטים ונחזור אליכם, או פשוט תרימו טלפון.",
-  // צילום אמיתי של אברהם
-  image: "/images/real-modern-1.webp",
-  imageAlt: "מטבח מודרני לבן עם חיפוי אבן טבעית, מתוצרת א. בית המטבחים",
+  /* צילום אמיתי של אברהם. הוחלף מ-real-modern-1: היו בה
+     סנדליים בפינה הימנית התחתונה. */
+  image: "/images/real-modern-2.webp",
+  imageAlt: "מטבח מודרני כהה עם אי מרכזי ותאורה תלויה, מתוצרת א. בית המטבחים",
   formTitle: "השאירו פרטים בטופס ונחזור אליכם בהקדם",
   fields: [
     { id: "name", label: "שם מלא", type: "text", autoComplete: "name" },
@@ -564,7 +571,6 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     galleryTitle: "מטבחים מודרניים שיצרנו",
     // צילומים אמיתיים של אברהם, מתיקיית "מטבחים שלנו/מודרני" בדרייב
     gallery: [
-      { image: "/images/real-modern-1.webp", alt: "מטבח מודרני לבן עם חיפוי אבן טבעית ומשטח שיש" },
       { image: "/images/real-modern-2.webp", alt: "מטבח מודרני כהה עם אי מרכזי ותאורה תלויה" },
       { image: "/images/real-modern-3.webp", alt: "מטבח כהה עם אי שיש בגוון קלקטה וברז זהב" },
       { image: "/images/real-modern-4.webp", alt: "מטבח לבן ועץ עם אי שיש מרכזי" },
@@ -599,7 +605,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
      דניאל אמר שיש לו טקסטים - להחליף כשיגיעו. */
   classic: {
     heroTitle: "מטבח קלאסי",
-    heroImage: "/images/style-classic.webp",
+    heroImage: "/images/real-classic-5.webp",
     heroAlt: "מטבח קלאסי לבן עם אי שיש",
     article: [
       {
@@ -676,12 +682,12 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
         heading: "מטבח כפרי בהתאמה אישית",
         paragraphs: [
           "מטבח כפרי הוא בעיקר **תחושה**: חומרים חמים, אור רך ומטבח שנעים לשבת בו גם כשלא מבשלים. הוא מזמין אנשים להישאר.",
-          "אנחנו עובדים עם **חזיתות ממוסגרות, גוונים חמים ומשטחים טבעיים**, ומדייקים כל פרט לפי החלל והאור שיש בבית שלכם.",
+          "אנחנו עובדים עם **חזיתות בחריטה, גוונים חמים ומשטחים טבעיים**, ומדייקים כל פרט לפי החלל והאור שיש בבית שלכם.",
         ],
       },
       {
         items: [
-          "חזיתות ממוסגרות בגוונים חמים",
+          "חזיתות בחריטה בגוונים חמים",
           "משטחי עץ או אבן בגימור טבעי",
           "אחסון פתוח לצד ארונות סגורים",
           "פרזול בגוון עתיק או פליז",
@@ -692,7 +698,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           image: "/images/style-rustic.webp",
           alt: "מטבח כפרי עם ארונות קרם, חיפוי עץ מחורץ ואי כהה",
           points: [
-            { x: 12, y: 72, label: "חזיתות ממוסגרות", pos: "top" },
+            { x: 12, y: 72, label: "חזיתות בחריטה", pos: "top" },
             { x: 55, y: 68, label: "משטח בגימור טבעי", pos: "top" },
             { x: 40, y: 14, label: "אחסון פתוח וסגור", pos: "bottom" },
             { x: 14, y: 18, label: "פרזול בגוון עתיק", pos: "bottom" },
@@ -704,7 +710,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     galleryTitle: "מטבחים כפריים שיצרנו",
     // צילומים אמיתיים מתיקיית "מטבחים שלנו/כפרי"
     gallery: [
-      { image: "/images/real-rustic-1.webp", alt: "מטבח לבן עם חזיתות ממוסגרות וחלון לגינה" },
+      { image: "/images/real-rustic-1.webp", alt: "מטבח לבן עם חזיתות בחריטה וחלון לגינה" },
       { image: "/images/real-rustic-2.webp", alt: "מטבח לבן עם ברזי פליז ומשטח שיש בהיר" },
       { image: "/images/real-rustic-3.webp", alt: "מטבח לבן עם תאורה נסתרת ומשטח שיש" },
       { image: "/images/real-rustic-4.webp", alt: "מטבח לבן עם כיריים ומשטח שיש בהיר" },
@@ -715,7 +721,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     faq: [
       {
         q: "מה הופך מטבח לכפרי?",
-        a: "בעיקר החומרים והגוונים: חזיתות ממוסגרות, עץ או גימור בגוון חם, פרזול בסגנון עתיק ותאורה רכה. זה פחות עניין של צורה ויותר של אווירה.",
+        a: "בעיקר החומרים והגוונים: חזיתות בחריטה, עץ או גימור בגוון חם, פרזול בסגנון עתיק ותאורה רכה. זה פחות עניין של צורה ויותר של אווירה.",
       },
       {
         q: "מטבח כפרי דורש יותר תחזוקה?",
@@ -723,7 +729,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
       },
       {
         q: "אפשר לשלב כפרי עם אלמנטים מודרניים?",
-        a: "כן, וזה שילוב שאנחנו עושים הרבה. חזיתות ממוסגרות עם משטח נקי ופרזול מינימלי נותנים מטבח חם אבל לא עמוס.",
+        a: "כן, וזה שילוב שאנחנו עושים הרבה. חזיתות בחריטה עם משטח נקי ופרזול מינימלי נותנים מטבח חם אבל לא עמוס.",
       },
       {
         q: "כמה זמן לוקח לייצר ולהתקין?",

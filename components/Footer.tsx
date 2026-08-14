@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { site, nav, kitchenTypes, footerLinks, footerNew } from "@/lib/content";
+import { site, nav, kitchenTypes, footerLinks, footerNew, footerSocial } from "@/lib/content";
 import Icon from "./Icon";
 
 /**
@@ -29,7 +29,7 @@ export default function Footer() {
           </Link>
 
           <ul className="footer__social">
-            {site.social.map((sc) => (
+            {footerSocial.map((sc) => (
               <li key={sc.id}>
                 <a
                   href={sc.href}

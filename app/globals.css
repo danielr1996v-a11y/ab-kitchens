@@ -4158,30 +4158,24 @@ a.footer__contact-link:hover {
   color: var(--color-muted);
 }
 
-/* שדה עם רקע וצללה פנימית - כך ברור שזה שדה למילוי,
-   במקום קו תחתון שנקרא כקישוט */
+/* קו תחתון בלבד, בדיוק כמו ברפרנס - בלי רקע ובלי מסגרת */
 .dmodal__input {
   width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 0.5rem;
-  background: var(--color-surface);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 0.5rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
   font: inherit;
   font-size: clamp(0.9375rem, 1vw, 1.125rem);
   color: var(--color-fg);
-  transition: border-color 0.2s var(--ease), background 0.2s var(--ease),
-    box-shadow 0.2s var(--ease);
-}
-.dmodal__input::placeholder {
-  color: var(--color-muted);
+  transition: border-color 0.2s var(--ease);
 }
 .dmodal__input:focus {
   outline: 0;
-  border-color: var(--color-gold);
-  background: var(--color-bg);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04),
-    0 0 0 3px rgba(221, 177, 67, 0.18);
+  /* הקו מתעבה ונצבע בזהב - סימון פוקוס בלי מסגרת */
+  border-bottom-color: var(--color-gold);
+  box-shadow: 0 1px 0 0 var(--color-gold);
 }
 
 /* הכפתור בפינה השמאלית התחתונה. ב-RTL flex-end הוא שמאל. */
