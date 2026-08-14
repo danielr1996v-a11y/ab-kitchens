@@ -1539,7 +1539,9 @@ main > *:first-child:not(.hero) {
   position: relative;
   width: 100%;
   padding: var(--section-gap) var(--side-padding);
-  background: var(--color-bg);
+  /* משטח בהיר ולא לבן. בלי זה הכרטיסים הלבנים - שאין להם מסגרת -
+     נבלעים ברקע ורק הצל מסגיר אותם. */
+  background: var(--color-surface);
 }
 
 .testimonials__inner {
@@ -1627,7 +1629,7 @@ main > *:first-child:not(.hero) {
    לגובה השורה ומשאיר חורים לבנים בכרטיסים הקצרים. */
 .reviews {
   column-count: 3;
-  column-gap: 1.5vw;
+  column-gap: 1.75vw;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1638,32 +1640,28 @@ main > *:first-child:not(.hero) {
   break-inside: avoid;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  margin-bottom: 1.5vw;
-  padding: var(--space-4);
+  gap: var(--space-3);
+  margin-bottom: 1.75vw;
+  padding: 1.75vw;
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  /* בלי מסגרת - ברפרנס הכרטיס מופרד מהרקע רק בצל רך ומפוזר */
+  border: 0;
   border-radius: 0.5rem;
-  /* צל עדין מאוד - מרים את הכרטיס מהרקע בלי להכביד */
-  box-shadow: 0 0.125rem 0.75rem rgba(26, 26, 26, 0.05);
+  box-shadow: 0 0.25rem 1.5rem rgba(26, 26, 26, 0.07);
 }
 
-/* השם והכוכבים יושבים מתחת להמלצה, כחתימה עליה.
-   קו שיער מפריד בין הציטוט לחתימה, ו-margin-top:auto מצמיד
-   אותה לתחתית גם אם הכרטיס נמתח. */
+/* עיגול האות בקצה ימין, השם והכוכבים לצידו. ב-RTL הצאצא
+   הראשון הוא הימני, ולכן האווטאר ראשון ב-DOM. */
 .review__head {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: auto;
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
+  gap: 0.85rem;
 }
 .review__avatar {
   display: grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 3rem;
+  height: 3rem;
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--color-header-bg);
@@ -1671,24 +1669,30 @@ main > *:first-child:not(.hero) {
   font-family: var(--font-display);
   font-size: var(--fs-base);
   font-weight: 700;
+  line-height: 1;
 }
 .review__who {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.3rem;
+  /* השם והכוכבים נצמדים ימינה, מתחת לקו אחד עם האווטאר */
+  align-items: flex-start;
+  text-align: right;
 }
 .review__name {
   margin: 0;
   font-size: var(--fs-base);
   font-weight: 700;
   line-height: 1.2;
+  color: var(--color-fg);
 }
 .review__text {
   margin: 0;
   font-size: var(--fs-base);
   font-weight: 300;
-  line-height: 1.6em;
-  color: var(--color-muted);
+  /* שורות מרווחות כמו ברפרנס - ההמלצה נושמת */
+  line-height: 1.85em;
+  color: var(--color-fg);
   /* המלצה ארוכה נחתכת אחרי 8 שורות עם "...", כמו בצילום.
      כך כרטיס אחד ארוך לא מותח את כל העמודה. */
   display: -webkit-box;
