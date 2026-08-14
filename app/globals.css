@@ -1559,6 +1559,10 @@ main > *:first-child:not(.hero) {
 }
 
 /* עינית עם קו קצר. ב-RTL ה-::after נופל משמאל לטקסט. */
+/* העינית והכותרת כגוש אחד בצד ימין. התג נשאר בצד הנגדי. */
+.testimonials__heading {
+  text-align: right;
+}
 .testimonials__eyebrow {
   display: flex;
   align-items: center;

@@ -58,11 +58,15 @@ export default function Testimonials({
     <section className="testimonials" aria-labelledby="testimonials-title">
       <div className="testimonials__inner">
         <header className="testimonials__header">
-          {/* עינית עם קו קצר, כמו ברפרנס */}
-          <p className="testimonials__eyebrow">ממליצים</p>
-          <h2 className="testimonials__title" id="testimonials-title">
-            מה אומרים עלינו
-          </h2>
+          {/* העינית והכותרת מקובצות יחד, אחרת space-between דוחף
+              את הכותרת למרכז. שתיהן נצמדות ימינה. */}
+          <div className="testimonials__heading">
+            {/* עינית עם קו קצר, כמו ברפרנס */}
+            <p className="testimonials__eyebrow">ממליצים</p>
+            <h2 className="testimonials__title" id="testimonials-title">
+              מה אומרים עלינו
+            </h2>
+          </div>
 
           {/* תג הדירוג - הצד הנגדי לכותרת */}
           <div className="gscore">
