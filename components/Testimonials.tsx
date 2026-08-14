@@ -11,9 +11,10 @@ export type Review = (typeof testimonials)[number];
  *
  * server component - אין כאן מצב, רק תצוגה.
  *
- * ⚠️ השמות עדיין "לקוח מרוצה". הטקסטים אמיתיים ומהלקוח, אבל
- * השמות ממתינים להעתקה מפרופיל הגוגל. אין תאריכים בכוונה -
- * לא נמציא "לפני חודשיים".
+ * סדר הכרטיס: קודם ההמלצה, ואז שם הממליץ מתחתיה - כמו ברפרנס.
+ * הציטוט הוא מה שמעניין, והשם הוא החתימה שמאשרת אותו.
+ *
+ * אין תאריכים בכוונה - לא נמציא "לפני חודשיים".
  */
 
 function Stars({ count }: { count: number }) {
@@ -80,6 +81,7 @@ export default function Testimonials({
         <ul className="reviews">
           {reviews.map((r) => (
             <li className="review" key={r.id}>
+              <p className="review__text">{r.text}</p>
               <div className="review__head">
                 <span className="review__avatar" aria-hidden="true">
                   {r.name.trim().charAt(0)}
@@ -89,7 +91,6 @@ export default function Testimonials({
                   <Stars count={r.rating} />
                 </div>
               </div>
-              <p className="review__text">{r.text}</p>
             </li>
           ))}
         </ul>

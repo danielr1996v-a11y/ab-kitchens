@@ -1648,11 +1648,16 @@ main > *:first-child:not(.hero) {
   box-shadow: 0 0.125rem 0.75rem rgba(26, 26, 26, 0.05);
 }
 
-/* השם והכוכבים למעלה, עם עיגול האות - בדיוק כמו ברפרנס */
+/* השם והכוכבים יושבים מתחת להמלצה, כחתימה עליה.
+   קו שיער מפריד בין הציטוט לחתימה, ו-margin-top:auto מצמיד
+   אותה לתחתית גם אם הכרטיס נמתח. */
 .review__head {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
 }
 .review__avatar {
   display: grid;
