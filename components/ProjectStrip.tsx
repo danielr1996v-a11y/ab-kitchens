@@ -62,7 +62,6 @@ export default function ProjectStrip() {
         <h2 className="pstrip__title" id="projects-title">
           {renderHighlight(aboutProjects.title)}
         </h2>
-        <p className="pstrip__intro">{aboutProjects.intro}</p>
       </Reveal>
 
       <div className="pstrip__track">

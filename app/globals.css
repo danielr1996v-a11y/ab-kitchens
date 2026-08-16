@@ -4654,23 +4654,14 @@ a.footer__contact-link:hover {
   background: var(--color-gold);
   flex-shrink: 0;
 }
+/* הכותרת היא האחרונה בבלוק מאז שהמשפט ירד - המרווח התחתון
+   שלה היה מצטבר על margin-bottom של הבלוק עצמו */
 .pstrip__title {
-  margin: 0 0 var(--space-2);
+  margin: 0;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   text-wrap: balance;
-}
-/* משקל 400 ולא 300. בעברית אין עולים ויורדים שמחזיקים את צורת
-   האות, ולכן Light מאבד הבחנה ונקרא "שקוף" - במיוחד כשהוא גם
-   אפור. שאר האתר עדיין 300 וממתין לאישור של דניאל.
-   ⚠️ כל סקשן חדש בעמוד אודות נכתב ב-400. */
-.pstrip__intro {
-  margin: 0;
-  font-size: var(--fs-base);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--color-muted);
 }
 
 .pstrip__track {
@@ -4783,5 +4774,70 @@ a.footer__contact-link:hover {
   }
   .pstrip__group[aria-hidden="true"] {
     display: none;
+  }
+}
+
+/* =========================================================
+   ABOUT STORY - סיפור המשפחה, סקשן 2 בעמוד אודות
+   =========================================================
+   שתי עמודות: הכותרת מימין והטקסט משמאל. הפיצול הזה הוא מה
+   שמאפשר לצילום של אברהם או של הנגרייה להיכנס בעתיד לצד
+   הטקסט - בלי לשנות את המבנה. היום המרחב הוא אוויר מכוון. */
+.astory {
+  padding-block: var(--section-gap);
+  padding-inline: var(--side-padding);
+  background: var(--color-surface);
+}
+.astory__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--space-5) 5vw;
+  align-items: start;
+}
+.astory__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+.astory__eyebrow::after {
+  content: "";
+  width: 3.5rem;
+  height: 2px;
+  background: var(--color-gold);
+  flex-shrink: 0;
+}
+.astory__title {
+  margin: 0;
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
+  white-space: pre-line;
+}
+.astory__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.astory__p {
+  margin: 0;
+  font-size: var(--fs-base);
+  /* 400 ולא 300 - בעברית Light מאבד הבחנה ונקרא שקוף */
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--color-fg);
+  /* אורך שורה קריא. בלי זה הטקסט נמתח על כל העמודה ונהיה
+     קשה למעקב בין שורה לשורה. */
+  max-width: 60ch;
+}
+
+@media (max-width: 900px) {
+  .astory__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
   }
 }
