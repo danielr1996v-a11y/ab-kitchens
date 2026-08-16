@@ -12,7 +12,6 @@ const routes: Array<{
   freq: MetadataRoute.Sitemap[number]["changeFrequency"];
 }> = [
   { path: "/", priority: 1.0, freq: "weekly" },
-  { path: "/גלריה", priority: 0.9, freq: "weekly" },
   { path: "/גלריה/קלאסי", priority: 0.8, freq: "monthly" },
   { path: "/גלריה/מודרני", priority: 0.8, freq: "monthly" },
   { path: "/גלריה/כפרי", priority: 0.8, freq: "monthly" },

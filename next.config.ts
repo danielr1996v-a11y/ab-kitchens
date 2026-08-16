@@ -47,7 +47,6 @@ const nextConfig: NextConfig = {
 
   async rewrites() {
     return [
-      { source: heb("/גלריה"), destination: "/gallery" },
       { source: heb("/גלריה/קלאסי"), destination: "/gallery/classic" },
       { source: heb("/גלריה/מודרני"), destination: "/gallery/modern" },
       { source: heb("/גלריה/כפרי"), destination: "/gallery/rustic" },
@@ -72,7 +71,13 @@ const nextConfig: NextConfig = {
       // הקטגוריה "בהתאמה אישית" הוסרה לבקשת הלקוח. מפנים לגלריה
       // הראשית כדי לא לאבד תנועה מהנתיב שהיה מאונדקס.
       // permanent: false במכוון - ההחלטה הפיכה.
-      { source: heb("/גלריה/בהתאמה-אישית"), destination: heb("/גלריה"), permanent: false },
+      { source: heb("/גלריה/בהתאמה-אישית"), destination: heb("/גלריה/קלאסי"), permanent: false },
+      /* עמוד הגלריה הראשי הוסר לבקשת הלקוח - "מטבחים" בתפריט
+         הוא פותח תפריט בלבד ואין מאחוריו עמוד.
+         מפנים ולא מוחקים: /גלריה היה נתיב באתר הישן ועשוי להיות
+         מאונדקס, ו-404 היה מאבד את התנועה. permanent: false כי
+         ההחלטה הפיכה. */
+      { source: heb("/גלריה"), destination: heb("/גלריה/קלאסי"), permanent: false },
     ];
   },
 };

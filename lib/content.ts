@@ -149,7 +149,7 @@ export const leadBanner = {
   titleLight: "עם ניסיון של מעל 30 שנה!",
   subtitle: "הופכים את החזון שלכם למציאות",
   ctaText: "צפו במטבחים שלנו",
-  ctaHref: "/גלריה",
+  ctaHref: "/גלריה/קלאסי",
 };
 
 /**

@@ -3542,7 +3542,9 @@ a.footer__contact-link:hover {
   z-index: 90; /* מתחת לתפריט המובייל (101) */
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  /* הטבעת מוסיפה 5px לכל צד. עם gap של 12px נשארים 2px בין
+     הטבעות והן כמעט נוגעות - 1.375rem מחזיר מרווח נראה. */
+  gap: 1.375rem;
 }
 
 .fab__btn {
@@ -3554,7 +3556,15 @@ a.footer__contact-link:hover {
   background: #25d366; /* הירוק הרשמי של וואטסאפ */
   color: #fff;
   text-decoration: none;
-  box-shadow: 0 0.25rem 0.875rem rgba(0, 0, 0, 0.22);
+  /* טבעת כהה סביב הירוק, לפי הרפרנס שדניאל שלח.
+     box-shadow ולא border: הטבעת נוספת מחוץ לקופסה ולכן מטרת
+     המגע נשארת 3.5rem במדויק ולא מתנפחת. הפחם של המותג ולא
+     שחור - אותו גוון של בר הניווט.
+     שני הכפתורים ולא רק וואטסאפ: הם זוג צמוד, וטבעת על אחד
+     בלבד נקראית כתקלה. */
+  box-shadow:
+    0 0 0 0.3125rem var(--color-header-bg),
+    0 0.25rem 0.875rem rgba(0, 0, 0, 0.22);
   transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 .fab__btn svg {

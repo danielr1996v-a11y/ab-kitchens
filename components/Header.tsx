@@ -122,16 +122,22 @@ export default function Header() {
                 onMouseEnter={() => open(item.href)}
                 onMouseLeave={scheduleClose}
               >
-                <Link
-                  href={item.href}
-                  className="header__link"
+                {/* button ולא Link: "מטבחים" הוא פותח תפריט בלבד
+                    ואין מאחוריו עמוד. button הוא הסמנטיקה הנכונה
+                    לכך, ושומר על גישה במקלדת - בניגוד ל-span. */}
+                <button
+                  type="button"
+                  className="header__link header__link--trigger"
                   aria-haspopup="true"
                   aria-expanded={openMenu === item.href}
                   onFocus={() => open(item.href)}
+                  onClick={() =>
+                    openMenu === item.href ? setOpenMenu(null) : open(item.href)
+                  }
                 >
                   {item.label}
                   <span className="header__caret" aria-hidden="true" />
-                </Link>
+                </button>
 
                 <div
                   className="header__menu-wrap"
@@ -224,14 +230,23 @@ export default function Header() {
                   className="mnav__item"
                   style={{ "--i": i } as React.CSSProperties}
                 >
-                  <Link
-                    href={item.href}
-                    className="mnav__link"
-                    onClick={closeMobile}
-                    aria-current={isCurrent(item.href) ? "page" : undefined}
-                  >
-                    {item.label}
-                  </Link>
+                  {/* "מטבחים" אינו קישור - אין עמוד מאחוריו.
+                      במובייל אין תפריט נפתח, ושלוש הקטגוריות
+                      מוצגות ממילא ככרטיסים מתחת לרשימה. */}
+                  {item.children ? (
+                    <span className="mnav__link mnav__link--static">
+                      {item.label}
+                    </span>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="mnav__link"
+                      onClick={closeMobile}
+                      aria-current={isCurrent(item.href) ? "page" : undefined}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
