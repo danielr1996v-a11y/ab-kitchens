@@ -2549,6 +2549,12 @@ a.footer__contact-link:hover {
   color: inherit;
   padding-inline: 0.14em;
 
+  /* חובה: לדפדפן יש background-color צהוב מובנה על <mark>,
+     ו-preflight של Tailwind לא מאפס אותו. הכלל כאן מצייר רק
+     background-image, ולכן בלי האיפוס הצהוב מבצבץ מתחתיו.
+     עד עכשיו זה לא נראה כי לא היה אף ==מרקר== בתוכן בפועל. */
+  background-color: transparent;
+
   /* גיבוי לדפדפנים ללא color-mix */
   background-image: linear-gradient(
     to top,
@@ -4598,5 +4604,168 @@ a.footer__contact-link:hover {
   /* 11px לא נקרא על מסך קטן. 12px היא הרצפה, ורק לטקסט משני. */
   .dhero__badge-note {
     font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
+   PROJECT STRIP - רצועת הפרויקטים בעמוד אודות
+   =========================================================
+   אותה מכניקה של מרקיזת הלוגואים: שתי קבוצות זהות, כל אחת
+   min-width: 100%, ו-translateX אינסופי. לא נכתב מנגנון סליידר
+   חדש - זה כבר עובד באתר.
+
+   ⚠️ direction: ltr על המסלול הוא הכרחי. הדף כולו RTL, ובלי
+   ההצהרה הזו כיוון התנועה מתהפך ביחס לאנימציה ומתקבל ריצוד. */
+.pstrip {
+  padding-block: var(--section-gap);
+  overflow: hidden;
+}
+.pstrip__head {
+  padding-inline: var(--side-padding);
+  margin-bottom: var(--space-5);
+  max-width: 46rem;
+}
+.pstrip__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+/* אותו קו קצר של עינית ההמלצות */
+.pstrip__eyebrow::after {
+  content: "";
+  width: 3.5rem;
+  height: 2px;
+  background: var(--color-gold);
+  flex-shrink: 0;
+}
+.pstrip__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.pstrip__intro {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 300;
+  line-height: var(--lh-body);
+  color: var(--color-muted);
+}
+
+.pstrip__track {
+  --pstrip-gap: 1.5vw;
+  display: flex;
+  gap: var(--pstrip-gap);
+  width: 100%;
+  min-width: 0;
+  direction: ltr;
+  /* דהיית קצוות - הכרטיסים נכנסים ויוצאים בלי חיתוך חד, וזה
+     מה שמייצר את ההצצה בשוליים שברפרנס */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+.pstrip__group {
+  display: flex;
+  gap: var(--pstrip-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 100%;
+  flex-shrink: 0;
+  animation: pstripMove 70s linear infinite;
+}
+/* עצירה בריחוף - בלי זה אי אפשר להסתכל על כרטיס שנע */
+.pstrip__track:hover .pstrip__group,
+.pstrip__track:focus-within .pstrip__group {
+  animation-play-state: paused;
+}
+@keyframes pstripMove {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - var(--pstrip-gap))); }
+}
+
+.pstrip__item {
+  flex-shrink: 0;
+}
+.pstrip__card {
+  position: relative;
+  display: block;
+  width: 22vw;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+.pstrip__img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-soft);
+}
+/* שכבת כהות שמופיעה רק בריחוף, כדי שהתווית תיקרא */
+.pstrip__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26, 26, 26, 0.72), rgba(26, 26, 26, 0.15));
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-soft);
+}
+.pstrip__label {
+  position: absolute;
+  inset-inline-start: 1.25rem;
+  bottom: 1.25rem;
+  color: #fff;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
+}
+.pstrip__card:hover .pstrip__veil,
+.pstrip__card:focus-visible .pstrip__veil,
+.pstrip__card:hover .pstrip__label,
+.pstrip__card:focus-visible .pstrip__label {
+  opacity: 1;
+  transform: translateY(0);
+}
+.pstrip__card:hover .pstrip__img {
+  transform: scale(1.04);
+}
+
+/* מובייל: אין ריחוף, ולכן התווית גלויה תמיד. אותו כלל שכבר
+   חל על הנקודות החמות - לא מסתירים מידע מאחורי אינטראקציה
+   שלא קיימת במכשיר. */
+@media (hover: none) {
+  .pstrip__veil,
+  .pstrip__label {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 700px) {
+  .pstrip__card {
+    width: 78vw;
+  }
+  .pstrip__track {
+    --pstrip-gap: 1rem;
+  }
+  .pstrip__group {
+    animation-duration: 45s;
+  }
+}
+
+/* תנועה מופחתת: הרצועה נעצרת וניתנת לגלילה ידנית, כדי שהתוכן
+   יישאר נגיש ולא ייעלם */
+@media (prefers-reduced-motion: reduce) {
+  .pstrip__group {
+    animation: none;
+  }
+  .pstrip__track {
+    overflow-x: auto;
+  }
+  .pstrip__group[aria-hidden="true"] {
+    display: none;
   }
 }

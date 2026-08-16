@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ProjectStrip from "@/components/ProjectStrip";
 
 export const metadata: Metadata = {
   title: "אודותינו | א. בית המטבחים - דור שני בענף",
@@ -13,9 +14,11 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section className="section-block">
-      <h1 className="page-title">אודותינו</h1>
-      <p className="page-note">התוכן של העמוד הזה ייבנה בהמשך, סקשן אחר סקשן.</p>
-    </section>
+    <>
+      {/* h1 של העמוד. הרצועה נושאת h2, ולכן הכותרת הראשית
+          חייבת לשבת כאן כדי לשמור על היררכיה תקינה */}
+      <h1 className="sr-only">אודות א. בית המטבחים</h1>
+      <ProjectStrip />
+    </>
   );
 }

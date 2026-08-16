@@ -887,3 +887,52 @@ export const designerCta = {
     closeLabel: "סגירה",
   },
 };
+
+/* =========================================================
+   עמוד אודות - סקשן 1: רצועת הפרויקטים
+   ========================================================= */
+
+/**
+ * הסוגים מוגדרים פעם אחת, והשיוך נגזר משם הקובץ. כך הוספת
+ * תמונה חדשה ל-public/images דורשת שורה אחת ברשימה ולא עריכה
+ * של טבלת מיפוי.
+ */
+const kitchenKind = {
+  classic: { label: "מטבח קלאסי", href: "/גלריה/קלאסי" },
+  modern: { label: "מטבח מודרני", href: "/גלריה/מודרני" },
+  rustic: { label: "מטבח כפרי", href: "/גלריה/כפרי" },
+} as const;
+
+/**
+ * שש-עשרה התמונות האמיתיות של אברהם.
+ *
+ * ⚠️ real-modern-1 מוחרגת במכוון - היא נפסלה בתיקוני הלקוח
+ * (רגליים נכנסו לפריים). אין להחזיר אותה בלי אישור.
+ *
+ * הרפרנס מציג גם שם פרויקט, עיר ושנה. אין לנו את הנתונים האלה
+ * ולא נמציא אותם - מוצג רק סוג המטבח, שהוא עובדה.
+ */
+const projectFiles = [
+  "real-classic-1", "real-rustic-3", "real-modern-2", "real-classic-4",
+  "real-rustic-1", "real-modern-3", "real-classic-2", "real-rustic-5",
+  "real-modern-4", "real-classic-6", "real-rustic-2", "real-modern-5",
+  "real-classic-3", "real-rustic-6", "real-classic-5", "real-rustic-4",
+];
+
+export const aboutProjects = {
+  eyebrow: "הפרויקטים שלנו",
+  /* ==מרקר== עובר דרך renderHighlight ונצבע בזהב הלוגו */
+  title: "מטבחים ==שמספרים== סיפור",
+  intro:
+    "כל מטבח כאן תוכנן, נגר, חופה בשיש והותקן על ידינו. לא קטלוג של ספק - עבודות שיצאו מהמפעל שלנו.",
+  items: projectFiles.map((file) => {
+    const kind = file.split("-")[1] as keyof typeof kitchenKind;
+    return {
+      id: file,
+      src: `/images/${file}.webp`,
+      label: kitchenKind[kind].label,
+      href: kitchenKind[kind].href,
+      alt: `${kitchenKind[kind].label} בעיצוב א. בית המטבחים`,
+    };
+  }),
+};
