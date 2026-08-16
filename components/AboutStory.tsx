@@ -52,7 +52,7 @@ export default function AboutStory() {
             src={aboutStory.image}
             alt={aboutStory.imageAlt}
             fill
-            sizes="(max-width: 900px) 92vw, 58vw"
+            sizes="(max-width: 900px) 92vw, 66vw"
             className="astory__img"
           />
         </div>

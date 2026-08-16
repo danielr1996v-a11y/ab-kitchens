@@ -4865,15 +4865,21 @@ a.footer__contact-link:hover {
   color: color-mix(in srgb, var(--color-fg) 9%, transparent);
   user-select: none;
 }
+/* פרופורציה רחבה ונמוכה, כמו המבנה ברפרנס. זה מה שמייצר את
+   תחושת ה"אובייקט הצף" - 16:10 היה קופסתי מדי ונקרא כתמונת
+   חלל רגילה ולא כאובייקט. הצל עמוק ומפוזר כדי שהיא באמת
+   תרחף מעל המילה ולא תשב עליה. */
 .astory__shot {
   position: relative;
-  width: min(58vw, 46rem);
-  aspect-ratio: 16 / 10;
+  width: min(66vw, 52rem);
+  aspect-ratio: 21 / 9;
   /* מרים את התמונה על המילה וחותך אותה - הלב של האפקט */
-  margin-top: -6vw;
+  margin-top: -5vw;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 1.5rem 3rem rgba(26, 26, 26, 0.14);
+  box-shadow:
+    0 0.5rem 1rem rgba(26, 26, 26, 0.06),
+    0 2rem 4rem rgba(26, 26, 26, 0.16);
 }
 .astory__img {
   object-fit: cover;
@@ -4883,5 +4889,8 @@ a.footer__contact-link:hover {
   .astory__shot {
     width: 92vw;
     margin-top: -4vw;
+    /* 21:9 במובייל נותן רצועה בגובה 90px בלבד - צר מדי כדי
+       שיראו מה יש בתמונה. חוזרים ליחס נדיב יותר. */
+    aspect-ratio: 3 / 2;
   }
 }
