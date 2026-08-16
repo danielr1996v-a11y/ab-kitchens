@@ -94,6 +94,15 @@
   --section-gap: clamp(2.5rem, 6vw, 5.5rem);
   --section-min-height: 80vh;
   --header-height: 4.5rem; /* 72px - גובה בר הניווט */
+
+  /* מרווח פינוי מתחת להדר.
+     ⚠️ ההדר הוא position: fixed עם z-index 100 - הוא מרחף מעל
+     התוכן ולא תופס מקום בזרימה. בדף הבית זה תקין כי ההירו
+     מתוכנן לשבת מתחתיו, אבל **כל עמוד שמתחיל בטקסט** מקבל את
+     השורה הראשונה מוסתרת מאחורי הבר. נמדד בעמוד אודות: תחתית
+     הבר ב-88, הכותרת ב-56 - כלומר 32px מתחת להדר.
+     כל סקשן ראשון בעמוד ללא הירו חייב את הטוקן הזה. */
+  --header-clearance: calc(var(--header-height) + var(--section-gap));
 }
 
 /* ===== כיול מובייל =====
@@ -4616,8 +4625,11 @@ a.footer__contact-link:hover {
 
    ⚠️ direction: ltr על המסלול הוא הכרחי. הדף כולו RTL, ובלי
    ההצהרה הזו כיוון התנועה מתהפך ביחס לאנימציה ומתקבל ריצוד. */
+/* הסקשן הראשון בעמוד ללא הירו - ולכן פינוי מלא מתחת להדר הצף
+   ולא רק --section-gap, שהיה משאיר את הכותרת מאחורי הבר. */
 .pstrip {
-  padding-block: var(--section-gap);
+  padding-top: var(--header-clearance);
+  padding-bottom: var(--section-gap);
   overflow: hidden;
 }
 .pstrip__head {
@@ -4649,10 +4661,14 @@ a.footer__contact-link:hover {
   line-height: var(--lh-tight);
   text-wrap: balance;
 }
+/* משקל 400 ולא 300. בעברית אין עולים ויורדים שמחזיקים את צורת
+   האות, ולכן Light מאבד הבחנה ונקרא "שקוף" - במיוחד כשהוא גם
+   אפור. שאר האתר עדיין 300 וממתין לאישור של דניאל.
+   ⚠️ כל סקשן חדש בעמוד אודות נכתב ב-400. */
 .pstrip__intro {
   margin: 0;
   font-size: var(--fs-base);
-  font-weight: 300;
+  font-weight: 400;
   line-height: var(--lh-body);
   color: var(--color-muted);
 }
