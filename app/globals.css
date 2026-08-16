@@ -4658,6 +4658,8 @@ a.footer__contact-link:hover {
    שלה היה מצטבר על margin-bottom של הבלוק עצמו */
 .pstrip__title {
   margin: 0;
+  /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
+  white-space: pre-line;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
@@ -4839,5 +4841,47 @@ a.footer__contact-link:hover {
   .astory__inner {
     grid-template-columns: 1fr;
     gap: var(--space-4);
+  }
+}
+
+/* ===== מילת הרקע הענקית עם התמונה עליה, לפי הרפרנס =====
+   המילה יושבת בשכבה אחת מתחת לתמונה, והתמונה חותכת אותה
+   באמצע - זה מה שמייצר את האפקט. */
+.astory__stage {
+  position: relative;
+  margin-top: var(--section-gap);
+  display: grid;
+  place-items: center;
+}
+.astory__watermark {
+  margin: 0;
+  /* גדול ככל שהמסך מרשה. clamp ולא vw טהור כדי שבמובייל
+     המילה לא תיעלם לגמרי ולא תשבור את הפריסה */
+  font-size: clamp(3.5rem, 14vw, 13rem);
+  font-weight: 700;
+  line-height: 0.9;
+  white-space: nowrap;
+  /* צבע בהיר מאוד - טקסטורה, לא טקסט לקריאה */
+  color: color-mix(in srgb, var(--color-fg) 9%, transparent);
+  user-select: none;
+}
+.astory__shot {
+  position: relative;
+  width: min(58vw, 46rem);
+  aspect-ratio: 16 / 10;
+  /* מרים את התמונה על המילה וחותך אותה - הלב של האפקט */
+  margin-top: -6vw;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1.5rem 3rem rgba(26, 26, 26, 0.14);
+}
+.astory__img {
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .astory__shot {
+    width: 92vw;
+    margin-top: -4vw;
   }
 }

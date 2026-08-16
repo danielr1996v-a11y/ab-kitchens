@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { aboutStory } from "@/lib/content";
 import { renderHighlight } from "@/lib/richText";
 import Reveal from "./Reveal";
@@ -37,6 +38,24 @@ export default function AboutStory() {
             </p>
           ))}
         </Reveal>
+      </div>
+
+      {/* מילת הרקע הענקית שהתמונה יושבת עליה, כמו ברפרנס.
+          aria-hidden: זו טקסטורה ויזואלית ולא תוכן - קורא מסך
+          שיקריא "משפחת ביטון" באמצע הסקשן רק יבלבל. */}
+      <div className="astory__stage">
+        <p className="astory__watermark" aria-hidden="true">
+          {aboutStory.watermark}
+        </p>
+        <div className="astory__shot">
+          <Image
+            src={aboutStory.image}
+            alt={aboutStory.imageAlt}
+            fill
+            sizes="(max-width: 900px) 92vw, 58vw"
+            className="astory__img"
+          />
+        </div>
       </div>
     </section>
   );
