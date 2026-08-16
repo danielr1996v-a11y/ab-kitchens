@@ -24,6 +24,7 @@ export default function Footer() {
               alt={site.name}
               width={1640}
               height={460}
+              sizes="160px"
               className="footer__logo-img"
             />
           </Link>

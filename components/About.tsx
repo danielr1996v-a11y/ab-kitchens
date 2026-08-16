@@ -30,6 +30,7 @@ export default function About({ content = about }: AboutProps = {}) {
             alt={content.logoAlt}
             width={1640}
             height={460}
+            sizes="(max-width: 700px) 200px, 280px"
             className="about__logo"
           />
           <h2 className="about__title" id="about-title">

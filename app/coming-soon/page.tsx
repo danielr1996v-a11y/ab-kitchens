@@ -38,6 +38,7 @@ export default function ComingSoonPage() {
           alt={site.name}
           width={1640}
           height={460}
+          sizes="(max-width: 700px) 220px, 320px"
           className="soon__logo"
           priority
         />
