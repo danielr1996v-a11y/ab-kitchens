@@ -31,7 +31,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="he" dir="rtl" className="h-full antialiased">
+    /* suppressHydrationWarning: הסקריפט של אנימציית הפתיחה
+       (app/(site)/layout.tsx) מוסיף מחלקות ל-<html> לפני ההידרציה,
+       ולכן ה-className בשרת ובלקוח לא זהים - וזה מכוון. */
+    <html lang="he" dir="rtl" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         {/* הדר, פוטר וכפתור צף עברו ל-app/(site)/layout.tsx.
             כאן נשאר רק מה שחייב לחול גם על עמוד "בקרוב". */}
