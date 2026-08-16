@@ -114,15 +114,16 @@ export default function DesignerCta() {
             </div>
           ))}
 
-          {/* שורה משלה ברוחב מלא. הכפתור מיושר לקצה הימני של
-              התוכן, כמו בצילום */}
+          {/* שורה משלה ברוחב מלא, מיושרת לקצה הימני של התוכן.
+              הוואטסאפ ראשון ב-DOM ולכן יושב מימין ב-RTL - הוחלף
+              בסדר ה-DOM ולא ב-order כדי שסדר המקלדת יישאר זהה
+              למה שרואים. */}
           <div className="dmodal__actions">
-            {/* הראשי ראשון ב-DOM כדי שיישב מימין ב-RTL */}
-            <button type="submit" className="dmodal__submit">
-              {modal.submitLabel}
-            </button>
             <button type="button" className="dmodal__alt" onClick={sendWhatsApp}>
               {modal.altLabel}
+            </button>
+            <button type="submit" className="dmodal__submit">
+              {modal.submitLabel}
             </button>
           </div>
         </form>

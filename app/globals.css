@@ -1665,7 +1665,9 @@ main > *:first-child:not(.hero) {
   flex-direction: column;
   gap: var(--space-3);
   margin-bottom: 1.75vw;
-  padding: 1.75vw;
+  /* clamp ולא vw טהור: 1.75vw נתן 6px במובייל, כלומר הטקסט נגע
+     בקצה הכרטיס. הרצפה 24px היא מה שנותן להמלצה לנשום. */
+  padding: clamp(1.5rem, 2.25vw, 2.75rem);
   background: var(--color-bg);
   /* בלי מסגרת - ברפרנס הכרטיס מופרד מהרקע רק בצל רך ומפוזר */
   border: 0;
@@ -1947,24 +1949,10 @@ a.footer__contact-link:hover {
 /* ===== Responsive ===== */
 @media (max-width: 1100px) {
   .footer__inner {
-    flex-wrap: wrap;
     gap: var(--space-4);
-  }
-  /* הטופס עולה לראש ותופס שורה מלאה - הוא העיקר */
-  .footer__form-card {
-    order: -1;
-    flex-basis: 100%;
-    max-width: none;
   }
 }
 @media (max-width: 700px) {
-  .footer__inner {
-    flex-direction: column;
-  }
-  .footer__brand,
-  .footer__col {
-    width: 100%;
-  }
   .footer__fields {
     grid-template-columns: 1fr;
     gap: var(--space-3);
@@ -2959,6 +2947,8 @@ a.footer__contact-link:hover {
   .header__cta span {
     display: none;
   }
+  /* הכיתוב מוסתר ונשאר ריבוע 44x44. בלי justify-content: center
+     האייקון נשאר צמוד לקצה ההתחלה ולא יושב במרכז הריבוע. */
   .header__cta,
   .header__burger {
     gap: 0;
@@ -2966,9 +2956,30 @@ a.footer__contact-link:hover {
     width: 2.75rem;
     height: 2.75rem;
     flex-shrink: 0;
+    justify-content: center;
   }
   .header__social {
     display: none;
+  }
+
+  /* סדר במובייל: המבורגר בקצה ימין, הטלפון צמוד אליו, והלוגו
+     נדחף לקצה שמאל. ב-RTL order נמוך יותר = ימני יותר.
+     margin-inline-start: auto על הלוגו בולע את כל המרווח הפנוי
+     ומרחיק אותו מהצמד - בלי זה space-between היה מפזר את שלושתם
+     במרווחים שווים והטלפון לא היה צמוד להמבורגר. */
+  .header__bar {
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+  .header__burger {
+    order: 1;
+  }
+  .header__cta {
+    order: 2;
+  }
+  .header__logo {
+    order: 3;
+    margin-inline-start: auto;
   }
 }
 
@@ -3289,11 +3300,6 @@ a.footer__contact-link:hover {
   .footer__inner {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-4) var(--space-3);
-  }
-}
-@media (max-width: 560px) {
-  .footer__inner {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -4547,18 +4553,17 @@ a.footer__contact-link:hover {
 }
 
 @media (max-width: 900px) {
+  /* שתי עמודות: ניווט לצד המטבחים, מידע לצד דברו איתנו.
+     minmax(0,1fr) ולא 1fr - ברירת המחדל של מסלול גריד היא
+     minmax(auto,1fr), והקישורים הם white-space: nowrap, ולכן
+     העמודה עם הטקסט הארוך התנפחה ל-218 מול 122. */
   .footer__inner {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-4) var(--space-3);
   }
   /* המותג תופס את שתי העמודות - הלוגו והרשתות צריכים רוחב */
   .footer__brand {
     grid-column: 1 / -1;
-  }
-}
-@media (max-width: 560px) {
-  .footer__inner {
-    grid-template-columns: 1fr;
   }
 }
 
