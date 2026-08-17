@@ -5095,9 +5095,9 @@ html.has-intro.intro-open .intro__slat {
   background-image: url("/images/hero-country.webp");
   background-size: cover;
   background-position: center;
-  /* גבוה מספיק שהתמונה תשלוט בסקשן. ב-26rem נשאר רק פס צר
-     מעל הכרטיסים והיא נקראה כפס רקע ולא כתמונה. */
-  min-height: 36rem;
+  /* 70vh לבקשת דניאל. vh ולא rem כדי שהיחס לגובה המסך יישמר
+     בכל מכשיר - ב-rem התמונה הייתה בולעת מסך נמוך. */
+  min-height: 70vh;
   display: grid;
   place-items: center;
   padding: var(--section-gap) var(--side-padding);
@@ -5244,17 +5244,15 @@ html.has-intro.intro-open .intro__slat {
     gap: var(--space-3) var(--space-2);
     margin-top: -5rem;
   }
-  .avals__stage {
-    min-height: 20rem;
+  /* 14px נופל מתחת לתקן שקבענו לגוף טקסט במגע. הכלל חל על כל
+     הטווח שבו הפריסה היא מובייל/טאבלט ולא רק מתחת ל-560, כי
+     גם ב-768 מדובר במכשיר מגע. */
+  .aval__text {
+    font-size: var(--fs-base);
   }
 }
 @media (max-width: 560px) {
   .avals__grid {
     grid-template-columns: 1fr;
-  }
-  /* 14px נופל מתחת לתקן שקבענו לגוף טקסט במובייל. בעמודה
-     אחת יש רוחב, אז אין סיבה להקטין. */
-  .aval__text {
-    font-size: var(--fs-base);
   }
 }
