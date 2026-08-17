@@ -5112,6 +5112,13 @@ html.has-intro.intro-open .intro__slat {
   align-items: center;
   gap: var(--space-2);
 }
+.avals__title {
+  margin: 0;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: #fff;
+}
 
 /* ===== הכרטיסים ===== */
 .avals__grid {
