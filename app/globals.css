@@ -4797,9 +4797,20 @@ a.footer__contact-link:hover {
   transform: scale(1.05);
 }
 
-/* מובייל: אין ריחוף, ולכן התווית גלויה תמיד */
+/* מובייל: אין ריחוף, ולכן התווית גלויה תמיד.
+   ⚠️ הכהות של הריחוף (75%) בולעת את התמונה כשהיא קבועה - וכל
+   הנקודה כאן היא להראות מטבחים. במגע היא מוחלפת בשיפוע קל
+   שיושב רק בתחתית, בדיוק מתחת לתווית. */
 @media (hover: none) {
-  .pcol__veil,
+  .pcol__veil {
+    opacity: 1;
+    background: linear-gradient(
+      to top,
+      rgba(26, 26, 26, 0.62) 0%,
+      rgba(26, 26, 26, 0.25) 34%,
+      transparent 60%
+    );
+  }
   .pcol__label {
     opacity: 1;
     transform: none;
@@ -4817,6 +4828,12 @@ a.footer__contact-link:hover {
   }
   .pstrip__head {
     order: -1;
+  }
+  /* ה-\n בתוכן נקבע לרוחב דסקטופ. במובייל הוא מייצר שורה
+     שלישית עם מילה יתומה, ולכן כאן השבירה טבעית. */
+  .pstrip__title {
+    white-space: normal;
+    text-wrap: balance;
   }
   .pcol {
     --pcol-gap: 1rem;
@@ -4838,7 +4855,8 @@ a.footer__contact-link:hover {
     animation-name: pcolRight;
   }
   .pcol__item {
-    width: 45vw;
+    /* 45vw נתן 169px - ריבוע קטן מדי מכדי לראות בו מטבח */
+    width: 62vw;
   }
   @keyframes pcolLeft {
     from { transform: translateX(0); }
@@ -5241,7 +5259,10 @@ html.has-intro.intro-open .intro__slat {
 @media (max-width: 900px) {
   .avals__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3) var(--space-2);
+    /* ⚠️ הריבוע הזהוב בולט 28px מעל הכרטיס. עם רווח שורה של
+       24px הוא נכנס לתוך הכרטיס שמעליו - נמדד ונראה כהתנגשות.
+       הרווח חייב לעלות על הבליטה ועוד אוויר. */
+    gap: 3.75rem var(--space-2);
     margin-top: -5rem;
   }
   /* 14px נופל מתחת לתקן שקבענו לגוף טקסט במגע. הכלל חל על כל
