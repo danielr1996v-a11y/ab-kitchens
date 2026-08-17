@@ -57,7 +57,6 @@ const nextConfig: NextConfig = {
       { source: heb("/מטבחים-כפריים"), destination: "/articles/rustic" },
       { source: heb("/שיש-למטבח"), destination: "/stone" },
       { source: heb("/מטבחים---כל-מה-שרצית-לדעת"), destination: "/articles/guide" },
-      { source: heb("/המעצבים-שלנו"), destination: "/designers" },
       { source: heb("/תקנון-ומדיניות-פרטיות"), destination: "/terms" },
       { source: heb("/מדיניות-פרטיות"), destination: "/privacy" },
       { source: heb("/הצהרת-נגישות"), destination: "/accessibility" },
@@ -68,6 +67,13 @@ const nextConfig: NextConfig = {
     return [
       // עמוד המחשבון נדחה לשלב ב'. עד אז מפנים ליצירת קשר כדי למנוע 404.
       { source: heb("/מחשבון"), destination: "/contact", permanent: false },
+      /* עמוד "המעצבים שלנו" הורד מהאוויר זמנית לבקשת דניאל.
+         ⚠️ הקוד לא נמחק - app/(site)/designers ו-DesignersHero
+         נשארו במקומם. ההחזרה היא הסרת ההפניה הזו והחזרת השורות
+         ל-nav ול-sitemap, ותו לא.
+         מפנים ולא מוחקים כדי שמי שיש לו את הקישור לא ייתקל
+         ב-404. הנתיב לא היה באתר הישן ולכן אין כאן סיכון SEO. */
+      { source: heb("/המעצבים-שלנו"), destination: "/contact", permanent: false },
       // הקטגוריה "בהתאמה אישית" הוסרה לבקשת הלקוח. מפנים לגלריה
       // הראשית כדי לא לאבד תנועה מהנתיב שהיה מאונדקס.
       // permanent: false במכוון - ההחלטה הפיכה.

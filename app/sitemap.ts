@@ -23,7 +23,6 @@ const routes: Array<{
   { path: "/מטבחים---כל-מה-שרצית-לדעת", priority: 0.7, freq: "monthly" },
   { path: "/אודותינו", priority: 0.6, freq: "monthly" },
   { path: "/המלצות", priority: 0.6, freq: "monthly" },
-  { path: "/המעצבים-שלנו", priority: 0.6, freq: "monthly" },
   { path: "/תקנון-ומדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/מדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/הצהרת-נגישות", priority: 0.2, freq: "yearly" },
