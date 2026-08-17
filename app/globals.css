@@ -41,7 +41,10 @@
   --color-surface: #f0f0f0; /* רקע סקשן אודות, לפי הפיגמה */
 
   /* צבעים אמיתיים מהפיגמה (Header) - מאומת ב-2026-07-30 */
-  --color-header-bg: #242323; /* פחם כהה - רקע ה-Header */
+  --color-header-bg: #242323;
+  /* הפחם של הפוטר. היה מקודד קשיח במקום אחד, וכשסקשן הערכים
+     נזקק לאותו גוון הוא הפך לטוקן - אחרת שני מספרים לתחזק. */
+  --color-deep: #323232; /* פחם כהה - רקע ה-Header */
   --color-gold: #ddb143; /* זהב/חרדל - כפתור "לחיוג מהיר" */
   /* זהב הלוגו - נמדד מ-logo-dark.png. חם וכהה יותר מזהב הממשק,
      ומשמש היכן שרוצים את הגוון של המותג עצמו ולא את צבע הפעולה. */
@@ -4441,7 +4444,7 @@ a.footer__contact-link:hover {
    עם מסגרת. הבלוק בסוף הקובץ ודורס את הגרסה הבהירה.
    ========================================================= */
 .footer {
-  background: #323232;
+  background: var(--color-deep);
   color: #fff;
 }
 /* הטקסטורה הבהירה שהייתה ברקע לא מתאימה לפחם */
@@ -5069,7 +5072,8 @@ html.has-intro.intro-open .intro__slat {
    התחתון שלה - חצי בפנים, חצי בחוץ. ריבוע האייקון חוצה את
    הגבול העליון של הכרטיס באותה טכניקה, בקטן. */
 .avals {
-  background: var(--color-header-bg);
+  /* אותו גוון של הפוטר, לבקשת דניאל */
+  background: var(--color-deep);
   padding-bottom: var(--section-gap);
   overflow: hidden;
 }
@@ -5095,8 +5099,8 @@ html.has-intro.intro-open .intro__slat {
   z-index: 1;
   background: linear-gradient(
     to bottom,
-    rgba(36, 35, 35, 0.55),
-    rgba(36, 35, 35, 0.78)
+    rgba(50, 50, 50, 0.5),
+    rgba(50, 50, 50, 0.75)
   );
 }
 .avals__head {
@@ -5162,18 +5166,14 @@ html.has-intro.intro-open .intro__slat {
   align-items: center;
   gap: 0.625rem;
 }
+/* מלבן נקי. הקטימות בפינות הפכו את הכרטיס לתמניון ולא
+   לריבוע - דניאל ביקש ריבוע, וזה מה שנשאר. */
 .aval::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   background: #fff;
-  /* פינות קטומות - "מרובע כזה" בשפה של הרפרנס */
-  clip-path: polygon(
-    1.25rem 0, calc(100% - 1.25rem) 0, 100% 1.25rem,
-    100% calc(100% - 1.25rem), calc(100% - 1.25rem) 100%,
-    1.25rem 100%, 0 calc(100% - 1.25rem), 0 1.25rem
-  );
 }
 /* התוכן מעל הרקע הקטום */
 .aval > * {
