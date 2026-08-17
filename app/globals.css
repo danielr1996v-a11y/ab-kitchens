@@ -4617,6 +4617,256 @@ a.footer__contact-link:hover {
 }
 
 /* =========================================================
+   PROJECT STRIP - הסקשן הפותח של עמוד אודות
+   =========================================================
+   לפי הרפרנס: טקסט במרכז, ובשני הצדדים עמודות פרויקטים נעות.
+
+   אותה מכניקה של מרקיזת הלוגואים, רק על ציר Y: שתי קבוצות
+   זהות בכל עמודה ו-translateY אינסופי. אפס JS.
+
+   שתי העמודות נעות בכיוונים הפוכים - כשהן נעות יחד העין
+   קוראת את זה כגלילה של העמוד ולא כאנימציה. */
+.pstrip {
+  display: grid;
+  grid-template-columns: 22vw minmax(0, 1fr) 22vw;
+  align-items: center;
+  gap: 0 4vw;
+  padding-block: var(--header-clearance) var(--section-gap);
+  overflow: hidden;
+}
+
+/* ===== הטקסט במרכז ===== */
+.pstrip__head {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pstrip__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+/* מעוין משני צדי העינית, כמו ברפרנס */
+.pstrip__eyebrow::before,
+.pstrip__eyebrow::after {
+  content: "";
+  width: 0.4375rem;
+  height: 0.4375rem;
+  background: var(--color-gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.pstrip__title {
+  margin: 0;
+  /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
+  white-space: pre-line;
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.pstrip__p {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--color-muted);
+  /* אורך שורה קריא - בלי זה הטקסט נמתח על כל העמודה */
+  max-width: 46ch;
+}
+
+/* ===== עמודות הפרויקטים ===== */
+.pcol {
+  --pcol-gap: 1.25vw;
+  /* גובה קבוע ולא auto: הלולאה מחשבת 100% מגובה הקבוצה, ובלי
+     תקרה העמודה מותחת את הסקשן לגובה כל שמונה התמונות. */
+  height: 42rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pcol-gap);
+  /* דהייה בקצוות - הכרטיסים נכנסים ויוצאים בלי חיתוך חד */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+.pcol__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pcol-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  animation-duration: 55s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.pcol--up .pcol__group {
+  animation-name: pcolUp;
+}
+.pcol--down .pcol__group {
+  animation-name: pcolDown;
+}
+/* עצירה בריחוף - בלי זה אי אפשר להסתכל על כרטיס שנע */
+.pcol:hover .pcol__group,
+.pcol:focus-within .pcol__group {
+  animation-play-state: paused;
+}
+@keyframes pcolUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-100% - var(--pcol-gap))); }
+}
+@keyframes pcolDown {
+  from { transform: translateY(calc(-100% - var(--pcol-gap))); }
+  to   { transform: translateY(0); }
+}
+
+.pcol__item {
+  flex-shrink: 0;
+}
+.pcol__card {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* מרובע, כמו שדניאל ביקש */
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+.pcol__img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-soft);
+}
+.pcol__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26, 26, 26, 0.75), rgba(26, 26, 26, 0.15));
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-soft);
+}
+.pcol__label {
+  position: absolute;
+  inset-inline-start: 0.875rem;
+  bottom: 0.875rem;
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
+}
+.pcol__card:hover .pcol__veil,
+.pcol__card:focus-visible .pcol__veil,
+.pcol__card:hover .pcol__label,
+.pcol__card:focus-visible .pcol__label {
+  opacity: 1;
+  transform: translateY(0);
+}
+.pcol__card:hover .pcol__img {
+  transform: scale(1.05);
+}
+
+/* מובייל: אין ריחוף, ולכן התווית גלויה תמיד */
+@media (hover: none) {
+  .pcol__veil,
+  .pcol__label {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* מתחת ל-900 אין מקום לשלוש עמודות. הטקסט עובר לרוחב מלא,
+   ושתי העמודות הופכות לשתי רצועות אופקיות מתחתיו - אותו DOM,
+   רק ציר אחר. */
+@media (max-width: 900px) {
+  .pstrip {
+    grid-template-columns: 1fr;
+    gap: var(--space-5) 0;
+    padding-inline: var(--side-padding);
+  }
+  .pstrip__head {
+    order: -1;
+  }
+  .pcol {
+    --pcol-gap: 1rem;
+    height: auto;
+    flex-direction: row;
+    /* שולי הסקשן בטלים כאן: הרצועה חייבת להגיע מקצה לקצה */
+    margin-inline: calc(var(--side-padding) * -1);
+    -webkit-mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
+  }
+  .pcol__group {
+    flex-direction: row;
+    animation-duration: 40s;
+  }
+  .pcol--up .pcol__group {
+    animation-name: pcolLeft;
+  }
+  .pcol--down .pcol__group {
+    animation-name: pcolRight;
+  }
+  .pcol__item {
+    width: 45vw;
+  }
+  @keyframes pcolLeft {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% - var(--pcol-gap))); }
+  }
+  @keyframes pcolRight {
+    from { transform: translateX(calc(-100% - var(--pcol-gap))); }
+    to   { transform: translateX(0); }
+  }
+}
+
+/* תנועה מופחתת: העמודות נעצרות וניתנות לגלילה ידנית, כדי
+   שהתוכן יישאר נגיש ולא ייעלם */
+@media (prefers-reduced-motion: reduce) {
+  .pcol__group {
+    animation: none;
+  }
+  .pcol {
+    overflow-y: auto;
+  }
+  .pcol__group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* =========================================================
+   כיול מגע למובייל - חייב לשבת בסוף הקובץ
+   =========================================================
+   הניסיון הראשון הציב את הכללים האלה ליד הטוקנים בראש הקובץ,
+   והם לא תפסו: media query לא מוסיף ספציפיות, ולכן כל כלל
+   מאוחר יותר באותה ספציפיות גבר עליהם. .lead__input נשאר 41px.
+   כאן, בסוף, הם מנצחים.
+
+   התקן: Apple HIG דורש 44x44, Material 48x48. */
+@media (max-width: 700px) {
+  /* פרטי הקשר היו 21px גובה - וזו ההמרה המרכזית בעמוד יצירת
+     קשר. מי שנוגע במספר רוצה להתקשר, לא להחטיא. */
+  .contact__link,
+  .cform__alt {
+    min-height: 2.75rem;
+  }
+  /* השדות בפאנל הכהה היו 41px. הגופן כבר 16px ולכן iOS לא
+     מזגזג בזום - רק הגובה חסר. */
+  .lead__input {
+    padding-block: 0.75rem;
+  }
+  /* 11px לא נקרא על מסך קטן. 12px היא הרצפה, ורק לטקסט משני. */
+  .dhero__badge-note {
+    font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
    PROJECT STRIP - רצועת הפרויקטים בעמוד אודות
    =========================================================
    אותה מכניקה של מרקיזת הלוגואים: שתי קבוצות זהות, כל אחת
@@ -4637,23 +4887,6 @@ a.footer__contact-link:hover {
   margin-bottom: var(--space-5);
   max-width: 46rem;
 }
-.pstrip__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  margin: 0 0 var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--color-fg);
-}
-/* אותו קו קצר של עינית ההמלצות */
-.pstrip__eyebrow::after {
-  content: "";
-  width: 3.5rem;
-  height: 2px;
-  background: var(--color-gold);
-  flex-shrink: 0;
-}
 /* הכותרת היא האחרונה בבלוק מאז שהמשפט ירד - המרווח התחתון
    שלה היה מצטבר על margin-bottom של הבלוק עצמו */
 .pstrip__title {
@@ -4666,183 +4899,23 @@ a.footer__contact-link:hover {
   text-wrap: balance;
 }
 
-.pstrip__track {
-  --pstrip-gap: 1.5vw;
-  display: flex;
-  gap: var(--pstrip-gap);
-  width: 100%;
-  min-width: 0;
-  direction: ltr;
-  /* דהיית קצוות - הכרטיסים נכנסים ויוצאים בלי חיתוך חד, וזה
-     מה שמייצר את ההצצה בשוליים שברפרנס */
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
-}
-.pstrip__group {
-  display: flex;
-  gap: var(--pstrip-gap);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  min-width: 100%;
-  flex-shrink: 0;
-  animation: pstripMove 70s linear infinite;
-}
-/* עצירה בריחוף - בלי זה אי אפשר להסתכל על כרטיס שנע */
-.pstrip__track:hover .pstrip__group,
-.pstrip__track:focus-within .pstrip__group {
-  animation-play-state: paused;
-}
-@keyframes pstripMove {
-  from { transform: translateX(0); }
-  to   { transform: translateX(calc(-100% - var(--pstrip-gap))); }
-}
-
-.pstrip__item {
-  flex-shrink: 0;
-}
-.pstrip__card {
-  position: relative;
-  display: block;
-  width: 22vw;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 0.5rem;
-}
-.pstrip__img {
-  object-fit: cover;
-  transition: transform 0.6s var(--ease-soft);
-}
-/* שכבת כהות שמופיעה רק בריחוף, כדי שהתווית תיקרא */
-.pstrip__veil {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(26, 26, 26, 0.72), rgba(26, 26, 26, 0.15));
-  opacity: 0;
-  transition: opacity 0.4s var(--ease-soft);
-}
-.pstrip__label {
-  position: absolute;
-  inset-inline-start: 1.25rem;
-  bottom: 1.25rem;
-  color: #fff;
-  font-size: var(--fs-base);
-  font-weight: 700;
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-soft);
-}
-.pstrip__card:hover .pstrip__veil,
-.pstrip__card:focus-visible .pstrip__veil,
-.pstrip__card:hover .pstrip__label,
-.pstrip__card:focus-visible .pstrip__label {
-  opacity: 1;
-  transform: translateY(0);
-}
-.pstrip__card:hover .pstrip__img {
-  transform: scale(1.04);
-}
 
 /* מובייל: אין ריחוף, ולכן התווית גלויה תמיד. אותו כלל שכבר
    חל על הנקודות החמות - לא מסתירים מידע מאחורי אינטראקציה
    שלא קיימת במכשיר. */
 @media (hover: none) {
-  .pstrip__veil,
-  .pstrip__label {
-    opacity: 1;
-    transform: none;
-  }
 }
 @media (max-width: 700px) {
-  .pstrip__card {
-    width: 78vw;
-  }
-  .pstrip__track {
-    --pstrip-gap: 1rem;
-  }
-  .pstrip__group {
-    animation-duration: 45s;
-  }
 }
 
 /* תנועה מופחתת: הרצועה נעצרת וניתנת לגלילה ידנית, כדי שהתוכן
    יישאר נגיש ולא ייעלם */
 @media (prefers-reduced-motion: reduce) {
-  .pstrip__group {
-    animation: none;
-  }
-  .pstrip__track {
-    overflow-x: auto;
-  }
   .pstrip__group[aria-hidden="true"] {
     display: none;
   }
 }
 
-/* =========================================================
-   ABOUT STORY - סיפור המשפחה, סקשן 2 בעמוד אודות
-   =========================================================
-   שתי עמודות: הכותרת מימין והטקסט משמאל. הפיצול הזה הוא מה
-   שמאפשר לצילום של אברהם או של הנגרייה להיכנס בעתיד לצד
-   הטקסט - בלי לשנות את המבנה. היום המרחב הוא אוויר מכוון. */
-.astory {
-  padding-block: var(--section-gap);
-  padding-inline: var(--side-padding);
-  background: var(--color-surface);
-}
-.astory__inner {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: var(--space-5) 5vw;
-  align-items: start;
-}
-.astory__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  margin: 0 0 var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--color-fg);
-}
-.astory__eyebrow::after {
-  content: "";
-  width: 3.5rem;
-  height: 2px;
-  background: var(--color-gold);
-  flex-shrink: 0;
-}
-.astory__title {
-  margin: 0;
-  font-size: var(--fs-display);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
-  white-space: pre-line;
-}
-.astory__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.astory__p {
-  margin: 0;
-  font-size: var(--fs-base);
-  /* 400 ולא 300 - בעברית Light מאבד הבחנה ונקרא שקוף */
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--color-fg);
-  /* אורך שורה קריא. בלי זה הטקסט נמתח על כל העמודה ונהיה
-     קשה למעקב בין שורה לשורה. */
-  max-width: 60ch;
-}
-
-@media (max-width: 900px) {
-  .astory__inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-}
 
 
 /* ============================================================

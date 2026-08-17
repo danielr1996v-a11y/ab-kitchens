@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import ProjectStrip from "@/components/ProjectStrip";
-import AboutStory from "@/components/AboutStory";
 
 export const metadata: Metadata = {
   title: "אודותינו | א. בית המטבחים - דור שני בענף",
@@ -20,7 +19,6 @@ export default function Page() {
           חייבת לשבת כאן כדי לשמור על היררכיה תקינה */}
       <h1 className="sr-only">אודות א. בית המטבחים</h1>
       <ProjectStrip />
-      <AboutStory />
     </>
   );
 }

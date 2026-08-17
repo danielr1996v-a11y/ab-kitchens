@@ -5,32 +5,33 @@ import { renderHighlight } from "@/lib/richText";
 import Reveal from "./Reveal";
 
 /**
- * ProjectStrip - רצועת הפרויקטים בראש עמוד האודות.
+ * ProjectStrip - הסקשן הפותח של עמוד אודות.
  *
- * server component: אין כאן מצב. התנועה היא CSS בלבד, על אותה
- * מכניקה של מרקיזת הלוגואים - שתי קבוצות זהות, כל אחת
- * min-width: 100%, ו-translateX אינסופי. כשקבוצה אחת יוצאת
- * השנייה כבר במקומה, ולכן הלולאה נראית רציפה בלי JS.
+ * לפי הרפרנס שדניאל שלח: הטקסט במרכז, ובשני הצדדים עמודות
+ * פרויקטים שנעות אוטומטית - כל צד עם פרויקטים אחרים.
  *
- * שתי החלטות שקל לפספס:
- * - הקבוצה השנייה היא aria-hidden. היא כפילות ויזואלית בלבד,
- *   וקורא מסך שיקריא את כל 32 הכרטיסים הוא באג.
- * - הכרטיס הוא קישור לגלריה של אותו סוג. ריחוף שמגלה "מטבח
- *   קלאסי" ולא מוביל לקלאסי הוא החמצה.
+ * המכניקה זהה למרקיזת הלוגואים שכבר עובדת באתר, רק על ציר Y:
+ * שתי קבוצות זהות בכל עמודה, כל אחת בגובה מלא, ו-translateY
+ * אינסופי. כשקבוצה יוצאת מלמעלה השנייה כבר במקומה. אפס JS.
+ *
+ * שתי העמודות נעות בכיוונים הפוכים. כשהן נעות יחד העין קוראת
+ * את זה כגלילה של העמוד עצמו ולא כאנימציה.
+ *
+ * server component - התנועה היא CSS בלבד.
  */
 
 function Card({
   item,
   duplicate = false,
 }: {
-  item: (typeof aboutProjects.items)[number];
+  item: (typeof aboutProjects.columns)[number][number];
   duplicate?: boolean;
 }) {
   return (
-    <li className="pstrip__item">
+    <li className="pcol__item">
       <Link
         href={item.href}
-        className="pstrip__card"
+        className="pcol__card"
         /* הכפילות מוסתרת מהנגישות ומהמקלדת - אחרת אותו יעד
            מופיע פעמיים ברצף הטאב */
         tabIndex={duplicate ? -1 : undefined}
@@ -41,42 +42,56 @@ function Card({
           alt={duplicate ? "" : item.alt}
           fill
           /* sizes חובה: בלי זה הדפדפן מבקש את הרוחב המקסימלי
-             ומוריד תמונה ענקית לכרטיס של 340px */
-          sizes="(max-width: 700px) 78vw, 22vw"
-          className="pstrip__img"
+             ומוריד תמונה ענקית לכרטיס צר */
+          sizes="(max-width: 900px) 45vw, 22vw"
+          className="pcol__img"
         />
-        <span className="pstrip__veil" aria-hidden="true" />
-        <span className="pstrip__label">{item.label}</span>
+        <span className="pcol__veil" aria-hidden="true" />
+        <span className="pcol__label">{item.label}</span>
       </Link>
     </li>
   );
 }
 
+function Column({ items, dir }: { items: typeof aboutProjects.columns[number]; dir: "up" | "down" }) {
+  return (
+    <div className={`pcol pcol--${dir}`} aria-label="פרויקטים">
+      <ul className="pcol__group">
+        {items.map((it) => (
+          <Card key={it.id} item={it} />
+        ))}
+      </ul>
+      {/* עותק שני - מה שמייצר את הלולאה הרציפה */}
+      <ul className="pcol__group" aria-hidden="true">
+        {items.map((it) => (
+          <Card key={`${it.id}-dup`} item={it} duplicate />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function ProjectStrip() {
-  const items = aboutProjects.items;
+  const [right, left] = aboutProjects.columns;
 
   return (
     <section className="pstrip" aria-labelledby="projects-title">
+      {/* ב-RTL הראשון ב-DOM הוא הימני */}
+      <Column items={right} dir="up" />
+
       <Reveal className="pstrip__head">
         <p className="pstrip__eyebrow">{aboutProjects.eyebrow}</p>
         <h2 className="pstrip__title" id="projects-title">
-          {renderHighlight(aboutProjects.title)}
+          {aboutProjects.title}
         </h2>
+        {aboutProjects.paragraphs.map((p, i) => (
+          <p className="pstrip__p" key={i}>
+            {renderHighlight(p)}
+          </p>
+        ))}
       </Reveal>
 
-      <div className="pstrip__track">
-        <ul className="pstrip__group">
-          {items.map((it) => (
-            <Card key={it.id} item={it} />
-          ))}
-        </ul>
-        {/* עותק שני - מה שמייצר את הלולאה הרציפה */}
-        <ul className="pstrip__group" aria-hidden="true">
-          {items.map((it) => (
-            <Card key={`${it.id}-dup`} item={it} duplicate />
-          ))}
-        </ul>
-      </div>
+      <Column items={left} dir="down" />
     </section>
   );
 }
