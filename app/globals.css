@@ -1,4 +1,9 @@
 @import "tailwindcss";
+/* ⚠️ חובה. Lenis מגדיר כאן html.lenis { height: auto } - בלעדיו
+   ה-h-full של Tailwind נועל את html על גובה מסך אחד בזמן שה-body
+   הוא בגובה העמוד המלא, והגלילה נשברת. נמדד: html 900px מול
+   body 7674px. */
+@import "lenis/dist/lenis.css";
 
 /* ===== פונט פולין (Polin) - הוטמע מקבצי הלקוח, 3 משקלים ===== */
 @font-face {
@@ -132,8 +137,14 @@
   --color-foreground: var(--color-fg);
 }
 
-html {
-  scroll-behavior: smooth;
+/* ⚠️ scroll-behavior: smooth מתנגש עם Lenis - שניהם מנסים
+   להנפיש את אותה גלילה, והתוצאה מגמגמת. Lenis רץ רק במצביע
+   מדויק (ראה SmoothScroll.tsx), ולכן הכלל הנייטיב מוגבל בדיוק
+   למצב ההפוך: מגע, שם Lenis כבוי ממילא. */
+@media (pointer: coarse) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
