@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { aboutValues } from "@/lib/content";
 import Icon from "./Icon";
 import Reveal from "./Reveal";
@@ -19,16 +18,10 @@ import Reveal from "./Reveal";
 export default function AboutValues() {
   return (
     <section className="avals" aria-labelledby="values-title">
-      {/* התמונה היא רקע ויזואלי: היא נושאת את הכותרת ואת החצי
-          העליון של הכרטיסים */}
-      <div className="avals__stage">
-        <Image
-          src={aboutValues.image}
-          alt={aboutValues.imageAlt}
-          fill
-          sizes="100vw"
-          className="avals__bg"
-        />
+      {/* התמונה היא רקע CSS ולא next/image, כדי ש-
+          background-attachment: fixed יוכל לעבוד. role="img"
+          נותן לה שם נגיש למרות שאין תג img. */}
+      <div className="avals__stage" role="img" aria-label={aboutValues.imageAlt}>
         <span className="avals__scrim" aria-hidden="true" />
 
         <Reveal className="avals__head">

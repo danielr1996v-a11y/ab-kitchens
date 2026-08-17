@@ -970,8 +970,10 @@ export const aboutProjects = {
 export const aboutValues = {
   eyebrow: "הערכים שלנו",
   title: "הערכים שמובילים אותנו",
-  image: "/images/real-classic-5.webp",
-  imageAlt: "מטבח מתוצרת א. בית המטבחים",
+  /* התמונה מוגדרת גם ב-CSS (‎.avals__stage) כי היא רקע ולא
+     next/image - זה מה שמאפשר ל-background-attachment לעבוד.
+     הערך כאן משמש ל-aria-label בלבד. */
+  imageAlt: "מטבח לבן יוקרתי מתוצרת א. בית המטבחים",
   items: [
     {
       id: "measure",
