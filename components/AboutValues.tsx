@@ -25,7 +25,6 @@ export default function AboutValues() {
         <span className="avals__scrim" aria-hidden="true" />
 
         <Reveal className="avals__head">
-          <p className="avals__eyebrow">{aboutValues.eyebrow}</p>
           <h2 className="avals__title" id="values-title">
             {aboutValues.title}
           </h2>

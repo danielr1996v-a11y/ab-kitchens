@@ -5112,32 +5112,6 @@ html.has-intro.intro-open .intro__slat {
   align-items: center;
   gap: var(--space-2);
 }
-.avals__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  margin: 0;
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: #fff;
-}
-/* מעוינים משני הצדדים, כמו בעינית של הסקשן הראשון */
-.avals__eyebrow::before,
-.avals__eyebrow::after {
-  content: "";
-  width: 0.4375rem;
-  height: 0.4375rem;
-  background: var(--color-gold);
-  transform: rotate(45deg);
-  flex-shrink: 0;
-}
-.avals__title {
-  margin: 0;
-  font-size: var(--fs-h1);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  color: #fff;
-}
 
 /* ===== הכרטיסים ===== */
 .avals__grid {
@@ -5159,6 +5133,9 @@ html.has-intro.intro-open .intro__slat {
    ואי אפשר היה לראות את החצי העליון שלו. */
 .aval {
   position: relative;
+  /* קפיצה קטנה בריחוף. translate ולא margin - הוא לא מזיז
+     את שאר הכרטיסים ולא גורם ל-reflow. */
+  transition: transform 0.3s var(--ease-soft);
   padding: 3rem 1.5rem 2.25rem;
   text-align: center;
   display: flex;
@@ -5175,10 +5152,24 @@ html.has-intro.intro-open .intro__slat {
   z-index: 0;
   background: #fff;
 }
-/* התוכן מעל הרקע הקטום */
+/* התוכן מעל הרקע */
 .aval > * {
   position: relative;
   z-index: 1;
+}
+.aval:hover,
+.aval:focus-within {
+  transform: translateY(-0.5rem);
+}
+/* מי שביקש להפחית תנועה לא מקבל קפיצות */
+@media (prefers-reduced-motion: reduce) {
+  .aval {
+    transition: none;
+  }
+  .aval:hover,
+  .aval:focus-within {
+    transform: none;
+  }
 }
 
 /* ריבוע האייקון: חצי מעל הכרטיס וחצי בתוכו. ריבוע מלא ונקי,
@@ -5208,7 +5199,9 @@ html.has-intro.intro-open .intro__slat {
   font-size: var(--fs-sm);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: var(--color-muted);
+  /* שחור המותג ולא אפור. המשקל כבר 400, ואפור עליו הוא
+     הצטברות של שני מנגנוני החלשה על אותו טקסט. */
+  color: var(--color-fg);
 }
 
 /* ⚠️ background-attachment: fixed לא עובד ב-iOS Safari - הוא
