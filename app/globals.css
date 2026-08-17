@@ -4628,9 +4628,12 @@ a.footer__contact-link:hover {
    קוראת את זה כגלילה של העמוד ולא כאנימציה. */
 .pstrip {
   display: grid;
-  grid-template-columns: 22vw minmax(0, 1fr) 22vw;
+  /* 19vw ולא 22: ב-22 העמודה המרכזית יצאה 691px, והשורה
+     הראשונה של הכותרת גלשה לשורה שלישית. עכשיו ~806px ושתי
+     השורות שבתוכן נשארות כפי שנכתבו. */
+  grid-template-columns: 19vw minmax(0, 1fr) 19vw;
   align-items: center;
-  gap: 0 4vw;
+  gap: 0 3vw;
   padding-block: var(--header-clearance) var(--section-gap);
   overflow: hidden;
 }
@@ -4664,19 +4667,27 @@ a.footer__contact-link:hover {
 }
 .pstrip__title {
   margin: 0;
+  /* align-items: center על ההורה מכווץ כל ילד לרוחב התוכן,
+     והכותרת נשברה ב-592 מתוך 736 הזמינים */
+  width: 100%;
   /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
   white-space: pre-line;
   font-size: var(--fs-display);
   font-weight: 700;
   line-height: var(--lh-tight);
-  text-wrap: balance;
+  /* בלי text-wrap: balance. הוא מאזן את אורכי השורות ולכן
+     נלחם ב-\n המפורש שבתוכן - התוצאה הייתה שלוש שורות במקום
+     השתיים שנכתבו. כאן השבירה נשלטת מהטקסט. */
 }
 .pstrip__p {
   margin: 0;
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: var(--color-muted);
+  /* שחור המותג ולא אפור. אחרי המעבר ל-400, אפור על 400 עדיין
+     נקרא חלש - וזו הצטברות של שני מנגנוני החלשה על אותו טקסט.
+     המשקל כבר יוצר את ההיררכיה מול הכותרת. */
+  color: var(--color-fg);
   /* אורך שורה קריא - בלי זה הטקסט נמתח על כל העמודה */
   max-width: 46ch;
 }
@@ -4881,22 +4892,6 @@ a.footer__contact-link:hover {
   padding-top: var(--header-clearance);
   padding-bottom: var(--section-gap);
   overflow: hidden;
-}
-.pstrip__head {
-  padding-inline: var(--side-padding);
-  margin-bottom: var(--space-5);
-  max-width: 46rem;
-}
-/* הכותרת היא האחרונה בבלוק מאז שהמשפט ירד - המרווח התחתון
-   שלה היה מצטבר על margin-bottom של הבלוק עצמו */
-.pstrip__title {
-  margin: 0;
-  /* התוכן מחזיק \n שמפריד את הכותרת לשתי שורות */
-  white-space: pre-line;
-  font-size: var(--fs-h1);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  text-wrap: balance;
 }
 
 
