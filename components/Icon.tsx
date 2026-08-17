@@ -6,7 +6,14 @@ export type IconId =
   | "whatsapp"
   | "pin"
   | "menu"
-  | "close";
+  | "close"
+  /* חמישה לערכי עמוד אודות. מצוירים באותו סטנדרט - קו 1.5
+     על גריד 24, currentColor - ולא מספרייה חיצונית. */
+  | "ruler"
+  | "gem"
+  | "clock"
+  | "handshake"
+  | "lifebuoy";
 
 /**
  * Icon - ספריית האייקונים של האתר.
@@ -123,5 +130,56 @@ export default function Icon({ id }: { id: IconId }) {
           />
         </svg>
       );
+
+    /* ===== ערכי עמוד אודות ===== */
+
+    case "ruler":
+      return (
+        <svg {...common}>
+          <rect x="2" y="8" width="20" height="8" rx="1.5" strokeWidth="1.5" />
+          <path d="M7 8v3M12 8v4M17 8v3" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+
+    case "gem":
+      return (
+        <svg {...common}>
+          <path
+            d="M6 3h12l3 6-9 12L3 9z"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path d="M3 9h18M9 3 7.5 9 12 21M15 3l1.5 6L12 21" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+      );
+
+    case "clock":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" strokeWidth="1.5" />
+          <path d="M12 7v5.5l3.5 2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    case "handshake":
+      return (
+        <svg {...common}>
+          <path
+            d="M3 10.5 7 7l3 2.5 2-1.5 2 1.5L17 7l4 3.5-3.5 5-2.5-2-3 2.5-3-2.5-2.5 2z"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
+
+    case "lifebuoy":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="9" strokeWidth="1.5" />
+          <circle cx="12" cy="12" r="3.75" strokeWidth="1.5" />
+          <path d="m5.6 5.6 3.7 3.7M14.7 14.7l3.7 3.7M18.4 5.6l-3.7 3.7M9.3 14.7l-3.7 3.7" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+
   }
 }

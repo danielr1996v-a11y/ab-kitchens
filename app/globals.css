@@ -5061,3 +5061,179 @@ html.has-intro.intro-open .intro__slat {
     display: none;
   }
 }
+
+/* =========================================================
+   ABOUT VALUES - "הערכים שמובילים אותנו", עמוד אודות
+   =========================================================
+   לפי הרפרנס: תמונת מטבח ברקע, והכרטיסים חוצים את הגבול
+   התחתון שלה - חצי בפנים, חצי בחוץ. ריבוע האייקון חוצה את
+   הגבול העליון של הכרטיס באותה טכניקה, בקטן. */
+.avals {
+  background: var(--color-header-bg);
+  padding-bottom: var(--section-gap);
+  overflow: hidden;
+}
+
+/* ===== התמונה והכותרת ===== */
+.avals__stage {
+  position: relative;
+  /* גבוה מספיק שהתמונה תשלוט בסקשן. ב-26rem נשאר רק פס צר
+     מעל הכרטיסים והיא נקראה כפס רקע ולא כתמונה. */
+  min-height: 36rem;
+  display: grid;
+  place-items: center;
+  padding: var(--section-gap) var(--side-padding);
+}
+.avals__bg {
+  object-fit: cover;
+  /* fixed רק בדסקטופ - ראה ה-media query למטה */
+  z-index: 0;
+}
+/* שכבת הכהות: בלעדיה הכותרת הלבנה לא נקראת על תמונה בהירה */
+.avals__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(36, 35, 35, 0.55),
+    rgba(36, 35, 35, 0.78)
+  );
+}
+.avals__head {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+.avals__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: #fff;
+}
+/* מעוינים משני הצדדים, כמו בעינית של הסקשן הראשון */
+.avals__eyebrow::before,
+.avals__eyebrow::after {
+  content: "";
+  width: 0.4375rem;
+  height: 0.4375rem;
+  background: var(--color-gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.avals__title {
+  margin: 0;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: #fff;
+}
+
+/* ===== הכרטיסים ===== */
+.avals__grid {
+  position: relative;
+  z-index: 3;
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--side-padding);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25vw;
+  /* הלב של האפקט: הרשימה נדחפת אל תוך התמונה, כך שהחצי
+     העליון של הכרטיסים יושב עליה והתחתון על הפחם */
+  margin-top: -7rem;
+}
+.aval {
+  background: var(--color-header-bg);
+  /* פינות קטומות - "מרובע כזה" בשפה של הרפרנס */
+  clip-path: polygon(
+    1.25rem 0, calc(100% - 1.25rem) 0, 100% 1.25rem,
+    100% calc(100% - 1.25rem), calc(100% - 1.25rem) 100%,
+    1.25rem 100%, 0 calc(100% - 1.25rem), 0 1.25rem
+  );
+  padding: 3rem 1.5rem 2.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+}
+/* ריבוע האייקון: חצי מעל הכרטיס וחצי בתוכו */
+.aval__badge {
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-top: -4.375rem;
+  background: var(--color-gold);
+  color: var(--color-gold-text);
+  /* מעוין קטום, באותה שפה של הכרטיס */
+  clip-path: polygon(
+    0.625rem 0, calc(100% - 0.625rem) 0, 100% 0.625rem,
+    100% calc(100% - 0.625rem), calc(100% - 0.625rem) 100%,
+    0.625rem 100%, 0 calc(100% - 0.625rem), 0 0.625rem
+  );
+}
+.aval__badge svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.aval__title {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: #fff;
+}
+.aval__text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* fixed רק בדסקטופ.
+   ⚠️ background-attachment: fixed לא עובד ב-iOS Safari - הוא
+   נופל בשקט ל-scroll בלי שגיאה. כאן זו תמונת next/image ולא
+   רקע, ולכן האפקט מושג ב-clip-path על המיכל. במובייל מוותרים
+   עליו לגמרי במקום להישען על משהו שנשבר. */
+@media (min-width: 901px) {
+  .avals__stage {
+    clip-path: inset(0);
+  }
+  .avals__bg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .avals__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-2);
+    margin-top: -5rem;
+  }
+  .avals__stage {
+    min-height: 20rem;
+  }
+}
+@media (max-width: 560px) {
+  .avals__grid {
+    grid-template-columns: 1fr;
+  }
+  /* 14px נופל מתחת לתקן שקבענו לגוף טקסט במובייל. בעמודה
+     אחת יש רוחב, אז אין סיבה להקטין. */
+  .aval__text {
+    font-size: var(--fs-base);
+  }
+}
