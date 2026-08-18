@@ -24,22 +24,6 @@ export default function SmoothScroll() {
 
     if (prefersReduced || isTouch) return;
 
-    /* בזמן אנימציית הפתיחה ה-body ב-position: fixed, ולכן גובה
-       העמוד הוא מסך אחד. אתחול Lenis כאן היה גורם לו למדוד עמוד
-       קצר ולסרב לגלול אחר כך. ממתינים לסיום. */
-    const root = document.documentElement;
-    if (root.classList.contains("has-intro") &&
-        !root.classList.contains("intro-done")) {
-      let cancelled = false;
-      let teardown: (() => void) | undefined;
-      const start = () => { if (!cancelled) teardown = init(); };
-      window.addEventListener("intro:done", start, { once: true });
-      return () => {
-        cancelled = true;
-        window.removeEventListener("intro:done", start);
-        teardown?.();
-      };
-    }
     return init();
   }, []);
 

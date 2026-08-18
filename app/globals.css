@@ -4943,155 +4943,11 @@ a.footer__contact-link:hover {
   }
 }
 
-
-
-/* ============================================================
-   Intro - אנימציית פתיחה
-   הסימן נבנה מלמטה למעלה (הוא בית, וזה מה שאברהם עושה), השם
-   נכנס אחריו, ואז תריס אנכי נפתח וחושף את האתר.
-
-   ⚠️ ברירת המחדל היא בלי שכבה. הכל תלוי ב-has-intro שנוסף ב-JS
-   רק אחרי שידוע שיש מי שיסיר אותה. אין JS -> אתר רגיל.
-   ============================================================ */
-.intro {
-  display: none;
-}
-html.has-intro .intro {
-  display: flex;
-  position: fixed;
-  inset: 0;
-  z-index: 9000; /* מעל ההדר (102), מתחת ל-DevInspector (9999) */
-  align-items: center;
-  justify-content: center;
-  background: var(--color-header-bg);
-  transition: opacity 0.5s ease;
-}
-html.has-intro.intro-done .intro {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* נעילת גלילה. position: fixed הוא מה שעוצר גם את iOS - overflow
-   לבדו לא מספיק שם. אין קפיצה כי קיבענו ל-0 לפני שהמחלקה נדלקת. */
-html.intro-scrolllock {
-  overflow: hidden;
-}
-html.intro-scrolllock body {
-  overflow: hidden;
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  overscroll-behavior: none;
-}
-
-/* הכפתור הצף לא מרחף מעל שכבת הפתיחה */
-html.has-intro:not(.intro-done) .fab {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.intro__lockup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.6vw;
-  position: relative;
-  z-index: 2;
-  transition: opacity 0.7s ease;
-}
-html.has-intro.intro-open .intro__lockup {
-  opacity: 0;
-}
-
-/* הסימן נחשף מלמטה למעלה - הבית נבנה */
-.intro__mark {
-  display: block;
-  width: 12vw;
-  clip-path: inset(100% 0 0 0);
-  transform: translateY(1.2vw);
-  transition:
-    clip-path 1.25s var(--ease-soft) 0.3s,
-    transform 1.25s var(--ease-soft) 0.3s;
-}
-html.has-intro.intro-lock .intro__mark {
-  clip-path: inset(0 0 0 0);
-  transform: none;
-}
-.intro__mark img,
-.intro__word img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.intro__word {
-  display: block;
-  width: 24vw;
-  opacity: 0;
-  transform: translateY(0.8vw);
-  transition:
-    opacity 0.9s ease 1.65s,
-    transform 1s var(--ease-soft) 1.65s;
-}
-html.has-intro.intro-lock .intro__word {
-  opacity: 1;
-  transform: none;
-}
-
-.intro__rule {
-  width: 0;
-  height: 2px; /* קו שיער - מותר ב-px */
-  background: var(--color-logo-gold);
-  transition: width 1s var(--ease-soft) 2.35s;
-}
-html.has-intro.intro-lock .intro__rule {
-  width: 7vw;
-}
-
-/* ---- התריס ---- */
-.intro__blinds {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-}
-.intro__slat {
-  flex: 1;
-  height: 100%;
-  transform: translateY(0);
-  background: linear-gradient(
-    180deg,
-    var(--color-header-bg) 0%,
-    #2e2b26 55%,
-    #3a3227 100%
-  );
-  transition: transform 1.05s var(--ease-soft);
-}
-/* 101% ולא 100%: האחוז הנוסף מכסה עיגול תת-פיקסלי שמשאיר קו דק */
-html.has-intro.intro-open .intro__slat {
-  transform: translateY(-101%);
-}
-
 @media (max-width: 768px) {
-  .intro__lockup {
-    gap: 5vw;
-  }
-  .intro__mark {
-    width: 34vw;
-  }
-  .intro__word {
-    width: 62vw;
-  }
-  html.has-intro.intro-lock .intro__rule {
-    width: 20vw;
-  }
 }
 
 /* מדלגים לגמרי, לא מקצרים */
 @media (prefers-reduced-motion: reduce) {
-  html.has-intro .intro {
-    display: none;
-  }
 }
 
 /* =========================================================
@@ -5110,7 +4966,7 @@ html.has-intro.intro-open .intro__slat {
 /* ===== התמונה והכותרת ===== */
 .avals__stage {
   position: relative;
-  background-image: url("/images/hero-country.webp");
+  background-image: url("/images/lead-3.webp");
   background-size: cover;
   background-position: center;
   /* 70vh לבקשת דניאל. vh ולא rem כדי שהיחס לגובה המסך יישמר

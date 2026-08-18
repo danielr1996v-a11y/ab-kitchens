@@ -112,14 +112,27 @@ export const heroSlideshow = {
   transitionSeconds: 2, // משך המעבר בין תמונות
   slides: [
     {
-      image: "/images/hero-country.webp",
-      alt: "מטבח כפרי בגווני קרם עם מדפי עץ ואי שיש - א. בית המטבחים",
-    },
-    {
       image: "/images/hero-modern.webp",
       alt: "מטבח מודרני עם ארונות עץ אגוז ואי מרכזי - א. בית המטבחים",
     },
+    {
+      image: "/images/style-classic.webp",
+      alt: "מטבח קלאסי בהיר עם אי מרכזי ותאורה תלויה - א. בית המטבחים",
+    },
+    {
+      image: "/images/hero-3.webp",
+      alt: "מטבח מודרני כהה עם חיפוי זכוכית ואי שיש - א. בית המטבחים",
+    },
+    {
+      image: "/images/hero-1.webp",
+      alt: "מטבח קלאסי לבן עם קולט אדים מרכזי - א. בית המטבחים",
+    },
+    {
+      image: "/images/lead-2.webp",
+      alt: "מטבח לבן עם אי מרכזי ותאורה תלויה - א. בית המטבחים",
+    },
   ],
+
   // סימן גלילה בתחתית הבאנר
   scrollIndicator: {
     enabled: true,
@@ -971,7 +984,7 @@ export const aboutValues = {
   /* התמונה מוגדרת גם ב-CSS (‎.avals__stage) כי היא רקע ולא
      next/image - זה מה שמאפשר ל-background-attachment לעבוד.
      הערך כאן משמש ל-aria-label בלבד. */
-  imageAlt: "מטבח לבן יוקרתי מתוצרת א. בית המטבחים",
+  imageAlt: "מטבח מתוצרת א. בית המטבחים",
   items: [
     {
       id: "choose",

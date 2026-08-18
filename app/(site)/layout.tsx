@@ -5,21 +5,6 @@ import FloatingActions from "@/components/FloatingActions";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
 import SanityBridge from "@/components/SanityBridge";
-import Intro from "@/components/Intro";
-
-/* רץ סינכרונית לפני הציור הראשון - אחרת התוכן מהבהב לרגע לפני
-   שהשכבה עולה. מוסיף את המחלקה רק אם באמת מריצים פתיחה, כך
-   שברירת המחדל (אין JS / סשן חוזר / תנועה מופחתת) היא אתר רגיל. */
-const introBoot = `(function(){try{
-if(sessionStorage.getItem('ab-intro-seen'))return;
-if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-var r=document.documentElement;r.classList.add('has-intro');
-/* בלי זה האתר נפתח היכן שהמשתמש היה לפני הרענון - לרוב בפוטר */
-if('scrollRestoration' in history)history.scrollRestoration='manual';
-window.scrollTo(0,0);r.classList.add('intro-scrolllock');
-/* רשת ביטחון עצמאית: גם אם כל שאר הסקריפט ייפול, הגלילה משתחררת */
-setTimeout(function(){r.classList.remove('intro-scrolllock')},8000);
-}catch(e){}})();`;
 
 /**
  * הלייאאוט של האתר עצמו - הדר, פוטר וכפתור צף.
@@ -33,8 +18,6 @@ export default function SiteLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <script dangerouslySetInnerHTML={{ __html: introBoot }} />
-      <Intro />
       <Schema />
       <SmoothScroll />
       <Header />
