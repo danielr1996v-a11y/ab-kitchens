@@ -56,6 +56,11 @@ export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
             aria-hidden={i !== 0}
             fill
             priority={i === 0}
+            /* ⚠️ eager לשאר השקופיות. בלי זה הן עצלות, והרוטציה
+               מגיעה אליהן לפני שהן סיימו לרדת - התוצאה היא שקופית
+               ריקה או אייקון תמונה שבורה באמצע המחזור.
+               priority רק על הראשונה כדי לא להתחרות על ה-LCP. */
+            loading={i === 0 ? undefined : "eager"}
             quality={90}
             sizes="100vw"
             className="hero__img"

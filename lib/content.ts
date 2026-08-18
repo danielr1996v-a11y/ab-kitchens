@@ -714,7 +714,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           image: "/images/style-rustic.webp",
           alt: "מטבח כפרי עם ארונות קרם, חיפוי עץ מחורץ ואי כהה",
           points: [
-            { x: 12, y: 72, label: "חזיתות בחריטה", pos: "top" },
+            { x: 12, y: 72, label: "חזיתות פולימר חרוטות", pos: "top" },
             { x: 55, y: 68, label: "משטח בגימור טבעי", pos: "top" },
             { x: 40, y: 14, label: "אחסון פתוח וסגור", pos: "bottom" },
             { x: 14, y: 18, label: "פרזול בגוון עתיק", pos: "bottom" },

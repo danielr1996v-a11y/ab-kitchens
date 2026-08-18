@@ -106,6 +106,11 @@ export default function LeadBanner({ withForm = false }: { withForm?: boolean })
               sizes="(max-width: 900px) 100vw, 54vw"
               className="lead__img"
               priority={i === 0}
+              /* ⚠️ eager לשאר השקופיות. בלי זה הן עצלות, והרוטציה
+                 מגיעה אליהן לפני שהן סיימו לרדת - התוצאה היא שקופית
+                 ריקה או אייקון תמונה שבורה באמצע המחזור.
+                 priority רק על הראשונה כדי לא להתחרות על ה-LCP. */
+              loading={i === 0 ? undefined : "eager"}
             />
           </div>
         ))}
