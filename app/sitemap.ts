@@ -17,7 +17,6 @@ const routes: Array<{
   { path: "/גלריה/כפרי", priority: 0.8, freq: "monthly" },
   { path: "/שיש-למטבח", priority: 0.8, freq: "monthly" },
   { path: "/contact", priority: 0.8, freq: "monthly" },
-  { path: "/מאמרים-וטיפים", priority: 0.7, freq: "weekly" },
   { path: "/מטבחים-מודרניים", priority: 0.7, freq: "monthly" },
   { path: "/מטבחים-כפריים", priority: 0.7, freq: "monthly" },
   { path: "/מטבחים---כל-מה-שרצית-לדעת", priority: 0.7, freq: "monthly" },

@@ -52,7 +52,6 @@ const nextConfig: NextConfig = {
       { source: heb("/גלריה/כפרי"), destination: "/gallery/rustic" },
       { source: heb("/אודותינו"), destination: "/about" },
       { source: heb("/המלצות"), destination: "/testimonials" },
-      { source: heb("/מאמרים-וטיפים"), destination: "/articles" },
       { source: heb("/מטבחים-מודרניים"), destination: "/articles/modern" },
       { source: heb("/מטבחים-כפריים"), destination: "/articles/rustic" },
       { source: heb("/שיש-למטבח"), destination: "/stone" },
@@ -67,6 +66,14 @@ const nextConfig: NextConfig = {
     return [
       // עמוד המחשבון נדחה לשלב ב'. עד אז מפנים ליצירת קשר כדי למנוע 404.
       { source: heb("/מחשבון"), destination: "/contact", permanent: false },
+      /* עמוד "מאמרים וסרטונים" הורד מהאוויר זמנית לבקשת דניאל.
+         ⚠️ הקוד לא נמחק - app/(site)/articles נשאר במקומו,
+         וההחזרה היא הסרת ההפניה והחזרת השורות ל-nav ול-sitemap.
+         מפנים ולא מוחקים: הנתיב היה באתר הישן ומאונדקס.
+         ⚠️ שלושת המאמרים עצמם (מודרניים, כפריים, המדריך) לא
+         הוסרו - הם נתיבים ישנים ונפרדים ונשארו ב-sitemap.
+         הם מיותמים כרגע מבחינת קישור פנימי. */
+      { source: heb("/מאמרים-וטיפים"), destination: "/", permanent: false },
       /* עמוד "המעצבים שלנו" הורד מהאוויר זמנית לבקשת דניאל.
          ⚠️ הקוד לא נמחק - app/(site)/designers ו-DesignersHero
          נשארו במקומם. ההחזרה היא הסרת ההפניה הזו והחזרת השורות

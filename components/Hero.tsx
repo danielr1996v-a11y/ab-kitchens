@@ -62,7 +62,14 @@ export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
                ולטעון את כולן יחד יוצר פרץ שמתחרה על הרוחב פס
                ומשאיר שקופית ריקה ברשת איטית. */
             loading={i === 1 ? "eager" : undefined}
-            quality={90}
+            /* ⚠️ unoptimized במכוון - לא לשחזר ל-next/image רגיל.
+               השקופיות נעלמו לסירוגין, והצלמית השבורה הוכיחה שהבקשה
+               נשלחה ונכשלה - כלומר /_next/image החזיר שגיאה, ולא
+               שהתמונה עוד נטענת. שאר החשודים (טעינה עצלה, priority,
+               סדר ה-CSS) נבדקו ונשללו.
+               המחיר אפסי: קבצי המקור כבר WebP בגודל הנכון, 67-128KB,
+               והמייעל החזיר עליהם כמעט את אותם בייטים. */
+            unoptimized
             sizes="100vw"
             className="hero__img"
           />

@@ -82,7 +82,6 @@ export const nav = [
   { href: "/", label: "דף הבית" },
   { href: "/גלריה", label: "מטבחים", children: kitchenTypes },
   { href: "/שיש-למטבח", label: "שיש" },
-  { href: "/מאמרים-וטיפים", label: "מאמרים וסרטונים" },
   { href: "/אודותינו", label: "אודות" },
   { href: "/contact", label: "יצירת קשר" },
 ];
