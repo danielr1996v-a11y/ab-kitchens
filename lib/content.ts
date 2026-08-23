@@ -259,6 +259,7 @@ export const trustedBy = {
       direction: "ltr" as const,
       logos: [
         { src: "/logos/caesarstone.webp", name: "אבן קיסר" },
+        { src: "/logos/anova.webp", name: "אנובה" },
         { src: "/logos/novo.webp", name: "נובו" },
         { src: "/logos/flurim.webp", name: "פלורים" },
         { src: "/logos/grandmassimo.webp", name: "גראנד מסימו" },
@@ -695,23 +696,14 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
      נקודה במיקום מנוחש היא גרועה מאין נקודה בכלל. */
   stone: {
     heroTitle: "שיש למטבח",
-    heroImage: "/images/stone-shish.webp",
-    heroAlt: "משטח שיש במטבח מתוצרת א. בית המטבחים",
+    heroImage: "/images/stone-unsplash-1.webp",
+    heroAlt: "משטח שיש בהיר במטבח - א. בית המטבחים",
     article: [
       {
         heading: "השיש הוא מה שנוגעים בו כל יום",
         paragraphs: [
           "משטח העבודה הוא המשטח שהכי הרבה קורה עליו: חיתוך, כלים חמים, מים, כתמים. הוא גם **הדבר הראשון שרואים** כשנכנסים למטבח.",
           "אנחנו **מעבד מורשה** של חברות השיש ולא עובדים דרך מעבדים חיצוניים. זה אומר שהמדידה, החיתוך והגימור נעשים אצלנו, ושהאחריות על העבודה היא שלנו.",
-        ],
-      },
-      {
-        items: [
-          "מדידה בשטח אחרי התקנת הארונות",
-          "חיתוך וגימור אצלנו, בלי קבלני משנה",
-          "כיור אינטגרלי, מונח או תת-מישורי",
-          "פרופיל קצה לפי הסגנון של המטבח",
-          "חיפוי קיר בין הארונות באותו חומר",
         ],
       },
     ],
