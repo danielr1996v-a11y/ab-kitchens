@@ -106,11 +106,12 @@ export default function LeadBanner({ withForm = false }: { withForm?: boolean })
               sizes="(max-width: 900px) 100vw, 54vw"
               className="lead__img"
               priority={i === 0}
-              /* ⚠️ eager לשאר השקופיות. בלי זה הן עצלות, והרוטציה
-                 מגיעה אליהן לפני שהן סיימו לרדת - התוצאה היא שקופית
-                 ריקה או אייקון תמונה שבורה באמצע המחזור.
-                 priority רק על הראשונה כדי לא להתחרות על ה-LCP. */
-              loading={i === 0 ? undefined : "eager"}
+              /* ⚠️ רק השקופית הבאה נטענת מראש, לא כולן.
+                 הראשונה priority. השנייה eager כי היא נחוצה בעוד
+                 שניות בודדות. השאר lazy - יש להן מחזור שלם ויותר,
+                 ולטעון את כולן יחד יוצר פרץ שמתחרה על הרוחב פס
+                 ומשאיר שקופית ריקה ברשת איטית. */
+              loading={i === 1 ? "eager" : undefined}
             />
           </div>
         ))}
