@@ -51,7 +51,6 @@ export default function DesignerCta() {
           src={designerCta.image}
           alt={designerCta.imageAlt}
           fill
-          quality={90}
           sizes="90vw"
           className="dcta__img"
         />

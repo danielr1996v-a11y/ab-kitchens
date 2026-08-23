@@ -36,7 +36,6 @@ export default function DesignersHero() {
         aria-hidden={!priority}
         fill
         priority={priority}
-        quality={90}
         sizes="(max-width: 900px) 100vw, 60vw"
         className="dhero__img"
       />

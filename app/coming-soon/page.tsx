@@ -27,7 +27,6 @@ export default function ComingSoonPage() {
         alt={comingSoon.imageAlt}
         fill
         priority
-        quality={85}
         sizes="100vw"
         className="soon__bg"
       />

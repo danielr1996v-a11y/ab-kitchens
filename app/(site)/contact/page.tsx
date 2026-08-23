@@ -78,7 +78,6 @@ export default function ContactPage() {
           alt={contactPage.imageAlt}
           fill
           priority
-          quality={88}
           sizes="(max-width: 900px) 100vw, 50vw"
           className="contact__img"
         />

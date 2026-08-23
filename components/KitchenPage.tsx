@@ -43,7 +43,6 @@ export default function KitchenPage({
             alt={page.heroAlt}
             fill
             priority
-            quality={90}
             sizes="100vw"
             className="kpage__hero-img"
           />
