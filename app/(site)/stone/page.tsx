@@ -16,19 +16,26 @@ export const metadata: Metadata = {
   },
 };
 
+/* רק ספקי השיש. הסינון לפי id ולא לפי מיקום במערך - הוספת
+   קבוצה או שינוי סדר ב-content לא ישברו את העמוד הזה. */
+const stoneOnly = {
+  ...trustedBy,
+  groups: trustedBy.groups.filter((g) => g.id === "stone"),
+};
+
 /**
  * עמוד השיש. אותו מבנה בדיוק כמו עמודי המטבחים - KitchenPage
  * נבנתה לכך שהוספת עמוד היא רשומה ב-kitchenPages ולא קוד חדש.
  *
- * ההבדל היחיד: סקשן הספקים מתחתיו. הוא רלוונטי כאן במיוחד -
- * דווקא בעמוד שמדבר על "מעבד מורשה של חברות השיש", הלוגואים
- * הם ההוכחה לטענה ולא קישוט.
+ * ההבדל היחיד: ספקי השיש מוצגים מעל הגלריה. בעמוד שטוען "מעבד
+ * מורשה של חברות השיש", הלוגואים הם ההוכחה לטענה - ולכן הם
+ * באים לפני העבודות ולא אחריהן.
  */
 export default function Page() {
   return (
-    <>
-      <KitchenPage styleKey="stone" />
-      <TrustedBy content={trustedBy} />
-    </>
+    <KitchenPage
+      styleKey="stone"
+      beforeGallery={<TrustedBy content={stoneOnly} />}
+    />
   );
 }

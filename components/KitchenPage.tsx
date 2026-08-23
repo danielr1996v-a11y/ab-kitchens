@@ -18,7 +18,16 @@ import { renderRichText } from "@/lib/richText";
  * הסקשן האחרון הוא LeadBanner הקיים - הפיגמה לא כללה סקשן
  * יצירת קשר, ואין סיבה לבנות שני פאנלים כהים שונים באתר.
  */
-export default function KitchenPage({ styleKey }: { styleKey: string }) {
+export default function KitchenPage({
+  styleKey,
+  beforeGallery,
+}: {
+  styleKey: string;
+  /* חריץ אופציונלי שנפתח מעל הגלריה. קיים בשביל עמוד השיש,
+     שמציג שם את ספקי השיש - הלוגואים הם ההוכחה לטענה "מעבד
+     מורשה", ולכן מקומם לפני העבודות ולא אחריהן. */
+  beforeGallery?: React.ReactNode;
+}) {
   const page = kitchenPages[styleKey];
   if (!page) return null;
 
@@ -123,6 +132,8 @@ export default function KitchenPage({ styleKey }: { styleKey: string }) {
           </section>
         ))}
       </article>
+
+      {beforeGallery}
 
       {/* ===== גלריה ===== */}
       <section className="kpage__gallery" aria-labelledby="gallery-title">
