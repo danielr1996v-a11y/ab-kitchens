@@ -146,7 +146,7 @@ export default function Header() {
                 >
                   <MegaMenu
                     items={item.children}
-                    fallbackImage={FEATURED?.image ?? "/images/hero-1.webp"}
+                    fallbackImage={FEATURED?.image ?? "/images/hero-modern.webp"}
                     isOpen={openMenu === item.href}
                     onLinkBlur={scheduleClose}
                   />
