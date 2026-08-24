@@ -135,7 +135,6 @@ async function main() {
         titleBold: leadBanner.titleBold,
         titleLight: leadBanner.titleLight,
         subtitle: leadBanner.subtitle,
-        ctaText: leadBanner.ctaText,
         slides: leadSlides,
       },
       {

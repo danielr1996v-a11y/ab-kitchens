@@ -31,7 +31,7 @@ export const homeQuery = defineQuery(`*[_id == "homePage"][0]{
     _type == "styleGrid" => { title, cards[]{ _key, title, image } },
     _type == "values" => { title, intro, items[]{ _key, title, description, image } },
     _type == "trustedBy" => { title, groups[]{ _key, label, logos[]{ ..., name } } },
-    _type == "leadBanner" => { titleBold, titleLight, subtitle, ctaText, slides[]{ ..., alt } },
+    _type == "leadBanner" => { titleBold, titleLight, subtitle, slides[]{ ..., alt } },
     _type == "testimonials" => { reviews[]{ _key, name, text, rating } }
   }
 }`);
@@ -124,7 +124,6 @@ export function adaptHome(data: Raw): Section[] | null {
               titleBold: s.titleBold ?? leadBanner.titleBold,
               titleLight: s.titleLight ?? leadBanner.titleLight,
               subtitle: s.subtitle ?? leadBanner.subtitle,
-              ctaText: s.ctaText ?? leadBanner.ctaText,
               slides: (s.slides ?? []).map((sl: SanityImage, i: number) => ({
                 image: src(sl, leadBanner.slides[i]?.image ?? ""),
                 alt: sl.alt ?? leadBanner.slides[i]?.alt ?? "",

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { leadBanner, leadForm } from "@/lib/content";
 
@@ -69,10 +68,6 @@ export default function LeadBanner({ withForm = false }: { withForm?: boolean })
           ) : (
             <>
               <p className="lead__subtitle">{leadBanner.subtitle}</p>
-
-              <Link href={leadBanner.ctaHref} className="lead__cta">
-                {leadBanner.ctaText}
-              </Link>
             </>
           )}
         </div>
