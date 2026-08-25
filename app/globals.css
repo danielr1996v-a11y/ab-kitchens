@@ -3581,8 +3581,8 @@ a.footer__contact-link:hover {
 .fab__btn svg {
   width: 1.75rem;
   height: 1.75rem;
-  /* האייקונים בספרייה מצוירים ב-stroke, ולכן הם לבנים דרך
-     currentColor ולא דורשים גרסה ממולאת */
+  /* ⚠️ אייקון הטלפון מצויר ב-stroke ואייקון וואטסאפ ב-fill,
+     ולכן ה-stroke-width חל רק על הראשון ולא משפיע על השני. */
   stroke-width: 1.8;
 }
 .fab__btn:hover,
@@ -4850,6 +4850,15 @@ a.footer__contact-link:hover {
     --pcol-gap: 1rem;
     height: auto;
     flex-direction: row;
+    /* ⚠️ direction: ltr הוא מה שמתקן את המסך הריק, ואינו קוסמטי.
+       העמודה במובייל היא flex-direction: row, והדף כולו RTL -
+       ולכן שתי הקבוצות נפרסו מימין לשמאל והשנייה הונחה **משמאל**
+       לראשונה, ב-x שלילי. האנימציה דוחפת שמאלה, וכך שתיהן יצאו
+       מהמסך יחד: נמדד 1988px של ריק ברוחב 375. זה בדיוק הדף
+       הריק שדניאל ראה.
+       ltr מנתק את המסלול מכיוון הדף, בדיוק כמו במרקיזת הלוגואים
+       (.marquee). כיוון הקריאה מוחזר על הכרטיס עצמו. */
+    direction: ltr;
     /* שולי הסקשן בטלים כאן: הרצועה חייבת להגיע מקצה לקצה */
     margin-inline: calc(var(--side-padding) * -1);
     -webkit-mask-image: linear-gradient(to left, transparent, #000 8%, #000 92%, transparent);
@@ -4857,7 +4866,14 @@ a.footer__contact-link:hover {
   }
   .pcol__group {
     flex-direction: row;
+    /* רשת ביטחון: גם אם יישארו מעט פרויקטים, קבוצה בודדת עדיין
+       מכסה את כל הרוחב ולא ייפתח חלל. זה הכלל מ-CLAUDE.md. */
+    min-width: 100%;
     animation-duration: 40s;
+  }
+  /* הטקסט חוזר לעברית - רק המסלול הוא ltr, לא התוכן */
+  .pcol__item {
+    direction: rtl;
   }
   .pcol--up .pcol__group {
     animation-name: pcolLeft;
@@ -4927,8 +4943,10 @@ a.footer__contact-link:hover {
    min-width: 100%, ו-translateX אינסופי. לא נכתב מנגנון סליידר
    חדש - זה כבר עובד באתר.
 
-   ⚠️ direction: ltr על המסלול הוא הכרחי. הדף כולו RTL, ובלי
-   ההצהרה הזו כיוון התנועה מתהפך ביחס לאנימציה ומתקבל ריצוד. */
+   ⚠️ direction: ltr על המסלול הוא הכרחי, וההערה הזו עמדה כאן
+   לבדה: הכללים שהיא מתארת מעולם לא נכתבו, וארבעה בלוקי מדיה
+   מתחתיה נשארו ריקים. זו הסיבה שהרצועה במובייל הראתה מסך ריק.
+   הכללים יושבים עכשיו בבלוק max-width: 900px. */
 /* הסקשן הראשון בעמוד ללא הירו - ולכן פינוי מלא מתחת להדר הצף
    ולא רק --section-gap, שהיה משאיר את הכותרת מאחורי הבר. */
 .pstrip {
@@ -4938,27 +4956,12 @@ a.footer__contact-link:hover {
 }
 
 
-/* מובייל: אין ריחוף, ולכן התווית גלויה תמיד. אותו כלל שכבר
-   חל על הנקודות החמות - לא מסתירים מידע מאחורי אינטראקציה
-   שלא קיימת במכשיר. */
-@media (hover: none) {
-}
-@media (max-width: 700px) {
-}
-
 /* תנועה מופחתת: הרצועה נעצרת וניתנת לגלילה ידנית, כדי שהתוכן
    יישאר נגיש ולא ייעלם */
 @media (prefers-reduced-motion: reduce) {
   .pstrip__group[aria-hidden="true"] {
     display: none;
   }
-}
-
-@media (max-width: 768px) {
-}
-
-/* מדלגים לגמרי, לא מקצרים */
-@media (prefers-reduced-motion: reduce) {
 }
 
 /* =========================================================
