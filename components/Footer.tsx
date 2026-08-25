@@ -63,13 +63,20 @@ export default function Footer() {
         <nav className="footer__col">
           <h3 className="footer__title">{footerNew.navTitle}</h3>
           <ul className="footer__list">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="footer__link">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
+            {/* ⚠️ פריט עם children (״מטבחים״) מסונן החוצה, כמו
+                בתפריט המובייל. אין מאחוריו עמוד - הוא פותח תפריט
+                בלבד - ולכן כאן הוא היה קישור שמוביל להפניה.
+                שלוש הקטגוריות מופיעות ממילא בטור ״המטבחים שלנו״
+                שצמוד לזה. */}
+            {nav
+              .filter((item) => !item.children)
+              .map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="footer__link">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
           </ul>
         </nav>
 
