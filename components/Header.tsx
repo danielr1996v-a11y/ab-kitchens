@@ -224,20 +224,18 @@ export default function Header() {
 
           <nav aria-label="ניווט מובייל">
             <ul className="mnav__list">
-              {nav.map((item, i) => (
-                <li
-                  key={item.href}
-                  className="mnav__item"
-                  style={{ "--i": i } as React.CSSProperties}
-                >
-                  {/* "מטבחים" אינו קישור - אין עמוד מאחוריו.
-                      במובייל אין תפריט נפתח, ושלוש הקטגוריות
-                      מוצגות ממילא ככרטיסים מתחת לרשימה. */}
-                  {item.children ? (
-                    <span className="mnav__link mnav__link--static">
-                      {item.label}
-                    </span>
-                  ) : (
+              {/* ⚠️ פריט עם children (״מטבחים״) לא מוצג כאן במכוון.
+                  אין מאחוריו עמוד, במובייל אין תפריט נפתח, ושלוש
+                  הקטגוריות מופיעות ממילא ככרטיסים מצולמים מתחת -
+                  כך שהמילה הייתה טקסט מת שאי אפשר ללחוץ עליו. */}
+              {nav
+                .filter((item) => !item.children)
+                .map((item, i) => (
+                  <li
+                    key={item.href}
+                    className="mnav__item"
+                    style={{ "--i": i } as React.CSSProperties}
+                  >
                     <Link
                       href={item.href}
                       className="mnav__link"
@@ -246,9 +244,8 @@ export default function Header() {
                     >
                       {item.label}
                     </Link>
-                  )}
-                </li>
-              ))}
+                  </li>
+                ))}
             </ul>
           </nav>
 

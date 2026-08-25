@@ -29,6 +29,10 @@ export default function KitchenPage({
   beforeGallery?: React.ReactNode;
 }) {
   const page = kitchenPages[styleKey];
+
+  /* התהליך לפי עמוד. עמוד השיש מגדיר משלו, כי התהליך המשותף
+     מדבר על הזמנת מטבח וסתר את ה-FAQ של אותו עמוד. */
+  const flow = page.process ?? kitchenProcess;
   if (!page) return null;
 
   return (
@@ -158,11 +162,11 @@ export default function KitchenPage({
       <section className="kpage__process" aria-labelledby="process-title">
         <Reveal>
           <h2 className="kpage__section-title" id="process-title">
-            {kitchenProcess.title}
+            {flow.title}
           </h2>
         </Reveal>
         <ol className="kpage__steps">
-          {kitchenProcess.steps.map((step) => (
+          {flow.steps.map((step) => (
             <li className="kstep" key={step.id}>
               <Image
                 src={step.image}
