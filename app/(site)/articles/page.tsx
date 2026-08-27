@@ -1,23 +1,43 @@
 import type { Metadata } from "next";
+import ArticleCard from "@/components/ArticleCard";
+import Reveal from "@/components/Reveal";
+import { articles, articlesPage } from "@/lib/articles";
 
 export const metadata: Metadata = {
-  title: "מאמרים וטיפים על מטבחים | א. בית המטבחים",
-  description:
-    "מדריכים, טיפים וסרטונים על תכנון מטבחים, בחירת שיש וסגנונות עיצוב.",
+  title: "מאמרים על מטבחים ושיש | א. בית המטבחים",
+  description: articlesPage.lead,
   alternates: { canonical: "/מאמרים-וטיפים" },
   openGraph: {
-    title: "מאמרים וטיפים על מטבחים | א. בית המטבחים",
-    description:
-      "מדריכים, טיפים וסרטונים על תכנון מטבחים, בחירת שיש וסגנונות עיצוב.",
+    title: "מאמרים על מטבחים ושיש | א. בית המטבחים",
+    description: articlesPage.lead,
     url: "/מאמרים-וטיפים",
   },
 };
 
+/**
+ * ליסטינג המאמרים.
+ *
+ * ⚠️ הנתיב הציבורי הוא /מאמרים-וטיפים - הכתובת שהייתה באתר
+ * הישן. היא הופנתה זמנית לדף הבית כשהעמוד ירד, וההפניה הוסרה
+ * כשהעמוד חזר עם תוכן אמיתי.
+ */
 export default function Page() {
   return (
-    <section className="section-block">
-      <h1 className="page-title">מאמרים וטיפים</h1>
-      <p className="page-note">התוכן של העמוד הזה ייבנה בהמשך, לפי הפיגמה.</p>
+    <section className="alist" aria-labelledby="articles-title">
+      <Reveal className="alist__head">
+        <h1 className="alist__title" id="articles-title">
+          {articlesPage.title}
+        </h1>
+        <p className="alist__lead">{articlesPage.lead}</p>
+      </Reveal>
+
+      <ul className="alist__grid">
+        {articles.map((a) => (
+          <li key={a.slug}>
+            <ArticleCard article={a} />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

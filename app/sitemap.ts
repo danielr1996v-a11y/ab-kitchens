@@ -17,9 +17,15 @@ const routes: Array<{
   { path: "/גלריה/כפרי", priority: 0.8, freq: "monthly" },
   { path: "/שיש-למטבח", priority: 0.8, freq: "monthly" },
   { path: "/contact", priority: 0.8, freq: "monthly" },
+  /* ⚠️ /מטבחים---כל-מה-שרצית-לדעת ירד מכאן במכוון: אין לו מאמר
+     בחומרים של הלקוח, והוא היה עמוד ריק שיושב באינדקס. */
+  { path: "/מאמרים-וטיפים", priority: 0.7, freq: "monthly" },
   { path: "/מטבחים-מודרניים", priority: 0.7, freq: "monthly" },
   { path: "/מטבחים-כפריים", priority: 0.7, freq: "monthly" },
-  { path: "/מטבחים---כל-מה-שרצית-לדעת", priority: 0.7, freq: "monthly" },
+  { path: "/מטבח-קלאסי", priority: 0.7, freq: "monthly" },
+  { path: "/שיש-טבעי", priority: 0.7, freq: "monthly" },
+  { path: "/שיש-קוורץ", priority: 0.7, freq: "monthly" },
+  { path: "/שיש-פורצלן", priority: 0.7, freq: "monthly" },
   { path: "/אודותינו", priority: 0.6, freq: "monthly" },
   { path: "/המלצות", priority: 0.6, freq: "monthly" },
   { path: "/תקנון-ומדיניות-פרטיות", priority: 0.2, freq: "yearly" },

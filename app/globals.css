@@ -1330,7 +1330,7 @@ main > *:first-child:not(.hero) {
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: 1.6em;
-  color: var(--color-muted);
+  color: var(--color-fg);
   margin: 0;
 }
 
@@ -2707,7 +2707,12 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: #4a4a4a;
+  /* ⚠️ --color-fg ולא אפור. שלושה גוונים שונים שימשו כאן לטקסט
+     קריאה רצופה, בעוד ששאר האתר (.pstrip__p, .aval__text,
+     .review__text, .legal__text) על --color-fg. נמדד: 8.86
+     ניגודיות מול 17.4 - עובר AA ולכן לא נתפס בבדיקת נגישות,
+     אבל נראה דהוי ליד אותו גופן בדיוק בעמוד אודות. */
+  color: var(--color-fg);
 }
 .kpage__paragraph + .kpage__paragraph {
   margin-top: var(--space-2);
@@ -2729,7 +2734,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: #4a4a4a;
+  color: var(--color-fg);
 }
 .kpage__list li::before {
   content: "";
@@ -2951,7 +2956,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: var(--color-muted);
+  color: var(--color-fg);
   max-width: 62ch;
 }
 
@@ -3652,7 +3657,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-body);
-  color: #4a4a4a;
+  color: var(--color-fg);
   margin-top: var(--space-2);
   max-width: 36ch;
 }
@@ -5195,5 +5200,194 @@ a.footer__contact-link:hover {
        האייקון הסמוך נצמד ויזואלית לכפתור במקום לשני חבריו
        והשלישייה מתפרקת. */
     gap: 0.625rem;
+  }
+}
+
+/* =========================================================
+   ARTICLES - ליסטינג, כרטיס ועמוד מאמר
+   =========================================================
+   הכרטיס חסר מידות במכוון: אותו רכיב יושב גם ברשת הליסטינג
+   וגם כקובייה בודדת בתחתית עמוד המטבח, והרוחב נקבע על ידי
+   הרשת שעוטפת אותו. */
+.alist {
+  /* חוק 4 - ריפוד צדדי דרך הטוקן. בלעדיו הכרטיסים נגעו
+     בקצוות המסך במובייל (נמדד 375 מתוך 375). */
+  padding-inline: var(--side-padding);
+  padding-top: var(--header-clearance);
+  padding-bottom: var(--section-gap);
+}
+.alist__head {
+  max-width: 46rem;
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+.alist__title {
+  font-size: clamp(1.875rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+}
+.alist__lead {
+  margin-top: var(--space-2);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--color-muted);
+}
+.alist__grid,
+.krel__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.4vw, 2.25rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== הכרטיס ===== */
+.acard__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+.acard__media {
+  position: relative;
+  display: block;
+  /* יחס קבוע - כך כל הכרטיסים ברשת מתיישרים בלי תלות בתמונה */
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background: var(--color-surface);
+}
+.acard__img {
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-soft);
+}
+.acard__link:hover .acard__img,
+.acard__link:focus-visible .acard__img {
+  transform: scale(1.04);
+}
+.acard__title {
+  margin-top: var(--space-3);
+  font-size: clamp(1.0625rem, 1.35vw, 1.25rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+  transition: color 0.4s var(--ease-soft);
+}
+.acard__link:hover .acard__title {
+  color: var(--color-logo-gold);
+}
+.acard__excerpt {
+  margin-top: var(--space-1);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--color-fg);
+}
+.acard__more {
+  margin-top: var(--space-2);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-logo-gold);
+}
+.acard__link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 4px;
+  border-radius: 0.75rem;
+}
+
+/* ===== סקשן המאמר בעמוד המטבח ===== */
+.krel {
+  padding-block: var(--section-gap);
+}
+.krel .kpage__section-title {
+  margin-bottom: var(--space-5);
+}
+
+/* ===== עמוד המאמר ===== */
+.apage {
+  /* חוק 4 - ריפוד צדדי דרך הטוקן. בלעדיו הכרטיסים נגעו
+     בקצוות המסך במובייל (נמדד 375 מתוך 375). */
+  padding-inline: var(--side-padding);
+  padding-top: var(--header-clearance);
+  padding-bottom: var(--section-gap);
+}
+.apage__head {
+  max-width: 52rem;
+  margin-inline: auto;
+  text-align: center;
+}
+.apage__title {
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+.apage__media {
+  position: relative;
+  margin-top: var(--space-5);
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+.apage__img {
+  object-fit: cover;
+}
+
+/* ⚠️ 65ch הוא בקשה מפורשת של דניאל - "שהמילים לא יהיו ארוכות
+   מידי". זה גם גבול הקריאות המקובל (60-75 תווים לשורה). */
+.apage__body {
+  max-width: 65ch;
+  margin-inline: auto;
+  margin-top: var(--space-6);
+}
+.apage__block + .apage__block {
+  margin-top: var(--space-5);
+}
+.apage__heading {
+  font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-2);
+}
+.apage__p {
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--color-fg);
+}
+.apage__p + .apage__p {
+  margin-top: var(--space-2);
+}
+.apage__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-6);
+  padding: 0.875rem 2rem;
+  border-radius: 999px;
+  background: var(--color-gold);
+  color: var(--color-fg);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-soft);
+}
+.apage__cta:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1100px) {
+  .alist__grid,
+  .krel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  .alist__grid,
+  .krel__grid {
+    grid-template-columns: 1fr;
+  }
+  .apage__media {
+    aspect-ratio: 4 / 3;
   }
 }

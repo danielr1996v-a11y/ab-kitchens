@@ -2,6 +2,8 @@ import { ViewTransition } from "react";
 import Image from "next/image";
 import { kitchenPages, kitchenProcess, heroSlideshow } from "@/lib/content";
 import LeadBanner from "./LeadBanner";
+import ArticleCard from "./ArticleCard";
+import { byStyle } from "@/lib/articles";
 import Reveal from "./Reveal";
 import ParallaxImage from "./ParallaxImage";
 import Hotspots from "./Hotspots";
@@ -33,6 +35,7 @@ export default function KitchenPage({
   /* התהליך לפי עמוד. עמוד השיש מגדיר משלו, כי התהליך המשותף
      מדבר על הזמנת מטבח וסתר את ה-FAQ של אותו עמוד. */
   const flow = page.process ?? kitchenProcess;
+  const related = byStyle(styleKey as Parameters<typeof byStyle>[0]);
   if (!page) return null;
 
   return (
@@ -222,6 +225,26 @@ export default function KitchenPage({
       />
 
       {/* ===== יצירת קשר - כאן עם טופס, בשונה מדף הבית ===== */}
+      {/* ⚠️ הקובייה נשלפת לפי relatedStyle ולא מקודדת לעמוד -
+          הוספת מאמר ב-lib/articles.ts מופיעה כאן לבד.
+          עמוד השיש מקבל שלוש קוביות, כל סגנון מטבח אחת. */}
+      {related.length > 0 && (
+        <section className="krel" aria-labelledby="related-title">
+          <Reveal>
+            <h2 className="kpage__section-title" id="related-title">
+              {related.length > 1 ? "מאמרים בנושא" : "מאמר בנושא"}
+            </h2>
+          </Reveal>
+          <ul className="krel__grid">
+            {related.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <LeadBanner withForm />
     </>
   );
