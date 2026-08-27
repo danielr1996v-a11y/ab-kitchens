@@ -5303,10 +5303,22 @@ a.footer__contact-link:hover {
 
 /* ===== סקשן המאמר בעמוד המטבח ===== */
 .krel {
+  /* ⚠️ ריפוד צדדי חובה - חוק 4. בלעדיו הסקשן היה היחיד בעמוד
+     המטבח שרץ מקצה לקצה, בעוד שכל אחיו (.kpage__gallery,
+     .kpage__process, .kfaq, .kpage__article) על אותו טוקן. */
+  padding-inline: var(--side-padding);
   padding-block: var(--section-gap);
 }
 .krel .kpage__section-title {
   margin-bottom: var(--space-5);
+}
+/* ⚠️ קובייה בודדת. שלושת עמודי הסגנונות מציגים מאמר אחד, ובלי
+   הכלל הזה הוא נמתח על שליש מהרוחב ומשאיר שני שלישים ריקים
+   מצדו. תיבה אחת ברוחב סביר, צמודה לצד ההתחלה כמו הכותרת
+   שמעליה. עמוד השיש עם שלושה מאמרים לא מושפע. */
+.krel__grid:has(> li:only-child) {
+  grid-template-columns: minmax(0, 26rem);
+  justify-content: start;
 }
 
 /* ===== עמוד המאמר ===== */
