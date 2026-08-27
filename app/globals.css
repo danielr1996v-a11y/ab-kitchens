@@ -5244,6 +5244,32 @@ a.footer__contact-link:hover {
 }
 
 /* ===== הכרטיס ===== */
+/* הכרטיס עצמו - תיבה לבנה עם מסגרת דקה וצל רך.
+   height: 100% כדי שכל הכרטיסים בשורה יהיו באותו גובה גם
+   כשהכותרת נשברת לשתי שורות. */
+.acard {
+  height: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  /* צל עדין מאוד. שתי שכבות: אחת קרובה שמנתקת מהרקע, ואחת
+     רחוקה ורכה שנותנת עומק בלי להכביד. */
+  box-shadow:
+    0 0.0625rem 0.125rem rgba(0, 0, 0, 0.04),
+    0 0.5rem 1.5rem rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.4s var(--ease-soft),
+    box-shadow 0.4s var(--ease-soft),
+    border-color 0.4s var(--ease-soft);
+}
+.acard:hover {
+  transform: translateY(-4px);
+  border-color: transparent;
+  box-shadow:
+    0 0.125rem 0.25rem rgba(0, 0, 0, 0.05),
+    0 1.25rem 2.5rem rgba(0, 0, 0, 0.11);
+}
 .acard__link {
   display: flex;
   flex-direction: column;
@@ -5261,7 +5287,6 @@ a.footer__contact-link:hover {
      מאמר, ומוריד אותה ל-188px. */
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 0.75rem;
   background: var(--color-surface);
 }
 .acard__img {
@@ -5273,6 +5298,9 @@ a.footer__contact-link:hover {
   transform: scale(1.04);
 }
 .acard__title {
+  /* הריפוד הצדדי חוזר על שלושת הטקסטים ולא על עוטף, כדי
+     שהתמונה תישאר צמודה לקצוות המסגרת. */
+  padding-inline: var(--space-3);
   margin-top: var(--space-3);
   font-size: clamp(1.0625rem, 1.35vw, 1.25rem);
   font-weight: 700;
@@ -5284,21 +5312,26 @@ a.footer__contact-link:hover {
   color: var(--color-logo-gold);
 }
 .acard__excerpt {
+  padding-inline: var(--space-3);
+  /* דוחף את "לקריאה" לתחתית - כך הוא באותו גובה בכל
+     הכרטיסים בשורה גם כשהתקצירים באורך שונה. */
+  flex: 1;
   margin-top: var(--space-1);
   font-size: var(--fs-base);
   line-height: var(--lh-body);
   color: var(--color-fg);
 }
 .acard__more {
+  padding-inline: var(--space-3);
+  padding-block-end: var(--space-3);
   margin-top: var(--space-2);
   font-size: 0.9375rem;
   font-weight: 700;
   color: var(--color-logo-gold);
 }
-.acard__link:focus-visible {
+.acard:has(.acard__link:focus-visible) {
   outline: 2px solid var(--color-gold);
-  outline-offset: 4px;
-  border-radius: 0.75rem;
+  outline-offset: 3px;
 }
 
 /* ===== סקשן המאמר בעמוד המטבח ===== */
