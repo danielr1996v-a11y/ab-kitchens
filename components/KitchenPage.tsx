@@ -3,6 +3,7 @@ import Image from "next/image";
 import { kitchenPages, kitchenProcess, heroSlideshow } from "@/lib/content";
 import LeadBanner from "./LeadBanner";
 import ArticleCard from "./ArticleCard";
+import Breadcrumbs from "./Breadcrumbs";
 import { byStyle } from "@/lib/articles";
 import Reveal from "./Reveal";
 import ParallaxImage from "./ParallaxImage";
@@ -251,7 +252,14 @@ export default function KitchenPage({
       />
 
       {/* ===== יצירת קשר - כאן עם טופס, בשונה מדף הבית ===== */}
+      {/* ⚠️ אין כאן פריט ביניים "מטבחים": הוא פותח תפריט בלבד
+          ואין מאחוריו עמוד, וקישור שבור בסימון גרוע מהיעדר
+          סימון. שתי רמות בלבד, ושתיהן אמיתיות. */}
       <LeadBanner withForm />
+
+      <Breadcrumbs
+        trail={[{ label: "דף הבית", href: "/" }, { label: page.heroTitle }]}
+      />
     </>
   );
 }

@@ -5462,3 +5462,69 @@ a.footer__contact-link:hover {
   /* רוחב מלא, לבקשת דניאל. */
   width: 100%;
 }
+
+/* =========================================================
+   פירורי לחם
+   =========================================================
+   יושבים בתחתית העמוד לבקשת דניאל, ולא בראשו כמקובל. הסימון
+   ל-BreadcrumbList תקף בכל מקום בעמוד, ולכן המיקום הוא החלטה
+   עיצובית בלבד ולא שיקול SEO.
+
+   צמודים לצד ההתחלה - ימין ב-RTL. */
+.crumbs {
+  padding: var(--space-4) var(--side-padding) var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+/* ⚠️ .apage ו-.alist כבר נושאים padding-inline משלהם, ולכן
+   הפירורים בתוכם קיבלו ריפוד כפול - נמדד 144px במקום 72.
+   בעמודי המטבחים ובעמודים הפשוטים הם ילדים ישירים של פרגמנט
+   ואין להם הורה מרופד, ולכן הכלל למעלה נשאר. */
+.apage > .crumbs,
+.alist > .crumbs {
+  padding-inline: 0;
+}
+.crumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: var(--lh-tight);
+}
+.crumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.crumbs__link {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+.crumbs__link:hover,
+.crumbs__link:focus-visible {
+  color: var(--color-logo-gold);
+}
+.crumbs__current {
+  color: var(--color-fg);
+  font-weight: 700;
+}
+.crumbs__sep {
+  color: var(--color-border);
+  /* ⚠️ החץ הוא תו לטיני ולכן מתהפך ב-RTL. scaleX מחזיר אותו
+     לכיוון הקריאה של העמוד. */
+  transform: scaleX(-1);
+}
+
+/* מטרת מגע - קישור של 14px הוא הרבה מתחת ל-44 */
+@media (hover: none) {
+  .crumbs__link,
+  .crumbs__current {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+}

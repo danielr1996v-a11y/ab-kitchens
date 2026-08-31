@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ArticleCard from "@/components/ArticleCard";
 import Reveal from "@/components/Reveal";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { articles, articlesPage } from "@/lib/articles";
 
 export const metadata: Metadata = {
@@ -38,6 +39,13 @@ export default function Page() {
           </li>
         ))}
       </ul>
+
+      <Breadcrumbs
+        trail={[
+          { label: "דף הבית", href: "/" },
+          { label: articlesPage.title },
+        ]}
+      />
     </section>
   );
 }

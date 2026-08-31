@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ProjectStrip from "@/components/ProjectStrip";
 import AboutValues from "@/components/AboutValues";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "אודותינו | א. בית המטבחים - דור שני בענף",
@@ -21,6 +22,9 @@ export default function Page() {
       <h1 className="sr-only">אודות א. בית המטבחים</h1>
       <ProjectStrip />
       <AboutValues />
+      <Breadcrumbs
+        trail={[{ label: "דף הבית", href: "/" }, { label: "אודותינו" }]}
+      />
     </>
   );
 }

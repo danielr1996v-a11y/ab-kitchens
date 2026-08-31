@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "המלצות לקוחות | סיפורי הצלחה של א. בית המטבחים",
@@ -13,9 +14,14 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section className="section-block">
-      <h1 className="page-title">המלצות לקוחות</h1>
-      <p className="page-note">התוכן של העמוד הזה ייבנה בהמשך, סקשן אחר סקשן.</p>
-    </section>
+    <>
+      <section className="section-block">
+        <h1 className="page-title">המלצות לקוחות</h1>
+        <p className="page-note">התוכן של העמוד הזה ייבנה בהמשך, סקשן אחר סקשן.</p>
+      </section>
+      <Breadcrumbs
+        trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
+      />
+    </>
   );
 }

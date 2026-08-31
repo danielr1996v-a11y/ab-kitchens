@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { articles, articleHref } from "@/lib/articles";
 
 /* ⚠️ ב-Next 16 params הוא Promise וחייב await.
@@ -68,6 +69,14 @@ export default async function Page({ params }: Props) {
           לתיאום פגישה ללא עלות
         </Link>
       </div>
+
+      <Breadcrumbs
+        trail={[
+          { label: "דף הבית", href: "/" },
+          { label: "מאמרים", href: "/מאמרים-וטיפים" },
+          { label: article.title },
+        ]}
+      />
     </article>
   );
 }

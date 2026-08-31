@@ -3,6 +3,7 @@ import Image from "next/image";
 import { site, contactPage } from "@/lib/content";
 import ContactForm from "@/components/ContactForm";
 import Icon from "@/components/Icon";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "יצירת קשר | א. בית המטבחים",
@@ -27,7 +28,8 @@ export default function ContactPage() {
   const tel2Href = `tel:${site.phone2.replace(/-/g, "")}`;
 
   return (
-    <section className="contact">
+    <>
+      <section className="contact">
       {/* ===== פאנל - ימין ב-RTL ===== */}
       <div className="contact__panel">
         <div className="contact__inner">
@@ -82,6 +84,10 @@ export default function ContactPage() {
           className="contact__img"
         />
       </div>
-    </section>
+      </section>
+      <Breadcrumbs
+        trail={[{ label: "דף הבית", href: "/" }, { label: "יצירת קשר" }]}
+      />
+    </>
   );
 }
