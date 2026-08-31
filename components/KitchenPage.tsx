@@ -188,6 +188,31 @@ export default function KitchenPage({
         </ol>
       </section>
 
+      {/* ⚠️ המאמר יושב **לפני** השאלות ותשובות, וזה מכוון.
+          זה הסדר שאברהם הגדיר בקובץ "סגנון עיצוב הדף" בדרייב.
+          בתחילה בנינו הפוך, דניאל הוצג עם הסתירה ואישר את
+          הסדר של אברהם. לא להחליף בחזרה.
+
+          הקובייה נשלפת לפי relatedStyle ולא מקודדת לעמוד -
+          הוספת מאמר ב-lib/articles.ts מופיעה כאן לבד.
+          עמוד השיש מקבל שלוש קוביות, כל סגנון מטבח אחת. */}
+      {related.length > 0 && (
+        <section className="krel" aria-labelledby="related-title">
+          <Reveal>
+            <h2 className="kpage__section-title" id="related-title">
+              {related.length > 1 ? "מאמרים בנושא" : "מאמר בנושא"}
+            </h2>
+          </Reveal>
+          <ul className="krel__grid">
+            {related.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* ===== שאלות ותשובות =====
           <details> מקורי: נפתח בלי JS, נגיש למקלדת, ונשאר קריא
           גם אם הסקריפטים לא נטענו. */}
@@ -226,26 +251,6 @@ export default function KitchenPage({
       />
 
       {/* ===== יצירת קשר - כאן עם טופס, בשונה מדף הבית ===== */}
-      {/* ⚠️ הקובייה נשלפת לפי relatedStyle ולא מקודדת לעמוד -
-          הוספת מאמר ב-lib/articles.ts מופיעה כאן לבד.
-          עמוד השיש מקבל שלוש קוביות, כל סגנון מטבח אחת. */}
-      {related.length > 0 && (
-        <section className="krel" aria-labelledby="related-title">
-          <Reveal>
-            <h2 className="kpage__section-title" id="related-title">
-              {related.length > 1 ? "מאמרים בנושא" : "מאמר בנושא"}
-            </h2>
-          </Reveal>
-          <ul className="krel__grid">
-            {related.map((a) => (
-              <li key={a.slug}>
-                <ArticleCard article={a} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       <LeadBanner withForm />
     </>
   );
