@@ -5472,8 +5472,18 @@ a.footer__contact-link:hover {
 
    צמודים לצד ההתחלה - ימין ב-RTL. */
 .crumbs {
-  padding: var(--space-4) var(--side-padding) var(--space-6);
-  border-top: 1px solid var(--color-border);
+  padding: var(--space-3) var(--side-padding);
+}
+/* בעמודים שבהם הפירורים הם האלמנט הראשון, הם גם אלה שצריכים
+   לפנות את ההדר הצף. */
+.crumbs--top {
+  padding-top: var(--header-clearance);
+}
+/* ...ואז הסקשן שאחריהם כבר לא צריך את הפינוי שוב. */
+.crumbs--top + .pstrip,
+.crumbs--top + .section-block,
+.crumbs--top + .contact {
+  padding-top: var(--space-3);
 }
 /* ⚠️ .apage ו-.alist כבר נושאים padding-inline משלהם, ולכן
    הפירורים בתוכם קיבלו ריפוד כפול - נמדד 144px במקום 72.
@@ -5513,10 +5523,10 @@ a.footer__contact-link:hover {
   font-weight: 700;
 }
 .crumbs__sep {
-  color: var(--color-border);
-  /* ⚠️ החץ הוא תו לטיני ולכן מתהפך ב-RTL. scaleX מחזיר אותו
-     לכיוון הקריאה של העמוד. */
-  transform: scaleX(-1);
+  /* סלאש. ⚠️ בלי scaleX - הוא היה נחוץ לחץ ›, שהוא כיווני
+     ומתהפך ב-RTL. הסלאש לא כיווני. */
+  color: var(--color-muted);
+  opacity: 0.55;
 }
 
 /* מטרת מגע - קישור של 14px הוא הרבה מתחת ל-44 */

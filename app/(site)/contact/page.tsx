@@ -29,6 +29,10 @@ export default function ContactPage() {
 
   return (
     <>
+      <Breadcrumbs
+        className="crumbs--top"
+        trail={[{ label: "דף הבית", href: "/" }, { label: "יצירת קשר" }]}
+      />
       <section className="contact">
       {/* ===== פאנל - ימין ב-RTL ===== */}
       <div className="contact__panel">
@@ -85,9 +89,6 @@ export default function ContactPage() {
         />
       </div>
       </section>
-      <Breadcrumbs
-        trail={[{ label: "דף הבית", href: "/" }, { label: "יצירת קשר" }]}
-      />
     </>
   );
 }

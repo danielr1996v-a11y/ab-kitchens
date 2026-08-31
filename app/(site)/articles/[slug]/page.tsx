@@ -34,6 +34,14 @@ export default async function Page({ params }: Props) {
 
   return (
     <article className="apage">
+      <Breadcrumbs
+        trail={[
+          { label: "דף הבית", href: "/" },
+          { label: "מאמרים", href: "/מאמרים-וטיפים" },
+          { label: article.title },
+        ]}
+      />
+
       <Reveal className="apage__head">
         <h1 className="apage__title">{article.title}</h1>
       </Reveal>
@@ -70,13 +78,6 @@ export default async function Page({ params }: Props) {
         </Link>
       </div>
 
-      <Breadcrumbs
-        trail={[
-          { label: "דף הבית", href: "/" },
-          { label: "מאמרים", href: "/מאמרים-וטיפים" },
-          { label: article.title },
-        ]}
-      />
     </article>
   );
 }

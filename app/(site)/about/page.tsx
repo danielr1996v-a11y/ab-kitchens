@@ -17,14 +17,15 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
+      <Breadcrumbs
+        className="crumbs--top"
+        trail={[{ label: "דף הבית", href: "/" }, { label: "אודותינו" }]}
+      />
       {/* h1 של העמוד. הרצועה נושאת h2, ולכן הכותרת הראשית
           חייבת לשבת כאן כדי לשמור על היררכיה תקינה */}
       <h1 className="sr-only">אודות א. בית המטבחים</h1>
       <ProjectStrip />
       <AboutValues />
-      <Breadcrumbs
-        trail={[{ label: "דף הבית", href: "/" }, { label: "אודותינו" }]}
-      />
     </>
   );
 }

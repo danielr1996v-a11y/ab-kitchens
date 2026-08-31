@@ -25,6 +25,13 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <section className="alist" aria-labelledby="articles-title">
+      <Breadcrumbs
+        trail={[
+          { label: "דף הבית", href: "/" },
+          { label: articlesPage.title },
+        ]}
+      />
+
       <Reveal className="alist__head">
         <h1 className="alist__title" id="articles-title">
           {articlesPage.title}
@@ -40,12 +47,6 @@ export default function Page() {
         ))}
       </ul>
 
-      <Breadcrumbs
-        trail={[
-          { label: "דף הבית", href: "/" },
-          { label: articlesPage.title },
-        ]}
-      />
     </section>
   );
 }

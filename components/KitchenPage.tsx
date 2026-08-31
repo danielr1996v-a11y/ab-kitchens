@@ -81,6 +81,13 @@ export default function KitchenPage({
         </a>
       </section>
 
+      {/* ⚠️ מיד אחרי ההירו ולא מעליו: ההירו הוא תמונה מקצה
+          לקצה, ופירורים מעליה היו יוצרים רצועה לבנה מתחת
+          להדר הצף. */}
+      <Breadcrumbs
+        trail={[{ label: "דף הבית", href: "/" }, { label: page.heroTitle }]}
+      />
+
       {/* ===== המאמר - עמודה ממורכזת, טקסט מיושר לימין ===== */}
       <article className="kpage__article" id="kpage-article">
         {page.article.map((block, i) => (
@@ -256,10 +263,6 @@ export default function KitchenPage({
           ואין מאחוריו עמוד, וקישור שבור בסימון גרוע מהיעדר
           סימון. שתי רמות בלבד, ושתיהן אמיתיות. */}
       <LeadBanner withForm />
-
-      <Breadcrumbs
-        trail={[{ label: "דף הבית", href: "/" }, { label: page.heroTitle }]}
-      />
     </>
   );
 }

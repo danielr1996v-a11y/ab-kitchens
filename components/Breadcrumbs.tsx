@@ -24,7 +24,14 @@ export type Crumb = {
  *
  * server component - אין מצב, רק תצוגה.
  */
-export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
+export default function Breadcrumbs({
+  trail,
+  className = "",
+}: {
+  trail: Crumb[];
+  /** "crumbs--top" בעמודים שבהם הפירורים הם האלמנט הראשון */
+  className?: string;
+}) {
   const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -37,7 +44,7 @@ export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
   };
 
   return (
-    <nav className="crumbs" aria-label="מיקומך באתר">
+    <nav className={`crumbs${className ? " " + className : ""}`} aria-label="מיקומך באתר">
       <ol className="crumbs__list">
         {trail.map((c, i) => (
           <li className="crumbs__item" key={c.label}>
@@ -54,7 +61,7 @@ export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
             )}
             {i < trail.length - 1 && (
               <span className="crumbs__sep" aria-hidden="true">
-                ›
+                /
               </span>
             )}
           </li>
