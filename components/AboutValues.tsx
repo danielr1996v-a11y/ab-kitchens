@@ -1,4 +1,4 @@
-import { aboutValues } from "@/lib/content";
+import { aboutValues, whatsappHref } from "@/lib/content";
 import Icon from "./Icon";
 import Reveal from "./Reveal";
 
@@ -44,6 +44,22 @@ export default function AboutValues() {
           </li>
         ))}
       </ul>
+
+      {/* ההנעה לפעולה שסוגרת את העמוד. עמוד אודות נגמר בערכים,
+          ובלי כפתור הקורא מסיים לקרוא ואין לו לאן ללכת. */}
+      <Reveal className="avals__cta">
+        <h2 className="avals__cta-title">{aboutValues.cta.title}</h2>
+        <p className="avals__cta-text">{aboutValues.cta.text}</p>
+        <a
+          className="avals__cta-btn"
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon id="whatsapp" />
+          {aboutValues.cta.buttonLabel}
+        </a>
+      </Reveal>
     </section>
   );
 }

@@ -5585,3 +5585,92 @@ a.footer__contact-link:hover {
     min-height: 2.75rem;
   }
 }
+
+/* ===================================================================
+   סבב תיקונים 15.09.2026 - מובייל בעמוד אודות ובעמודי המטבחים
+   =================================================================== */
+
+/* --- 1. המרווח מהפירורים לתוכן בעמודי המטבחים והשיש --------------
+   .kpage__article נושא --section-gap (88px) למעלה, וזה הריווח
+   שמפריד בין סקשנים שלמים. כאן הוא יושב מיד מתחת לשורת פירורים
+   קטנה ולא מתחת לסקשן - ולכן במובייל הוא נקרא כניתוק. */
+@media (max-width: 900px) {
+  .crumbs + .kpage__article {
+    padding-top: var(--space-4);
+  }
+}
+
+/* --- 2. "הערכים שמובילים אותנו" במובייל -------------------------- */
+@media (max-width: 900px) {
+  /* ⚠️ .aval__text עולה במובייל ל---fs-base, בדיוק כמו
+     .aval__title - וכותרת באותו גודל של הטקסט שמתחתיה מפסיקה
+     להיקרא ככותרת. היא עולה מדרגה כדי שההיררכיה תחזור. */
+  .aval__title {
+    font-size: 1.25rem;
+  }
+  /* הכותרת הייתה ממורכזת בתיבת התמונה כולה, אבל הכרטיסים
+     מכסים את 80px התחתונים שלה (margin-top: -5rem) - ולכן
+     בפועל היא נראתה צמודה לתחתית. ריפוד תחתון בגובה הכיסוי
+     מחזיר אותה למרכז של החלק שבאמת נראה. */
+  .avals__stage {
+    padding-bottom: calc(var(--space-5) + 5rem);
+  }
+}
+
+/* --- 3. הנעה לפעולה בתחתית עמוד אודות ---------------------------- */
+.avals__cta {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--side-padding) 0;
+}
+.avals__cta-title {
+  margin: 0;
+  font-size: var(--fs-sub);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: #fff;
+}
+.avals__cta-text {
+  margin: 0;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: rgba(255, 255, 255, 0.72);
+}
+.avals__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  /* 44px מטרת מגע מינימלית, ולכן הריפוד האנכי ולא גובה קבוע */
+  min-height: 44px;
+  margin-top: var(--space-2);
+  padding: 0.75rem 1.75rem;
+  background: var(--color-gold);
+  color: var(--color-gold-text);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-soft), filter 0.3s var(--ease-soft);
+}
+.avals__cta-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.avals__cta-btn:hover,
+.avals__cta-btn:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .avals__cta-btn {
+    transition: none;
+  }
+  .avals__cta-btn:hover,
+  .avals__cta-btn:focus-visible {
+    transform: none;
+  }
+}
