@@ -56,19 +56,23 @@ export default function DesignerCta() {
         />
 
         <div className="dcta__body">
+          {/* ⚠️ הכפתור יושב **בתוך** בלוק הטקסט ולא לצדו.
+              קודם הוא היה אח שלו ב-space-between, ולכן ריחף
+              בצד הנגדי של הכרטיס. כאן הוא נופל מתחת לטקסט
+              ובתוך הקו הזהב שמסמן את הבלוק. */}
           <div className="dcta__text">
             <p className="dcta__eyebrow">{designerCta.eyebrow}</p>
             <h2 className="dcta__title">{designerCta.title}</h2>
             <p className="dcta__lead">{designerCta.lead}</p>
-          </div>
 
-          <button
-            type="button"
-            className="dcta__btn"
-            onClick={() => dialogRef.current?.showModal()}
-          >
-            {designerCta.ctaText}
-          </button>
+            <button
+              type="button"
+              className="dcta__btn"
+              onClick={() => dialogRef.current?.showModal()}
+            >
+              {designerCta.ctaText}
+            </button>
+          </div>
         </div>
       </div>
 

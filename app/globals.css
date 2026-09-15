@@ -819,7 +819,9 @@ main > *:first-child:not(.hero) {
 .about__paragraph {
   font-size: var(--fs-base);
   font-weight: 400;
-  line-height: var(--lh-tight);
+  /* ⚠️ --lh-body ולא --lh-tight. הטוקן ה"צמוד" הוא 1.11em והוא
+     נועד לכותרות; על פסקה הוא הצמיד את השורות. */
+  line-height: var(--lh-body);
   color: var(--color-header-bg);
   margin: 0;
 }
@@ -2516,6 +2518,8 @@ a.footer__contact-link:hover {
    ========================================================= */
 .legal {
   max-width: 48rem;
+  /* בלי זה העמוד נצמד לצד ההתחלה - ימין ב-RTL */
+  margin-inline: auto;
 }
 .legal__intro {
   font-size: var(--fs-sub);
@@ -2896,6 +2900,10 @@ a.footer__contact-link:hover {
 }
 .kfaq__list {
   border-top: 1px solid var(--color-border);
+  /* הרשימה נמתחה על כל רוחב התוכן בעוד התשובה עצמה חסומה
+     ב-62ch, ולכן השאלות נראו רחבות לאין שיעור מהתשובות. */
+  max-width: 52rem;
+  margin-inline: auto;
 }
 .kfaq__item {
   border-bottom: 1px solid var(--color-border);
@@ -2996,24 +3004,35 @@ a.footer__contact-link:hover {
     display: none;
   }
 
-  /* סדר במובייל: המבורגר בקצה ימין, הטלפון צמוד אליו, והלוגו
-     נדחף לקצה שמאל. ב-RTL order נמוך יותר = ימני יותר.
-     margin-inline-start: auto על הלוגו בולע את כל המרווח הפנוי
-     ומרחיק אותו מהצמד - בלי זה space-between היה מפזר את שלושתם
+  /* ⚠️ הסדר התהפך ב-15.09 לבקשת דניאל. קודם היה המבורגר בימין
+     והלוגו בשמאל; עכשיו הלוגו בימין וההמבורגר בקצה שמאל, עם
+     הטלפון צמוד אליו.
+     ב-RTL order נמוך יותר = ימני יותר, ולכן לוגו 1 · טלפון 2 ·
+     המבורגר 3. margin-inline-end על הלוגו בולע את כל המרווח
+     הפנוי ודוחף את הצמד לקצה - בלי זה שלושתם היו מתפזרים
      במרווחים שווים והטלפון לא היה צמוד להמבורגר. */
   .header__bar {
     justify-content: flex-start;
     gap: 0.5rem;
   }
-  .header__burger {
+  .header__logo {
     order: 1;
+    margin-inline-end: auto;
   }
   .header__cta {
     order: 2;
   }
-  .header__logo {
+  .header__burger {
     order: 3;
-    margin-inline-start: auto;
+  }
+
+  /* הטלפון בלי רקע - אייקון בלבד, לבקשת דניאל.
+     ⚠️ הריבוע 44x44 נשאר: הוא בא מ-width/height בכלל שלמעלה
+     ולא מהרקע, ולכן מטרת המגע לא נפגעת. */
+  .header__cta {
+    background: transparent;
+    color: var(--color-fg);
+    border-radius: 0;
   }
 }
 
@@ -4088,8 +4107,9 @@ a.footer__contact-link:hover {
   padding: var(--space-6) var(--space-5);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-5);
+  /* ⚠️ flex-start ולא space-between: הכפתור כבר לא אח של
+     הטקסט אלא יושב בתוכו, ואין בין מה למה לפזר. */
+  justify-content: flex-start;
 }
 
 /* הקו האנכי מהרפרנס - מפריד את הטקסט מקצה הכרטיס */
@@ -4122,10 +4142,11 @@ a.footer__contact-link:hover {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* הכפתור בצד הנגדי, כמו ברפרנס. מלבני ולא מעוגל - שם הוא כזה. */
+/* מלבני ולא מעוגל - כך הוא ברפרנס. */
 .dcta__btn {
-  order: 1;
-  flex-shrink: 0;
+  /* ⚠️ מרווח עליון בלבד. order ו-flex-shrink הוסרו - הם היו
+     נחוצים כשהכפתור היה אח של הטקסט בשורת flex. */
+  margin-top: var(--space-4);
   padding: 1rem 2.25rem;
   border: 0;
   background: var(--color-gold);
@@ -4612,11 +4633,12 @@ a.footer__contact-link:hover {
   }
 }
 
-/* הכלל המשותף לכפתורים קובע align-self: flex-start, שנחוץ
-   במיכלים שהם עמודה. כאן המיכל ממורכז אנכית, ולכן הכפתור
-   חוזר למרכז ולא נדבק לראש הכרטיס. */
+/* ⚠️ הכלל הזה דורס את .dcta__btn שלמעלה - כל שינוי לכפתור
+   חייב לעבור גם כאן.
+   flex-start ולא center: הכפתור ירד לתוך בלוק הטקסט, שהוא
+   עמודה, ולכן הוא צריך להיצמד לצד ההתחלה ולא להתמרכז. */
 .dcta__btn {
-  align-self: center;
+  align-self: flex-start;
 }
 
 /* =========================================================
@@ -4988,12 +5010,14 @@ a.footer__contact-link:hover {
   background-image: url("/images/lead-3.webp");
   background-size: cover;
   background-position: center;
-  /* 70vh לבקשת דניאל. vh ולא rem כדי שהיחס לגובה המסך יישמר
-     בכל מכשיר - ב-rem התמונה הייתה בולעת מסך נמוך. */
-  min-height: 70vh;
+  /* ⚠️ 44vh, ירד מ-70. vh ולא rem כדי שהיחס לגובה המסך יישמר
+     בכל מכשיר - ב-rem התמונה הייתה בולעת מסך נמוך.
+     גם הריפוד האנכי צומצם: --section-gap למעלה ולמטה הוסיף
+     עוד עד 88px כל אחד, וזה מה שיצר את הרווח. */
+  min-height: 44vh;
   display: grid;
   place-items: center;
-  padding: var(--section-gap) var(--side-padding);
+  padding: var(--space-5) var(--side-padding);
 }
 
 /* שכבת הכהות: בלעדיה הכותרת הלבנה לא נקראת על תמונה בהירה */
@@ -5477,7 +5501,11 @@ a.footer__contact-link:hover {
 /* בעמודים שבהם הפירורים הם האלמנט הראשון, הם גם אלה שצריכים
    לפנות את ההדר הצף. */
 .crumbs--top {
-  padding-top: var(--header-clearance);
+  /* ⚠️ לא --header-clearance. הטוקן הזה הוא גובה ההדר **ועוד**
+     --section-gap, כלומר עד 160px של לבן מעל שורת פירורים -
+     וזה כל המרווח שדניאל ראה בראש עמוד אודות. לשורה אחת
+     מספיק לפנות את ההדר ועוד נשימה. */
+  padding-top: calc(var(--header-height) + var(--space-3));
 }
 /* ...ואז הסקשן שאחריהם כבר לא צריך את הפינוי שוב. */
 .crumbs--top + .pstrip,
