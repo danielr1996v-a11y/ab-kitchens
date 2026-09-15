@@ -5608,6 +5608,11 @@ a.footer__contact-link:hover {
 @media (min-width: 901px) {
   .avals__stage {
     padding-bottom: calc(var(--space-5) + 7rem);
+    /* ⚠️ 44vh לבדו נשבר על חלון נמוך: בגובה חלון 693 התיבה
+       יוצאת 305px, וזה כבר לא מספיק ל-112px כיסוי + כותרת
+       + רווח - הכותרת נדבקת לריבועים הזהובים. הרצפה מבטיחה
+       רווח של 86px לפחות, ותקרת ה-44vh נשמרת בחלון גבוה. */
+    min-height: max(44vh, 24rem);
   }
 }
 @media (max-width: 900px) {
