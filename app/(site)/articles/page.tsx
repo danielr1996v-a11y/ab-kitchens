@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import ArticleCard from "@/components/ArticleCard";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import DesignerCta from "@/components/DesignerCta";
 import { articles, articlesPage } from "@/lib/articles";
 
 export const metadata: Metadata = {
@@ -47,6 +48,10 @@ export default function Page() {
         ))}
       </ul>
 
+      {/* ⚠️ הליסטינג היה העמוד היחיד באתר בלי שום הנעה לפעולה -
+          הקורא סיים לעבור על הכרטיסים ולא היה לו לאן להמשיך.
+          עמוד המאמר הבודד כבר נושא כפתור משלו (.apage__cta). */}
+      <DesignerCta />
     </section>
   );
 }

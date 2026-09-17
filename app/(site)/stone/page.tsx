@@ -36,7 +36,7 @@ export default function Page() {
     <KitchenPage
       styleKey="stone"
       beforeGallery={
-        <TrustedBy content={stoneOnly} note="אנחנו מעבדים מורשים" />
+        <TrustedBy content={stoneOnly} note="(אנחנו מעבדים מורשים)" />
       }
     />
   );

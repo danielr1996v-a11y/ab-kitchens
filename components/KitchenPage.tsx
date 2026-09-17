@@ -3,6 +3,7 @@ import Image from "next/image";
 import { kitchenPages, kitchenProcess, heroSlideshow } from "@/lib/content";
 import LeadBanner from "./LeadBanner";
 import DesignerCta from "./DesignerCta";
+import Placeholder from "./Placeholder";
 import ArticleCard from "./ArticleCard";
 import Breadcrumbs from "./Breadcrumbs";
 import { byStyle } from "@/lib/articles";
@@ -170,6 +171,24 @@ export default function KitchenPage({
           ))}
         </ul>
       </section>
+
+      {/* ⛔ חריצים שממתינים לתוכן מאברהם. חסומים ב-production
+          ולכן לא נראים בתצוגת הלקוח - ראה Placeholder.tsx.
+          נשלפים לפי styleKey ולא מקודדים בכל עמוד בנפרד. */}
+      {styleKey === "classic" && (
+        <Placeholder
+          title="זוויות נוספות"
+          slots={3}
+          note="ממתין לצילומים מזוויות נוספות - בקשה מהסבב של 17.09"
+        />
+      )}
+      {styleKey === "stone" && (
+        <Placeholder
+          title="פרויקטים נבחרים"
+          slots={3}
+          note="ממתין ל: אי · רגל שיש המשכית · סרטון מפעל"
+        />
+      )}
 
       {/* ===== הנעה לפעולה באמצע העמוד =====
           עד כה ההנעה היחידה בעמודים הפנימיים הייתה LeadBanner

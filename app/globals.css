@@ -5854,3 +5854,51 @@ a.footer__contact-link:hover {
   line-height: var(--lh-body);
   color: var(--color-fg);
 }
+
+/* --- סקשן שממתין לתוכן מהלקוח ---------------------------------------
+   ⛔ חסום ב-production ברכיב עצמו (Placeholder.tsx), ולכן הכלל
+   הזה לא מגיע לאתר החי. הוא קיים כדי שדניאל יראה בדיוק מה
+   חסר ואיפה, כשהוא מריץ dev.
+
+   מקווקו ולא מלא במכוון: החריץ צריך להיראות **לא גמור** ולא
+   כמו החלטה עיצובית, אחרת שוכחים למלא אותו. */
+.phold {
+  padding: var(--section-gap) var(--side-padding);
+  border-block: 1px dashed var(--color-logo-gold);
+}
+.phold__head {
+  margin-bottom: var(--space-4);
+}
+.phold__title {
+  margin: 0;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+}
+.phold__note {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--color-logo-gold);
+}
+.phold__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: var(--space-3);
+}
+.phold__slot {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--color-border);
+  background: var(--color-surface);
+}
+.phold__num {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--color-border);
+}

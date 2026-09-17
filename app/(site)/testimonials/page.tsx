@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Testimonials from "@/components/Testimonials";
 import DesignerCta from "@/components/DesignerCta";
+import Placeholder from "@/components/Placeholder";
 import { site, testimonials } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -44,6 +45,14 @@ export default function Page() {
 
       {/* בלי limit ובלי moreHref - זה העמוד שאליו מקשרים */}
       <Testimonials reviews={testimonials} />
+
+      {/* ⛔ ממתין לטקסטים מדניאל. לא נשאב ולא הומצא. */}
+      <Placeholder
+        title="עוד ממליצים"
+        slots={4}
+        ratio="3 / 2"
+        note="ממתין לטקסטים ממידרג ומפייסבוק - הוכרע שדניאל מעביר אותם"
+      />
 
       <DesignerCta />
 

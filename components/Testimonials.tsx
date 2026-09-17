@@ -1,4 +1,5 @@
 import { site, testimonials } from "@/lib/content";
+import Placeholder from "./Placeholder";
 
 export type Review = (typeof testimonials)[number];
 
@@ -112,6 +113,18 @@ export default function Testimonials({
             </li>
           ))}
         </ul>
+
+        {/* ⛔ סרטון ההמלצה. חריץ אחד ביחס וידאו, חסום ב-production.
+            מופיע רק בבלוק המקוצר של דף הבית (moreHref) - בעמוד
+            ההמלצות המלא יש לו סקשן אחר. */}
+        {moreHref && (
+          <Placeholder
+            title="סרטון המלצה"
+            slots={1}
+            ratio="16 / 9"
+            note="ממתין לסרטון מאברהם - בקשה מהסבב של 17.09"
+          />
+        )}
 
         {moreHref && (
           <div className="testimonials__more">

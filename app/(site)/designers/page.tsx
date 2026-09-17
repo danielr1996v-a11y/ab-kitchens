@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DesignersHero from "@/components/DesignersHero";
+import DesignerCta from "@/components/DesignerCta";
 
 export const metadata: Metadata = {
   title: "המעצבים שלנו | א. בית המטבחים",
@@ -24,5 +25,12 @@ export const metadata: Metadata = {
  * נבנה סקשן אחר סקשן. כרגע: הפתיח בלבד.
  */
 export default function DesignersPage() {
-  return <DesignersHero />;
+  /* ⚠️ העמוד הזה כל מטרתו להסיר אי-ודאות לפני הפגישה, והוא רץ
+     עד כה **בלי כפתור לקבוע אותה**. זה היה הפער הבולט מכולם. */
+  return (
+    <>
+      <DesignersHero />
+      <DesignerCta />
+    </>
+  );
 }
