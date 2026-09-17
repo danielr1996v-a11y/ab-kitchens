@@ -5660,14 +5660,21 @@ a.footer__contact-link:hover {
 }
 .avals__cta-title {
   margin: 0;
-  font-size: var(--fs-sub);
+  /* ⚠️ יוצא מ---fs-sub. זו **כותרת סקשן** ולא תת-כותרת, והיא
+     נגררה לתוך הטוקן בסבב האיחוד יחד עם תתי-הכותרת האמיתיות.
+     23 → 34px: גדולה מכל תת-כותרת באתר, וקטנה מ---fs-h1 (40px)
+     של כותרות הסקשנים, כי היא סוגרת עמוד ולא פותחת סקשן. */
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2.125rem);
   font-weight: 700;
   line-height: var(--lh-tight);
   color: #fff;
 }
 .avals__cta-text {
   margin: 0;
-  font-size: var(--fs-base);
+  /* ⚠️ פספסתי אותה בסבב איחוד תתי-הכותרת - היא תת-כותרת
+     לכל דבר, יושבת ישר מתחת ל-.avals__cta-title. על 16px
+     מול כותרת של 34 הפער נראה כמו שכחה. */
+  font-size: var(--fs-sub);
   font-weight: 400;
   line-height: var(--lh-body);
   color: rgba(255, 255, 255, 0.72);
@@ -5705,14 +5712,6 @@ a.footer__contact-link:hover {
   .avals__cta-btn:focus-visible {
     transform: none;
   }
-}
-
-/* --- 4. העינית "החזון שלנו" --------------------------------------
-   14px על עינית שיושבת מעל כותרת של עד 52px נבלעה. עולה ל-16px
-   בשני הרוחבים. היא נשארת נקראת כתווית ולא כטקסט גוף בזכות
-   המשקל 700 ושני המעוינים הזהובים משני צדיה. */
-.pstrip__eyebrow {
-  font-size: 1rem;
 }
 
 /* ===================================================================
@@ -5753,15 +5752,19 @@ a.footer__contact-link:hover {
    ⚠️ ריווח אותיות בעברית לא מוסיף קריאות כמו בלטינית, ולכן
    0.08em ולא יותר - מעבר לזה המילים מתחילות להתפרק. */
 .pstrip__eyebrow {
-  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  /* 20px → 24px בדסקטופ, סבב שלישי של הגדלה.
+     ⚠️ הרצפה נשארת 20 ולא עולה: במובייל .pstrip__title יורדת
+     ל-25px (רצפת --fs-display), ועינית של 24 מול כותרת של 25
+     מבטלת את ההיררכיה. הגדלה בדסקטופ בלבד. */
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
   letter-spacing: 0.08em;
   color: var(--color-logo-gold);
 }
 /* המעוינים גדלים יחד עם התווית, אחרת הם נראים כמו נקודות אבק */
 .pstrip__eyebrow::before,
 .pstrip__eyebrow::after {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.625rem;
+  height: 0.625rem;
 }
 /* הפסקאות של החזון - גוף הטקסט של המקטע החשוב בעמוד אודות */
 .pstrip__p {
