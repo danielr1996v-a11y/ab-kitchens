@@ -2928,7 +2928,11 @@ a.footer__contact-link:hover {
   justify-content: space-between;
   gap: var(--space-3);
   padding-block: var(--space-3);
-  font-size: var(--fs-base);
+  /* ⚠️ גדל בדסקטופ בלבד, לבקשת דניאל: 16px → 20px. הרצפה
+     נשארת 16 כי במובייל השאלה היא **מטרת מגע** - היא ה-summary
+     שפותח את התשובה - ורוחב השורה שם צר, וכל הגדלה שוברת אותה
+     לשורה נוספת ומרחיקה את הסימן + מהטקסט. */
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.25rem);
   font-weight: 700;
   line-height: var(--lh-tight);
   cursor: pointer;
@@ -2973,10 +2977,14 @@ a.footer__contact-link:hover {
 /* התשובה */
 .kfaq__a {
   padding-block-end: var(--space-3);
-  font-size: var(--fs-base);
+  /* 16px → 19px בדסקטופ. נמוך מהשאלה במכוון - ההיררכיה
+     נשמרת גם על ידי המשקל (700 מול 400) וגם על ידי הגודל. */
+  font-size: clamp(1rem, 0.9rem + 0.45vw, 1.1875rem);
   font-weight: 400;
   line-height: var(--lh-body);
   color: var(--color-fg);
+  /* ⚠️ 62ch ולא רוחב בפיקסלים: ch נגזר מגודל הגופן, ולכן
+     אורך השורה במספר תווים נשאר זהה גם אחרי ההגדלה. */
   max-width: 62ch;
 }
 
