@@ -60,31 +60,45 @@
   --font-display: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
   --font-body: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
 
-  /* ===== סקאלת גדלי טקסט - נשאבה מהפיגמה (14/16/40) =====
-     ב-rem (÷16). להוסיף גדלים כשיופיעו בעיצוב - לא להמציא חדשים */
-  --fs-sm: 0.875rem;   /* 14px - טקסט משני/עינית (Light) */
-  --fs-base: 1rem;     /* 16px - גוף טקסט + ניווט */
-  /* ===== כרטיסים =====
-     ⚠️ שני הטוקנים האלה נולדו מבקשה של דניאל שכל הגדלים יהיו
-     זהים בכל האתר. לפניהם אותו תפקיד רץ בחמישה גדלים:
-     .kstep__text על 14px (הקטן באתר, ועוד על תמונה כהה),
-     .aval__text 14 בדסקטופ ו-16 במובייל - הפוך - ושלושה
-     אחרים על 16. הכותרות: 16 / 24 / 20-26.
-     מעכשיו כל כרטיס באתר נשען על שני הטוקנים האלה בלבד. */
-  --fs-card-title: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);    /* 20-24px */
-  --fs-card-body: clamp(1.0625rem, 1rem + 0.35vw, 1.1875rem); /* 17-19px */
+  /* ===================================================================
+     סקאלת הטיפוגרפיה — עקומה אחת, נקודת עצירה אחת
+     ===================================================================
+     ⚠️ לפני האיחוד היו כאן **29 עקומות clamp נפרדות** (7 טוקנים +
+     22 clamp מקומיים), וכל אחת נעצרה ברוחב אחר — מ-467px עד
+     1875px. התוצאה לא הייתה סקאלה אלא עקומות שחותכות אחת את
+     השנייה: ב-1512 שבע-עשרה מהן כבר נעצרו ושתים-עשרה עוד גדלו,
+     ולכן **היחסים בין הגדלים השתנו ממסך למסך**. דניאל ראה את זה
+     בעין לפני שמדדתי.
 
-  /* 20-26px - תת-כותרת. עלה מ-18-24 לבקשת דניאל.
-     ⚠️ הטוקן הזה הוא עכשיו **המקור היחיד** לכל תת-כותרת באתר.
-     לפני השינוי אותו תפקיד רץ בשלושה גדלים שונים: חלק על
-     --fs-sub, חלק על --fs-base (16px), ושתיים על clamp מקומי.
-     כל אלה אוחדו לכאן, ולכן שינוי כאן מזיז את כל האתר. */
-  --fs-sub: clamp(1.25rem, 1.6vw, 1.625rem);
-  /* 25px במובייל → 40px בדסקטופ. היה קבוע על 40 בכל מסך, מה שנתן
-     כותרת ענקית ב-390. הרצפה היא הבקשה של דניאל, התקרה היא הפיגמה. */
-  --fs-h1: clamp(1.5625rem, 1.25rem + 1.6vw, 2.5rem);
-  /* כותרת גדולה רספונסיבית. רצפה 25px כמו כל שאר הכותרות באתר */
-  --fs-display: clamp(1.5625rem, 3vw, 3.25rem);
+     הפתרון: כל גודל עובר בשתי נקודות ייחוס משותפות —
+     **375px** (רצפת מובייל) ו-**1440px** (תקרת דסקטופ):
+
+         B = (C - F) / 10.65        ← (1440-375)/100
+         A = F - B × 3.75
+
+     ⚠️ **התקרה ב-1440 ולא 1920, וזה הכיול שפותר את הבעיה:**
+     המסכים של דניאל הם 1512 · 1728 · 2560, כולם מעל 1440, ולכן
+     כולם נופלים על התקרה ו**זהים לפיקסל**. תקרה ב-1600 הייתה
+     משאירה את המקבוק 14" קטן משני האחרים.
+
+     ⚠️ **למה לא vw טהור** (LESSONS L-010): בייחוס 1920, טקסט גוף
+     של 16px הוא 0.833vw — ובמקבוק 1512 זה 12.6px, בלתי קריא.
+     הפתרון כאן מקיים את רוח L-010 (יחסים קבועים, בלי הצטלבות)
+     בלי לשבור קריאות.
+
+     ⛔ **להוסיף גודל חדש = להוסיף טוקן כאן, לא clamp מקומי.**
+     clamp מקומי יחזיר את הבאג שהרגע תוקן. */
+
+  /* שני עוגנים קבועים. הם לא זזים - כל השאר נגזר מהם */
+  --fs-sm: 0.875rem;   /* 14px - טקסט משני, תוויות */
+  --fs-base: 1rem;     /* 16px - גוף טקסט, ניווט, שדות, כפתורים */
+
+  /* הטווח הזורם. F@375 → C@1440, ואז עוצר */
+  --fs-card-body: clamp(1.0625rem, 1.01849rem + 0.1878vw, 1.1875rem);  /* 17→19 */
+  --fs-card-title: clamp(1.25rem, 1.16197rem + 0.3756vw, 1.5rem);      /* 20→24 */
+  --fs-sub: clamp(1.25rem, 1.18398rem + 0.2817vw, 1.4375rem);          /* 20→23 */
+  --fs-h1: clamp(1.625rem, 1.3169rem + 1.315vw, 2.5rem);               /* 26→40 */
+  --fs-display: clamp(1.5625rem, 1.16637rem + 1.69vw, 2.6875rem);      /* 25→43 */
 
   /* גובה שורה - ב-em בלבד (חוק פיתוח). 1.11 מהפיגמה */
   --lh-tight: 1.11em;
@@ -436,6 +450,9 @@ h1, h2, h3, h4 {
   padding-block: 0.75rem;
   /* גדול ואוורירי - הטיפוגרפיה היא מה שנושא את התפריט */
   font-family: var(--font-display);
+  /* ⛔ ה-clamp המקומי היחיד שנשאר באתר, במכוון: התפריט הזה
+     מוצג **רק במובייל** (מוסתר מעל 900px), ולכן אינו יכול
+     להצטלב עם שום גודל בדסקטופ. נעצר ב-467px. */
   font-size: clamp(1.375rem, 6vw, 1.75rem);
   font-weight: 400;
   line-height: 1.2;
@@ -1331,7 +1348,7 @@ main > *:first-child:not(.hero) {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
-  font-size: clamp(2.5rem, 3.5vw, 4rem);
+  font-size: var(--fs-display);
   font-weight: 700;
   line-height: 1em;
   color: var(--color-gold);
@@ -2677,7 +2694,7 @@ a.footer__contact-link:hover {
   position: relative;
   z-index: 1;
   color: #fff;
-  font-size: clamp(1.5625rem, 2.8vw, 3.25rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   /* ב-RTL הפריט הראשון ב-flex כבר יושב מימין - אין צורך במרג'ין */
@@ -2703,7 +2720,7 @@ a.footer__contact-link:hover {
   align-items: start;
 }
 .kpage__heading {
-  font-size: clamp(1.5625rem, 2.8vw, 3.25rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   text-wrap: balance;
@@ -2776,7 +2793,7 @@ a.footer__contact-link:hover {
 .kpage__section-title {
   /* 2.8vw, עם רצפה ותקרה: vw טהור היה נותן 11px ב-390
      ו-56px ב-2000 - הראשון בלתי קריא והשני צועק. */
-  font-size: clamp(1.5625rem, 2.8vw, 3.25rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   margin-bottom: var(--space-4);
@@ -2944,7 +2961,7 @@ a.footer__contact-link:hover {
      נשארת 16 כי במובייל השאלה היא **מטרת מגע** - היא ה-summary
      שפותח את התשובה - ורוחב השורה שם צר, וכל הגדלה שוברת אותה
      לשורה נוספת ומרחיקה את הסימן + מהטקסט. */
-  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.25rem);
+  font-size: var(--fs-card-title);
   font-weight: 700;
   line-height: var(--lh-tight);
   cursor: pointer;
@@ -2991,7 +3008,7 @@ a.footer__contact-link:hover {
   padding-block-end: var(--space-3);
   /* 16px → 19px בדסקטופ. נמוך מהשאלה במכוון - ההיררכיה
      נשמרת גם על ידי המשקל (700 מול 400) וגם על ידי הגודל. */
-  font-size: clamp(1rem, 0.9rem + 0.45vw, 1.1875rem);
+  font-size: var(--fs-card-body);
   font-weight: 400;
   line-height: var(--lh-body);
   color: var(--color-fg);
@@ -3434,7 +3451,7 @@ a.footer__contact-link:hover {
   margin: 0 auto var(--space-4);
 }
 .soon__title {
-  font-size: clamp(1.625rem, 3.4vw, 3rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   text-wrap: balance;
@@ -3699,7 +3716,7 @@ a.footer__contact-link:hover {
   margin-bottom: var(--space-1);
 }
 .contact__title {
-  font-size: clamp(1.625rem, 2.4vw, 2.75rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   text-wrap: balance;
@@ -3913,7 +3930,7 @@ a.footer__contact-link:hover {
 .dhero__title {
   margin: 0 0 var(--space-3);
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: var(--fs-display);
   font-weight: 700;
   line-height: 1.05em;
   letter-spacing: -0.02em;
@@ -4281,7 +4298,7 @@ a.footer__contact-link:hover {
   align-items: center;
   gap: 0.875rem;
   margin: 0 0 var(--space-2);
-  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
+  font-size: var(--fs-sm);
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-fg);
@@ -4297,7 +4314,7 @@ a.footer__contact-link:hover {
 /* 3vw */
 .dmodal__title {
   margin: 0 0 var(--space-3);
-  font-size: clamp(1.5rem, 3vw, 2.75rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: 1.15em;
   text-wrap: balance;
@@ -4330,7 +4347,7 @@ a.footer__contact-link:hover {
 .dmodal__label {
   display: block;
   margin-bottom: 0.5rem;
-  font-size: clamp(0.75rem, 0.8vw, 0.9375rem);
+  font-size: var(--fs-sm);
   font-weight: 400;
   color: var(--color-muted);
 }
@@ -4344,7 +4361,7 @@ a.footer__contact-link:hover {
   border-radius: 0;
   background: transparent;
   font: inherit;
-  font-size: clamp(0.9375rem, 1vw, 1.125rem);
+  font-size: var(--fs-base);
   color: var(--color-fg);
   transition: border-color 0.2s var(--ease);
 }
@@ -4373,7 +4390,7 @@ a.footer__contact-link:hover {
   background: var(--color-gold);
   color: var(--color-fg);
   font: inherit;
-  font-size: clamp(0.9375rem, 1vw, 1.125rem);
+  font-size: var(--fs-base);
   font-weight: 700;
   cursor: pointer;
   transition: filter 0.2s var(--ease);
@@ -4386,7 +4403,7 @@ a.footer__contact-link:hover {
   border: 0;
   background: transparent;
   font: inherit;
-  font-size: clamp(0.8125rem, 0.9vw, 1rem);
+  font-size: var(--fs-sm);
   color: var(--color-muted);
   cursor: pointer;
   text-decoration: underline;
@@ -5276,7 +5293,7 @@ a.footer__contact-link:hover {
   margin-bottom: var(--space-6);
 }
 .alist__title {
-  font-size: clamp(1.875rem, 4vw, 3.25rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
 }
@@ -5355,7 +5372,7 @@ a.footer__contact-link:hover {
      שהתמונה תישאר צמודה לקצוות המסגרת. */
   padding-inline: var(--space-3);
   margin-top: var(--space-3);
-  font-size: clamp(1.0625rem, 1.35vw, 1.25rem);
+  font-size: var(--fs-card-title);
   font-weight: 700;
   line-height: var(--lh-tight);
   color: var(--color-fg);
@@ -5421,7 +5438,7 @@ a.footer__contact-link:hover {
   text-align: center;
 }
 .apage__title {
-  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   text-wrap: balance;
@@ -5448,7 +5465,7 @@ a.footer__contact-link:hover {
   margin-top: var(--space-5);
 }
 .apage__heading {
-  font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+  font-size: var(--fs-card-title);
   font-weight: 700;
   line-height: var(--lh-tight);
   margin-bottom: var(--space-2);
@@ -5505,6 +5522,15 @@ a.footer__contact-link:hover {
    מודרני וכפרי לא מקבלים את המחלקה ולכן הכיול שלהם לא נגע. */
 .khot--tall {
   height: auto;
+  /* ⚠️ **חובה לאפס את min-height.** הכלל הבסיסי .khot קובע
+     min-height: 20rem, וכאן הגובה נגזר מ-aspect-ratio - ולכן
+     גובה מינימלי של 320px **גוזר רוחב** של 320 × 1.789 = 572px.
+     ברוחב 375 זה יצר גלישה אופקית של 257px בעמוד הקלאסי.
+     נמדד: scrollWidth 632 מול clientWidth 375.
+     הבאג היה קיים מאז שהנקודות נבנו ולא נתפס, כי הוא מופיע
+     רק בעמוד היחיד עם tall ורק מתחת ל~640px.
+     ⚠️ היחס עצמו לא נוגע, ולכן כיול ארבע הנקודות נשמר. */
+  min-height: 0;
   /* ⚠️ 1.79 ולא 1.42 - זה **לא** יחס התמונה, וזו לא טעות.
      .kparallax גבוהה ב-126% מהמסגרת, ולכן היחס שהתמונה באמת
      נפגשת איתו הוא יחס השכבה. כדי שהשכבה תצא 1.42 (יחס
@@ -5672,7 +5698,7 @@ a.footer__contact-link:hover {
      נגררה לתוך הטוקן בסבב האיחוד יחד עם תתי-הכותרת האמיתיות.
      23 → 34px: גדולה מכל תת-כותרת באתר, וקטנה מ---fs-h1 (40px)
      של כותרות הסקשנים, כי היא סוגרת עמוד ולא פותחת סקשן. */
-  font-size: clamp(1.5rem, 1.25rem + 1vw, 2.125rem);
+  font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   color: #fff;
@@ -5734,7 +5760,7 @@ a.footer__contact-link:hover {
 
    חל על ארבעת העמודים דרך אותו סלקטור: מודרני, קלאסי, כפרי, שיש. */
 .kpage__block:first-child .kpage__paragraph {
-  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
+  font-size: var(--fs-card-body);
 }
 
 /* --- התמונה הענקית בעמוד הקלאסי -----------------------------------
@@ -5748,9 +5774,17 @@ a.footer__contact-link:hover {
 
    מרוכז ולא נצמד לצד: הבלוק פורץ את הריפוד בשני הכיוונים, ולכן
    הצרה בלי מרכוז הייתה משאירה אותו תלוי בקצה אחד. */
-.kpage__block--full .kpage__block-body:has(.khot--tall) {
-  max-width: 62rem;
-  margin-inline: auto;
+/* ⚠️ **רק מעל 1100px.** הכלל הקודם היה חסר מדיה, ו-
+   `margin-inline: auto` דרס את `margin-inline: -side-padding`
+   שהפריצה לרוחב מלא נשענת עליו. התוצאה: גלישה אופקית של
+   side-padding אחד בדיוק - 20px ב-375 ו-38px ב-768.
+   מעל 1100 התקרה של 62rem באמת נכנסת לתוקף, ושם המרכוז נכון.
+   מתחת לזה הפריצה המקורית נשארת כפי שהיא. */
+@media (min-width: 1100px) {
+  .kpage__block--full .kpage__block-body:has(.khot--tall) {
+    max-width: 62rem;
+    margin-inline: auto;
+  }
 }
 
 /* --- "החזון שלנו" בעמוד אודות --------------------------------------
@@ -5764,7 +5798,7 @@ a.footer__contact-link:hover {
      ⚠️ הרצפה נשארת 20 ולא עולה: במובייל .pstrip__title יורדת
      ל-25px (רצפת --fs-display), ועינית של 24 מול כותרת של 25
      מבטלת את ההיררכיה. הגדלה בדסקטופ בלבד. */
-  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  font-size: var(--fs-card-title);
   letter-spacing: 0.08em;
   color: var(--color-logo-gold);
 }
@@ -5776,7 +5810,7 @@ a.footer__contact-link:hover {
 }
 /* הפסקאות של החזון - גוף הטקסט של המקטע החשוב בעמוד אודות */
 .pstrip__p {
-  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
+  font-size: var(--fs-card-body);
 }
 
 /* --- שורת ההבהרה מתחת ל"סומכים עלינו" ----------------------------
