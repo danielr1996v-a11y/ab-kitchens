@@ -27,7 +27,9 @@ const routes: Array<{
   { path: "/שיש-קוורץ", priority: 0.7, freq: "monthly" },
   { path: "/שיש-פורצלן", priority: 0.7, freq: "monthly" },
   { path: "/אודותינו", priority: 0.6, freq: "monthly" },
-  { path: "/המלצות", priority: 0.6, freq: "monthly" },
+  /* ⛔ /המלצות הוצא מה-sitemap: העמוד ממתין לתוכן מאברהם והוא
+     noindex. sitemap שמכריז על עמוד ריק סותר את ה-noindex.
+     להחזיר ברגע שהתוכן נכנס. */
   { path: "/תקנון-ומדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/מדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/הצהרת-נגישות", priority: 0.2, freq: "yearly" },

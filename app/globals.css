@@ -64,7 +64,12 @@
      ב-rem (÷16). להוסיף גדלים כשיופיעו בעיצוב - לא להמציא חדשים */
   --fs-sm: 0.875rem;   /* 14px - טקסט משני/עינית (Light) */
   --fs-base: 1rem;     /* 16px - גוף טקסט + ניווט */
-  --fs-sub: clamp(1.125rem, 1.5vw, 1.5rem); /* 18-24px - תת-כותרת */
+  /* 20-26px - תת-כותרת. עלה מ-18-24 לבקשת דניאל.
+     ⚠️ הטוקן הזה הוא עכשיו **המקור היחיד** לכל תת-כותרת באתר.
+     לפני השינוי אותו תפקיד רץ בשלושה גדלים שונים: חלק על
+     --fs-sub, חלק על --fs-base (16px), ושתיים על clamp מקומי.
+     כל אלה אוחדו לכאן, ולכן שינוי כאן מזיז את כל האתר. */
+  --fs-sub: clamp(1.25rem, 1.6vw, 1.625rem);
   /* 25px במובייל → 40px בדסקטופ. היה קבוע על 40 בכל מסך, מה שנתן
      כותרת ענקית ב-390. הרצפה היא הבקשה של דניאל, התקרה היא הפיגמה. */
   --fs-h1: clamp(1.5625rem, 1.25rem + 1.6vw, 2.5rem);
@@ -3680,7 +3685,7 @@ a.footer__contact-link:hover {
   text-wrap: balance;
 }
 .contact__lead {
-  font-size: var(--fs-base);
+  font-size: var(--fs-sub);
   font-weight: 400;
   line-height: var(--lh-body);
   color: var(--color-fg);
@@ -3904,7 +3909,7 @@ a.footer__contact-link:hover {
 .dhero__lead {
   margin: 0 0 var(--space-4);
   max-width: 22rem;
-  font-size: var(--fs-base);
+  font-size: var(--fs-sub);
   font-weight: 400;
   line-height: 1.6em;
   color: var(--color-muted);
@@ -4143,7 +4148,7 @@ a.footer__contact-link:hover {
 }
 .dcta__lead {
   margin: 0;
-  font-size: var(--fs-base);
+  font-size: var(--fs-sub);
   font-weight: 400;
   line-height: 1.6em;
   color: rgba(255, 255, 255, 0.8);
@@ -4282,7 +4287,10 @@ a.footer__contact-link:hover {
 .dmodal__lead {
   margin: 0 0 var(--space-5);
   max-width: 36rem;
-  font-size: clamp(0.9375rem, 1vw, 1.125rem);
+  /* אוחד ל---fs-sub. ⚠️ כאן המשקל 700, ולכן 20px נקרא כבד
+     יותר מאותו גודל במקומות אחרים - נבדק שהוא לא מתחרה
+     בשדות הטופס שמתחתיו. */
+  font-size: var(--fs-sub);
   font-weight: 700;
   line-height: 1.6em;
   color: var(--color-fg);
@@ -5260,7 +5268,7 @@ a.footer__contact-link:hover {
 }
 .alist__lead {
   margin-top: var(--space-2);
-  font-size: var(--fs-base);
+  font-size: var(--fs-sub);
   line-height: var(--lh-body);
   color: var(--color-muted);
 }
@@ -5760,100 +5768,18 @@ a.footer__contact-link:hover {
   font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
 }
 
-/* --- שורת הסיום בבלוק ההמלצות המקוצר ------------------------------
-   שני יעדים שונים בכוונה: מי שרוצה עוד הוכחה הולך לעמוד המלא,
-   ומי שכבר משוכנע הולך ישר לטופס. שורה אחת עם שני כפתורים
-   באותו משקל הייתה מפצלת את ההחלטה, ולכן הקישור משני והכפתור
-   ראשי. */
-.testimonials__more {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
-}
-.testimonials__all {
-  font-size: var(--fs-base);
-  font-weight: 700;
-  color: var(--color-fg);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-logo-gold);
-  padding-bottom: 0.125rem;
-  transition: color 0.25s var(--ease-soft);
-}
-.testimonials__all:hover,
-.testimonials__all:focus-visible {
-  color: var(--color-logo-gold);
-}
-/* הכפתור הראשי. מוגדל לבקשת הלקוח - זו ההנעה המרכזית בדף הבית. */
-.testimonials__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* 48px ולא 44: זה הכפתור הראשי בעמוד, והוא צריך להיות
-     גדול מהמינימום התקני ולא שווה לו */
-  min-height: 48px;
-  padding: 0.875rem 1.75rem;
-  background: var(--color-gold);
-  color: var(--color-gold-text);
-  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-  font-weight: 700;
-  text-decoration: none;
-  text-align: center;
-  transition: transform 0.3s var(--ease-soft), filter 0.3s var(--ease-soft);
-}
-.testimonials__cta:hover,
-.testimonials__cta:focus-visible {
-  transform: translateY(-2px);
-  filter: brightness(1.06);
-}
-@media (prefers-reduced-motion: reduce) {
-  .testimonials__cta {
-    transition: none;
-  }
-  .testimonials__cta:hover,
-  .testimonials__cta:focus-visible {
-    transform: none;
-  }
-}
-/* במובייל הכפתור על שורה משלו ובמלוא הרוחב - שני פריטים
-   צמודים ב-375 יוצאים צרים מדי שניהם */
-@media (max-width: 560px) {
-  .testimonials__more {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .testimonials__cta {
-    width: 100%;
-  }
-  .testimonials__all {
-    align-self: flex-start;
-  }
-}
-
 /* --- שורת ההבהרה מתחת ל"סומכים עלינו" ----------------------------
    ממורכזת כמו הכותרת (הכלל בשורה 3651 ממרכז אותה). */
 .trusted__note {
   margin: calc(-1 * var(--space-4)) 0 var(--space-5);
   text-align: center;
-  font-size: var(--fs-base);
+  font-size: var(--fs-sub);
   font-weight: 400;
   line-height: var(--lh-body);
   color: var(--color-fg);
 }
 
-/* --- ראש עמוד ההמלצות --------------------------------------------- */
-.treviews__head {
-  padding-bottom: 0;
-}
-.treviews__lead {
-  margin: var(--space-3) 0 0;
-  max-width: 52rem;
-  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--color-fg);
-}
+
 
 /* --- סקשן שממתין לתוכן מהלקוח ---------------------------------------
    ⛔ חסום ב-production ברכיב עצמו (Placeholder.tsx), ולכן הכלל

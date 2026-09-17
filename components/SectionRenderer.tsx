@@ -43,17 +43,10 @@ function Block({ section }: { section: Section }) {
     case "leadBanner":
       return <LeadBanner withForm={section.withForm} />;
     case "testimonials":
-      /* ⚠️ בדף הבית הבלוק מקוצר לשלוש המלצות + קישור לעמוד
-         המלא. קודם הוא הציג את כל השבע, וזה בלוק ארוך מאוד
-         באמצע העמוד. העמוד הייעודי מרנדר את Testimonials
-         ישירות, בלי limit. */
-      return (
-        <Testimonials
-          reviews={section.reviews}
-          limit={3}
-          moreHref="/המלצות"
-        />
-      );
+      /* ⚠️ כל ההמלצות, בלי limit ובלי כפתורים - הוראה מפורשת
+         של דניאל מ-17.09. החריץ לסרטון נשאר, והוא חסום
+         ב-production ולכן לא נראה בתצוגת הלקוח. */
+      return <Testimonials reviews={section.reviews} videoSlot />;
     default: {
       // סוג בלוק שנוסף לטיפוס אך לא טופל כאן - שגיאת בילד, לא סקשן חסר
       const exhaustive: never = section;

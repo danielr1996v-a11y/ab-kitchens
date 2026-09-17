@@ -51,22 +51,20 @@ function GoogleMark() {
 }
 
 /**
- * limit    - מציג רק את N הראשונות. בדף הבית הבלוק מקוצר, וכל
- *            ההמלצות יושבות בעמוד הייעודי.
- * moreHref - מוסיף שורת סיום: קישור לעמוד ההמלצות המלא וכפתור
- *            הנעה לפעולה. בעמוד ההמלצות עצמו הוא מושמט, אחרת
- *            העמוד היה מקשר לעצמו.
+ * videoSlot - חריץ לסרטון ההמלצה. רק בדף הבית.
+ *
+ * ⚠️ היו כאן limit ו-moreHref שקיצרו את הבלוק לשלוש המלצות
+ * והוסיפו שורת כפתורים. דניאל ביטל את שניהם ב-17.09: כל
+ * ההמלצות חוזרות, והכפתורים ירדו. הפרופס נמחקו ולא הושארו
+ * "למקרה ש" - חוק 6 של הפרויקט.
  */
 export default function Testimonials({
   reviews = testimonials,
-  limit,
-  moreHref,
+  videoSlot,
 }: {
   reviews?: Review[];
-  limit?: number;
-  moreHref?: string;
+  videoSlot?: boolean;
 } = {}) {
-  const shown = limit ? reviews.slice(0, limit) : reviews;
   return (
     <section className="testimonials" aria-labelledby="testimonials-title">
       <div className="testimonials__inner">
@@ -98,7 +96,7 @@ export default function Testimonials({
         </header>
 
         <ul className="reviews">
-          {shown.map((r) => (
+          {reviews.map((r) => (
             <li className="review" key={r.id}>
               <div className="review__head">
                 <span className="review__avatar" aria-hidden="true">
@@ -114,31 +112,14 @@ export default function Testimonials({
           ))}
         </ul>
 
-        {/* ⛔ סרטון ההמלצה. חריץ אחד ביחס וידאו, חסום ב-production.
-            מופיע רק בבלוק המקוצר של דף הבית (moreHref) - בעמוד
-            ההמלצות המלא יש לו סקשן אחר. */}
-        {moreHref && (
+        {/* ⛔ סרטון ההמלצה. חריץ אחד ביחס וידאו, חסום ב-production. */}
+        {videoSlot && (
           <Placeholder
             title="סרטון המלצה"
             slots={1}
             ratio="16 / 9"
             note="ממתין לסרטון מאברהם - בקשה מהסבב של 17.09"
           />
-        )}
-
-        {moreHref && (
-          <div className="testimonials__more">
-            <a className="testimonials__all" href={moreHref}>
-              לכל ההמלצות
-              {reviews.length > (limit ?? 0) &&
-                ` (${reviews.length})`}
-            </a>
-            {/* ⚠️ עוגן ל-#designer-cta ולא טופס נוסף. הנוסח הוא
-                מה שהלקוח ביקש מילה במילה. */}
-            <a className="testimonials__cta" href="#designer-cta">
-              פגישה עם מעצבת ללא עלות – השאירו טלפון
-            </a>
-          </div>
         )}
       </div>
     </section>

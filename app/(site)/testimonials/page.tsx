@@ -1,32 +1,30 @@
 import type { Metadata } from "next";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Testimonials from "@/components/Testimonials";
-import DesignerCta from "@/components/DesignerCta";
 import Placeholder from "@/components/Placeholder";
-import { site, testimonials } from "@/lib/content";
-
-export const metadata: Metadata = {
-  title: "המלצות לקוחות | סיפורי הצלחה של א. בית המטבחים",
-  description: "לקוחות מספרים על העבודה איתנו - שירות, איכות ועמידה בזמנים. דירוג 5.0 בגוגל.",
-  alternates: { canonical: "/המלצות" },
-  openGraph: {
-    title: "המלצות לקוחות | סיפורי הצלחה של א. בית המטבחים",
-    description: "לקוחות מספרים על העבודה איתנו - שירות, איכות ועמידה בזמנים. דירוג 5.0 בגוגל.",
-    url: "/המלצות",
-  },
-};
 
 /**
- * עמוד ההמלצות המרכזי.
+ * עמוד ההמלצות המרכזי - **ממתין לתוכן מאברהם.**
  *
- * ⚠️ **אין כאן המלצה שלא נאמרה.** כל השבע מגיעות מ-
- * lib/content.ts, שם הן שוחזרו מארכיון האתר הישן עם שמות
- * אמיתיים. המלצות ממידרג ומפייסבוק **ממתינות לטקסטים מדניאל**
- * - לא נשאבות ולא מומצאות.
+ * הוראה של דניאל מ-17.09: העמוד קיים, אבל לא שמים בו כלום
+ * עדיין. שבע ההמלצות הקיימות נשארו בדף הבית, והאוסף המלא
+ * (כולל מידרג ופייסבוק) יגיע מאברהם.
  *
- * ה-h1 כאן ולא ב-Testimonials: הרכיב נושא h2 ומשמש גם בדף
- * הבית, שם ה-h1 הוא אחר.
+ * ⚠️ **noindex עד שיהיה תוכן.** עמוד ריק שמאונדקס הוא נזק
+ * כפול: גוגל רואה תוכן דל תחת הדומיין, ומבקר שמגיע אליו
+ * מתוצאות החיפוש נוחת על כלום. ההוצאה מ-`sitemap.ts` משלימה
+ * את זה.
+ *
+ * ⛔ **כשהתוכן נכנס** - למחוק את `robots`, להחזיר את
+ * `/המלצות` ל-sitemap, למחוק את ה-Placeholder, ולהחזיר את
+ * סימון ה-Review (הגרסה המלאה קיימת בקומיט 31592e0).
  */
+export const metadata: Metadata = {
+  title: "המלצות לקוחות | א. בית המטבחים",
+  description: "לקוחות מספרים על העבודה איתנו.",
+  alternates: { canonical: "/המלצות" },
+  robots: { index: false, follow: true },
+};
+
 export default function Page() {
   return (
     <>
@@ -35,54 +33,16 @@ export default function Page() {
         trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
       />
 
-      <section className="section-block treviews__head">
+      <section className="section-block">
         <h1 className="page-title">המלצות לקוחות</h1>
-        <p className="treviews__lead">
-          {site.googleReviews} ביקורות בגוגל, דירוג {site.googleRating.toFixed(1)}.
-          כאן אספנו את מה שלקוחות כתבו על העבודה איתנו.
-        </p>
       </section>
 
-      {/* בלי limit ובלי moreHref - זה העמוד שאליו מקשרים */}
-      <Testimonials reviews={testimonials} />
-
-      {/* ⛔ ממתין לטקסטים מדניאל. לא נשאב ולא הומצא. */}
+      {/* ⛔ חסום ב-production - אברהם לא רואה "בקרוב" */}
       <Placeholder
-        title="עוד ממליצים"
-        slots={4}
+        title="ההמלצות"
+        slots={6}
         ratio="3 / 2"
-        note="ממתין לטקסטים ממידרג ומפייסבוק - הוכרע שדניאל מעביר אותם"
-      />
-
-      <DesignerCta />
-
-      {/* ⚠️ אותו @id של components/Schema.tsx ולא LocalBusiness
-          שני. JSON-LD ממזג צמתים לפי @id, ולכן ההמלצות נתלות
-          בעסק הקיים במקום ליצור ישות מתחרה באותו עמוד.
-
-          ⛔ **בלי aggregateRating.** הדירוג 5.0 על 11 ביקורות
-          טרם אומת אחד-לאחד מול פרופיל הגוגל (רשום כחסום
-          ב-PROJECT.md §8). סימון דירוג לא מאומת הוא חשיפה
-          מול גוגל, לא רווח. */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "@id": "https://www.ab-kitchens.co.il/#business",
-            review: testimonials.map((r) => ({
-              "@type": "Review",
-              author: { "@type": "Person", name: r.name },
-              reviewRating: {
-                "@type": "Rating",
-                ratingValue: r.rating,
-                bestRating: 5,
-              },
-              reviewBody: r.text,
-            })),
-          }),
-        }}
+        note="ממתין לאוסף המלא מאברהם, כולל מידרג ופייסבוק. שבע ההמלצות הקיימות נשארו בדף הבית."
       />
     </>
   );
