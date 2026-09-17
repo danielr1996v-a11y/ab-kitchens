@@ -43,7 +43,17 @@ function Block({ section }: { section: Section }) {
     case "leadBanner":
       return <LeadBanner withForm={section.withForm} />;
     case "testimonials":
-      return <Testimonials reviews={section.reviews} />;
+      /* ⚠️ בדף הבית הבלוק מקוצר לשלוש המלצות + קישור לעמוד
+         המלא. קודם הוא הציג את כל השבע, וזה בלוק ארוך מאוד
+         באמצע העמוד. העמוד הייעודי מרנדר את Testimonials
+         ישירות, בלי limit. */
+      return (
+        <Testimonials
+          reviews={section.reviews}
+          limit={3}
+          moreHref="/המלצות"
+        />
+      );
     default: {
       // סוג בלוק שנוסף לטיפוס אך לא טופל כאן - שגיאת בילד, לא סקשן חסר
       const exhaustive: never = section;

@@ -2,6 +2,7 @@ import { ViewTransition } from "react";
 import Image from "next/image";
 import { kitchenPages, kitchenProcess, heroSlideshow } from "@/lib/content";
 import LeadBanner from "./LeadBanner";
+import DesignerCta from "./DesignerCta";
 import ArticleCard from "./ArticleCard";
 import Breadcrumbs from "./Breadcrumbs";
 import { byStyle } from "@/lib/articles";
@@ -169,6 +170,16 @@ export default function KitchenPage({
           ))}
         </ul>
       </section>
+
+      {/* ===== הנעה לפעולה באמצע העמוד =====
+          עד כה ההנעה היחידה בעמודים הפנימיים הייתה LeadBanner
+          בתחתית, כלומר מי שנשר לפני הסוף לא פגש אף קריאה לפעולה.
+          כאן, מיד אחרי הגלריה, הקורא בדיוק סיים לראות עבודות -
+          זו הנקודה שבה הוא הכי קרוב להחליט.
+
+          ⚠️ אותו רכיב של דף הבית ולא ורסיה חדשה. הפאנל, הפופאפ
+          והשליחה מתוחזקים במקום אחד. */}
+      <DesignerCta />
 
       {/* ===== התהליך - ארבעה כרטיסים, תמונה עם שכבה כהה ===== */}
       <section className="kpage__process" aria-labelledby="process-title">

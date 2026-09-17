@@ -16,14 +16,21 @@ import { trustedBy } from "@/lib/content";
  * ביצועים: transform בלבד, בלי JavaScript.
  */
 
-export type TrustedByProps = { content?: typeof trustedBy };
+/* note: שורת הבהרה מתחת לכותרת. קיימת בשביל עמוד השיש, שבו
+   הלוגואים הם ההוכחה לטענה "מעבד מורשה" - בלי המשפט הזה
+   הקורא רואה לוגואים ולא יודע מה היחס שלנו אליהם. */
+export type TrustedByProps = { content?: typeof trustedBy; note?: string };
 
-export default function TrustedBy({ content = trustedBy }: TrustedByProps = {}) {
+export default function TrustedBy({
+  content = trustedBy,
+  note,
+}: TrustedByProps = {}) {
   return (
     <section className="section-block trusted" aria-labelledby="trusted-title">
       <h2 className="trusted__title" id="trusted-title">
         {content.title}
       </h2>
+      {note && <p className="trusted__note">{note}</p>}
 
       <div className="trusted__rows">
         {content.groups.map((group, gi) => (

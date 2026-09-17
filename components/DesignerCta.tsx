@@ -45,7 +45,10 @@ export default function DesignerCta() {
     );
 
   return (
-    <section className="dcta">
+    /* ⚠️ ה-id הוא יעד עוגן: הכפתור בבלוק ההמלצות בדף הבית
+       מפנה לכאן במקום להחזיק טופס משלו. טופס אחד באתר, לא
+       שניים שצריך לתחזק במקביל. */
+    <section className="dcta" id="designer-cta">
       <div className="dcta__card">
         <Image
           src={designerCta.image}

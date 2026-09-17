@@ -49,11 +49,23 @@ function GoogleMark() {
   );
 }
 
+/**
+ * limit    - מציג רק את N הראשונות. בדף הבית הבלוק מקוצר, וכל
+ *            ההמלצות יושבות בעמוד הייעודי.
+ * moreHref - מוסיף שורת סיום: קישור לעמוד ההמלצות המלא וכפתור
+ *            הנעה לפעולה. בעמוד ההמלצות עצמו הוא מושמט, אחרת
+ *            העמוד היה מקשר לעצמו.
+ */
 export default function Testimonials({
   reviews = testimonials,
+  limit,
+  moreHref,
 }: {
   reviews?: Review[];
+  limit?: number;
+  moreHref?: string;
 } = {}) {
+  const shown = limit ? reviews.slice(0, limit) : reviews;
   return (
     <section className="testimonials" aria-labelledby="testimonials-title">
       <div className="testimonials__inner">
@@ -85,7 +97,7 @@ export default function Testimonials({
         </header>
 
         <ul className="reviews">
-          {reviews.map((r) => (
+          {shown.map((r) => (
             <li className="review" key={r.id}>
               <div className="review__head">
                 <span className="review__avatar" aria-hidden="true">
@@ -100,6 +112,21 @@ export default function Testimonials({
             </li>
           ))}
         </ul>
+
+        {moreHref && (
+          <div className="testimonials__more">
+            <a className="testimonials__all" href={moreHref}>
+              לכל ההמלצות
+              {reviews.length > (limit ?? 0) &&
+                ` (${reviews.length})`}
+            </a>
+            {/* ⚠️ עוגן ל-#designer-cta ולא טופס נוסף. הנוסח הוא
+                מה שהלקוח ביקש מילה במילה. */}
+            <a className="testimonials__cta" href="#designer-cta">
+              פגישה עם מעצבת ללא עלות – השאירו טלפון
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

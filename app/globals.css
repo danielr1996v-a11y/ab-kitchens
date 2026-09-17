@@ -615,9 +615,13 @@ h1, h2, h3, h4 {
 .hero {
   position: relative;
   width: 100%;
-  /* 80vh ולא aspect-ratio: היחס 1417/589 קרס ל-162px ברוחב 390.
-     התמונות ב-object-fit: cover ולכן ממלאות נכון בכל יחס מסך. */
-  height: 80vh;
+  /* לא aspect-ratio: היחס 1417/589 קרס ל-162px ברוחב 390.
+     התמונות ב-object-fit: cover ולכן ממלאות נכון בכל יחס מסך.
+
+     ⚠️ ירד מ-80vh ל-64vh לבקשת הלקוח - הבאנר תפס כמעט את כל
+     הגלילה הראשונה. clamp ולא vh נקי: רצפה של 24rem כדי שלא
+     יקרוס לרצועה בחלון נמוך, ותקרה כדי שלא יבלע מסך 4K. */
+  height: clamp(24rem, 64vh, 40rem);
   overflow: hidden;
   background: var(--color-header-bg); /* מונע הבזק לבן לפני טעינת התמונה */
 }
@@ -832,7 +836,10 @@ main > *:first-child:not(.hero) {
   position: relative;
   align-self: flex-start;
   font-size: var(--fs-base);
-  font-weight: 500;
+  /* ⚠️ 700 ולא 500. ל-Polin שלושה משקלים בלבד (300/400/700),
+     והדפדפן היה **מסנתז** 500 - כלומר מותח את ה-400 באלגוריתם.
+     זו הסיבה שאותיות כאן נראו בעובי וברוחב שונים משאר האתר. */
+  font-weight: 700;
   line-height: var(--lh-tight);
   color: var(--color-gold);
   padding-bottom: 0.25rem;
@@ -1924,7 +1931,9 @@ a.footer__contact-link:hover {
   gap: 1rem; /* 16px */
 }
 .footer__link {
-  font-size: 0.9375rem; /* 15px */
+  /* ⚠️ עלה מ-15px ל-17px לבקשת הלקוח - בפוטר יש שטח פנוי,
+     והטקסט היה קטן מגוף הטקסט של האתר (16px). */
+  font-size: 1.0625rem; /* 17px */
   font-weight: 400;
   line-height: var(--lh-tight);
   color: var(--color-fg);
@@ -1951,24 +1960,16 @@ a.footer__contact-link:hover {
   padding-top: var(--space-2);
   border-top: 1px solid rgba(20, 19, 19, 0.08);
 }
-.footer__copy,
-.footer__legal {
-  font-size: 0.8125rem;
+/* ⚠️ .footer__legal הוסר - הקישורים המשפטיים עלו לעמודת "מידע"
+   ואין להם יותר אלמנט בפוטר. הכלל נשאר כאן כקוד מת עד שנגעתי
+   בו בסבב הזה. */
+.footer__copy {
+  /* 13px → 15px. שורת הזכויות הייתה הטקסט הקטן ביותר באתר. */
+  font-size: 0.9375rem;
   font-weight: 400;
   line-height: 1.5em;
   color: var(--color-muted);
   margin: 0;
-}
-.footer__legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-  padding: 0;
-}
-.footer__legal .footer__link {
-  font-size: 0.8125rem;
-  color: var(--color-muted);
 }
 
 /* ===== Responsive ===== */
@@ -1983,20 +1984,23 @@ a.footer__contact-link:hover {
     gap: var(--space-3);
   }
   .footer__contact-link {
-    font-size: var(--fs-base);
+    font-size: 1.0625rem;
   }
   .footer__submit {
     width: 100%;
   }
   /* הקישורים היו 15px בגובה מגע 18px - שליש מהמינימום של 44.
-     בדסקטופ 15px נכון ואחיד, במובייל האצבע צריכה שטח. הריווח
-     יורד ל-8px כי הריפוד עצמו כבר מפריד בין השורות. */
+     במובייל האצבע צריכה שטח. הריווח יורד ל-8px כי הריפוד עצמו
+     כבר מפריד בין השורות.
+     ⚠️ הכלל הזה קבע --fs-base (16px) וגזר את ההגדלה ל-17
+     דווקא במובייל, שם יש הכי פחות סיבה להקטין. עולה ל-17
+     בשני הרוחבים. */
   .footer__list {
     gap: var(--space-1);
   }
   .footer__link,
   .footer__contact-link {
-    font-size: var(--fs-base);
+    font-size: 1.0625rem;
     min-height: 2.75rem;
     display: flex;
     align-items: center;
@@ -2272,7 +2276,8 @@ a.footer__contact-link:hover {
 }
 .mega__title {
   font-size: var(--fs-base);
-  font-weight: 500;
+  /* ⚠️ 700 ולא 500 - אין ל-Polin משקל 500, ראה .about__cta */
+  font-weight: 700;
   line-height: 1.25em;
   color: var(--color-fg);
   /* שבירה לשתי שורות במקום שורה אחת ארוכה - חוסך רוחב משמעותי */
@@ -2631,9 +2636,11 @@ a.footer__contact-link:hover {
 .kpage__hero {
   position: relative;
   width: 100%;
-  /* 80vh, זהה להירו של דף הבית. היחס 1325/395 מהפיגמה קרס ל-116px
-     ברוחב 390 - רצועה, לא באנר. */
-  height: 80vh;
+  /* זהה להירו של דף הבית. היחס 1325/395 מהפיגמה קרס ל-116px
+     ברוחב 390 - רצועה, לא באנר.
+     ⚠️ ירד מ-80vh ל-58vh: כאן הבאנר נושא כותרת אחת בלבד, והתוכן
+     שמתחתיו הוא העיקר. נמוך יותר מדף הבית במכוון. */
+  height: clamp(22rem, 58vh, 34rem);
   overflow: hidden;
   background: var(--color-header-bg); /* מונע הבזק לבן לפני הטעינה */
   display: flex;
@@ -4582,7 +4589,7 @@ a.footer__contact-link:hover {
   gap: 0.625rem;
   /* אותו גודל כמו שאר קישורי הפוטר. כלל ישן קבע כאן 1.25rem
      מהתקופה שבה פרטי הקשר ישבו בעמודת המותג ולא כעמודה. */
-  font-size: 0.9375rem;
+  font-size: 1.0625rem; /* 17px - עלה יחד עם .footer__link */
   color: #fff;
   text-decoration: none;
   transition: color 0.2s var(--ease);
@@ -4602,7 +4609,7 @@ a.footer__contact-link:hover {
   display: flex;
   justify-content: space-between;
   gap: var(--space-2);
-  font-size: 0.9375rem; /* זהה לשאר הפוטר */
+  font-size: 1.0625rem; /* זהה לשאר הפוטר */
   color: #fff;
 }
 .footer__hours-time {
@@ -5698,4 +5705,152 @@ a.footer__contact-link:hover {
    המשקל 700 ושני המעוינים הזהובים משני צדיה. */
 .pstrip__eyebrow {
   font-size: 1rem;
+}
+
+/* ===================================================================
+   סבב הערות הלקוח 17.09.2026
+   =================================================================== */
+
+/* --- הטקסט שמיד אחרי ההירו בעמודים הפנימיים ------------------------
+   ⚠️ **רק** הבלוק הראשון של המאמר, ולא כל האתר. הבקשה הייתה
+   מפורשת: להגדיל שם כדי לשפר קריאות ולנצל שטח, בלי הגדלה
+   גורפת. 16px → 19px בדסקטופ, ועם clamp כדי שבמובייל הוא
+   יעלה בעדינות ל-17 ולא ידחס את השורה.
+
+   חל על ארבעת העמודים דרך אותו סלקטור: מודרני, קלאסי, כפרי, שיש. */
+.kpage__block:first-child .kpage__paragraph {
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
+}
+
+/* --- התמונה הענקית בעמוד הקלאסי -----------------------------------
+   .khot--tall הוא היחיד עם aspect-ratio של 1.79, ובבלוק
+   full-bleed הוא יוצא ברוחב המסך כולו - כלומר עד ~980px גובה
+   על מסך רחב.
+
+   ⛔ **לא לחתוך את הגובה.** ה-y של ארבע הנקודות מחושב באחוזים
+   מתוך .kparallax, וכל שינוי ביחס המסגרת מזיז את כולן. הצרת
+   הרוחב שומרת על היחס ולכן הכיול נשאר שלם.
+
+   מרוכז ולא נצמד לצד: הבלוק פורץ את הריפוד בשני הכיוונים, ולכן
+   הצרה בלי מרכוז הייתה משאירה אותו תלוי בקצה אחד. */
+.kpage__block--full .kpage__block-body:has(.khot--tall) {
+  max-width: 62rem;
+  margin-inline: auto;
+}
+
+/* --- "החזון שלנו" בעמוד אודות --------------------------------------
+   הבקשה: שהמקטע ייראה מרשים וסמכותי, "לא שורה קטנה". העינית
+   הייתה 14px, עלתה ל-16 בסבב הקודם, ועכשיו היא תווית אמיתית -
+   גדולה, בזהב הלוגו, עם ריווח אותיות שנותן לה נוכחות.
+   ⚠️ ריווח אותיות בעברית לא מוסיף קריאות כמו בלטינית, ולכן
+   0.08em ולא יותר - מעבר לזה המילים מתחילות להתפרק. */
+.pstrip__eyebrow {
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  letter-spacing: 0.08em;
+  color: var(--color-logo-gold);
+}
+/* המעוינים גדלים יחד עם התווית, אחרת הם נראים כמו נקודות אבק */
+.pstrip__eyebrow::before,
+.pstrip__eyebrow::after {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+/* הפסקאות של החזון - גוף הטקסט של המקטע החשוב בעמוד אודות */
+.pstrip__p {
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
+}
+
+/* --- שורת הסיום בבלוק ההמלצות המקוצר ------------------------------
+   שני יעדים שונים בכוונה: מי שרוצה עוד הוכחה הולך לעמוד המלא,
+   ומי שכבר משוכנע הולך ישר לטופס. שורה אחת עם שני כפתורים
+   באותו משקל הייתה מפצלת את ההחלטה, ולכן הקישור משני והכפתור
+   ראשי. */
+.testimonials__more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+.testimonials__all {
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--color-fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-logo-gold);
+  padding-bottom: 0.125rem;
+  transition: color 0.25s var(--ease-soft);
+}
+.testimonials__all:hover,
+.testimonials__all:focus-visible {
+  color: var(--color-logo-gold);
+}
+/* הכפתור הראשי. מוגדל לבקשת הלקוח - זו ההנעה המרכזית בדף הבית. */
+.testimonials__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 48px ולא 44: זה הכפתור הראשי בעמוד, והוא צריך להיות
+     גדול מהמינימום התקני ולא שווה לו */
+  min-height: 48px;
+  padding: 0.875rem 1.75rem;
+  background: var(--color-gold);
+  color: var(--color-gold-text);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+  transition: transform 0.3s var(--ease-soft), filter 0.3s var(--ease-soft);
+}
+.testimonials__cta:hover,
+.testimonials__cta:focus-visible {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonials__cta {
+    transition: none;
+  }
+  .testimonials__cta:hover,
+  .testimonials__cta:focus-visible {
+    transform: none;
+  }
+}
+/* במובייל הכפתור על שורה משלו ובמלוא הרוחב - שני פריטים
+   צמודים ב-375 יוצאים צרים מדי שניהם */
+@media (max-width: 560px) {
+  .testimonials__more {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .testimonials__cta {
+    width: 100%;
+  }
+  .testimonials__all {
+    align-self: flex-start;
+  }
+}
+
+/* --- שורת ההבהרה מתחת ל"סומכים עלינו" ----------------------------
+   ממורכזת כמו הכותרת (הכלל בשורה 3651 ממרכז אותה). */
+.trusted__note {
+  margin: calc(-1 * var(--space-4)) 0 var(--space-5);
+  text-align: center;
+  font-size: var(--fs-base);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--color-fg);
+}
+
+/* --- ראש עמוד ההמלצות --------------------------------------------- */
+.treviews__head {
+  padding-bottom: 0;
+}
+.treviews__lead {
+  margin: var(--space-3) 0 0;
+  max-width: 52rem;
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.1875rem);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--color-fg);
 }
