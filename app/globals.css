@@ -6054,3 +6054,119 @@ a.footer__contact-link:hover {
     columns: 1;
   }
 }
+
+/* ===== סרטוני לקוחות ===== */
+.tvideos {
+  padding: 0 var(--side-padding) var(--section-gap);
+}
+.tvideos__title {
+  margin: 0 auto var(--space-4);
+  max-width: 76rem;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
+}
+/* ⚠️ columns ולא grid. כרגע כל הסטילס 9:16, אבל ארבעת הקבצים
+   הגדולים בדרייב עשויים להיות אופקיים - וב-grid אחיד הייתי
+   חייב לחתוך אותם. אותו שיקול בדיוק כמו בגריד הצילומים. */
+.vgrid {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 76rem;
+  columns: 4;
+  column-gap: var(--space-3);
+}
+.vcard {
+  break-inside: avoid;
+  margin-bottom: var(--space-3);
+}
+.vcard__btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  overflow: hidden;
+}
+.vcard__poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.4s var(--ease-soft);
+}
+.vcard__btn:hover .vcard__poster,
+.vcard__btn:focus-visible .vcard__poster {
+  transform: scale(1.03);
+}
+/* כפתור הנגן. עיגול זהב, לא המשולש האדום של יוטיוב - זה
+   האתר שלנו ולא שלהם. */
+.vcard__play {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(50%, -50%);
+  display: grid;
+  place-items: center;
+  /* 4rem = 64px, מעל תקן המגע של 44 */
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: var(--color-gold-text);
+  transition: transform 0.3s var(--ease-soft);
+  pointer-events: none;
+}
+.vcard__play svg {
+  /* המשולש נראה מוסט שמאלה במרכז אופטי, ולכן מוזז חזרה */
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-inline-start: 0.125rem;
+}
+.vcard__btn:hover .vcard__play,
+.vcard__btn:focus-visible .vcard__play {
+  transform: translate(50%, -50%) scale(1.08);
+}
+.vcard__frame {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .vcard__poster,
+  .vcard__play {
+    transition: none;
+  }
+  .vcard__btn:hover .vcard__poster,
+  .vcard__btn:focus-visible .vcard__poster {
+    transform: none;
+  }
+  .vcard__btn:hover .vcard__play,
+  .vcard__btn:focus-visible .vcard__play {
+    transform: translate(50%, -50%);
+  }
+}
+@media (max-width: 1100px) {
+  .vgrid {
+    columns: 3;
+  }
+}
+@media (max-width: 560px) {
+  .vgrid {
+    /* שתיים ולא אחת: כרטיס 9:16 במלוא הרוחב יוצא 595px גובה,
+       וגלילה דרך 17 כאלה היא עונש. שתיים = סריקה מהירה, בדיוק
+       כמו שאנשים רגילים לגלול ריאלז. */
+    columns: 2;
+  }
+  .vcard__play {
+    width: 3rem;
+    height: 3rem;
+  }
+  .vcard__play svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}

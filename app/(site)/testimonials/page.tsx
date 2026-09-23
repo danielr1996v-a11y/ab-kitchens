@@ -3,6 +3,8 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
 import TestimonialWall from "@/components/TestimonialWall";
+import VideoGrid from "@/components/VideoGrid";
+import { videosSection } from "@/lib/videos";
 import DesignerCta from "@/components/DesignerCta";
 import {
   testimonialsPage,
@@ -84,6 +86,19 @@ export default function Page() {
           היא צילום כמו כל השאר. */}
       <section className="treviews__wall" aria-label="המלצות מלקוחות">
         <TestimonialWall items={[featuredQuote, ...testimonials]} />
+      </section>
+
+      {/* ===== סרטוני לקוחות =====
+          ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה
+          ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
+          נקראים בלי מאמץ ומחממים את הקרקע. */}
+      <section className="tvideos" aria-labelledby="videos-title">
+        <Reveal>
+          <h2 className="tvideos__title" id="videos-title">
+            {videosSection.title}
+          </h2>
+        </Reveal>
+        <VideoGrid />
       </section>
 
       <DesignerCta />
