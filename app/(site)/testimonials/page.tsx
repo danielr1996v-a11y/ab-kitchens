@@ -1,30 +1,39 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Placeholder from "@/components/Placeholder";
+import Reveal from "@/components/Reveal";
+import TestimonialWall from "@/components/TestimonialWall";
+import DesignerCta from "@/components/DesignerCta";
+import {
+  testimonialsPage,
+  featuredLetter,
+  featuredQuote,
+  testimonials,
+} from "@/lib/testimonialsPage";
 
-/**
- * עמוד ההמלצות המרכזי - **ממתין לתוכן מאברהם.**
- *
- * הוראה של דניאל מ-17.09: העמוד קיים, אבל לא שמים בו כלום
- * עדיין. שבע ההמלצות הקיימות נשארו בדף הבית, והאוסף המלא
- * (כולל מידרג ופייסבוק) יגיע מאברהם.
- *
- * ⚠️ **noindex עד שיהיה תוכן.** עמוד ריק שמאונדקס הוא נזק
- * כפול: גוגל רואה תוכן דל תחת הדומיין, ומבקר שמגיע אליו
- * מתוצאות החיפוש נוחת על כלום. ההוצאה מ-`sitemap.ts` משלימה
- * את זה.
- *
- * ⛔ **כשהתוכן נכנס** - למחוק את `robots`, להחזיר את
- * `/המלצות` ל-sitemap, למחוק את ה-Placeholder, ולהחזיר את
- * סימון ה-Review (הגרסה המלאה קיימת בקומיט 31592e0).
- */
 export const metadata: Metadata = {
   title: "המלצות לקוחות | א. בית המטבחים",
-  description: "לקוחות מספרים על העבודה איתנו.",
+  description:
+    "לקוחות מספרים על העבודה איתנו - מדידה, ייצור, שיש והתקנה. לצד כל המלצה אפשר לפתוח את ההודעה המקורית.",
   alternates: { canonical: "/המלצות" },
-  robots: { index: false, follow: true },
+  openGraph: {
+    title: "המלצות לקוחות | א. בית המטבחים",
+    description:
+      "לקוחות מספרים על העבודה איתנו. לצד כל המלצה אפשר לפתוח את ההודעה המקורית.",
+    url: "/המלצות",
+  },
 };
 
+/**
+ * עמוד ההמלצות.
+ *
+ * ⚠️ ה-noindex וההוצאה מ-sitemap.ts הוסרו - העמוד כבר לא ריק.
+ * (הוא הוכנס כשהעמוד המתין לתוכן; ראה קומיט a8df7f0 ואילך.)
+ *
+ * סדר הקריאה: המכתב בכתב יד פותח, ואחריו קיר ההמלצות. המכתב
+ * לא יושב ברשת כי הוא לא מאותו סוג - הוא נייר, הוא כתב יד,
+ * והוא ההוכחה שהכי קשה לביים.
+ */
 export default function Page() {
   return (
     <>
@@ -33,16 +42,88 @@ export default function Page() {
         trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
       />
 
-      <section className="section-block">
-        <h1 className="page-title">המלצות לקוחות</h1>
+      <section className="treviews__head">
+        <Reveal>
+          <h1 className="treviews__title">{testimonialsPage.title}</h1>
+          <p className="treviews__lead">{testimonialsPage.lead}</p>
+        </Reveal>
       </section>
 
-      {/* ⛔ חסום ב-production - אברהם לא רואה "בקרוב" */}
-      <Placeholder
-        title="ההמלצות"
-        slots={6}
-        ratio="3 / 2"
-        note="ממתין לאוסף המלא מאברהם, כולל מידרג ופייסבוק. שבע ההמלצות הקיימות נשארו בדף הבית."
+      {/* ===== המכתב בכתב יד ===== */}
+      <section className="tletter" aria-labelledby="letter-title">
+        <Reveal className="tletter__inner">
+          <div className="tletter__text">
+            <h2 className="tletter__title" id="letter-title">
+              מכתב שהגיע אלינו
+            </h2>
+            <blockquote className="tletter__quote">
+              {featuredLetter.quote.map((p) => (
+                <p className="tletter__p" key={p.slice(0, 28)}>
+                  {p}
+                </p>
+              ))}
+            </blockquote>
+            <p className="tletter__meta">{featuredLetter.place}</p>
+          </div>
+
+          <figure className="tletter__figure">
+            <Image
+              src={featuredLetter.image}
+              alt={featuredLetter.imageAlt}
+              width={1080}
+              height={1498}
+              className="tletter__img"
+              sizes="(max-width: 900px) 90vw, 40vw"
+            />
+          </figure>
+        </Reveal>
+      </section>
+
+      {/* ===== ההמלצה הארוכה - רצועה משלה =====
+          יצאה 993px בתוך הקיר וקבעה לבדה את גובהו. כאן היא
+          מקבלת רוחב קריא ואת הבמה שמגיעה לה. */}
+      <section className="tquote" aria-label="המלצה מורחבת">
+        <Reveal className="tquote__inner">
+          <span className="tquote__mark" aria-hidden="true">״</span>
+          <blockquote className="tquote__body">
+            {featuredQuote.quote.map((p) => (
+              <p className="tquote__p" key={p.slice(0, 28)}>
+                {p}
+              </p>
+            ))}
+          </blockquote>
+          <p className="tquote__meta">{featuredQuote.source}</p>
+        </Reveal>
+      </section>
+
+      {/* ===== קיר ההמלצות ===== */}
+      <section className="treviews__wall" aria-label="המלצות נוספות">
+        <TestimonialWall items={testimonials} />
+      </section>
+
+      <DesignerCta />
+
+      {/* ⚠️ אותו @id של components/Schema.tsx, כדי שההמלצות
+          ייתלו בעסק הקיים ולא ייצרו ישות מתחרה באותו עמוד.
+          ⛔ בלי aggregateRating - הדירוג טרם אומת מול פרופיל
+          הגוגל (PROJECT.md §8). */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.ab-kitchens.co.il/#business",
+            review: [featuredLetter, ...testimonials]
+              /* רק המלצות עם שם - ל-Review נדרש author */
+              .filter((t) => t.author)
+              .map((t) => ({
+                "@type": "Review",
+                author: { "@type": "Person", name: t.author },
+                reviewBody: t.quote.join(" "),
+              })),
+          }),
+        }}
       />
     </>
   );
