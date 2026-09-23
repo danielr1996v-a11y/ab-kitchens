@@ -2,26 +2,23 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import {
-  testimonialsPage,
-  type Testimonial,
-} from "@/lib/testimonialsPage";
+import { testimonialsPage, type Testimonial } from "@/lib/testimonialsPage";
 
 /**
- * קיר ההמלצות + חלון הצילום המקורי.
+ * גריד ההמלצות - הצילומים המקוריים.
  *
- * ההחלטה המרכזית: **הטקסט הוא התוכן, הצילום הוא ההוכחה.**
- * צילום מסך הוא תמונה של טקסט - גוגל לא קורא אותו, קורא מסך
- * לא מקריא אותו, והוא מטושטש במסך טוב. לכן המילים מוקלדות
- * בטיפוגרפיה של האתר, והצילום נפתח בלחיצה למי שרוצה לוודא.
+ * ⚠️ **שינוי כיוון מהגרסה הראשונה, לבקשת דניאל.** קודם הטקסט
+ * היה מוקלד והצילום נפתח בלחיצה; עכשיו הצילום **הוא** התוכן.
  *
- * ⚠️ הפריסה היא `columns` ולא `grid` במכוון: אורכי ההמלצות
- * נעים בין שורה אחת לחמש פסקאות. ב-grid שורה שלמה מתיישרת
- * לגובה הכרטיס הארוך ביותר ונוצרים חורים ענקיים. `columns`
- * מזרים אותן ומסדר את עצמו.
+ * ⚠️ **מה שזה עולה, ואיך זה מפוצה:** טקסט בתוך תמונה נעלם
+ * מגוגל ומקורא מסך. לכן התמלול המלא של כל המלצה יושב ב-`alt`
+ * של התמונה - הוא לא נראה, אבל הוא קיים למי שצריך אותו. סימון
+ * ה-Review בעמוד נגזר מאותו תמלול.
  *
- * ⚠️ <dialog> מקורי ולא div: נעילת פוקוס, סגירה ב-Escape ורקע
- * חוסם מגיעים מהדפדפן. אותה בחירה כמו ב-DesignerCta.
+ * ⚠️ **columns ולא grid.** יחסי הצילומים נעים בין 0.78 ל-2.45
+ * (צילום טלפון לאורך מול בועת הודעה רחבה). ב-grid כל שורה
+ * מתיישרת לגובה הגבוה ביותר ונוצרים חורים, או שצריך לחתוך את
+ * הצילומים - וחיתוך של הוכחה הורס את מה שהיא באה להוכיח.
  */
 export default function TestimonialWall({
   items,
@@ -40,46 +37,26 @@ export default function TestimonialWall({
     <>
       <ul className="twall">
         {items.map((t) => (
-          <li className="tcard" key={t.id}>
-            <blockquote className="tcard__quote">
-              {t.quote.map((p) => (
-                <p className="tcard__p" key={p.slice(0, 28)}>
-                  {p}
-                </p>
-              ))}
-            </blockquote>
-
-            {/* דירוגי מידרג, כשיש. הנמוך מוצג יחד עם הגבוהים. */}
-            {t.scores && (
-              <ul className="tscore">
-                {t.scores.map((s) => (
-                  <li className="tscore__item" key={s.label}>
-                    <span className="tscore__label">{s.label}</span>
-                    <span className="tscore__value">{s.value}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <footer className="tcard__foot">
-              <div className="tcard__who">
-                {/* ⚠️ בלי שם - מוצג המקור בלבד. לא ממציאים שם. */}
-                {t.author && <p className="tcard__name">{t.author}</p>}
-                <p className="tcard__meta">
-                  {[t.place, t.date].filter(Boolean).join(" · ")}
-                  {(t.place || t.date) && " · "}
-                  {t.source}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="tcard__proof"
-                onClick={() => open(t)}
-              >
-                {testimonialsPage.originalLabel}
-              </button>
-            </footer>
+          <li className="tshot" key={t.id}>
+            <button
+              type="button"
+              className="tshot__btn"
+              onClick={() => open(t)}
+              /* שם נגיש לכפתור. ה-alt נושא את ההמלצה עצמה */
+              aria-label={`הגדלת הצילום${t.author ? ` של ${t.author}` : ""}`}
+            >
+              <Image
+                src={t.image}
+                /* ⚠️ התמלול המלא, לא תיאור. זה מה שמחזיק את
+                   ההמלצה קריאה לגוגל ולקורא מסך אחרי שהיא
+                   הפכה לתמונה. */
+                alt={t.quote.join(" ")}
+                width={t.w}
+                height={t.h}
+                className="tshot__img"
+                sizes="(max-width: 700px) 90vw, (max-width: 1200px) 45vw, 30vw"
+              />
+            </button>
           </li>
         ))}
       </ul>
@@ -95,9 +72,9 @@ export default function TestimonialWall({
         {shown && (
           <Image
             src={shown.image}
-            alt={shown.imageAlt}
-            width={1200}
-            height={900}
+            alt={shown.quote.join(" ")}
+            width={shown.w}
+            height={shown.h}
             className="tproof__img"
             sizes="(max-width: 700px) 90vw, 60vw"
           />

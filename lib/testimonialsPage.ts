@@ -34,6 +34,9 @@ export type Testimonial = {
   /** הצילום המקורי. נפתח בלחיצה */
   image: string;
   imageAlt: string;
+  /** מידות אמיתיות של הקובץ. בלעדיהן יש קפיצת פריסה בטעינה */
+  w: number;
+  h: number;
   /** תאריך, רק כשהוא מופיע בצילום */
   date?: string;
   /** דירוגי מידרג. מוצגים **כולל** הנמוך - כך הוכרע */
@@ -42,8 +45,6 @@ export type Testimonial = {
 
 export const testimonialsPage = {
   title: "המלצות לקוחות",
-  lead: "כל מה שכתוב כאן נכתב על ידי לקוחות, ולצד כל המלצה אפשר לפתוח את ההודעה המקורית.",
-  originalLabel: "לצפייה במקור",
   closeLabel: "סגירה",
 };
 
@@ -64,6 +65,8 @@ export const featuredLetter: Testimonial = {
   place: "רמות ב׳, ירושלים",
   source: "מכתב",
   image: "/images/testimonials/letter.webp",
+  w: 1080,
+  h: 1498,
   imageAlt: "מכתב תודה בכתב יד ממשפחה מרמות ב׳ בירושלים",
 };
 
@@ -89,6 +92,8 @@ export const featuredQuote: Testimonial = {
   ],
   source: "וואטסאפ",
   image: "/images/testimonials/wa-miriam.webp",
+  w: 787,
+  h: 321,
   imageAlt: "הודעת וואטסאפ עם המלצה מפורטת על המטבח והשירות",
 };
 
@@ -101,6 +106,8 @@ export const testimonials: Testimonial[] = [
     author: "חיה ב.",
     source: "וואטסאפ",
     image: "/images/testimonials/wa-chaya.webp",
+    w: 560,
+    h: 335,
     imageAlt: "הודעת וואטסאפ על הזמנת שיש, מדידה באותו יום והתקנה תוך שבוע",
   },
   {
@@ -120,6 +127,8 @@ export const testimonials: Testimonial[] = [
       { label: "זמנים", value: 7 },
     ],
     image: "/images/testimonials/midrag-natan.webp",
+    w: 1100,
+    h: 1097,
     imageAlt: "חוות דעת באתר מידרג על התקנת שיש וכיור למטבח",
   },
   {
@@ -132,6 +141,8 @@ export const testimonials: Testimonial[] = [
     author: "ר.ט.",
     source: "וואטסאפ",
     image: "/images/testimonials/wa-stone.webp",
+    w: 1080,
+    h: 1385,
     imageAlt: "הודעת וואטסאפ על חוויית קניית שיש למטבח",
   },
   {
@@ -142,6 +153,8 @@ export const testimonials: Testimonial[] = [
     ],
     source: "וואטסאפ",
     image: "/images/testimonials/wa-sara.webp",
+    w: 406,
+    h: 196,
     imageAlt: "הודעת וואטסאפ על מטבח שקיבל קווים נקיים ושיש איכותי",
   },
 ];

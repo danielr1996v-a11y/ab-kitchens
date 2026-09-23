@@ -45,7 +45,6 @@ export default function Page() {
       <section className="treviews__head">
         <Reveal>
           <h1 className="treviews__title">{testimonialsPage.title}</h1>
-          <p className="treviews__lead">{testimonialsPage.lead}</p>
         </Reveal>
       </section>
 
@@ -79,26 +78,12 @@ export default function Page() {
         </Reveal>
       </section>
 
-      {/* ===== ההמלצה הארוכה - רצועה משלה =====
-          יצאה 993px בתוך הקיר וקבעה לבדה את גובהו. כאן היא
-          מקבלת רוחב קריא ואת הבמה שמגיעה לה. */}
-      <section className="tquote" aria-label="המלצה מורחבת">
-        <Reveal className="tquote__inner">
-          <span className="tquote__mark" aria-hidden="true">״</span>
-          <blockquote className="tquote__body">
-            {featuredQuote.quote.map((p) => (
-              <p className="tquote__p" key={p.slice(0, 28)}>
-                {p}
-              </p>
-            ))}
-          </blockquote>
-          <p className="tquote__meta">{featuredQuote.source}</p>
-        </Reveal>
-      </section>
-
-      {/* ===== קיר ההמלצות ===== */}
-      <section className="treviews__wall" aria-label="המלצות נוספות">
-        <TestimonialWall items={testimonials} />
+      {/* ===== גריד הצילומים המקוריים =====
+          ⚠️ ההמלצה הארוכה חזרה לכאן. קודם הייתה לה רצועת טקסט
+          משלה, אבל דניאל ביקש שמהמכתב והלאה יוצג המקור - ולכן
+          היא צילום כמו כל השאר. */}
+      <section className="treviews__wall" aria-label="המלצות מלקוחות">
+        <TestimonialWall items={[featuredQuote, ...testimonials]} />
       </section>
 
       <DesignerCta />
