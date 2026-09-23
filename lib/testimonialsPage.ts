@@ -44,7 +44,10 @@ export type Testimonial = {
 };
 
 export const testimonialsPage = {
-  title: "המלצות לקוחות",
+  /* ⚠️ הכותרת הנראית בלבד. ה-<title> של הדפדפן ותיאור ה-SEO
+     נשארים "המלצות לקוחות" - "המלצות" לבדו בתוצאת חיפוש לא
+     אומר לאף אחד על מי מדובר. */
+  title: "המלצות",
   closeLabel: "סגירה",
 };
 

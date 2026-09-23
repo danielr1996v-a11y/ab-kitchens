@@ -5884,6 +5884,7 @@ a.footer__contact-link:hover {
 
 .treviews__head {
   padding: 0 var(--side-padding) var(--space-6);
+  text-align: center;
 }
 .treviews__title {
   margin: 0;
@@ -5896,7 +5897,9 @@ a.footer__contact-link:hover {
 /* ===== המכתב בכתב יד ===== */
 .tletter {
   padding: var(--section-gap) var(--side-padding);
-  background: var(--color-surface);
+  /* ⚠️ בלי רקע. דניאל ביקש שכל העמוד יהיה לבן, וה---color-surface
+     האפור היה הדבר היחיד ששבר את זה. ההפרדה בין המכתב לגריד
+     נשענת עכשיו על הריווח בלבד - נבדק בעין שזה מספיק. */
 }
 .tletter__inner {
   display: grid;
