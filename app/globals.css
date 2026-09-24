@@ -5882,16 +5882,55 @@ a.footer__contact-link:hover {
    בצדדים. כך העמוד נושם באותו קצב כמו שאר האתר מעצם הבנייה
    ולא בכיול בעין, וגם נשאר אחיד בין המסכים אחרי איחוד הסקאלה. */
 
-.treviews__head {
-  padding: 0 var(--side-padding) var(--space-6);
-  text-align: center;
+/* ===== הבאנר ===== */
+.tbanner {
+  position: relative;
+  width: 100%;
+  /* נמוך מהירו של עמודי המטבחים (22-34rem) במכוון: זה עמוד
+     משני, והבאנר נושא מילה אחת ולא טענה. */
+  height: clamp(18rem, 44vh, 26rem);
+  overflow: hidden;
+  background: var(--color-header-bg); /* מונע הבזק לבן לפני הטעינה */
+  display: flex;
+  /* ⚠️ לתחתית ולא למרכז, וזו החלטה שנולדה ממדידה. במרכז
+     התמונה בהירות 0.548 ולבן עליה נותן ניגודיות 2.17 - נכשל
+     גם בסף 3.0 של כותרת גדולה. כדי לעבור שם צריך להכהות
+     ל-50%, וזה כבר מכבה את התמונה כולה.
+     בתחתית הבהירות 0.329, ושם הגראדיינט ממילא יושב.
+     זה גם מה ש-.kpage__hero עושה - אותה שפה. */
+  align-items: flex-end;
+  justify-content: center;
+  padding: var(--space-5) var(--side-padding);
 }
-.treviews__title {
+.tbanner__img {
+  object-fit: cover;
+}
+/* ⚠️ עוצמת הגראדיינט נמדדה ולא נאמדה. האזור שמתחת לכותרת
+   בתמונה הזו הוא בהירות 0.329, כלומר לבן עליו נותן ניגודיות
+   2.77 - נכשל גם בסף 3.0 של כותרת גדולה. שכבה של 55% מורידה
+   אותו ל-~0.148 ומביאה את הניגודיות ל-5.2, מעל 4.5 המלא.
+   הוא נשאר "קטן" בכך שהוא שקוף לגמרי בשני שלישים העליונים. */
+.tbanner__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 19, 19, 0) 0%,
+    rgba(20, 19, 19, 0.1) 45%,
+    rgba(20, 19, 19, 0.68) 100%
+  );
+}
+.tbanner__title {
+  position: relative;
+  z-index: 1;
   margin: 0;
-  font-size: var(--fs-h1);
+  font-size: var(--fs-display);
   font-weight: 700;
   line-height: var(--lh-tight);
-  color: var(--color-fg);
+  color: #fff;
+  text-align: center;
+  /* צל רך - רשת ביטחון למקרה שהתמונה תוחלף בבהירה יותר */
+  text-shadow: 0 2px 12px rgba(20, 19, 19, 0.45);
 }
 
 /* ===== המכתב בכתב יד ===== */
@@ -6122,7 +6161,12 @@ a.footer__contact-link:hover {
   border-radius: 50%;
   background: var(--color-gold);
   color: var(--color-gold-text);
-  transition: transform 0.3s var(--ease-soft);
+  /* ⚠️ טבעת ההילה נבנית מ-box-shadow ולא מאלמנט נוסף: היא
+     מונפשת על המרחיב בלבד ולכן לא גורמת ל-reflow. מתחילה
+     ברוחב 0 ולכן בלתי נראית במנוחה. */
+  box-shadow: 0 0 0 0 rgba(221, 177, 67, 0);
+  transition: transform 0.45s var(--ease-soft),
+    box-shadow 0.45s var(--ease-soft);
   pointer-events: none;
 }
 .vcard__play svg {
@@ -6131,9 +6175,13 @@ a.footer__contact-link:hover {
   height: 1.75rem;
   margin-inline-start: 0.125rem;
 }
+/* ⚠️ 1.06 ולא 1.08, וטבעת של 0.625rem ולא יותר. ברירת המחדל
+   שלי אגרסיבית מדי כמעט תמיד - כאן הטבעת היא מה שנושא את
+   התחושה, והקנה מידה רק תומך בה. */
 .vcard__btn:hover .vcard__play,
 .vcard__btn:focus-visible .vcard__play {
-  transform: translate(50%, -50%) scale(1.08);
+  transform: translate(50%, -50%) scale(1.06);
+  box-shadow: 0 0 0 0.625rem rgba(221, 177, 67, 0.28);
 }
 .vcard__frame {
   display: block;
@@ -6152,6 +6200,7 @@ a.footer__contact-link:hover {
   .vcard__btn:hover .vcard__play,
   .vcard__btn:focus-visible .vcard__play {
     transform: translate(50%, -50%);
+    box-shadow: none;
   }
 }
 @media (max-width: 1100px) {

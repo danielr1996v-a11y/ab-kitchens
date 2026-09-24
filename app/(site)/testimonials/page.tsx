@@ -39,16 +39,32 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
+      {/* ===== הבאנר =====
+          ⚠️ hero-country.webp נבחרה כי היא **לא בשימוש בשום
+          מקום אחר באתר** - כל שאר התמונות הרחבות כבר מופיעות
+          בסליידר הבית, במאמרים או בפאנל המעצבת שיושב בתחתית
+          העמוד הזה עצמו.
+
+          alt ריק במכוון: התמונה דקורטיבית וה-h1 נושא את
+          המשמעות. אותה החלטה כמו ב-designerCta. */}
+      <section className="tbanner">
+        <Image
+          src="/images/hero-country.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="tbanner__img"
+        />
+        <span className="tbanner__scrim" aria-hidden="true" />
+        <h1 className="tbanner__title">{testimonialsPage.title}</h1>
+      </section>
+
+      {/* ⚠️ בלי crumbs--top: הבאנר כבר מפנה את ההדר הצף, בדיוק
+          כמו בעמודי המטבחים. */}
       <Breadcrumbs
-        className="crumbs--top"
         trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
       />
-
-      <section className="treviews__head">
-        <Reveal>
-          <h1 className="treviews__title">{testimonialsPage.title}</h1>
-        </Reveal>
-      </section>
 
       {/* ===== המכתב בכתב יד ===== */}
       <section className="tletter" aria-labelledby="letter-title">
