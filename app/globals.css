@@ -6062,6 +6062,11 @@ a.footer__contact-link:hover {
 .tvideos__title {
   margin: 0 auto var(--space-4);
   max-width: 76rem;
+  /* ⚠️ text-wrap: balance ולא שבירה חופשית. במובייל הכותרת
+     נשברה ל-"תשמעו מה יש ללקוחות שלנו" + "להגיד" - מילה
+     בודדה בשורה אחרונה, מה שאסור אצלנו. balance מחלק את
+     השורות לאורך דומה ומונע את היתומה. */
+  text-wrap: balance;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);

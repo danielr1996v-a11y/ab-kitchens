@@ -97,7 +97,7 @@ export const clientVideos: ClientVideo[] = [
 ];
 
 export const videosSection = {
-  title: "סרטונים",
+  title: "תשמעו מה יש ללקוחות שלנו להגיד",
   /* טקסט הכפתור של הנגן. נקרא על ידי קורא מסך יחד עם ה-alt */
   playLabel: "הפעלת הסרטון",
 };
