@@ -3,8 +3,7 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
 import TestimonialWall from "@/components/TestimonialWall";
-import VideoGrid from "@/components/VideoGrid";
-import { videosSection } from "@/lib/videos";
+import VideoSlider from "@/components/VideoSlider";
 import DesignerCta from "@/components/DesignerCta";
 import {
   testimonialsPage,
@@ -109,12 +108,10 @@ export default function Page() {
           ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
           נקראים בלי מאמץ ומחממים את הקרקע. */}
       <section className="tvideos" aria-labelledby="videos-title">
-        <Reveal>
-          <h2 className="tvideos__title" id="videos-title">
-            {videosSection.title}
-          </h2>
-        </Reveal>
-        <VideoGrid />
+        {/* ⚠️ הכותרת נכנסה לתוך הקומפוננטה ולא נשארה כאן:
+            חצי הניווט חולקים state עם המסלול, והם חייבים
+            לשבת בשורת הכותרת - כלומר שלושתם תחת אותו רכיב. */}
+        <VideoSlider titleId="videos-title" />
       </section>
 
       <DesignerCta />

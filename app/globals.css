@@ -6093,43 +6093,127 @@ a.footer__contact-link:hover {
     columns: 1;
   }
 }
-
 /* ===== סרטוני לקוחות ===== */
+/* ⚠️ **בלי ריפוד צדדי על הסקשן**, וזה לא סגנון אלא תיקון.
+   המסלול מרכז את הכרטיס הראשון ב-calc(50% - חצי כרטיס), ואחוז
+   בריפוד נפתר תמיד מול **בלוק ההכלה** ולא מול האלמנט עצמו.
+   כשהסקשן היה מרופד והמסלול יצא ממנו במרג׳ין שלילי, ה-50%
+   נמדד מ-1360 במקום מ-1512 והכרטיס הראשון נפל 78px מהמרכז.
+   הריפוד עבר לכותרת, והמסלול מקבל את הרוחב המלא באמת. */
 .tvideos {
-  padding: 0 var(--side-padding) var(--section-gap);
+  padding: 0 0 var(--section-gap);
+}
+/* הכותרת והחצים באותה שורה: הכותרת מימין, הניווט משמאל */
+.tvideos__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+  /* 76rem לתוכן עצמו, בדיוק כמו שאר הסקשנים בעמוד */
+  max-width: calc(76rem + var(--side-padding) * 2);
+  margin: 0 auto var(--space-4);
+  padding-inline: var(--side-padding);
 }
 .tvideos__title {
-  margin: 0 auto var(--space-4);
-  max-width: 76rem;
+  margin: 0;
   /* ⚠️ text-wrap: balance ולא שבירה חופשית. במובייל הכותרת
      נשברה ל-"תשמעו מה יש ללקוחות שלנו" + "להגיד" - מילה
-     בודדה בשורה אחרונה, מה שאסור אצלנו. balance מחלק את
-     השורות לאורך דומה ומונע את היתומה. */
+     בודדה בשורה אחרונה, מה שאסור אצלנו.
+     ⚠️ והיום זה קריטי יותר ולא פחות: הכותרת חולקת שורה עם
+     החצים ומקבלת פחות רוחב, ולכן הסיכון ליתומה גדל. */
   text-wrap: balance;
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
   color: var(--color-fg);
 }
-/* ⚠️ columns ולא grid. כרגע כל הסטילס 9:16, אבל ארבעת הקבצים
-   הגדולים בדרייב עשויים להיות אופקיים - וב-grid אחיד הייתי
-   חייב לחתוך אותם. אותו שיקול בדיוק כמו בגריד הצילומים. */
-.vgrid {
-  list-style: none;
-  margin: 0 auto;
+
+/* ===== חצי הניווט ===== */
+.vnav {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+.vnav__btn {
+  display: grid;
+  place-items: center;
+  /* 3rem = 48px, מעל תקן המגע של 44 */
+  width: 3rem;
+  height: 3rem;
   padding: 0;
-  max-width: 76rem;
-  columns: 4;
-  column-gap: var(--space-3);
+  background: none;
+  /* ⚠️ מרובע ובלי border-radius - כך הוכרע מול דניאל, בשונה
+     מהרפרנס שהחצים בו עגולים. */
+  border: 1px solid var(--color-border);
+  color: var(--color-fg);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease),
+    opacity var(--dur) var(--ease);
+}
+.vnav__btn:hover,
+.vnav__btn:focus-visible {
+  border-color: var(--color-fg);
+}
+.vnav__btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+/* חץ בקצה: נשאר במקום ובסדר הטאבים, אבל לא לכיד */
+.vnav__btn[aria-disabled="true"] {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ===== המסלול =====
+   ⚠️ **direction נשאר rtl.** במסלול marquee (.pcol) נאלצנו
+   לעבור ל-ltr, אבל שם הבעיה הייתה translateX על שתי קבוצות.
+   כאן זה גוללן נייטיבי, padding-inline הוא לוגי ונפתר נכון,
+   והכרטיס הראשון צריך ממילא לשבת מימין. ⛔ ל-ltr יש גם מחיר
+   נסתר: .vcard__play ממורכז ב-translate(50%) חיובי, שנכון רק
+   תחת RTL - הוא היה קופץ חצי-רוחב הצידה. */
+.vslider {
+  /* ⚠️ הרצפה 15rem ולא 13rem, ונמדדה מול הקפיצה בנקודת
+     המעבר: מתחת ל-700 הכרטיס הוא 68vw, ומעל 700 הוא 17vw.
+     עם רצפה של 13rem הכרטיס צנח מ-272 ל-208 בפיקסל אחד.
+     15rem מצמצם את הקפיצה ל-272→240. */
+  --vcard-w: clamp(15rem, 17vw, 20rem);
+  list-style: none;
+  margin: 0;
+  display: flex;
+  gap: var(--space-3);
+  /* ⚠️ זה מה שמאפשר לראשון ולאחרון להגיע למרכז הבמה, ובלעדיו
+     הסרטון הראשון נתקע בקצה. חצי המסלול פחות חצי כרטיס. */
+  padding: var(--space-2) calc(50% - var(--vcard-w) / 2);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.vslider::-webkit-scrollbar {
+  display: none;
+}
+/* ⚠️ מושהה רק למשך אנימציית החץ. ראה את ההערה ב-VideoSlider */
+.vslider--free {
+  scroll-snap-type: none;
 }
 .vcard {
-  break-inside: avoid;
-  margin-bottom: var(--space-3);
+  flex: 0 0 var(--vcard-w);
+  scroll-snap-align: center;
+  /* ⚠️ הסקייל נכתב inline מ-JS בכל פריים של גלילה, **ובכוונה
+     בלי transition כאן**: כך הוא עוקב אחרי האצבע בדיוק ולא
+     רודף אחריה בפיגור קבוע. */
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 .vcard__btn {
   position: relative;
   display: block;
   width: 100%;
+  /* ⚠️ יחס אחיד לכל הכרטיסים. כל הסטילס היום 9:16 עם סטייה
+     של פחות מאחוז, ובלי היחס הקבוע הבמה קופצת בגובה בין
+     סרטון לסרטון. סרטון אופקי עתידי ייחתך כאן - להחליט עליו
+     כשהוא יגיע, לא מראש. */
+  aspect-ratio: 9 / 16;
   padding: 0;
   background: none;
   border: 0;
@@ -6139,12 +6223,18 @@ a.footer__contact-link:hover {
 .vcard__poster {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.4s var(--ease-soft);
 }
 .vcard__btn:hover .vcard__poster,
 .vcard__btn:focus-visible .vcard__poster {
   transform: scale(1.03);
+}
+/* הכרטיס שבמרכז מורם מהרקע. הצל הוא ההבדל היחיד מלבד הגודל */
+.vcard--active .vcard__btn {
+  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.08),
+    0 12px 32px rgba(20, 19, 19, 0.14);
 }
 /* כפתור הנגן. עיגול זהב, לא המשולש האדום של יוטיוב - זה
    האתר שלנו ולא שלהם. */
@@ -6162,8 +6252,7 @@ a.footer__contact-link:hover {
   background: var(--color-gold);
   color: var(--color-gold-text);
   /* ⚠️ טבעת ההילה נבנית מ-box-shadow ולא מאלמנט נוסף: היא
-     מונפשת על המרחיב בלבד ולכן לא גורמת ל-reflow. מתחילה
-     ברוחב 0 ולכן בלתי נראית במנוחה. */
+     לא תופסת מקום בפריסה ולא דוחפת כלום. */
   box-shadow: 0 0 0 0 rgba(221, 177, 67, 0);
   transition: transform 0.45s var(--ease-soft),
     box-shadow 0.45s var(--ease-soft);
@@ -6175,9 +6264,8 @@ a.footer__contact-link:hover {
   height: 1.75rem;
   margin-inline-start: 0.125rem;
 }
-/* ⚠️ 1.06 ולא 1.08, וטבעת של 0.625rem ולא יותר. ברירת המחדל
-   שלי אגרסיבית מדי כמעט תמיד - כאן הטבעת היא מה שנושא את
-   התחושה, והקנה מידה רק תומך בה. */
+/* ⚠️ 1.06 ולא 1.08, וטבעת של 0.625rem ולא יותר - ברירת המחדל
+   שלי אגרסיבית מדי כמעט תמיד. */
 .vcard__btn:hover .vcard__play,
 .vcard__btn:focus-visible .vcard__play {
   transform: translate(50%, -50%) scale(1.06);
@@ -6186,6 +6274,7 @@ a.footer__contact-link:hover {
 .vcard__frame {
   display: block;
   width: 100%;
+  aspect-ratio: 9 / 16;
   border: 0;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -6203,17 +6292,19 @@ a.footer__contact-link:hover {
     box-shadow: none;
   }
 }
-@media (max-width: 1100px) {
-  .vgrid {
-    columns: 3;
+@media (max-width: 700px) {
+  /* החצים יורדים מתחת לכותרת. ב-RTL flex-start הוא ימין */
+  .tvideos__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
   }
-}
-@media (max-width: 560px) {
-  .vgrid {
-    /* שתיים ולא אחת: כרטיס 9:16 במלוא הרוחב יוצא 595px גובה,
-       וגלילה דרך 17 כאלה היא עונש. שתיים = סריקה מהירה, בדיוק
-       כמו שאנשים רגילים לגלול ריאלז. */
-    columns: 2;
+  .vslider {
+    /* ⚠️ 68vw ולא הטוקן: 17vw על מסך של 375 יוצא כרטיס של 64px.
+       ⚠️ והתקרה 17rem חובה: בלעדיה, ברוחב 700 הכרטיס יצא 476
+       רוחב ו-**846 גובה** - גבוה ממסך הטלפון שהוא נועד לו. */
+    --vcard-w: min(68vw, 17rem);
+    gap: var(--space-2);
   }
   .vcard__play {
     width: 3rem;
