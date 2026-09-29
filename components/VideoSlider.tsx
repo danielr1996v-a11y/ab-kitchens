@@ -26,6 +26,9 @@ import { clientVideos, videosSection } from "@/lib/videos";
 /* ⚠️ שלושה עותקים ולא שניים: הנורמליזציה קופצת עותק שלם, וצריך
    עותק שלם **משני הצדדים** של האמצעי כדי שהקפיצה לא תיראה. */
 const COPIES = 3;
+/* ⚠️ 650 ולא 480. דניאל: "המעבר בין סרטונים מאוד מהיר".
+   ברירת המחדל שלי אגרסיבית מדי כמעט תמיד. */
+const DUR = 650;
 /* כמה מתכווץ כל צעד מהמרכז, ואיפה זה נעצר */
 const SHRINK = 0.09;
 const SHRINK_MAX = 2.5;
@@ -45,6 +48,13 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
   const [active, setActive] = useState(N);
 
   const anim = useRef(0);
+  /* טיימר רשת הביטחון של האנימציה. ראה stopAnim */
+  const guard = useRef(0);
+  /* ⚠️ **יעד הניווט חי ב-ref ולא ב-state.** הכפתורים קראו את
+     `active` מה-state, שמתעדכן רק אחרי רינדור - ולכן שתי
+     לחיצות מהירות שתיהן חישבו מאותו מקור ישן, ביטלו זו את
+     האנימציה של זו, והסליידר נתקע במקום. ref מתעדכן מיד. */
+  const target = useRef(N);
   const idle = useRef(0);
   /* ננעל בזמן אנימציה או גרירה - אסור לנרמל באמצע תנועה */
   const busy = useRef(false);
@@ -84,6 +94,8 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     });
 
     setActive(nearest);
+    /* באמצע אנימציה היעד כבר קדימה - לא לדרוס אותו */
+    if (!busy.current) target.current = nearest;
     return nearest;
   }, []);
 
@@ -115,6 +127,23 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     update();
   }, [update]);
 
+  /**
+   * עוצר אנימציה ומנקה **כל** עקבה שלה.
+   *
+   * ⚠️ זה תיקון של באג אמיתי ולא סידור. קודם `vslider--free`
+   * ו-`busy` נוקו רק בפריים האחרון של הלולאה. כל דבר שקטע
+   * אותה באמצע - לחיצה נוספת, גרירה, גלגלת - השאיר את ה-snap
+   * מכובה ואת `busy` דלוק לנצח, ואז הנורמליזציה של הלולאה
+   * הפסיקה לרוץ והסליידר נתקע. עכשיו יש מקום אחד שמנקה.
+   */
+  const stopAnim = useCallback(() => {
+    const track = trackRef.current;
+    window.cancelAnimationFrame(anim.current);
+    window.clearTimeout(guard.current);
+    busy.current = false;
+    track?.classList.remove("vslider--free");
+  }, []);
+
   /** מביא כרטיס למרכז הבמה */
   const goTo = useCallback(
     (index: number, instant = false) => {
@@ -126,7 +155,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       if (!card) return;
 
       const delta = midOf(card) - midOf(track);
-      window.cancelAnimationFrame(anim.current);
+      stopAnim();
 
       /* ⚠️ prefers-reduced-motion נבדק כאן ב-JS ולא נסמך על
          ה-CSS: הכלל הגלובלי מכבה משכי אנימציה, והלולאה הזאת
@@ -152,20 +181,31 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       busy.current = true;
       track.classList.add("vslider--free");
 
+      const finish = () => {
+        track.scrollLeft = from + delta;
+        stopAnim();
+        normalize();
+      };
+
+      /* ⚠️ **רשת ביטחון, והיא הכרחית.** requestAnimationFrame
+         לא מובטח: בלשונית שלא מצוירת הדפדפן מרעיב פריימים,
+         ואז הלולאה לא מתחילה - הסליידר פשוט לא זז ונשאר תקוע
+         עם snap מכובה. נמדד כאן: ארבע לחיצות רצופות, אפס
+         תזוזה. הטיימר מבטיח שהיעד מושג תמיד. */
+      guard.current = window.setTimeout(finish, DUR + 300);
+
       const tick = (now: number) => {
-        const p = Math.min((now - t0) / 480, 1);
+        const p = Math.min((now - t0) / DUR, 1);
         track.scrollLeft = from + delta * (1 - Math.pow(1 - p, 3));
         if (p < 1) {
           anim.current = window.requestAnimationFrame(tick);
         } else {
-          track.classList.remove("vslider--free");
-          busy.current = false;
-          normalize();
+          finish();
         }
       };
       anim.current = window.requestAnimationFrame(tick);
     },
-    [update, normalize],
+    [update, normalize, stopAnim],
   );
 
   /* מתמקמים על הסרטון הראשון של העותק האמצעי.
@@ -204,9 +244,23 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       track.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       window.cancelAnimationFrame(anim.current);
+      window.clearTimeout(guard.current);
       window.clearTimeout(idle.current);
+      window.clearTimeout(wheelIdle.current);
     };
   }, [update, normalize]);
+
+  /** צעד אחד מהיעד הנוכחי, לא ממה שה-state הספיק לדעת */
+  const step = useCallback(
+    (dir: 1 | -1) => {
+      target.current += dir;
+      /* ⚠️ נגן שנשאר פתוח מחוץ לבמה ממשיך להשמיע קול, וגם חוסם
+         את הנורמליזציה של הלולאה. עוזבים סרטון - סוגרים אותו. */
+      setOpenIndex(null);
+      goTo(target.current);
+    },
+    [goTo],
+  );
 
   /**
    * גרירה בעכבר.
@@ -216,11 +270,45 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
    */
   const drag = useRef({ on: false, x: 0, left: 0, moved: false });
 
+  /**
+   * גלגלת אופקית בלבד. אנכית ממשיכה לעמוד דרך Lenis.
+   *
+   * ⚠️ **ה-snap חייב להיות מושהה כאן.** בלעדיו mandatory מצמיד
+   * בחזרה לאותו כרטיס בזמן הגלילה - נמדד: המסלול לא זז
+   * בפיקסל. אותה מלכודת בדיוק כמו באנימציית החץ.
+   */
+  const wheelIdle = useRef(0);
+
+  const onWheel = (e: React.WheelEvent<HTMLUListElement>) => {
+    const track = trackRef.current;
+    if (!track || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+
+    stopAnim();
+    busy.current = true;
+    track.classList.add("vslider--free");
+    /* ⛔ **לא כותבים deltaX בעצמנו.** הדפדפן כבר גולל אופקית
+       לבד, וההוספה הידנית נספרה פעמיים ובסימן הפוך ב-RTL:
+       נמדד קפיצה של 10 כרטיסים מתוך 360px של תנועה. התפקיד
+       היחיד שלנו כאן הוא להוריד את ה-snap מהדרך. */
+
+    /* מתיישבים על הכרטיס הקרוב כשהתנופה נגמרת */
+    window.clearTimeout(wheelIdle.current);
+    wheelIdle.current = window.setTimeout(() => {
+      track.classList.remove("vslider--free");
+      busy.current = false;
+      const nearest = update();
+      if (nearest !== undefined) {
+        target.current = nearest;
+        goTo(nearest);
+      }
+    }, 120);
+  };
+
   const onPointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
     const track = trackRef.current;
     if (!track || e.pointerType !== "mouse") return;
 
-    window.cancelAnimationFrame(anim.current);
+    stopAnim();
     drag.current = {
       on: true,
       x: e.clientX,
@@ -281,7 +369,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
           <button
             type="button"
             className="vnav__btn"
-            onClick={() => goTo(active - 1)}
+            onClick={() => step(-1)}
             aria-label="הסרטון הקודם"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
@@ -297,7 +385,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
           <button
             type="button"
             className="vnav__btn"
-            onClick={() => goTo(active + 1)}
+            onClick={() => step(1)}
             aria-label="הסרטון הבא"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
@@ -318,9 +406,12 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
         ref={trackRef}
         aria-roledescription="carousel"
         aria-label={videosSection.title}
-        /* Lenis מנהל את גלגלת העכבר של הדף. בלי זה הוא בולע גם
-           את הגלילה האופקית כאן. */
-        data-lenis-prevent
+        /* ⛔ **data-lenis-prevent הוסר, וזה היה הבאג.** הוא אמר
+           ל-Lenis להתעלם מהגלגלת מעל הסליידר, ולמסלול אין מה
+           לגלול אנכית - ולכן גלילת העמוד נעצרה לגמרי כשהעכבר
+           היה מעל הסקשן. נמדד: 0px תזוזה. במקומו onWheel
+           שמטפל רק באופקי ומשאיר את האנכי ל-Lenis. */
+        onWheel={onWheel}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
@@ -349,6 +440,9 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
                   /* גרירה שהסתיימה על כרטיס היא לא לחיצה */
                   if (drag.current.moved) return;
                   setOpenIndex(flat);
+                  /* היעד עובר לכרטיס שנפתח, אחרת החץ הבא יקפוץ
+                     מהמקום הישן */
+                  target.current = flat;
                   goTo(flat);
                 }}
                 aria-label={`${videosSection.playLabel}: ${v.alt}`}
