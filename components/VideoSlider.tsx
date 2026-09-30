@@ -304,20 +304,25 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     }, 120);
   };
 
+  /* ⚠️ **גרירה מתחילה רק אחרי תזוזה אמיתית, לא בלחיצה.** זה
+     היה באג חמור: `vslider--drag` נוסף כבר ב-pointerdown,
+     והוא מכבה `pointer-events` על הכרטיסים. כלומר עצם לחיצת
+     העכבר הפכה את הכרטיס לשקוף ללחיצות, והדפדפן לא ייצר
+     click עליו - **אף סרטון לא נפתח.** נמדד עם
+     elementFromPoint: לפני הלחיצה `vcard__poster`, מיד אחריה
+     `vslider`. גם setPointerCapture נדחה לאותו רגע, מאותה
+     סיבה בדיוק. */
   const onPointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (e.pointerType !== "mouse") return;
     const track = trackRef.current;
-    if (!track || e.pointerType !== "mouse") return;
-
-    stopAnim();
+    if (!track) return;
+    /* רק רושמים מאיפה התחילו. שום דבר עוד לא קורה. */
     drag.current = {
       on: true,
       x: e.clientX,
       left: track.scrollLeft,
       moved: false,
     };
-    busy.current = true;
-    track.classList.add("vslider--drag");
-    track.setPointerCapture(e.pointerId);
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
@@ -325,7 +330,17 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     if (!track || !drag.current.on) return;
 
     const dx = e.clientX - drag.current.x;
-    if (Math.abs(dx) > 4) drag.current.moved = true;
+
+    /* סף של 4px: מתחת לזה זו לחיצה, לא גרירה */
+    if (!drag.current.moved) {
+      if (Math.abs(dx) <= 4) return;
+      drag.current.moved = true;
+      stopAnim();
+      busy.current = true;
+      track.classList.add("vslider--drag");
+      track.setPointerCapture(e.pointerId);
+    }
+
     /* גרירה ימינה מזיזה את התוכן ימינה, כלומר scrollLeft קטן.
        נכון גם ב-LTR וגם ב-RTL - הסמנטיקה של scrollLeft זהה. */
     track.scrollLeft = drag.current.left - dx;
@@ -336,14 +351,22 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     if (!track || !drag.current.on) return;
 
     drag.current.on = false;
+
+    /* לחיצה רגילה: לא נגענו בכלום, ושהקליק ימשיך לכפתור.
+       ⚠️ `moved` נשאר false, ולכן הנגן ייפתח כרגיל. */
+    if (!drag.current.moved) return;
+
     busy.current = false;
     track.classList.remove("vslider--drag");
     if (track.hasPointerCapture(e.pointerId))
       track.releasePointerCapture(e.pointerId);
 
-    /* מתיישבים על הכרטיס הקרוב, והאנימציה מנרמלת בסופה */
+    /* מתיישבים על הכרטיס הקרוב */
     const nearest = update();
-    if (nearest !== undefined) goTo(nearest);
+    if (nearest !== undefined) {
+      target.current = nearest;
+      goTo(nearest);
+    }
   };
 
   if (N === 0) return null;
@@ -437,8 +460,16 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
                 className="vcard__btn"
                 tabIndex={clone ? -1 : undefined}
                 onClick={() => {
-                  /* גרירה שהסתיימה על כרטיס היא לא לחיצה */
-                  if (drag.current.moved) return;
+                  /* ⚠️ גרירה שהסתיימה על כרטיס היא לא לחיצה -
+                     והדגל **נצרך פעם אחת** ומתאפס מיד. אחרת,
+                     במכשיר עם מסך מגע גם עכבר, גרירה בעכבר
+                     הייתה משאירה אותו דלוק ומבטלת את ההקשה
+                     הבאה באצבע (ב-touch אין pointerdown שמאפס
+                     אותו). */
+                  if (drag.current.moved) {
+                    drag.current.moved = false;
+                    return;
+                  }
                   setOpenIndex(flat);
                   /* היעד עובר לכרטיס שנפתח, אחרת החץ הבא יקפוץ
                      מהמקום הישן */
