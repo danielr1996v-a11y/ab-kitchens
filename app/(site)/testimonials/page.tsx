@@ -4,15 +4,12 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import Reveal from "@/components/Reveal";
 import TestimonialWall from "@/components/TestimonialWall";
 import VideoSlider from "@/components/VideoSlider";
-import MidragReviews from "@/components/MidragReviews";
 import DesignerCta from "@/components/DesignerCta";
 import {
   testimonialsPage,
   featuredLetter,
   featuredQuote,
   testimonials,
-  midragReviews,
-  MIDRAG_ANON,
 } from "@/lib/testimonialsPage";
 
 export const metadata: Metadata = {
@@ -106,11 +103,6 @@ export default function Page() {
         <TestimonialWall items={[featuredQuote, ...testimonials]} />
       </section>
 
-      {/* ===== עוד המלצות ממידרג =====
-          ⚠️ אחרי קיר הצילומים ולפני הסרטונים: אלה עדיין המלצות
-          כתובות, ומקומן ליד שאר הכתובות. */}
-      <MidragReviews />
-
       {/* ===== סרטוני לקוחות =====
           ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה
           ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
@@ -135,10 +127,9 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "@id": "https://www.ab-kitchens.co.il/#business",
-            review: [featuredLetter, ...testimonials, ...midragReviews]
-              /* רק המלצות עם שם אמיתי. ⚠️ גם הפלייסהולדר של
-                 מידרג נפסל - הוא מחרוזת ולא אדם. */
-              .filter((t) => t.author && t.author !== MIDRAG_ANON)
+            review: [featuredLetter, ...testimonials]
+              /* רק המלצות עם שם - ל-Review נדרש author */
+              .filter((t) => t.author)
               .map((t) => ({
                 "@type": "Review",
                 author: { "@type": "Person", name: t.author },
