@@ -36,8 +36,11 @@ export const articles: Article[] = [
     title: "מטבח קלאסי – פשוט, נעים ותמיד נכון",
     excerpt:
       "למה מטבח שלא רודף אחרי טרנד נשאר יפה גם אחרי עשור, ומה באמת מחזיק אותו.",
-    image: "/images/style-classic.webp",
-    imageAlt: "מטבח קלאסי בהיר עם אי מרכזי ותאורה תלויה",
+    /* ⚠️ הוחלפה מ-style-classic.webp (5.10) - דניאל פסל אותה.
+       זו עבודה אמיתית ולא רנדר, וזה דווקא מתאים למאמר שמדבר
+       על מטבח מאוזן שלא רודף אחרי טרנד. */
+    image: "/images/real-classic-1.webp",
+    imageAlt: "מטבח בגוון קרם עם משטח וחיפוי שיש כהה וכיור כפול",
     relatedStyle: "classic",
     blocks: [
       {

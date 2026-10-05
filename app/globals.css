@@ -1738,7 +1738,12 @@ main > *:first-child:not(.hero) {
   /* 44px מטרת מגע מינימלית, דרך ריפוד ולא גובה קבוע */
   min-height: 44px;
   padding: 0.75rem 1.75rem;
-  border: 1px solid var(--color-border);
+  /* ⚠️ **זהב הלוגו ולא זהב הפעולה, וזו מדידה ולא העדפה.**
+     ddb143 על לבן נותן ניגודיות 2.01 - נכשל בסף 3.0 של WCAG
+     לגבול רכיב, והמסגרת פשוט לא נראית. aa8347 נותן 3.47.
+     ⚠️ ולכן גם 2px ולא 1px: קו זהב דק נבלע ליד כרטיסי
+     ההמלצות הלבנים. */
+  border: 2px solid var(--color-logo-gold);
   color: var(--color-fg);
   font-size: var(--fs-base);
   font-weight: 700;
@@ -1746,9 +1751,10 @@ main > *:first-child:not(.hero) {
   transition: border-color var(--dur) var(--ease),
     background-color var(--dur) var(--ease);
 }
+/* ⛔ בריחוף לא ממלאים בזהב: לבן על aa8347 נותן 3.47, מתחת
+   לסף 4.5 של טקסט רגיל. רקע אפור בהיר עם טקסט כהה עובר. */
 .reviews__more-btn:hover,
 .reviews__more-btn:focus-visible {
-  border-color: var(--color-logo-gold);
   background: var(--color-surface);
 }
 .reviews__more-btn svg {
