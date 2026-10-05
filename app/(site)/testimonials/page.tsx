@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Reveal from "@/components/Reveal";
 import TestimonialWall from "@/components/TestimonialWall";
 import VideoSlider from "@/components/VideoSlider";
 import DesignerCta from "@/components/DesignerCta";
@@ -27,13 +26,11 @@ export const metadata: Metadata = {
 
 /**
  * עמוד ההמלצות.
+ * סדר: באנר → פירורי לחם → קיר הצילומים → סרטונים → CTA.
  *
  * ⚠️ ה-noindex וההוצאה מ-sitemap.ts הוסרו - העמוד כבר לא ריק.
  * (הוא הוכנס כשהעמוד המתין לתוכן; ראה קומיט a8df7f0 ואילך.)
  *
- * סדר הקריאה: המכתב בכתב יד פותח, ואחריו קיר ההמלצות. המכתב
- * לא יושב ברשת כי הוא לא מאותו סוג - הוא נייר, הוא כתב יד,
- * והוא ההוכחה שהכי קשה לביים.
  */
 export default function Page() {
   return (
@@ -65,42 +62,16 @@ export default function Page() {
         trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
       />
 
-      {/* ===== המכתב בכתב יד ===== */}
-      <section className="tletter" aria-labelledby="letter-title">
-        <Reveal className="tletter__inner">
-          <div className="tletter__text">
-            <h2 className="tletter__title" id="letter-title">
-              מכתב שהגיע אלינו
-            </h2>
-            <blockquote className="tletter__quote">
-              {featuredLetter.quote.map((p) => (
-                <p className="tletter__p" key={p.slice(0, 28)}>
-                  {p}
-                </p>
-              ))}
-            </blockquote>
-            <p className="tletter__meta">{featuredLetter.place}</p>
-          </div>
-
-          <figure className="tletter__figure">
-            <Image
-              src={featuredLetter.image}
-              alt={featuredLetter.imageAlt}
-              width={1080}
-              height={1498}
-              className="tletter__img"
-              sizes="(max-width: 900px) 90vw, 40vw"
-            />
-          </figure>
-        </Reveal>
-      </section>
-
       {/* ===== גריד הצילומים המקוריים =====
-          ⚠️ ההמלצה הארוכה חזרה לכאן. קודם הייתה לה רצועת טקסט
-          משלה, אבל דניאל ביקש שמהמכתב והלאה יוצג המקור - ולכן
-          היא צילום כמו כל השאר. */}
+          ⚠️ כל ההמלצות כאן הן המקור עצמו - צילומים, בלי מלל
+          שלנו. גם המכתב בכתב יד. */}
       <section className="treviews__wall" aria-label="המלצות מלקוחות">
-        <TestimonialWall items={[featuredQuote, ...testimonials]} />
+        {/* ⚠️ המכתב ראשון בקיר. עד 5.10 הייתה לו רצועה משלו
+            עם התמלול מימין; דניאל ביקש שיהיה צילום בין
+            הצילומים, בלי מלל. התמלול נשאר ב-alt. */}
+        <TestimonialWall
+          items={[featuredLetter, featuredQuote, ...testimonials]}
+        />
       </section>
 
       {/* ===== סרטוני לקוחות =====

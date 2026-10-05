@@ -5973,60 +5973,6 @@ a.footer__contact-link:hover {
   text-shadow: 0 2px 12px rgba(20, 19, 19, 0.45);
 }
 
-/* ===== המכתב בכתב יד ===== */
-.tletter {
-  padding: var(--section-gap) var(--side-padding);
-  /* ⚠️ בלי רקע. דניאל ביקש שכל העמוד יהיה לבן, וה---color-surface
-     האפור היה הדבר היחיד ששבר את זה. ההפרדה בין המכתב לגריד
-     נשענת עכשיו על הריווח בלבד - נבדק בעין שזה מספיק. */
-}
-.tletter__inner {
-  display: grid;
-  /* הטקסט רחב מהתמונה: המילים הן התוכן, הנייר הוא ההוכחה */
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  gap: var(--space-6);
-  align-items: center;
-  max-width: 76rem;
-  margin-inline: auto;
-}
-.tletter__title {
-  margin: 0 0 var(--space-3);
-  font-size: var(--fs-card-title);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  color: var(--color-logo-gold);
-}
-.tletter__quote {
-  margin: 0;
-  max-width: 58ch;
-}
-.tletter__p {
-  margin: 0;
-  font-size: var(--fs-card-body);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--color-fg);
-}
-.tletter__p + .tletter__p {
-  margin-top: var(--space-2);
-}
-.tletter__meta {
-  margin: var(--space-4) 0 0;
-  font-size: var(--fs-base);
-  font-weight: 700;
-  color: var(--color-fg);
-}
-.tletter__figure {
-  margin: 0;
-}
-.tletter__img {
-  width: 100%;
-  height: auto;
-  /* צל רך - הנייר "מונח" על הרקע ולא הודבק עליו */
-  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.08),
-    0 12px 32px rgba(20, 19, 19, 0.1);
-}
-
 /* ===== קיר ההמלצות ===== */
 .treviews__wall {
   padding: var(--section-gap) var(--side-padding);
@@ -6112,17 +6058,6 @@ a.footer__contact-link:hover {
 }
 
 /* ===== רספונסיבי ===== */
-@media (max-width: 1100px) {
-  .tletter__inner {
-    /* התמונה יורדת מתחת לטקסט: בטאבלט שתי עמודות מצרות את
-       שתיהן, והמכתב הופך לבלתי קריא */
-    grid-template-columns: 1fr;
-    gap: var(--space-5);
-  }
-  .tletter__figure {
-    max-width: 30rem;
-  }
-}
 @media (max-width: 1200px) {
   .twall {
     columns: 2;
