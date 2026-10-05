@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site, testimonials } from "@/lib/content";
 import Placeholder from "./Placeholder";
 
@@ -24,7 +25,12 @@ function Stars({ count }: { count: number }) {
   return (
     <span className="stars" aria-label={`דירוג ${count} מתוך 5`}>
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} viewBox="0 0 20 20" className="stars__icon" aria-hidden="true">
+        <svg
+          key={i}
+          viewBox="0 0 20 20"
+          className="stars__icon"
+          aria-hidden="true"
+        >
           <path
             d="M10 1.6l2.5 5.1 5.6.8-4 3.9.9 5.6L10 14.4 5 17l1-5.6-4-3.9 5.6-.8z"
             fill={i < count ? "currentColor" : "none"}
@@ -42,10 +48,22 @@ function Stars({ count }: { count: number }) {
 function GoogleMark() {
   return (
     <svg viewBox="0 0 48 48" className="gscore__logo" aria-hidden="true">
-      <path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-2.7-.4-3.9H24v7.1h12.1c-.2 1.8-1.6 4.5-4.5 6.3l6.9 5.3c4.1-3.8 6.6-9.4 6.6-14.8z" />
-      <path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.9-5.3c-1.8 1.3-4.3 2.2-7.6 2.2-5.8 0-10.7-3.8-12.5-9.1l-7.1 5.5C8.1 41.1 15.4 46 24 46z" />
-      <path fill="#FBBC05" d="M11.5 28.5c-.5-1.4-.8-2.9-.8-4.5s.3-3.1.7-4.5l-7.1-5.5C2.9 17 2 20.4 2 24s.9 7 2.4 10l7.1-5.5z" />
-      <path fill="#EA4335" d="M24 10.2c4.1 0 6.9 1.8 8.5 3.3l6.2-6C34.9 4 29.9 2 24 2 15.4 2 8.1 6.9 4.4 14l7.1 5.5c1.8-5.3 6.7-9.3 12.5-9.3z" />
+      <path
+        fill="#4285F4"
+        d="M45.1 24.5c0-1.6-.1-2.7-.4-3.9H24v7.1h12.1c-.2 1.8-1.6 4.5-4.5 6.3l6.9 5.3c4.1-3.8 6.6-9.4 6.6-14.8z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.9-5.3c-1.8 1.3-4.3 2.2-7.6 2.2-5.8 0-10.7-3.8-12.5-9.1l-7.1 5.5C8.1 41.1 15.4 46 24 46z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M11.5 28.5c-.5-1.4-.8-2.9-.8-4.5s.3-3.1.7-4.5l-7.1-5.5C2.9 17 2 20.4 2 24s.9 7 2.4 10l7.1-5.5z"
+      />
+      <path
+        fill="#EA4335"
+        d="M24 10.2c4.1 0 6.9 1.8 8.5 3.3l6.2-6C34.9 4 29.9 2 24 2 15.4 2 8.1 6.9 4.4 14l7.1 5.5c1.8-5.3 6.7-9.3 12.5-9.3z"
+      />
     </svg>
   );
 }
@@ -111,6 +129,25 @@ export default function Testimonials({
             </li>
           ))}
         </ul>
+
+        {/* ⚠️ כפתור אחד לכל הסקשן, ולא כפתור לכל כרטיס. ב-17.09
+            ירדו מכאן כפתורים פר-המלצה והם לא חוזרים - זה מעבר
+            אחד לעמוד המלא, לא קריאה לפעולה על כל ציטוט. */}
+        <div className="reviews__more">
+          <Link className="reviews__more-btn" href="/המלצות">
+            לכל ההמלצות
+            {/* ב-RTL "קדימה" הוא שמאלה */}
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+              <path
+                d="M15 6l-6 6 6 6"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
 
         {/* ⛔ סרטון ההמלצה. חריץ אחד ביחס וידאו, חסום ב-production. */}
         {videoSlot && (
