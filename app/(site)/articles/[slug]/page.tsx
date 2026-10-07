@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import LeadForm from "@/components/LeadForm";
 import { notFound } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -76,11 +76,18 @@ export default async function Page({ params }: Props) {
           </section>
         ))}
 
-        <Link href="/contact" className="apage__cta">
-          לתיאום פגישה ללא עלות
-        </Link>
+        {/* ⚠️ עד 7.10 כאן היה כפתור שהוביל לעמוד יצירת קשר נפרד.
+            דניאל ביקש טופס ישיר במקום - מי שסיים לקרוא משאיר
+            פרטים בלי לעזוב את המאמר. */}
+        <div className="apage__lead">
+          <p className="apage__lead-title">לתיאום פגישה ללא עלות</p>
+          <LeadForm
+            source={`מאמר: ${article.title}`}
+            submitLabel="שלחו פרטים"
+            variant="light"
+          />
+        </div>
       </div>
-
     </article>
   );
 }

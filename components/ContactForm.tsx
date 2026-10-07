@@ -1,20 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { site, contactPage } from "@/lib/content";
+import { site, contactPage, leadCopy } from "@/lib/content";
+import { isValidPhone, leadWhatsappUrl, sendLead } from "@/lib/lead";
 
 /**
  * טופס יצירת קשר.
  *
- * ⚠️ אין endpoint בפרויקט, ולכן השליחה היא mailto: - נפתחת
- * תוכנת המייל של הגולש עם הנושא והגוף ממולאים, והוא רק לוחץ שלח.
- * זה עובד בכל דפדפן בלי שרת ובלי שירות חיצוני.
- *
- * לשליחה אמיתית מהשרת (בלי לפתוח תוכנת מייל) נדרש מפתח של
- * Formspree או Resend. אז מחליפים את handleSubmit בקריאת fetch
- * ל-Route Handler - שאר הקומפוננטה לא משתנה.
+ * ⚠️ **עד 7.10 השליחה הייתה mailto** - נפתחה תוכנת המייל של
+ * הגולש, ומי שאין לו אחת (רוב הטלפונים) פשוט נתקע. עכשיו
+ * השליחה דרך /api/lead, אותה נקודה כמו כל שאר הטפסים, עם
+ * ההודעה החופשית בנוסף לשם ולטלפון.
  *
  * וואטסאפ נשאר ככפתור משני: במובייל הוא ממיר הרבה יותר טוב.
+ * ובכישלון שליחה הוא מוצע כרשת ביטחון, עם הפרטים כבר בפנים.
  */
 export default function ContactForm() {
   const [values, setValues] = useState<Record<string, string>>({});
@@ -22,35 +21,48 @@ export default function ContactForm() {
   const set = (id: string, v: string) =>
     setValues((prev) => ({ ...prev, [id]: v }));
 
-  const body = () =>
-    [
-      `שם: ${values.name || ""}`,
-      `טלפון: ${values.phone || ""}`,
-      values.message ? `\n${values.message}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+  const [state, setState] = useState<
+    "idle" | "sending" | "sent" | "invalid" | "failed"
+  >("idle");
 
-  const sendMail = (e: React.FormEvent) => {
+  const name = values.name ?? "";
+  const phone = values.phone ?? "";
+  const message = values.message ?? "";
+
+  const send = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `פנייה מהאתר${values.name ? ` - ${values.name}` : ""}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body())}`;
+    if (!name.trim() || !isValidPhone(phone)) {
+      setState("invalid");
+      return;
+    }
+    setState("sending");
+    const res = await sendLead({
+      name,
+      phone,
+      message,
+      source: "עמוד יצירת קשר",
+      company: values.company ?? "",
+    });
+    setState(res.ok ? "sent" : res.error === "invalid" ? "invalid" : "failed");
   };
 
-  const sendWhatsApp = () => {
+  const sendWhatsApp = () =>
     window.open(
-      `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(
-        `שלום, הגעתי מהאתר.\n${body()}`
-      )}`,
+      leadWhatsappUrl({ name, phone, message }),
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
-  };
+
+  if (state === "sent") {
+    return (
+      <p className="cform cform__done" role="status">
+        {leadCopy.success.replace("{name}", name.trim().split(/\s+/)[0])}
+      </p>
+    );
+  }
 
   return (
-    <form className="cform" onSubmit={sendMail}>
+    <form className="cform" onSubmit={send} noValidate>
       <p className="cform__title">{contactPage.formTitle}</p>
 
       <div className="cform__row">
@@ -87,14 +99,54 @@ export default function ContactForm() {
         />
       </div>
 
+      {/* מלכודת לבוטים - מוסתרת מהעין ומקורא המסך */}
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="lform__trap"
+        value={values.company ?? ""}
+        onChange={(e) => set("company", e.target.value)}
+      />
+
       <div className="cform__actions">
-        <button type="submit" className="cform__submit">
-          {contactPage.submitLabel}
+        <button
+          type="submit"
+          className="cform__submit"
+          disabled={state === "sending"}
+        >
+          {state === "sending" ? leadCopy.sending : contactPage.submitLabel}
         </button>
         <button type="button" className="cform__alt" onClick={sendWhatsApp}>
           {contactPage.altLabel}
         </button>
       </div>
+
+      {state === "invalid" && (
+        <p className="lform__msg" role="alert">
+          {leadCopy.invalid}
+        </p>
+      )}
+      {state === "failed" && (
+        <div className="lform__msg" role="alert">
+          <p>{leadCopy.failed}</p>
+          <p className="lform__fallback">
+            <a
+              href={leadWhatsappUrl({ name, phone, message })}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {leadCopy.failedWhatsapp}
+            </a>
+            {" · "}
+            <a href={`tel:${site.phone1.replace(/\D/g, "")}`} dir="ltr">
+              {site.phone1}
+            </a>
+          </p>
+        </div>
+      )}
     </form>
   );
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import LeadForm from "@/components/LeadForm";
 import { leadBanner, leadForm } from "@/lib/content";
 
 /**
@@ -14,7 +15,11 @@ import { leadBanner, leadForm } from "@/lib/content";
  * withForm: מחליף את הכותרת המשנית והקישור בטופס קצר.
  * ברירת המחדל false, כדי שדף הבית יישאר בדיוק כפי שהוא.
  */
-export default function LeadBanner({ withForm = false }: { withForm?: boolean }) {
+export default function LeadBanner({
+  withForm = false,
+}: {
+  withForm?: boolean;
+}) {
   const { slides, displaySeconds, transitionSeconds } = leadBanner;
   const count = slides.length;
 
@@ -40,30 +45,18 @@ export default function LeadBanner({ withForm = false }: { withForm?: boolean })
               <p className="lead__subtitle">
                 {leadForm.titleLight}
                 <br />
-                <strong className="lead__subtitle-bold">{leadForm.titleBold}</strong>
+                <strong className="lead__subtitle-bold">
+                  {leadForm.titleBold}
+                </strong>
               </p>
 
-              {/* ⚠️ ללא יעד, בדיוק כמו הטופס בפוטר. פנייה תיעלם. */}
-              <form className="lead__form" action="#" method="post">
-                {leadForm.fields.map((f) => (
-                  <div className="lead__field" key={f.id}>
-                    <label className="lead__label" htmlFor={`lead-${f.id}`}>
-                      {f.label}
-                    </label>
-                    <input
-                      id={`lead-${f.id}`}
-                      name={f.id}
-                      type={f.type}
-                      autoComplete={f.autoComplete}
-                      required
-                      className="lead__input"
-                    />
-                  </div>
-                ))}
-                <button type="submit" className="lead__submit">
-                  {leadForm.submitLabel}
-                </button>
-              </form>
+              {/* ⚠️ עד 7.10 הטופס הזה שלח ל-action="#" - פנייה נעלמה.
+                  עכשיו הטופס האחיד, ששולח מייל לאברהם. */}
+              <LeadForm
+                source="באנר לידים"
+                submitLabel={leadForm.submitLabel}
+                variant="dark"
+              />
             </>
           ) : (
             <>

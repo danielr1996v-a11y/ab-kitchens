@@ -26,6 +26,8 @@ export function proxy(request: NextRequest) {
   if (
     pathname === TARGET ||
     pathname.startsWith("/_next/") ||
+    /* ⚠️ נקודת הקצה של הטפסים - גם מאחורי השער פנייה חייבת לעבור */
+    pathname.startsWith("/api/") ||
     pathname.startsWith("/images/") ||
     pathname.startsWith("/fonts/") ||
     pathname.startsWith("/logos/") ||

@@ -3140,61 +3140,128 @@ a.footer__contact-link:hover {
   }
 }
 
-/* ===== טופס בתוך הפאנל הכהה של LeadBanner (וריאנט עמודי הסגנונות) ===== */
-/* width: 100% הכרחי - ההורה הוא align-items: flex-start, ובלעדיו
-   הטופס מתכווץ לרוחב התוכן והקווים יוצאים קצרים. */
-.lead__form {
+/* ===== טופס הפנייה האחיד - LeadForm (7.10) =====
+   אותו טופס בכרטיס המעצבת, בבאנר הלידים ובסוף כל מאמר.
+   השפה היא של הטופס שכבר אושר בבאנר: קו תחתון בלבד, תווית
+   קטנה מעל, כפתור זהב מרובע (מהקבוצה המשותפת למטה).
+   ⚠️ .lform__submit **לא מוגדר כאן** - הוא בקבוצת הכפתורים
+   המשותפת בהמשך הקובץ. הגדרה שנייה כאן הייתה בדיוק מלכודת
+   הסלקטור הכפול של הפרויקט. */
+.lform {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
+  gap: var(--space-3);
+  /* width: 100% הכרחי - ההורה הוא align-items: flex-start, ובלעדיו
+     הטופס מתכווץ לרוחב התוכן והקווים יוצאים קצרים. */
   width: 100%;
+  margin-top: var(--space-3);
 }
-.lead__field {
+/* שם וטלפון זה לצד זה - שני שדות קצרים לא צריכים שתי שורות */
+.lform__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.lform__field {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  min-width: 0;
 }
-.lead__label {
+.lform__label {
   font-size: var(--fs-sm);
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.75);
 }
 /* קו תחתון בלבד - קופסאות מלאות היו מכבידות על הפאנל */
-.lead__input {
+.lform__input {
+  width: 100%;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-  color: #fff;
+  border-bottom: 1px solid;
+  border-radius: 0;
   font-family: inherit;
-  font-size: var(--fs-base);
+  /* ⚠️ 16px לפחות: מתחת לזה ספארי באייפון מגדיל את העמוד בפוקוס */
+  font-size: max(1rem, var(--fs-base));
+  /* 44px - מטרת מגע. הטופס הישן בבאנר נמדד 41px ותוקן בסוף
+     הקובץ; כאן זה נבנה נכון מההתחלה. */
+  min-height: 2.75rem;
   padding-block: 0.5rem;
   transition: border-color var(--dur) var(--ease);
 }
-.lead__input:focus {
+.lform__input:focus {
   outline: none;
   border-bottom-color: var(--color-gold);
 }
-.lead__input:focus-visible {
+.lform__input:focus-visible {
   outline: 2px solid var(--color-gold);
   outline-offset: 4px;
 }
-.lead__submit {
-  align-self: flex-start;
-  margin-top: var(--space-1);
-  background: var(--color-gold);
-  color: var(--color-gold-text);
-  font-family: inherit;
-  font-size: var(--fs-base);
-  font-weight: 700;
-  border: 0;
-  border-radius: 0.5rem;
-  padding: 0.75rem 2rem;
-  cursor: pointer;
-  transition: opacity var(--dur) var(--ease);
+.lform__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
 }
-.lead__submit:hover {
-  opacity: 0.88;
+/* מלכודת לבוטים - מחוץ למסך, לא display:none (בוטים מדלגים עליו) */
+.lform__trap {
+  position: absolute;
+  inset-inline-start: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.lform__msg {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+}
+.lform__msg p {
+  margin: 0;
+}
+.lform__msg a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.lform__done {
+  font-size: var(--fs-card-body);
+  font-weight: 700;
+  line-height: var(--lh-body);
+}
+
+/* כהה: על פחם. אותם ערכים בדיוק של הטופס שאושר בבאנר */
+.lform--dark .lform__label {
+  color: rgba(255, 255, 255, 0.75);
+}
+.lform--dark .lform__input {
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.35);
+}
+.lform--dark .lform__msg,
+.lform--dark.lform__done {
+  color: #fff;
+}
+.lform--dark .lform__msg a {
+  color: var(--color-gold);
+}
+
+/* בהיר: על משטח בהיר בסוף מאמר.
+   ⚠️ הקו ב---color-muted ולא ב---color-border: הגבול הבהיר נותן
+   1.24 מול הרקע, ושדה שלא רואים את הגבול שלו הוא שדה שלא ממלאים.
+   muted על f0f0f0 נותן 4.0 - מעל סף 3.0 לגבול רכיב. */
+.lform--light .lform__label {
+  color: var(--color-muted);
+}
+.lform--light .lform__input {
+  color: var(--color-fg);
+  border-bottom-color: var(--color-muted);
+}
+
+@media (max-width: 700px) {
+  /* במובייל שדה מתחת לשדה - חצי רוחב טלפון קצר מדי למספר */
+  .lform__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
 }
 
 /* השורה השנייה של הכיתוב מעל הטופס - הקריאה לפעולה עצמה */
@@ -3797,6 +3864,13 @@ a.footer__contact-link:hover {
   flex-direction: column;
   gap: var(--space-2);
 }
+/* הודעת התודה מחליפה את הטופס כולו אחרי שליחה */
+.cform__done {
+  font-size: var(--fs-card-body);
+  font-weight: 700;
+  line-height: var(--lh-body);
+  color: var(--color-fg);
+}
 .cform__title {
   font-size: var(--fs-base);
   font-weight: 700;
@@ -4247,23 +4321,6 @@ a.footer__contact-link:hover {
 }
 
 /* מלבני ולא מעוגל - כך הוא ברפרנס. */
-.dcta__btn {
-  /* ⚠️ מרווח עליון בלבד. order ו-flex-shrink הוסרו - הם היו
-     נחוצים כשהכפתור היה אח של הטקסט בשורת flex. */
-  margin-top: var(--space-4);
-  padding: 1rem 2.25rem;
-  border: 0;
-  background: var(--color-gold);
-  color: var(--color-fg);
-  font-size: var(--fs-base);
-  font-weight: 700;
-  cursor: pointer;
-  transition: filter 0.2s var(--ease);
-}
-.dcta__btn:hover,
-.dcta__btn:focus-visible {
-  filter: brightness(1.07);
-}
 
 /* ===== הפופאפ =====
    חלונית רחבה ומרווחת לפי הרפרנס, עם פתיחה רכה.
@@ -4272,211 +4329,21 @@ a.footer__contact-link:hover {
    אבל דרך clamp: vw טהור נותן 3px לתווית ב-390 - בלתי קריא.
    ה-vw נשאר האמצע, והרצפה מגינה על המובייל.
    ========================================================= */
-.dmodal {
-  /* המרכוז המובנה של <dialog> מסתמך על margin:auto, ו-preflight
-     של Tailwind מאפס margin על הכל. */
-  margin: auto;
-  width: min(54rem, calc(100vw - 2rem));
-  max-height: calc(100vh - 2rem);
-  overflow-y: auto;
-  padding: var(--space-6) var(--space-6) var(--space-6);
-  border: 0;
-  /* פינות חדות, כמו בצילום - לא כרטיס מעוגל */
-  border-radius: 0;
-  background: var(--color-bg);
-  color: var(--color-fg);
-  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.32);
-
-  /* פתיחה רכה: עולה מעט, גדל מעט, ונפתח. allow-discrete הוא מה
-     שמאפשר להנפיש אלמנט שעובר מ-display:none - בלעדיו הוא פשוט
-     מופיע. @starting-style קובע מאיפה הוא מתחיל. */
-  opacity: 0;
-  transform: translateY(1rem) scale(0.97);
-  transition: opacity 0.45s var(--ease-soft), transform 0.45s var(--ease-soft),
-    overlay 0.45s allow-discrete, display 0.45s allow-discrete;
-}
-.dmodal[open] {
-  opacity: 1;
-  transform: none;
-}
-@starting-style {
-  .dmodal[open] {
-    opacity: 0;
-    transform: translateY(1rem) scale(0.97);
-  }
-}
 
 /* הרקע מיטשטש ולא רק מכהה - זה מה שנותן את תחושת העומק */
-.dmodal::backdrop {
-  background: rgba(26, 26, 26, 0.5);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  transition: opacity 0.45s var(--ease-soft), overlay 0.45s allow-discrete,
-    display 0.45s allow-discrete;
-}
-.dmodal[open]::backdrop {
-  opacity: 1;
-}
-@starting-style {
-  .dmodal[open]::backdrop {
-    opacity: 0;
-  }
-}
-
-.dmodal__close {
-  position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
-  width: 2.75rem;
-  height: 2.75rem;
-  display: grid;
-  place-items: center;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-fg);
-  cursor: pointer;
-  transition: background 0.2s var(--ease);
-}
-.dmodal__close:hover,
-.dmodal__close:focus-visible {
-  background: var(--color-surface);
-}
-.dmodal__close svg {
-  width: 1.5rem;
-  height: 1.5rem;
-}
 
 /* עינית עם קו קצר. ב-RTL ה-::after נופל משמאל לטקסט. */
-.dmodal__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  margin: 0 0 var(--space-2);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--color-fg);
-}
-.dmodal__eyebrow::after {
-  content: "";
-  width: 3.5rem;
-  height: 2px;
-  background: var(--color-gold);
-  flex-shrink: 0;
-}
 
 /* 3vw */
-.dmodal__title {
-  margin: 0 0 var(--space-3);
-  font-size: var(--fs-h1);
-  font-weight: 700;
-  line-height: 1.15em;
-  text-wrap: balance;
-}
 
 /* 1vw, שחור ובולד */
-.dmodal__lead {
-  margin: 0 0 var(--space-5);
-  max-width: 36rem;
-  /* אוחד ל---fs-sub. ⚠️ כאן המשקל 700, ולכן 20px נקרא כבד
-     יותר מאותו גודל במקומות אחרים - נבדק שהוא לא מתחרה
-     בשדות הטופס שמתחתיו. */
-  font-size: var(--fs-sub);
-  font-weight: 700;
-  line-height: 1.6em;
-  color: var(--color-fg);
-}
-
-.dmodal__form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
-}
 /* ריתמוס הרפרנס: שדה ברוחב מלא, ואז שניים זה לצד זה */
-.dmodal__field--wide {
-  grid-column: 1 / -1;
-}
 
 /* 0.8vw */
-.dmodal__label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: var(--fs-sm);
-  font-weight: 400;
-  color: var(--color-muted);
-}
 
 /* קו תחתון בלבד, בדיוק כמו ברפרנס - בלי רקע ובלי מסגרת */
-.dmodal__input {
-  width: 100%;
-  padding: 0.5rem 0;
-  border: 0;
-  border-bottom: 1px solid var(--color-border);
-  border-radius: 0;
-  background: transparent;
-  font: inherit;
-  font-size: var(--fs-base);
-  color: var(--color-fg);
-  transition: border-color 0.2s var(--ease);
-}
-.dmodal__input:focus {
-  outline: 0;
-  /* הקו מתעבה ונצבע בזהב - סימון פוקוס בלי מסגרת */
-  border-bottom-color: var(--color-gold);
-  box-shadow: 0 1px 0 0 var(--color-gold);
-}
 
 /* הכפתור בפינה השמאלית התחתונה. ב-RTL flex-end הוא שמאל. */
-.dmodal__actions {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  /* ב-RTL flex-start הוא ימין - שם הכפתור יושב בצילום,
-     מיושר לקצה הימני של התוכן */
-  justify-content: flex-start;
-  gap: var(--space-3);
-  margin-top: var(--space-2);
-}
-.dmodal__submit {
-  padding: 1rem 3rem;
-  border: 0;
-  border-radius: 0;
-  background: var(--color-gold);
-  color: var(--color-fg);
-  font: inherit;
-  font-size: var(--fs-base);
-  font-weight: 700;
-  cursor: pointer;
-  transition: filter 0.2s var(--ease);
-}
-.dmodal__submit:hover,
-.dmodal__submit:focus-visible {
-  filter: brightness(1.07);
-}
-.dmodal__alt {
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: var(--fs-sm);
-  color: var(--color-muted);
-  cursor: pointer;
-  text-decoration: underline;
-}
-.dmodal__alt:hover,
-.dmodal__alt:focus-visible {
-  color: var(--color-fg);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dmodal,
-  .dmodal::backdrop {
-    transition: none;
-  }
-  .dmodal {
-    transform: none;
-  }
-}
 
 @media (max-width: 900px) {
   .dcta__card {
@@ -4492,25 +4359,7 @@ a.footer__contact-link:hover {
   .dcta__text {
     order: 0;
   }
-  .dcta__btn {
-    order: 1;
-    width: 100%;
-  }
-  .dmodal {
-    padding: var(--space-5) var(--space-3) var(--space-4);
-  }
   /* עמודה אחת - שתי עמודות על 390px נותנות שדות דחוקים */
-  .dmodal__form {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-  .dmodal__actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-  .dmodal__submit {
-    width: 100%;
-  }
 }
 
 /* =========================================================
@@ -4529,12 +4378,10 @@ a.footer__contact-link:hover {
    ========================================================= */
 .about__cta,
 .lead__cta,
-.lead__submit,
+.lform__submit,
 .soon__submit,
 .cform__submit,
 .dhero__cta,
-.dcta__btn,
-.dmodal__submit,
 .kpage__cta {
   display: inline-block;
   align-self: flex-start;
@@ -4557,21 +4404,17 @@ a.footer__contact-link:hover {
 
 .about__cta:hover,
 .lead__cta:hover,
-.lead__submit:hover,
+.lform__submit:hover,
 .soon__submit:hover,
 .cform__submit:hover,
 .dhero__cta:hover,
-.dcta__btn:hover,
-.dmodal__submit:hover,
 .kpage__cta:hover,
 .about__cta:focus-visible,
 .lead__cta:focus-visible,
-.lead__submit:focus-visible,
+.lform__submit:focus-visible,
 .soon__submit:focus-visible,
 .cform__submit:focus-visible,
 .dhero__cta:focus-visible,
-.dcta__btn:focus-visible,
-.dmodal__submit:focus-visible,
 .kpage__cta:focus-visible {
   filter: brightness(1.07);
   background: var(--color-gold);
@@ -4744,9 +4587,6 @@ a.footer__contact-link:hover {
    חייב לעבור גם כאן.
    flex-start ולא center: הכפתור ירד לתוך בלוק הטקסט, שהוא
    עמודה, ולכן הוא צריך להיצמד לצד ההתחלה ולא להתמרכז. */
-.dcta__btn {
-  align-self: flex-start;
-}
 
 /* =========================================================
    כיול מגע למובייל - חייב לשבת בסוף הקובץ
@@ -4766,9 +4606,6 @@ a.footer__contact-link:hover {
   }
   /* השדות בפאנל הכהה היו 41px. הגופן כבר 16px ולכן iOS לא
      מזגזג בזום - רק הגובה חסר. */
-  .lead__input {
-    padding-block: 0.75rem;
-  }
   /* 11px לא נקרא על מסך קטן. 12px היא הרצפה, ורק לטקסט משני. */
   .dhero__badge-note {
     font-size: 0.75rem;
@@ -5061,9 +4898,6 @@ a.footer__contact-link:hover {
   }
   /* השדות בפאנל הכהה היו 41px. הגופן כבר 16px ולכן iOS לא
      מזגזג בזום - רק הגובה חסר. */
-  .lead__input {
-    padding-block: 0.75rem;
-  }
   /* 11px לא נקרא על מסך קטן. 12px היא הרצפה, ורק לטקסט משני. */
   .dhero__badge-note {
     font-size: 0.75rem;
@@ -5545,21 +5379,22 @@ a.footer__contact-link:hover {
 .apage__p + .apage__p {
   margin-top: var(--space-2);
 }
-.apage__cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+
+/* ===== טופס בסוף מאמר (7.10) =====
+   החליף כפתור שהוביל לעמוד יצירת קשר נפרד. משטח בהיר עם קו זהב
+   בצד - אותה שפה של הקו בכרטיס המעצבת, כדי שיזוהה כאותה פעולה. */
+.apage__lead {
   margin-top: var(--space-6);
-  padding: 0.875rem 2rem;
-  border-radius: 999px;
-  background: var(--color-gold);
-  color: var(--color-fg);
-  font-weight: 700;
-  text-decoration: none;
-  transition: transform 0.3s var(--ease-soft);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-inline-start: 3px solid var(--color-logo-gold);
 }
-.apage__cta:hover {
-  transform: translateY(-2px);
+.apage__lead-title {
+  margin: 0;
+  font-size: var(--fs-card-title);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--color-fg);
 }
 
 @media (max-width: 1100px) {
