@@ -3,7 +3,7 @@
  *
  * ⚠️ **הערוץ של אברהם, לא הערוץ של סרטוני ההמלצות.** סרטוני
  * ההמלצות (lib/videos.ts) הועלו לערוץ נפרד; כאן זה הערוץ העסקי
- * שלו, @א.ביתהמטבחים - 60 סרטוני Shorts נכון ל-7.10.
+ * שלו, @א.ביתהמטבחים - 60 סרטוני Shorts נכון ל-7.10, מתוכם 2 כפולים שהוסתרו (58).
  *
  * ⚠️ **מחובר לערוץ.** הרשימה כאן היא הבסיס, והעמוד מושך את
  * פיד ה-RSS של הערוץ פעם ביום (getChannelVideos). סרטון חדש
@@ -131,13 +131,6 @@ export const channelVideos: ChannelVideo[] = [
     title: "מטבח שמתאים בדיוק לאורח החיים שלכם",
   },
   {
-    id: "W8BPvfF4Ug4",
-    cat: "stone",
-    w: 480,
-    h: 853,
-    title: "פתרון מושלם במקום פלטת שבת!",
-  },
-  {
     id: "kmiX49OvHJg",
     cat: "stone",
     w: 480,
@@ -172,14 +165,6 @@ export const channelVideos: ChannelVideo[] = [
     w: 405,
     h: 720,
     title: "היום אפשר לבשל גם בלי כירת גז מעל השיש",
-  },
-  {
-    id: "bJG4UhW71KE",
-    cat: "stone",
-    w: 480,
-    h: 853,
-    title:
-      "אינדוקציה כהלכה - מוטמע מתחת לשיש לנוחות מקסימלית וחסכון מטורף בנקיונות..",
   },
   {
     id: "kMVUcBOiYLs",
@@ -433,6 +418,19 @@ export const channelVideos: ChannelVideo[] = [
   },
 ];
 
+/**
+ * ⛔ סרטונים שהועלו פעמיים לערוץ - מוסתרים (7.10, דניאל: "זה
+ * אותו סרטון - תסיר אחד מהם"). נמצאו בהשוואת הסטילס של כל 60:
+ * · W8BPvfF4Ug4 = kmiX49OvHJg (פלטת שבת) - פריים זהה לגמרי
+ * · bJG4UhW71KE = kMVUcBOiYLs (אינדוקציה) - אותו רגע, רק עם כיתוב
+ * נשאר מכל זוג זה עם יותר צפיות (125 מול 13, 102 מול 11).
+ *
+ * ⚠️ **לא מספיק למחוק מהרשימה למעלה.** שניהם בין 15 האחרונים
+ * בפיד, ו-getChannelVideos היה מחזיר אותם כ"חדשים" תוך יום.
+ * הרשימה הזו מסננת גם את הפיד.
+ */
+export const hiddenVideoIds = new Set(["W8BPvfF4Ug4", "bJG4UhW71KE"]);
+
 /** מיון של סרטון חדש מהפיד. כל מה שלא מדבר על אבן או משטח - נגרות */
 export const guessCategory = (title: string): VideoCategory =>
   /שיש|אבן|קוורץ|קוורציט|גרניט|פורצלן|פלט|משטח|כיור|קנט|אינדוקציה/.test(title)
@@ -463,7 +461,7 @@ export async function getChannelVideos(): Promise<ChannelVideo[]> {
     for (const entry of xml.split("<entry>").slice(1)) {
       const id = entry.match(/<yt:videoId>([^<]+)</)?.[1];
       const raw = entry.match(/<title>([^<]+)</)?.[1] ?? "";
-      if (!id || known.has(id)) continue;
+      if (!id || known.has(id) || hiddenVideoIds.has(id)) continue;
       const title = decode(raw)
         .replace(/#[^\s#]+/g, " ")
         .replace(/\s+/g, " ")

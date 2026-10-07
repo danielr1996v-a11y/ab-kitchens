@@ -80,14 +80,20 @@ export default function Testimonials({
   reviews = testimonials,
   videoSlot,
   showMore = true,
+  plain = false,
 }: {
   reviews?: Review[];
   videoSlot?: boolean;
   /** "לכל ההמלצות" - כבוי בעמוד ההמלצות עצמו, שלא יפנה לעצמו */
   showMore?: boolean;
+  /** בלי הרקע האפור - בעמוד ההמלצות, שדניאל ביקש שיהיה לבן כולו */
+  plain?: boolean;
 } = {}) {
   return (
-    <section className="testimonials" aria-labelledby="testimonials-title">
+    <section
+      className={`testimonials${plain ? " testimonials--plain" : ""}`}
+      aria-labelledby="testimonials-title"
+    >
       <div className="testimonials__inner">
         <header className="testimonials__header">
           {/* העינית והכותרת מקובצות יחד, אחרת space-between דוחף

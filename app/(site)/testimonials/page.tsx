@@ -83,7 +83,7 @@ export default function Page() {
           המבקר מזהה מיד שאלה ביקורות גוגל אמיתיות. בלי כפתור
           "לכל ההמלצות", כי אנחנו כבר בעמוד ההמלצות. */}
       <GoogleReviewsWidget widgetId={trustindexWidgetId}>
-        <Testimonials reviews={googleReviews} showMore={false} />
+        <Testimonials reviews={googleReviews} showMore={false} plain />
       </GoogleReviewsWidget>
 
       {/* ===== סרטוני לקוחות =====
