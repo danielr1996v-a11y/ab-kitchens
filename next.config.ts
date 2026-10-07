@@ -58,6 +58,7 @@ const nextConfig: NextConfig = {
       { source: heb("/גלריה/כפרי"), destination: "/gallery/rustic" },
       { source: heb("/אודותינו"), destination: "/about" },
       { source: heb("/המלצות"), destination: "/testimonials" },
+      { source: heb("/סרטונים"), destination: "/videos" },
       /* ⚠️ המפה חייבת להסכים עם ARTICLE_PATHS ב-lib/articles.ts.
          שני הראשונים הם נתיבים מהאתר הישן ונשמרו כלשונם. */
       { source: heb("/מאמרים-וטיפים"), destination: "/articles" },

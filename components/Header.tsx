@@ -186,7 +186,7 @@ export default function Header() {
           <span>{quickDial.label}</span>
         </a>
 
-        {/* מבורגר - מוצג רק מתחת ל-900px, שם header__nav מוסתר */}
+        {/* מבורגר - מוצג עד 1279px, שם header__nav מוסתר (ראה globals.css) */}
         <button
           ref={toggleRef}
           type="button"

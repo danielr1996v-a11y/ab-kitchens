@@ -28,6 +28,7 @@ const routes: Array<{
   { path: "/שיש-פורצלן", priority: 0.7, freq: "monthly" },
   { path: "/אודותינו", priority: 0.6, freq: "monthly" },
   { path: "/המלצות", priority: 0.6, freq: "monthly" },
+  { path: "/סרטונים", priority: 0.6, freq: "weekly" },
   { path: "/תקנון-ומדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/מדיניות-פרטיות", priority: 0.2, freq: "yearly" },
   { path: "/הצהרת-נגישות", priority: 0.2, freq: "yearly" },
