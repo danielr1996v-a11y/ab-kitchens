@@ -477,7 +477,15 @@ export const comingSoon = {
 };
 
 /** התהליך זהה בכל עמודי הסגנונות, ולכן מוגדר פעם אחת */
-export const kitchenProcess = {
+/**
+ * שלב בתהליך. ⚠️ image אופציונלי (7.10): דניאל הסיר את תמונות
+ * השיש ושולח חדשות. כרטיס בלי תמונה נשאר כרטיס פחם עם טקסט לבן -
+ * זה כבר הרקע של .kstep מתחת לתמונה, אז אין מצב שבור.
+ */
+export type ProcessStep = { id: string; title: string; text: string; image?: string };
+export type ProcessFlow = { title: string; steps: ProcessStep[] };
+
+export const kitchenProcess: ProcessFlow = {
   title: "איך עובד התהליך?",
   steps: [
     {
@@ -519,32 +527,30 @@ export const kitchenProcess = {
  * "מודדים רק אחרי שהארונות כבר מותקנים בבית". שני חלקים
  * באותו עמוד סתרו זה את זה. השלב השני כאן מיישב את הסתירה.
  */
-export const stoneProcess = {
+/* ⏸ **ארבעת השלבים בלי תמונה - ממתינים לצילומים מדניאל (7.10).**
+   כל ארבע התמונות (stone-wa-1/2/3/5) הוסרו לבקשתו. */
+export const stoneProcess: ProcessFlow = {
   title: "איך עובד התהליך?",
   steps: [
     {
       id: "material",
       title: "בוחרים את החומר",
       text: "באים לראות לוחות אמיתיים, לא תמונה בקטלוג. אותו גוון נראה אחרת לגמרי בגודל מלא ובתאורה של הבית, ולכן שווה לבחור מול הלוח עצמו.",
-      image: "/images/stone-wa-1.webp",
     },
     {
       id: "measure",
       title: "מודדים אחרי שהארונות בפנים",
       text: "לא לפי תוכנית. קירות כמעט אף פעם לא יוצאים ישרים לגמרי, ומדידה על הארונות המותקנים היא מה שמונע פערים בקצוות.",
-      image: "/images/stone-wa-3.webp",
     },
     {
       id: "cut",
       title: "חותכים אצלנו",
       text: "אנחנו מעבד מורשה, והחיתוך והגימור נעשים אצלנו ולא אצל גורם חיצוני. הכיור, הקנטים והחיתוכים לכיריים - הכל לפי מה שסוכם מראש.",
-      image: "/images/stone-wa-2.webp",
     },
     {
       id: "install",
       title: "מתקינים ונשארים זמינים",
       text: "מגיעים, מתקינים ומשלימים את החיבורים. אם משהו צריך תשומת לב אחר כך, מרימים טלפון ואנחנו מגיעים.",
-      image: "/images/stone-wa-5.webp",
     },
   ],
 };
@@ -594,7 +600,7 @@ type KitchenPageContent = {
     };
   }>;
   /** התהליך של העמוד. כשלא מוגדר - נופל חזרה ל-kitchenProcess */
-  process?: typeof kitchenProcess;
+  process?: ProcessFlow;
   galleryTitle: string;
   /** ⚠️ פלייסהולדרים. הצילומים האמיתיים יושבים בדרייב,
       בתיקייה "מטבחים שלנו" לפי סגנון. */
@@ -743,13 +749,13 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     ],
     galleryTitle: "מטבחים קלאסיים שיצרנו",
     // צילומים אמיתיים מתיקיית "מטבחים שלנו/קלאסי"
+    /* ⚠️ 7.10: real-classic-1 (הברזים השחורים הכפולים), -3
+       (המטבח הכשר עם שני הברזים) ו--6 (המקרר הלבן והפרקט) הוסרו
+       לבקשת דניאל. -3 ו--6 היו אותה תמונה כמו stone-wa-4/1. */
     gallery: [
-      { image: "/images/real-classic-1.webp", alt: "מטבח בגוון קרם עם משטח שיש כהה" },
       { image: "/images/real-classic-2.webp", alt: "מטבח קו ארוך בגוון קרם עם משטח בהיר" },
-      { image: "/images/real-classic-3.webp", alt: "מטבח בגוון קרם עם תאורה נסתרת ומשטח בהיר" },
       { image: "/images/real-classic-4.webp", alt: "מטבח קרם עם חיפוי שיש מנומר ואי עם מושבים" },
       { image: "/images/real-classic-5.webp", alt: "מטבח קרם עם חיפוי אבן אפורה ועמודת תנורים" },
-      { image: "/images/real-classic-6.webp", alt: "מטבח קו ארוך בגוון קרם עם תאורה לינארית" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -793,12 +799,10 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
       },
     ],
     galleryTitle: "עבודות שיש שיצאו מאיתנו",
+    /* ⏸ **ממתין לצילומים מדניאל (7.10).** stone-wa-1 עד 5 הוסרו
+       לבקשתו - שולחן השיש הכחול עם היד על הכיסא, המטבח עם
+       המקרר הלבן והפרקט, ותקריבי הכיור והלד. נשארה אחת. */
     gallery: [
-      { image: "/images/stone-wa-1.webp", alt: "משטח שיש בהיר במטבח בהתאמה אישית" },
-      { image: "/images/stone-wa-2.webp", alt: "משטח שיש עם כיור אינטגרלי" },
-      { image: "/images/stone-wa-3.webp", alt: "חיפוי שיש בין ארונות המטבח" },
-      { image: "/images/stone-wa-4.webp", alt: "משטח עבודה בשיש בגוון בהיר" },
-      { image: "/images/stone-wa-5.webp", alt: "אי מטבח עם משטח שיש" },
       { image: "/images/stone-wa-6.webp", alt: "משטח שיש וחיפוי קיר תואם" },
     ],
     faqTitle: "שאלות ותשובות",

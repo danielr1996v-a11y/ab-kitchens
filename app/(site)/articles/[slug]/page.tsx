@@ -46,16 +46,19 @@ export default async function Page({ params }: Props) {
         <h1 className="apage__title">{article.title}</h1>
       </Reveal>
 
-      <div className="apage__media">
-        <Image
-          src={article.image}
-          alt={article.imageAlt}
-          fill
-          sizes="(max-width: 900px) 100vw, 80vw"
-          priority
-          className="apage__img"
-        />
-      </div>
+      {/* ⏸ בלי תמונה - בלי באנר. מאמר נקרא טוב גם בלעדיו */}
+      {article.image && (
+        <div className="apage__media">
+          <Image
+            src={article.image}
+            alt={article.imageAlt ?? ""}
+            fill
+            sizes="(max-width: 900px) 100vw, 80vw"
+            priority
+            className="apage__img"
+          />
+        </div>
+      )}
 
       {/* גוף המאמר. הרוחב מוגבל ב-CSS ל-65ch - בקשה מפורשת
           של דניאל שהשורות לא יהיו ארוכות מדי. */}

@@ -16,14 +16,28 @@ export default function ArticleCard({ article }: { article: Article }) {
   return (
     <article className="acard">
       <Link href={articleHref(article.slug)} className="acard__link">
-        <span className="acard__media">
-          <Image
-            src={article.image}
-            alt={article.imageAlt}
-            fill
-            sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 30vw"
-            className="acard__img"
-          />
+        {/* ⏸ בלי תמונה (ממתין לצילום מדניאל): משטח פחם עם הלוגו
+            הבהיר, באותו יחס 16/9 - כך הרשת נשארת מיושרת. */}
+        <span
+          className={`acard__media${article.image ? "" : " acard__media--empty"}`}
+        >
+          {article.image ? (
+            <Image
+              src={article.image}
+              alt={article.imageAlt ?? ""}
+              fill
+              sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 30vw"
+              className="acard__img"
+            />
+          ) : (
+            <Image
+              src="/logo.png"
+              alt=""
+              width={1640}
+              height={460}
+              className="acard__logo"
+            />
+          )}
         </span>
 
         <h3 className="acard__title">{article.title}</h3>

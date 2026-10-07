@@ -5414,6 +5414,18 @@ a.footer__contact-link:hover {
   overflow: hidden;
   background: var(--color-surface);
 }
+/* ⏸ מאמר שממתין לתמונה (7.10): משטח פחם עם הלוגו הבהיר במרכז.
+   הפחם הוא אותו --color-header-bg של כרטיסי התהליך - שני המצבים
+   הזמניים נראים אותו דבר. */
+.acard__media--empty {
+  display: grid;
+  place-items: center;
+  background: var(--color-header-bg);
+}
+.acard__logo {
+  width: 42%;
+  height: auto;
+}
 .acard__img {
   object-fit: cover;
   transition: transform 0.6s var(--ease-soft);

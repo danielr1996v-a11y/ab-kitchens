@@ -210,13 +210,16 @@ export default function KitchenPage({
         <ol className="kpage__steps">
           {flow.steps.map((step) => (
             <li className="kstep" key={step.id}>
-              <Image
-                src={step.image}
-                alt=""
-                fill
-                sizes="(max-width: 700px) 80vw, (max-width: 1100px) 45vw, 22vw"
-                className="kstep__img"
-              />
+              {/* בלי תמונה - כרטיס פחם עם טקסט לבן, הרקע של .kstep */}
+              {step.image && (
+                <Image
+                  src={step.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 700px) 80vw, (max-width: 1100px) 45vw, 22vw"
+                  className="kstep__img"
+                />
+              )}
               <div className="kstep__body">
                 <h3 className="kstep__title">{step.title}</h3>
                 <p className="kstep__text">{step.text}</p>
