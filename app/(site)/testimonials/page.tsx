@@ -3,12 +3,14 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import TestimonialWall from "@/components/TestimonialWall";
 import VideoSlider from "@/components/VideoSlider";
+import Testimonials from "@/components/Testimonials";
 import DesignerCta from "@/components/DesignerCta";
 import {
   testimonialsPage,
   featuredLetter,
   featuredQuote,
   testimonials,
+  googleReviews,
 } from "@/lib/testimonialsPage";
 
 export const metadata: Metadata = {
@@ -74,6 +76,12 @@ export default function Page() {
         />
       </section>
 
+      {/* ===== ביקורות מגוגל =====
+          ⚠️ אותו רכיב של דף הבית, עם תג הדירוג של גוגל - כך
+          המבקר מזהה מיד שאלה ביקורות גוגל אמיתיות. בלי כפתור
+          "לכל ההמלצות", כי אנחנו כבר בעמוד ההמלצות. */}
+      <Testimonials reviews={googleReviews} showMore={false} />
+
       {/* ===== סרטוני לקוחות =====
           ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה
           ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
@@ -98,14 +106,22 @@ export default function Page() {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "@id": "https://www.ab-kitchens.co.il/#business",
-            review: [featuredLetter, ...testimonials]
-              /* רק המלצות עם שם - ל-Review נדרש author */
-              .filter((t) => t.author)
-              .map((t) => ({
+            review: [
+              ...[featuredLetter, ...testimonials]
+                /* רק המלצות עם שם - ל-Review נדרש author */
+                .filter((t) => t.author)
+                .map((t) => ({
+                  "@type": "Review",
+                  author: { "@type": "Person", name: t.author },
+                  reviewBody: t.quote.join(" "),
+                })),
+              ...googleReviews.map((g) => ({
                 "@type": "Review",
-                author: { "@type": "Person", name: t.author },
-                reviewBody: t.quote.join(" "),
+                author: { "@type": "Person", name: g.name },
+                reviewRating: { "@type": "Rating", ratingValue: g.rating },
+                reviewBody: g.text,
               })),
+            ],
           }),
         }}
       />

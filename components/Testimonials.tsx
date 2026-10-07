@@ -79,9 +79,12 @@ function GoogleMark() {
 export default function Testimonials({
   reviews = testimonials,
   videoSlot,
+  showMore = true,
 }: {
   reviews?: Review[];
   videoSlot?: boolean;
+  /** "לכל ההמלצות" - כבוי בעמוד ההמלצות עצמו, שלא יפנה לעצמו */
+  showMore?: boolean;
 } = {}) {
   return (
     <section className="testimonials" aria-labelledby="testimonials-title">
@@ -133,21 +136,23 @@ export default function Testimonials({
         {/* ⚠️ כפתור אחד לכל הסקשן, ולא כפתור לכל כרטיס. ב-17.09
             ירדו מכאן כפתורים פר-המלצה והם לא חוזרים - זה מעבר
             אחד לעמוד המלא, לא קריאה לפעולה על כל ציטוט. */}
-        <div className="reviews__more">
-          <Link className="reviews__more-btn" href="/המלצות">
-            לכל ההמלצות
-            {/* ב-RTL "קדימה" הוא שמאלה */}
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
-              <path
-                d="M15 6l-6 6 6 6"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </div>
+        {showMore && (
+          <div className="reviews__more">
+            <Link className="reviews__more-btn" href="/המלצות">
+              לכל ההמלצות
+              {/* ב-RTL "קדימה" הוא שמאלה */}
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+                <path
+                  d="M15 6l-6 6 6 6"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </Link>
+          </div>
+        )}
 
         {/* ⛔ סרטון ההמלצה. חריץ אחד ביחס וידאו, חסום ב-production. */}
         {videoSlot && (
