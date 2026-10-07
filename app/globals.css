@@ -6270,3 +6270,16 @@ a.footer__contact-link:hover {
     padding: 0 var(--space-2);
   }
 }
+
+/* ===== ביקורות גוגל חיות (Trustindex) - 7.10 =====
+   רק המסגרת. הווידג'ט מביא את העיצוב שלו מבפנים. */
+.greviews {
+  padding: var(--section-gap) var(--side-padding);
+}
+.greviews__inner {
+  max-width: 76rem;
+  margin-inline: auto;
+  /* ⚠️ גובה מינימלי שומר מקום בזמן שהסקריפט נטען - בלעדיו כל
+     מה שמתחת קופץ למעלה ואז חזרה למטה */
+  min-height: 18rem;
+}

@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import TestimonialWall from "@/components/TestimonialWall";
 import VideoSlider from "@/components/VideoSlider";
 import Testimonials from "@/components/Testimonials";
+import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 import DesignerCta from "@/components/DesignerCta";
 import {
   testimonialsPage,
@@ -11,6 +12,7 @@ import {
   featuredQuote,
   testimonials,
   googleReviews,
+  trustindexWidgetId,
 } from "@/lib/testimonialsPage";
 
 export const metadata: Metadata = {
@@ -80,7 +82,9 @@ export default function Page() {
           ⚠️ אותו רכיב של דף הבית, עם תג הדירוג של גוגל - כך
           המבקר מזהה מיד שאלה ביקורות גוגל אמיתיות. בלי כפתור
           "לכל ההמלצות", כי אנחנו כבר בעמוד ההמלצות. */}
-      <Testimonials reviews={googleReviews} showMore={false} />
+      <GoogleReviewsWidget widgetId={trustindexWidgetId}>
+        <Testimonials reviews={googleReviews} showMore={false} />
+      </GoogleReviewsWidget>
 
       {/* ===== סרטוני לקוחות =====
           ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה

@@ -257,6 +257,13 @@ export const testimonials: Testimonial[] = [
  * שמות: שם פרטי + אות, לפי ההכרעה של דניאל לכל האתר.
  * אין כפילות מול דף הבית - שם כל השבע ממידרג.
  */
+/**
+ * ⚠️ מזהה הווידג'ט של Trustindex. ריק = מוצגות 6 הביקורות שלמטה.
+ * ⏸ ממתין לדניאל: פותח חשבון, מחבר את הפרופיל, ושולח את שורת
+ * הקוד. המזהה הוא מה שאחרי "loader.js?" בשורה הזו.
+ */
+export const trustindexWidgetId = "";
+
 export const googleReviews = [
   {
     id: "g-omri",
