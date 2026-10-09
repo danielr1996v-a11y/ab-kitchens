@@ -56,6 +56,14 @@
   --color-logo-gold: #aa8347;
   --color-gold-text: #000000; /* טקסט על גבי הזהב */
 
+  /* שלב 2 של מערכת הניהול (09.10.26) - ערכים שהיו כתובים ישירות
+     בקוד הפכו למשתנים. ⚠️ **אותו ערך בדיוק**, אף צבע לא השתנה.
+     הלבן פוצל לפי תפקיד: טקסט על רקע כהה או תמונה מול משטח לבן.
+     היום זה אותו #ffffff, אבל בעורך אלה שתי החלטות נפרדות. */
+  --color-on-dark: #ffffff;
+  --color-whatsapp: #25d366; /* הירוק של וואטסאפ - צבע של מותג זר, לא שלנו */
+  --color-header-bg-hover: #3a3736; /* פחם בריחוף - כפתור עמוד המעצבים */
+
   /* טיפוגרפיה - פונט פולין (Polin) מהלקוח */
   --font-display: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
   --font-body: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
@@ -140,6 +148,40 @@
      הבר ב-88, הכותרת ב-56 - כלומר 32px מתחת להדר.
      כל סקשן ראשון בעמוד ללא הירו חייב את הטוקן הזה. */
   --header-clearance: calc(var(--header-height) + var(--section-gap));
+
+  /* פינות - סולם לפי פיקסלים. השמות הם הגודל ב-px (ב-16px לרם),
+     כי לרכיבים אין היררכיה ברורה של "קטן/בינוני" - 7 ערכים
+     שונים נמצאו בשימוש, וכולם נשמרו כמו שהם. */
+  --radius-6: 0.375rem;
+  --radius-8: 0.5rem;
+  --radius-10: 0.625rem;
+  --radius-12: 0.75rem;
+  --radius-16: 1rem;
+  --radius-32: 2rem;
+  --radius-round: 50%;
+
+  /* צללים - 20 ערכים, כל אחד בשימוש במקום אחד או שניים.
+     לא אוחדו: איחוד היה משנה את המראה, והשלב הזה רק נותן להם שם. */
+  --shadow-header: 0 0.125rem 1rem rgba(0, 0, 0, 0.06);
+  --shadow-header-scrolled: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.09);
+  --shadow-review: 0 0.25rem 1.5rem rgba(26, 26, 26, 0.07);
+  --shadow-mega: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.04), 0 1.5rem 3.5rem rgba(20, 19, 19, 0.11);
+  --shadow-thumb: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.06);
+  --shadow-thumb-hover: 0 0.625rem 1.5rem rgba(20, 19, 19, 0.14);
+  --shadow-text-on-photo: 0 1px 3px rgba(0, 0, 0, 0.55);
+  --shadow-hotspot-ring: 0 0 0 0.25rem rgba(0, 0, 0, 0.28);
+  --shadow-hotspot-label: 0 0.25rem 1rem rgba(0, 0, 0, 0.14);
+  --shadow-hotspot-ring-active: 0 0 0 0.3125rem rgba(0, 0, 0, 0.32);
+  --shadow-fab: 0 0.5rem 1.5rem rgba(37, 211, 102, 0.42), 0 0.125rem 0.375rem rgba(0, 0, 0, 0.14);
+  --shadow-fab-hover: 0 0.625rem 1.875rem rgba(37, 211, 102, 0.55), 0 0.125rem 0.5rem rgba(0, 0, 0, 0.16);
+  --shadow-form: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05), 0 1rem 2rem rgba(0, 0, 0, 0.04);
+  --shadow-badge: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05), 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.06), 0 1.5rem 3rem rgba(0, 0, 0, 0.16);
+  --shadow-title-on-photo: 0 2px 12px rgba(20, 19, 19, 0.45);
+  --shadow-video-active: 0 2px 8px rgba(20, 19, 19, 0.08), 0 12px 32px rgba(20, 19, 19, 0.14);
+  --shadow-play: 0 0 0 0 rgba(221, 177, 67, 0);
+  --shadow-play-hover: 0 0 0 0.625rem rgba(221, 177, 67, 0.28);
 }
 
 /* ===== כיול מובייל =====
@@ -240,8 +282,8 @@ h1, h2, h3, h4 {
 }
 
 .header__bar {
-  background: #fff;
-  border-radius: 1rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-16);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -249,13 +291,13 @@ h1, h2, h3, h4 {
   height: var(--header-height);
   padding-inline: 1.5vw;
   /* צל עדין מאוד - מפריד את הבר הלבן מהתמונה שמתחתיו */
-  box-shadow: 0 0.125rem 1rem rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-header);
   transition: box-shadow 0.4s var(--ease-soft);
 }
 
 /* בגלילה הצל מעמיק קלות - רמז שהבר מרחף מעל התוכן */
 .header--scrolled .header__bar {
-  box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.09);
+  box-shadow: var(--shadow-header-scrolled);
 }
 
 /* ⚠️ **באג שדניאל דיווח (7.10): טקסט מבצבץ וחתוך מעל ההדר במובייל.**
@@ -356,7 +398,7 @@ h1, h2, h3, h4 {
   gap: 0.625rem;
   background: var(--color-gold);
   color: var(--color-gold-text);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-8);
   padding: 0.625rem 1.25rem;
   font-size: var(--fs-base);
   font-weight: 700; /* Bold */
@@ -385,7 +427,7 @@ h1, h2, h3, h4 {
   flex-shrink: 0;
   padding: 0;
   border: 0;
-  border-radius: 0.625rem;
+  border-radius: var(--radius-10);
   background: transparent;
   color: var(--color-fg);
   cursor: pointer;
@@ -430,7 +472,7 @@ h1, h2, h3, h4 {
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--space-2) var(--side-padding) var(--space-3);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* שורת הלוגו - בגובה בר הניווט, כך שהמבורגר שמעליה נשאר
@@ -471,7 +513,7 @@ h1, h2, h3, h4 {
   font-size: clamp(1.375rem, 6vw, 1.75rem);
   font-weight: 400;
   line-height: 1.2;
-  color: #fff;
+  color: var(--color-on-dark);
   text-decoration: none;
   transition: color 0.25s var(--ease);
 }
@@ -506,7 +548,7 @@ h1, h2, h3, h4 {
   position: relative;
   display: block;
   aspect-ratio: 1 / 1;
-  border-radius: 0.625rem;
+  border-radius: var(--radius-10);
   overflow: hidden;
   text-decoration: none;
 }
@@ -527,7 +569,7 @@ h1, h2, h3, h4 {
   z-index: 1;
   padding: 0.5rem;
   text-align: center;
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: var(--fs-base);
   font-weight: 700;
 }
@@ -551,7 +593,7 @@ h1, h2, h3, h4 {
   justify-content: center;
   gap: 0.5rem;
   min-height: 3rem; /* מטרת מגע */
-  border-radius: 0.625rem;
+  border-radius: var(--radius-10);
   font-size: var(--fs-base);
   font-weight: 700;
   text-decoration: none;
@@ -567,7 +609,7 @@ h1, h2, h3, h4 {
 }
 .mnav__action--wa {
   border: 1px solid rgba(255, 255, 255, 0.35);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .mnav__action--wa:hover,
 .mnav__action--wa:focus-visible {
@@ -587,7 +629,7 @@ h1, h2, h3, h4 {
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   color: rgba(255, 255, 255, 0.7);
 }
 .mnav__social-link svg {
@@ -596,7 +638,7 @@ h1, h2, h3, h4 {
 }
 .mnav__social-link:hover,
 .mnav__social-link:focus-visible {
-  color: #fff;
+  color: var(--color-on-dark);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -618,7 +660,7 @@ h1, h2, h3, h4 {
 .header__burger[aria-expanded="true"] {
   position: relative;
   z-index: 102;
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .header__burger[aria-expanded="true"]:hover,
 .header__burger[aria-expanded="true"]:focus-visible {
@@ -776,7 +818,7 @@ main > *:first-child:not(.hero) {
 
 /* גרסה בהירה - מעל תמונות ורקעים כהים */
 .link-arrow--light {
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* =========================================================
@@ -1070,7 +1112,7 @@ main > *:first-child:not(.hero) {
   /* גובה השורה נגזר מגובה המסך ולא מרוחבו, כדי שכל הרשת
      תיכנס במסך אחד גם בצג רחב. clamp שומר על מינימום קריא. */
   --bento-row: clamp(11rem, 36vh, 23rem);
-  --bento-radius: 1rem;
+  --bento-radius: var(--radius-16);
 
   display: grid;
   grid-template-columns: 70fr 30fr;
@@ -1164,7 +1206,7 @@ main > *:first-child:not(.hero) {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: var(--fs-base);
   font-weight: 400;
   line-height: var(--lh-tight);
@@ -1313,7 +1355,7 @@ main > *:first-child:not(.hero) {
   position: relative;
   height: var(--values-visual-h);
   max-height: 100%;
-  border-radius: 1rem;
+  border-radius: var(--radius-16);
   overflow: hidden;
   background: var(--color-header-bg);
 }
@@ -1463,7 +1505,7 @@ main > *:first-child:not(.hero) {
     width: 100%;
     /* 16/10 ולא 4/3 - מקצר את הסקשן בכ-300px בטלפון */
     aspect-ratio: 16 / 10;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-12);
     overflow: hidden;
     margin-bottom: var(--space-2);
     background: var(--color-header-bg);
@@ -1805,8 +1847,8 @@ main > *:first-child:not(.hero) {
   background: var(--color-bg);
   /* בלי מסגרת - ברפרנס הכרטיס מופרד מהרקע רק בצל רך ומפוזר */
   border: 0;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.25rem 1.5rem rgba(26, 26, 26, 0.07);
+  border-radius: var(--radius-8);
+  box-shadow: var(--shadow-review);
 }
 
 /* עיגול האות בקצה ימין, השם והכוכבים לצידו. ב-RTL הצאצא
@@ -1822,9 +1864,9 @@ main > *:first-child:not(.hero) {
   width: 3rem;
   height: 3rem;
   flex-shrink: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-header-bg);
-  color: #fff;
+  color: var(--color-on-dark);
   font-family: var(--font-display);
   font-size: var(--fs-base);
   font-weight: 700;
@@ -2295,14 +2337,13 @@ a.footer__contact-link:hover {
 
 .mega {
   --mega-thumb: 5.5rem;   /* 88px - תמונה מרובעת */
-  --mega-radius: 0.5rem;
+  --mega-radius: var(--radius-8);
 
   width: max-content;
   max-width: 90vw;
-  background: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.04),
-    0 1.5rem 3.5rem rgba(20, 19, 19, 0.11);
+  background: var(--color-bg);
+  border-radius: var(--radius-16);
+  box-shadow: var(--shadow-mega);
   padding: var(--space-3);
 
   opacity: 0;
@@ -2352,12 +2393,12 @@ a.footer__contact-link:hover {
   border-radius: 0; /* פינות ישרות, לפי הבקשה */
   overflow: hidden;
   background: var(--color-border);
-  box-shadow: 0 0.125rem 0.5rem rgba(20, 19, 19, 0.06);
+  box-shadow: var(--shadow-thumb);
   transition: box-shadow 0.25s var(--ease-soft);
 }
 .mega__card:hover .mega__thumb,
 .mega__card:focus-visible .mega__thumb {
-  box-shadow: 0 0.625rem 1.5rem rgba(20, 19, 19, 0.14);
+  box-shadow: var(--shadow-thumb-hover);
 }
 
 .mega__img {
@@ -2501,7 +2542,7 @@ a.footer__contact-link:hover {
   align-items: flex-start;
   width: 100%;
   max-width: 30.1875rem; /* 483px מהפיגמה */
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* ===== טיפוגרפיה ===== */
@@ -2534,7 +2575,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 700;
   line-height: var(--lh-tight);
-  color: #fff;
+  color: var(--color-on-dark);
   padding-bottom: 0.25rem;
 }
 .lead__cta::after {
@@ -2763,7 +2804,7 @@ a.footer__contact-link:hover {
 .kpage__hero-title {
   position: relative;
   z-index: 1;
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
@@ -2942,10 +2983,10 @@ a.footer__contact-link:hover {
 .kstep__body {
   position: relative;
   z-index: 1;
-  color: #fff;
+  color: var(--color-on-dark);
   /* השכבה הוחלשה, אז הצל הוא מה שמחזיק את הלבן קריא
      גם כשמתחתיו נופל אזור בהיר בתמונה */
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  text-shadow: var(--shadow-text-on-photo);
 }
 .kstep__title {
   font-size: var(--fs-card-title);
@@ -3248,12 +3289,12 @@ a.footer__contact-link:hover {
   color: rgba(255, 255, 255, 0.75);
 }
 .lform--dark .lform__input {
-  color: #fff;
+  color: var(--color-on-dark);
   border-bottom-color: rgba(255, 255, 255, 0.35);
 }
 .lform--dark .lform__msg,
 .lform--dark.lform__done {
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .lform--dark .lform__msg a {
   color: var(--color-gold);
@@ -3282,7 +3323,7 @@ a.footer__contact-link:hover {
 /* השורה השנייה של הכיתוב מעל הטופס - הקריאה לפעולה עצמה */
 .lead__subtitle-bold {
   font-weight: 700;
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* =========================================================
@@ -3332,10 +3373,10 @@ a.footer__contact-link:hover {
   display: block;
   width: 0.875rem;
   height: 0.875rem;
-  border-radius: 50%;
-  background: #fff;
+  border-radius: var(--radius-round);
+  background: var(--color-on-dark);
   /* הילה כהה: נקודה לבנה על מטבח בהיר צריכה ניגוד, לא עוד לבן */
-  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-hotspot-ring);
   position: relative;
 }
 /* הטבעת הפועמת */
@@ -3343,8 +3384,8 @@ a.footer__contact-link:hover {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  border: 1px solid #fff;
+  border-radius: var(--radius-round);
+  border: 1px solid var(--color-on-dark);
   animation: khotPulse 2.4s var(--ease-soft) infinite;
 }
 @keyframes khotPulse {
@@ -3368,14 +3409,14 @@ a.footer__contact-link:hover {
   left: 50%;
   transform: translateX(-50%) translateY(0.25rem);
   white-space: nowrap;
-  background: #fff;
+  background: var(--color-bg);
   color: var(--color-fg);
   font-size: var(--fs-sm);
   font-weight: 400;
   line-height: 1;
   padding: 0.5rem 0.875rem;
-  border-radius: 2rem;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.14);
+  border-radius: var(--radius-32);
+  box-shadow: var(--shadow-hotspot-label);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s var(--ease-soft), transform 0.3s var(--ease-soft),
@@ -3439,7 +3480,7 @@ a.footer__contact-link:hover {
      נבחרה, ואין סיבה שתמשיך למשוך תשומת לב */
   .khot__point.is-active .khot__dot {
     background: var(--color-gold);
-    box-shadow: 0 0 0 0.3125rem rgba(0, 0, 0, 0.32);
+    box-shadow: var(--shadow-hotspot-ring-active);
   }
   .khot__point.is-active .khot__dot::after {
     animation: none;
@@ -3543,170 +3584,6 @@ a.footer__contact-link:hover {
 }
 
 /* =========================================================
-   COMING SOON - עמוד זמני, עומד בפני עצמו
-   בלי הדר ובלי פוטר. מסך אחד, תמונה מלאה ופאנל תוכן.
-   ========================================================= */
-.soon {
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-5) var(--side-padding);
-  background: var(--color-header-bg);
-  overflow: hidden;
-}
-.soon__bg {
-  object-fit: cover;
-  z-index: 0;
-}
-/* כהות מלאה: הטקסט כאן ארוך, וקריאוּת גוברת על התמונה */
-.soon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.88) 0%,
-    rgba(0, 0, 0, 0.72) 55%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
-}
-.soon__panel {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 44rem;
-  text-align: center;
-  color: #fff;
-}
-.soon__logo {
-  width: 13rem;
-  height: auto;
-  margin: 0 auto var(--space-4);
-}
-.soon__title {
-  font-size: var(--fs-h1);
-  font-weight: 700;
-  line-height: var(--lh-tight);
-  text-wrap: balance;
-  margin-bottom: var(--space-3);
-}
-.soon__text {
-  font-size: var(--fs-base);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: rgba(255, 255, 255, 0.88);
-  max-width: 38rem;
-  margin-inline: auto;
-}
-.soon__text + .soon__text {
-  margin-top: var(--space-2);
-}
-.soon__tagline {
-  font-size: var(--fs-sm);
-  letter-spacing: 0.08em;
-  color: var(--color-gold);
-  margin-top: var(--space-3);
-}
-
-/* ===== טופס ===== */
-.soon__form {
-  margin-top: var(--space-5);
-  text-align: right;
-  max-width: 26rem;
-  margin-inline: auto;
-}
-.soon__form-title {
-  font-size: var(--fs-base);
-  font-weight: 700;
-  margin-bottom: var(--space-2);
-  text-align: center;
-}
-.soon__fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-}
-.soon__field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-.soon__label {
-  font-size: var(--fs-sm);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.75);
-}
-.soon__input {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 0.5rem;
-  color: #fff;
-  font-family: inherit;
-  font-size: var(--fs-base);
-  padding: 0.7rem 0.85rem;
-  transition: border-color var(--dur) var(--ease);
-}
-.soon__input:focus {
-  outline: none;
-  border-color: var(--color-gold);
-}
-.soon__input:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
-}
-.soon__submit {
-  width: 100%;
-  margin-top: var(--space-2);
-  background: var(--color-gold);
-  color: var(--color-gold-text);
-  font-family: inherit;
-  font-size: var(--fs-base);
-  font-weight: 700;
-  border: 0;
-  border-radius: 0.5rem;
-  padding: 0.85rem 2rem;
-  cursor: pointer;
-  transition: opacity var(--dur) var(--ease);
-}
-.soon__submit:hover {
-  opacity: 0.9;
-}
-
-/* ===== קשר ישיר ===== */
-.soon__contact {
-  margin-top: var(--space-4);
-}
-.soon__call {
-  display: inline-block;
-  font-size: var(--fs-sub);
-  font-weight: 700;
-  color: #fff;
-  border-bottom: 1px solid var(--color-gold);
-  padding-bottom: 0.2rem;
-  transition: color var(--dur) var(--ease);
-}
-.soon__call:hover,
-.soon__call:focus-visible {
-  color: var(--color-gold);
-}
-.soon__address {
-  font-size: var(--fs-sm);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.65);
-  margin-top: var(--space-2);
-}
-
-@media (max-width: 560px) {
-  .soon__fields {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =========================================================
    מעבר בין עמודים - View Transitions
    הצלבה רכה: היוצא נמוג, הנכנס נמוג ועולה קלות.
    האיפוק הוא מה שגורם לזה להרגיש יוקרתי, לא האפקט.
@@ -3774,9 +3651,9 @@ a.footer__contact-link:hover {
   place-items: center;
   width: 3.5rem; /* מטרת מגע נדיבה */
   height: 3.5rem;
-  border-radius: 50%;
-  background: #25d366; /* הירוק הרשמי של וואטסאפ */
-  color: #fff;
+  border-radius: var(--radius-round);
+  background: var(--color-whatsapp); /* הירוק הרשמי של וואטסאפ */
+  color: var(--color-on-dark);
   text-decoration: none;
   /* ⚠️ הילה ירוקה, לא צל שחור. הצל השחור שהיה כאן הוא מה
      שהכביד על הכפתור - הוא נקרא ככתם מלוכלך מתחת לעיגול.
@@ -3784,8 +3661,7 @@ a.footer__contact-link:hover {
      ומעליה שכבה שחורה **חלשה מאוד** שכל תפקידה לנתק את
      העיגול מהרקע כדי שלא יצוף על תמונה בהירה. */
   box-shadow:
-    0 0.5rem 1.5rem rgba(37, 211, 102, 0.42),
-    0 0.125rem 0.375rem rgba(0, 0, 0, 0.14);
+    var(--shadow-fab);
   transition: transform 0.3s var(--ease-soft), box-shadow 0.3s var(--ease-soft);
 }
 .fab__btn svg {
@@ -3801,8 +3677,7 @@ a.footer__contact-link:hover {
      ולהוסיף רק אם צריך. */
   transform: scale(1.04);
   box-shadow:
-    0 0.625rem 1.875rem rgba(37, 211, 102, 0.55),
-    0 0.125rem 0.5rem rgba(0, 0, 0, 0.16);
+    var(--shadow-fab-hover);
 }
 .fab__btn:focus-visible {
   outline: 2px solid var(--color-gold);
@@ -3870,11 +3745,10 @@ a.footer__contact-link:hover {
 /* ===== הטופס - כרטיס ===== */
 .cform {
   margin-top: var(--space-3);
-  background: #fff;
-  border-radius: 0.75rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-12);
   padding: var(--space-3);
-  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05),
-    0 1rem 2rem rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-form);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -3908,7 +3782,7 @@ a.footer__contact-link:hover {
 .cform__input {
   background: var(--color-surface);
   border: 1px solid transparent;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-8);
   color: var(--color-fg);
   font-family: inherit;
   font-size: var(--fs-base);
@@ -3922,7 +3796,7 @@ a.footer__contact-link:hover {
 }
 .cform__input:focus {
   outline: none;
-  background: #fff;
+  background: var(--color-bg);
   border-color: var(--color-logo-gold);
 }
 .cform__input:focus-visible {
@@ -3946,14 +3820,14 @@ a.footer__contact-link:hover {
   font-size: var(--fs-base);
   font-weight: 700;
   border: 0;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-8);
   padding: 0.85rem 1.5rem;
   cursor: pointer;
   transition: background var(--dur) var(--ease);
 }
 .cform__submit:hover {
   background: var(--color-logo-gold);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .cform__alt {
   background: none;
@@ -4100,9 +3974,9 @@ a.footer__contact-link:hover {
 .dhero__cta {
   display: inline-block;
   padding: 0.9375rem 2rem;
-  border-radius: 2rem;
+  border-radius: var(--radius-32);
   background: var(--color-header-bg);
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: var(--fs-base);
   font-weight: 400;
   text-decoration: none;
@@ -4110,7 +3984,7 @@ a.footer__contact-link:hover {
 }
 .dhero__cta:hover,
 .dhero__cta:focus-visible {
-  background: #3a3736;
+  background: var(--color-header-bg-hover);
 }
 
 .dhero__swatches {
@@ -4123,7 +3997,7 @@ a.footer__contact-link:hover {
 .dhero__swatch {
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
@@ -4189,13 +4063,13 @@ a.footer__contact-link:hover {
   z-index: 2;
   width: 6.5rem;
   height: 6.5rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-header-bg);
-  color: #fff;
+  color: var(--color-on-dark);
   display: grid;
   place-content: center;
   text-align: center;
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-badge);
 }
 .dhero__badge-value {
   display: flex;
@@ -4271,7 +4145,7 @@ a.footer__contact-link:hover {
 .dcta__card {
   position: relative;
   min-height: 26rem;
-  border-radius: 1rem;
+  border-radius: var(--radius-16);
   overflow: hidden;
   background: var(--color-header-bg);
 }
@@ -4312,7 +4186,7 @@ a.footer__contact-link:hover {
   padding-inline-start: var(--space-4);
   border-inline-start: 2px solid var(--color-gold);
   text-align: start;
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .dcta__eyebrow {
   margin: 0 0 var(--space-1);
@@ -4394,7 +4268,6 @@ a.footer__contact-link:hover {
 .about__cta,
 .lead__cta,
 .lform__submit,
-.soon__submit,
 .cform__submit,
 .dhero__cta,
 .kpage__cta {
@@ -4420,14 +4293,12 @@ a.footer__contact-link:hover {
 .about__cta:hover,
 .lead__cta:hover,
 .lform__submit:hover,
-.soon__submit:hover,
 .cform__submit:hover,
 .dhero__cta:hover,
 .kpage__cta:hover,
 .about__cta:focus-visible,
 .lead__cta:focus-visible,
 .lform__submit:focus-visible,
-.soon__submit:focus-visible,
 .cform__submit:focus-visible,
 .dhero__cta:focus-visible,
 .kpage__cta:focus-visible {
@@ -4444,13 +4315,6 @@ a.footer__contact-link:hover {
   content: none;
 }
 
-@media (max-width: 900px) {
-  /* בטופס הקצר של העמוד הזמני הכפתור נשאר ברוחב מלא */
-  .soon__submit {
-    width: 100%;
-  }
-}
-
 /* =========================================================
    פוטר כהה - לפי הרפרנס שדניאל שלח
    רקע פחם, כותרות לבנות, קישורים אפורים, ורשתות בריבועים
@@ -4458,7 +4322,7 @@ a.footer__contact-link:hover {
    ========================================================= */
 .footer {
   background: var(--color-deep);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 /* הטקסטורה הבהירה שהייתה ברקע לא מתאימה לפחם */
 .footer::before {
@@ -4487,18 +4351,18 @@ a.footer__contact-link:hover {
   /* היו 20px - גדול מדי לכותרת עמודה בפוטר, והתחרה בקישורים
      שמתחתיה. 16px נותן היררכיה בלי לצעוק. */
   font-size: var(--fs-base);
-  color: #fff;
+  color: var(--color-on-dark);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .footer__link {
-  color: #fff;
+  color: var(--color-on-dark);
   transition: opacity 0.2s var(--ease);
 }
 .footer__link:hover,
 .footer__link:focus-visible {
-  color: #fff;
+  color: var(--color-on-dark);
   opacity: 0.75;
 }
 
@@ -4516,8 +4380,8 @@ a.footer__contact-link:hover {
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 0.375rem;
-  color: #fff;
+  border-radius: var(--radius-6);
+  color: var(--color-on-dark);
   transition: background 0.2s var(--ease), color 0.2s var(--ease),
     border-color 0.2s var(--ease);
 }
@@ -4529,7 +4393,7 @@ a.footer__contact-link:hover {
 .footer__social-link:focus-visible {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.5);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* פרטי קשר - האייקון בזהב, הטקסט אפור */
@@ -4548,7 +4412,7 @@ a.footer__contact-link:hover {
   /* אותו גודל כמו שאר קישורי הפוטר. כלל ישן קבע כאן 1.25rem
      מהתקופה שבה פרטי הקשר ישבו בעמודת המותג ולא כעמודה. */
   font-size: 1.0625rem; /* 17px - עלה יחד עם .footer__link */
-  color: #fff;
+  color: var(--color-on-dark);
   text-decoration: none;
   transition: color 0.2s var(--ease);
 }
@@ -4560,7 +4424,7 @@ a.footer__contact-link:hover {
 }
 .footer__contact-link:not(.footer__contact-link--static):hover,
 .footer__contact-link:not(.footer__contact-link--static):focus-visible {
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 .footer__hours {
@@ -4568,7 +4432,7 @@ a.footer__contact-link:hover {
   justify-content: space-between;
   gap: var(--space-2);
   font-size: 1.0625rem; /* זהה לשאר הפוטר */
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .footer__hours-time {
   font-variant-numeric: tabular-nums;
@@ -4577,10 +4441,10 @@ a.footer__contact-link:hover {
 /* קו דק מפריד, כמו בצילום */
 .footer__bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.18);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .footer__copy {
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 @media (max-width: 900px) {
@@ -4759,7 +4623,7 @@ a.footer__contact-link:hover {
   /* מרובע, כמו שדניאל ביקש */
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-8);
 }
 .pcol__img {
   object-fit: cover;
@@ -4776,7 +4640,7 @@ a.footer__contact-link:hover {
   position: absolute;
   inset-inline-start: 0.875rem;
   bottom: 0.875rem;
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: var(--fs-sm);
   font-weight: 700;
   opacity: 0;
@@ -5001,7 +4865,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 
 /* ===== הכרטיסים ===== */
@@ -5041,7 +4905,7 @@ a.footer__contact-link:hover {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: #fff;
+  background: var(--color-on-dark);
 }
 /* התוכן מעל הרקע */
 .aval > * {
@@ -5225,13 +5089,12 @@ a.footer__contact-link:hover {
   height: 100%;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  border-radius: var(--radius-16);
   overflow: hidden;
   /* צל עדין מאוד. שתי שכבות: אחת קרובה שמנתקת מהרקע, ואחת
      רחוקה ורכה שנותנת עומק בלי להכביד. */
   box-shadow:
-    0 0.125rem 0.25rem rgba(0, 0, 0, 0.05),
-    0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+    var(--shadow-card);
   transition:
     transform 0.4s var(--ease-soft),
     box-shadow 0.4s var(--ease-soft),
@@ -5241,8 +5104,7 @@ a.footer__contact-link:hover {
   transform: translateY(-4px);
   border-color: transparent;
   box-shadow:
-    0 0.25rem 0.5rem rgba(0, 0, 0, 0.06),
-    0 1.5rem 3rem rgba(0, 0, 0, 0.16);
+    var(--shadow-card-hover);
 }
 .acard__link {
   display: flex;
@@ -5364,7 +5226,7 @@ a.footer__contact-link:hover {
   margin-top: var(--space-5);
   aspect-ratio: 16 / 7;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: var(--radius-16);
 }
 .apage__img {
   object-fit: cover;
@@ -5618,7 +5480,7 @@ a.footer__contact-link:hover {
   font-size: var(--fs-h1);
   font-weight: 700;
   line-height: var(--lh-tight);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .avals__cta-text {
   margin: 0;
@@ -5844,10 +5706,10 @@ a.footer__contact-link:hover {
   font-size: var(--fs-display);
   font-weight: 700;
   line-height: var(--lh-tight);
-  color: #fff;
+  color: var(--color-on-dark);
   text-align: center;
   /* צל רך - רשת ביטחון למקרה שהתמונה תוחלף בבהירה יותר */
-  text-shadow: 0 2px 12px rgba(20, 19, 19, 0.45);
+  text-shadow: var(--shadow-title-on-photo);
 }
 
 /* ===== קיר ההמלצות ===== */
@@ -6098,8 +5960,7 @@ a.footer__contact-link:hover {
 }
 /* הכרטיס שבמרכז מורם מהרקע. הצל הוא ההבדל היחיד מלבד הגודל */
 .vcard--active .vcard__btn {
-  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.08),
-    0 12px 32px rgba(20, 19, 19, 0.14);
+  box-shadow: var(--shadow-video-active);
 }
 /* כפתור הנגן. עיגול זהב, לא המשולש האדום של יוטיוב - זה
    האתר שלנו ולא שלהם. */
@@ -6113,12 +5974,12 @@ a.footer__contact-link:hover {
   /* 4rem = 64px, מעל תקן המגע של 44 */
   width: 4rem;
   height: 4rem;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--color-gold);
   color: var(--color-gold-text);
   /* ⚠️ טבעת ההילה נבנית מ-box-shadow ולא מאלמנט נוסף: היא
      לא תופסת מקום בפריסה ולא דוחפת כלום. */
-  box-shadow: 0 0 0 0 rgba(221, 177, 67, 0);
+  box-shadow: var(--shadow-play);
   transition: transform 0.45s var(--ease-soft),
     box-shadow 0.45s var(--ease-soft);
   pointer-events: none;
@@ -6134,7 +5995,7 @@ a.footer__contact-link:hover {
 .vcard__btn:hover .vcard__play,
 .vcard__btn:focus-visible .vcard__play {
   transform: translate(50%, -50%) scale(1.06);
-  box-shadow: 0 0 0 0.625rem rgba(221, 177, 67, 0.28);
+  box-shadow: var(--shadow-play-hover);
 }
 .vcard__frame {
   display: block;
@@ -6224,7 +6085,7 @@ a.footer__contact-link:hover {
 .chv__tab--on,
 .chv__tab--on:hover {
   background: var(--color-logo-gold);
-  color: #fff;
+  color: var(--color-on-dark);
 }
 .chv__count {
   font-size: var(--fs-sm);
@@ -6289,4 +6150,167 @@ a.footer__contact-link:hover {
   /* ⚠️ גובה מינימלי שומר מקום בזמן שהסקריפט נטען - בלעדיו כל
      מה שמתחת קופץ למעלה ואז חזרה למטה */
   min-height: 18rem;
+}
+
+/* =========================================================
+   עמוד הדוגמה של השפה הגרפית - /styleguide (שלב 2, 09.10.26)
+   כלי עבודה, לא עמוד באתר: חסום ב-production.
+   ⚠️ משתמש רק במשתנים - אם משהו כאן נראה שונה מהאתר,
+   המשתנה הוא הבעיה ולא העמוד.
+   ========================================================= */
+.sg {
+  padding-top: var(--header-clearance);
+}
+.sg__head,
+.sg__block {
+  padding-inline: var(--side-padding);
+  margin-bottom: var(--section-gap);
+}
+/* הרכיבים מביאים ריפוד צדדי משלהם - הסקשן שלהם בלי, אחרת כפול */
+.sg__block--bleed {
+  padding-inline: 0;
+}
+.sg__block--bleed > .sg__h2 {
+  margin-inline: var(--side-padding);
+}
+.sg__title {
+  font-size: var(--fs-display);
+  line-height: var(--lh-tight);
+  font-weight: 700;
+}
+.sg__lead {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-size: var(--fs-sub);
+}
+.sg__h2 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  font-weight: 700;
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.sg__h3 {
+  font-size: var(--fs-card-title);
+  font-weight: 700;
+  margin: var(--space-5) 0 var(--space-3);
+  padding-inline: var(--side-padding);
+}
+.sg__list,
+.sg__swatches,
+.sg__tiles,
+.sg__weights,
+.sg__cards {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sg__swatches,
+.sg__tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(max(9rem, 14vw), 1fr));
+  gap: var(--space-4);
+}
+.sg__tiles--photo {
+  margin-top: var(--space-5);
+}
+.sg__list .sg__row {
+  display: grid;
+  grid-template-columns: 1fr 10vw 16vw 14vw;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.sg__swatches .sg__row,
+.sg__tiles .sg__row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.sg__swatch,
+.sg__tile {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-1);
+}
+.sg__tile {
+  background: var(--color-surface);
+}
+.sg__tile--shadow {
+  background: var(--color-bg);
+  border-color: transparent;
+}
+.sg__photo-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 2;
+  background: center / cover url("/images/hero-modern.webp");
+  color: var(--color-on-dark);
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+.sg__label {
+  font-weight: 700;
+}
+.sg__name,
+.sg__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
+.sg__use {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+}
+.sg__type {
+  line-height: var(--lh-tight);
+}
+.sg__bar {
+  display: block;
+  height: 0.75rem;
+  background: var(--color-logo-gold);
+}
+.sg__weights {
+  margin-top: var(--space-4);
+  font-size: var(--fs-sub);
+  display: grid;
+  gap: var(--space-2);
+}
+.sg__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-inline: var(--side-padding);
+  gap: var(--space-4);
+}
+.sg__dark,
+.sg__light {
+  padding: var(--space-5);
+}
+.sg__dark {
+  background: var(--color-header-bg);
+}
+.sg__light {
+  background: var(--color-surface);
+}
+.sg__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  padding-inline: var(--side-padding);
+}
+@media (max-width: 900px) {
+  .sg__list .sg__row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sg__pair,
+  .sg__cards {
+    grid-template-columns: 1fr;
+  }
 }

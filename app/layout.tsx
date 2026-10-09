@@ -37,7 +37,7 @@ export default function RootLayout({
     <html lang="he" dir="rtl" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         {/* הדר, פוטר וכפתור צף עברו ל-app/(site)/layout.tsx.
-            כאן נשאר רק מה שחייב לחול גם על עמוד "בקרוב". */}
+            כאן נשאר רק מה שחייב לחול גם על עמודים מחוץ לאתר (Studio). */}
         <Analytics />
         {children}
         {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}

@@ -8,8 +8,8 @@ import ArticleCard from "./ArticleCard";
 import Breadcrumbs from "./Breadcrumbs";
 import { byStyle } from "@/lib/articles";
 import Reveal from "./Reveal";
-import ParallaxImage from "./ParallaxImage";
 import Hotspots from "./Hotspots";
+import Faq from "./Faq";
 import { renderRichText } from "@/lib/richText";
 
 /**
@@ -254,25 +254,8 @@ export default function KitchenPage({
         </section>
       )}
 
-      {/* ===== שאלות ותשובות =====
-          <details> מקורי: נפתח בלי JS, נגיש למקלדת, ונשאר קריא
-          גם אם הסקריפטים לא נטענו. */}
-      <section className="kfaq" aria-labelledby="faq-title">
-        <h2 className="kpage__section-title" id="faq-title">
-          {page.faqTitle}
-        </h2>
-        <div className="kfaq__list">
-          {page.faq.map((item) => (
-            <details className="kfaq__item" key={item.q}>
-              <summary className="kfaq__q">
-                <span>{item.q}</span>
-                <span className="kfaq__sign" aria-hidden="true" />
-              </summary>
-              <p className="kfaq__a">{item.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+      {/* ===== שאלות ותשובות ===== */}
+      <Faq title={page.faqTitle} items={page.faq} />
 
       {/* גוגל מציג שאלות ותשובות ישירות בתוצאות. הסימון נגזר
           מאותו מקור תוכן, כך שהוא לא יכול להיפרד ממה שמוצג. */}
