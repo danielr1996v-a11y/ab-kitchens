@@ -62,10 +62,10 @@ export const navGroups: NavGroup[] = [
   {
     label: "תוכן עיקרי",
     views: [
-      { id: "articles", label: "מאמרים", icon: "FileText", permission: "items.edit", stage: 4, about: "כל המאמרים: הוספה, עריכה, טיוטה ופרסום, וקידום בגוגל." },
-      { id: "testimonials", label: "המלצות", icon: "MessageSquareQuote", permission: "items.edit", stage: 4, about: "המלצות כתובות, צילומי מסך וביקורות גוגל ברשימה אחת." },
-      { id: "videos", label: "סרטונים", icon: "Clapperboard", permission: "items.edit", stage: 4, about: "סרטוני לקוחות וסרטוני הערוץ. סרטון חדש מהערוץ מחכה כאן לאישור." },
-      { id: "projects", label: "פרויקטים", icon: "Images", permission: "items.edit", stage: 4, about: "תמונות הפרויקטים: לאיזה סגנון, ואם מופיעות ברצועת אודות או בגלריה." },
+      { id: "articles", label: "מאמרים", icon: "FileText", permission: "items.edit", about: "כל המאמרים: הוספה, עריכה, טיוטה ופרסום, וקידום בגוגל." },
+      { id: "testimonials", label: "המלצות", icon: "MessageSquareQuote", permission: "items.edit", about: "המלצות כתובות, צילומי מסך וביקורות גוגל ברשימה אחת." },
+      { id: "videos", label: "סרטונים", icon: "Clapperboard", permission: "items.edit", about: "סרטוני לקוחות וסרטוני הערוץ. סרטון חדש מהערוץ מחכה כאן לאישור." },
+      { id: "projects", label: "פרויקטים", icon: "Images", permission: "items.edit", about: "תמונות הפרויקטים: לאיזה סגנון, ואם מופיעות ברצועת אודות או בגלריה." },
     ],
   },
   {

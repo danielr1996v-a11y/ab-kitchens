@@ -26,7 +26,9 @@ const SCHEMA = [
      status TEXT NOT NULL CHECK (status IN ('publish','draft','trash')),
      data TEXT NOT NULL,
      revision INTEGER NOT NULL DEFAULT 1,
-     updated_at TEXT NOT NULL
+     updated_at TEXT NOT NULL,
+     position REAL NOT NULL DEFAULT 0,
+     prev_status TEXT
    )`,
   `CREATE INDEX IF NOT EXISTS entries_type ON entries(type, status)`,
   `CREATE TABLE IF NOT EXISTS drafts (
@@ -68,6 +70,14 @@ const SCHEMA = [
      key TEXT PRIMARY KEY,
      count INTEGER NOT NULL,
      expires_at TEXT NOT NULL
+   )`,
+  `CREATE TABLE IF NOT EXISTS media (
+     url TEXT PRIMARY KEY,
+     name TEXT NOT NULL,
+     width INTEGER,
+     height INTEGER,
+     bytes INTEGER,
+     created_at TEXT NOT NULL
    )`,
   `CREATE TABLE IF NOT EXISTS redirects (
      from_path TEXT PRIMARY KEY,
