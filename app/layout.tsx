@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Analytics from "@/components/Analytics";
-import DevInspector from "@/components/DevInspector";
 import { site } from "@/lib/content";
 
 /* שכבת הגנה שנייה: תג noindex ברמת העמוד בכל דיפלוי שאינו פרודקשן.
@@ -36,12 +33,12 @@ export default function RootLayout({
        ולכן ה-className בשרת ובלקוח לא זהים - וזה מכוון. */
     <html lang="he" dir="rtl" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
-        {/* הדר, פוטר וכפתור צף עברו ל-app/(site)/layout.tsx.
-            כאן נשאר רק מה שחייב לחול גם על עמודים מחוץ לאתר (Studio). */}
-        <Analytics />
+        {/* ⚠️ השורש ריק בכוונה (שלב 3, 09.10.26): ה-CSS של האתר,
+            הפיקסל וכלי הבדיקה עברו ל-app/(site)/layout.tsx, ומערכת
+            הניהול טוענת CSS ניטרלי משלה (app/admin/layout.tsx).
+            כך שתי השפות לא דולפות זו לזו, והפיקסל של פייסבוק לא
+            רץ בתוך מערכת הניהול. */}
         {children}
-        {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}
-        <DevInspector />
       </body>
     </html>
   );

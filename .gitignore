@@ -5,3 +5,7 @@ out/
 .DS_Store
 *.log
 .vercel
+
+# מערכת הניהול: מסד מקומי - פרטים אישיים, לא ב-git
+.data/
+!.env.example

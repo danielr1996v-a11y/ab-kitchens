@@ -1,4 +1,7 @@
 import { ViewTransition } from "react";
+import "../globals.css";
+import Analytics from "@/components/Analytics";
+import DevInspector from "@/components/DevInspector";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
@@ -32,6 +35,9 @@ export default function SiteLayout({
       <FloatingActions />
       {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
       <SanityBridge />
+      <Analytics />
+      {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}
+      <DevInspector />
     </>
   );
 }
