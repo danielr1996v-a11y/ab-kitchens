@@ -49,7 +49,13 @@ export default function Reveal({
   }, [threshold]);
 
   return (
-    <div ref={ref} className={`${className}${visible ? " is-visible" : ""}`}>
+    /* data-reveal: סימון למעבר לעץ אלמנטים (lib/admin/pageImport.ts) -
+       ב-HTML לבדו Reveal נראה כמו div רגיל. ערך ריק = סף ברירת המחדל */
+    <div
+      ref={ref}
+      className={`${className}${visible ? " is-visible" : ""}`}
+      data-reveal={threshold === 0.25 ? "" : threshold}
+    >
       {children}
     </div>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site, testimonials } from "@/lib/content";
 import Placeholder from "./Placeholder";
+import { widgetMarker } from "@/lib/site/marker";
 
 export type Review = (typeof testimonials)[number];
 
@@ -81,6 +82,7 @@ export default function Testimonials({
   videoSlot,
   showMore = true,
   plain = false,
+  source = "home",
 }: {
   reviews?: Review[];
   videoSlot?: boolean;
@@ -88,11 +90,14 @@ export default function Testimonials({
   showMore?: boolean;
   /** בלי הרקע האפור - בעמוד ההמלצות, שדניאל ביקש שיהיה לבן כולו */
   plain?: boolean;
+  /** איזו רשימה מוצגת - לסימון המעבר לעץ (lib/site/marker.ts) */
+  source?: "home" | "google";
 } = {}) {
   return (
     <section
       className={`testimonials${plain ? " testimonials--plain" : ""}`}
       aria-labelledby="testimonials-title"
+      {...(source === "google" ? widgetMarker("googleReviews") : widgetMarker("testimonials", { showMore, plain, videoSlot }))}
     >
       <div className="testimonials__inner">
         <header className="testimonials__header">

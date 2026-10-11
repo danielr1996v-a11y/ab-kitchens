@@ -1,6 +1,7 @@
 import Image from "next/image";
 import LeadForm from "@/components/LeadForm";
 import { leadBanner, leadForm } from "@/lib/content";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * LeadBanner - באנר דו-עמודתי לפי הפיגמה (node 2016:144).
@@ -30,7 +31,7 @@ export default function LeadBanner({
   const pctFadeOut = ((displaySeconds + transitionSeconds) / cycle) * 100;
 
   return (
-    <section className="lead" aria-labelledby="lead-title">
+    <section className="lead" aria-labelledby="lead-title" {...widgetMarker("leadBanner", { withForm })}>
       {/* פאנל כהה - ימין ב-RTL */}
       <div className="lead__panel">
         <div className="lead__content">

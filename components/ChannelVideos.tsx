@@ -8,6 +8,7 @@ import {
   type ChannelVideo,
   type VideoCategory,
 } from "@/lib/channel";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * הסרטונים של אברהם - שתי קטגוריות, רשת, ונגן במקום.
@@ -57,7 +58,7 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
   };
 
   return (
-    <div className="chv">
+    <div className="chv" {...widgetMarker("channelVideos")}>
       <div className="chv__tabs" role="tablist" aria-label={videosPage.title}>
         {videoCategories.map((c, i) => {
           const count = videos.filter((v) => v.cat === c.id).length;

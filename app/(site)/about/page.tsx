@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import ProjectStrip from "@/components/ProjectStrip";
-import AboutValues from "@/components/AboutValues";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import PageDoc from "@/components/site/PageDoc";
 
 export const metadata: Metadata = {
   title: "אודותינו | א. בית המטבחים - דור שני בענף",
@@ -14,18 +12,8 @@ export const metadata: Metadata = {
   },
 };
 
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
 export default function Page() {
-  return (
-    <>
-      <Breadcrumbs
-        className="crumbs--top"
-        trail={[{ label: "דף הבית", href: "/" }, { label: "אודותינו" }]}
-      />
-      {/* h1 של העמוד. הרצועה נושאת h2, ולכן הכותרת הראשית
-          חייבת לשבת כאן כדי לשמור על היררכיה תקינה */}
-      <h1 className="sr-only">אודות א. בית המטבחים</h1>
-      <ProjectStrip />
-      <AboutValues />
-    </>
-  );
+  return <PageDoc path="/אודותינו" />;
 }

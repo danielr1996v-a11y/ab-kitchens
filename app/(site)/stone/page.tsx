@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import KitchenPage from "@/components/KitchenPage";
-import TrustedBy from "@/components/TrustedBy";
-import { trustedBy } from "@/lib/content";
+import PageDoc from "@/components/site/PageDoc";
 
 export const metadata: Metadata = {
   title: "שיש למטבח | א. בית המטבחים",
@@ -16,28 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-/* רק ספקי השיש. הסינון לפי id ולא לפי מיקום במערך - הוספת
-   קבוצה או שינוי סדר ב-content לא ישברו את העמוד הזה. */
-const stoneOnly = {
-  ...trustedBy,
-  groups: trustedBy.groups.filter((g) => g.id === "stone"),
-};
-
-/**
- * עמוד השיש. אותו מבנה בדיוק כמו עמודי המטבחים - KitchenPage
- * נבנתה לכך שהוספת עמוד היא רשומה ב-kitchenPages ולא קוד חדש.
- *
- * ההבדל היחיד: ספקי השיש מוצגים מעל הגלריה. בעמוד שטוען "מעבד
- * מורשה של חברות השיש", הלוגואים הם ההוכחה לטענה - ולכן הם
- * באים לפני העבודות ולא אחריהן.
- */
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
 export default function Page() {
-  return (
-    <KitchenPage
-      styleKey="stone"
-      beforeGallery={
-        <TrustedBy content={stoneOnly} note="(אנחנו מעבדים מורשים)" />
-      }
-    />
-  );
+  return <PageDoc path="/שיש-למטבח" />;
 }

@@ -1,55 +1,12 @@
-import SectionRenderer from "@/components/SectionRenderer";
-import { homeSections } from "@/lib/sections";
-import DesignerCta from "@/components/DesignerCta";
-import { getTestimonials } from "@/lib/site/data";
-import { sanityFetch } from "@/lib/sanity/live";
-import { homeQuery, adaptHome } from "@/lib/sanity/queries";
+import PageDoc from "@/components/site/PageDoc";
 
 /**
- * דף הבית.
+ * דף הבית - מעץ האלמנטים שבמסד (שלב 5ב).
  *
- * התוכן מגיע מ-Sanity (sanityFetch - מתעדכן חי, בלי בנייה),
- * והאדפטר ממיר אותו ל-Section[] שהקומפוננטות מכירות.
- *
- * שתי רשתות ביטחון, שתיהן נופלות ל-homeSections מהקוד:
- * - אין env (סביבה בלי חשבון Sanity) - sanityFetch הוא null
- * - יש חיבור אבל אין מסמך / שגיאה - האדפטר מחזיר null
- * האתר לעולם לא מציג עמוד ריק בגלל תקלת CMS.
+ * ⚠️ עד שלב 5ב התוכן הגיע מ-Sanity. בייבוא נשמר בעץ מה שהוצג אז
+ * באתר, חוץ מההמלצות, שמגיעות מהמערכת (הנוסח העדכני, ADMIN-SPEC §0).
+ * ה-h1 המוסתר נשמר בעץ כמו שהוא.
  */
-export default async function HomePage() {
-  let sections = homeSections;
-
-  if (sanityFetch) {
-    try {
-      const { data } = await sanityFetch({ query: homeQuery });
-      sections = adaptHome(data) ?? homeSections;
-    } catch {
-      // Sanity לא זמין - האתר ממשיך מהקוד. עדיף עמוד נכון מאתמול
-      // מאשר שגיאה של עכשיו.
-    }
-  }
-
-  /* ⚠️ שלב 5א: ההמלצות בדף הבית מהמערכת (כתובות, "מוצג בדף הבית"),
-     ולא מ-Sanity - שם יושב הנוסח הישן (ADMIN-SPEC §0, הנוסח העדכני
-     מהקוד הוא שיובא). שאר הסקשנים עוברים לעץ האלמנטים בשלב 5ב. */
-  const { written } = await getTestimonials();
-  sections = sections.map((sec) => (sec._type === "testimonials" ? { ...sec, reviews: written } : sec));
-
-  /* ה-CTA אינו בלוק CMS בשלב הזה - הוא סקשן קבוע בסוף העמוד.
-     לכן הוא מרונדר כאן ולא דרך SectionRenderer, שאחרת היה
-     נעלם כשהתוכן מגיע מ-Sanity ולא כולל אותו. */
-  return (
-    <>
-      {/* ⚠️ ה-h1 של דף הבית. הוא מוסתר ולא מעוצב במכוון:
-          ההירו הוא סליידר תמונות ללא טקסט, ולכן העמוד רץ עד
-          כה **בלי h1 בכלל** בעוד שבכל שאר העמודים באתר יש
-          בדיוק אחד. זו הייתה החמצה בעמוד החשוב ביותר.
-          אותו פתרון כבר קיים ב-app/(site)/about/page.tsx. */}
-      <h1 className="sr-only">
-        א. בית המטבחים - מטבחים ושיש בהתאמה אישית בירושלים
-      </h1>
-      <SectionRenderer sections={sections} />
-      <DesignerCta />
-    </>
-  );
+export default function HomePage() {
+  return <PageDoc path="/" />;
 }

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { site, leadCopy } from "@/lib/content";
 import { isValidPhone, leadWhatsappUrl, sendLead } from "@/lib/lead";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * טופס פנייה אחיד - שם וטלפון, שולח מייל לאברהם.
@@ -59,7 +60,7 @@ export default function LeadForm({
   }
 
   return (
-    <form className={cls} onSubmit={submit} noValidate>
+    <form className={cls} onSubmit={submit} noValidate {...widgetMarker("leadForm", { source, submitLabel, variant })}>
       <div className="lform__row">
         <div className="lform__field">
           <label className="lform__label" htmlFor={`${uid}-name`}>

@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import ArticleCard from "@/components/ArticleCard";
-import Reveal from "@/components/Reveal";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import DesignerCta from "@/components/DesignerCta";
+import PageDoc from "@/components/site/PageDoc";
 import { articlesPage } from "@/lib/articles";
-import { getArticles } from "@/lib/site/data";
 
 export const metadata: Metadata = {
   title: "מאמרים על מטבחים ושיש | א. בית המטבחים",
@@ -17,43 +13,8 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * ליסטינג המאמרים.
- *
- * ⚠️ הנתיב הציבורי הוא /מאמרים-וטיפים - הכתובת שהייתה באתר
- * הישן. היא הופנתה זמנית לדף הבית כשהעמוד ירד, וההפניה הוסרה
- * כשהעמוד חזר עם תוכן אמיתי.
- */
-export default async function Page() {
-  const articles = await getArticles();
-  return (
-    <section className="alist" aria-labelledby="articles-title">
-      <Breadcrumbs
-        trail={[
-          { label: "דף הבית", href: "/" },
-          { label: articlesPage.title },
-        ]}
-      />
-
-      <Reveal className="alist__head">
-        <h1 className="alist__title" id="articles-title">
-          {articlesPage.title}
-        </h1>
-        <p className="alist__lead">{articlesPage.lead}</p>
-      </Reveal>
-
-      <ul className="alist__grid">
-        {articles.map((a) => (
-          <li key={a.slug}>
-            <ArticleCard article={a} />
-          </li>
-        ))}
-      </ul>
-
-      {/* ⚠️ הליסטינג היה העמוד היחיד באתר בלי שום הנעה לפעולה -
-          הקורא סיים לעבור על הכרטיסים ולא היה לו לאן להמשיך.
-          עמוד המאמר הבודד כבר נושא כפתור משלו (.apage__cta). */}
-      <DesignerCta />
-    </section>
-  );
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
+export default function Page() {
+  return <PageDoc path="/מאמרים-וטיפים" />;
 }

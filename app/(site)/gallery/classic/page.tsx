@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import KitchenPage from "@/components/KitchenPage";
+import PageDoc from "@/components/site/PageDoc";
 
 export const metadata: Metadata = {
   title: "מטבחים קלאסיים | א. בית המטבחים",
@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   },
 };
 
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
 export default function Page() {
-  return <KitchenPage styleKey="classic" />;
+  return <PageDoc path="/גלריה/קלאסי" />;
 }

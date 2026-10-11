@@ -20,6 +20,7 @@ import {
 } from "@/lib/admin/entries";
 import { listMedia, MAX_UPLOAD, uploadImage } from "@/lib/admin/media";
 import { importRepoContent } from "@/lib/admin/import";
+import { importPages } from "@/lib/admin/pageImport";
 import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
   checkLogin,
@@ -247,6 +248,17 @@ async function handle(req: Request, ctx: Ctx) {
     await requireUser("settings.edit");
     const res = await importRepoContent();
     for (const t of ["article", "testimonial", "video", "project"]) revalidateType(t);
+    return json(res);
+  }
+
+  /* ייבוא עמודים כעץ אלמנטים (שלב 5ב) - מנהל בלבד, וחסום מול ענן
+     בלי ADMIN_ALLOW_IMPORT, כמו ייבוא התוכן */
+  if (method === "POST" && action === "import-pages") {
+    await requireUser("settings.edit");
+    const body = await readBody(req, 64 * 1024);
+    const paths = Array.isArray(body.paths) ? body.paths.filter((p): p is string => typeof p === "string" && p.startsWith("/")) : [];
+    const res = await importPages(new URL(req.url).origin, paths, body.replace === true && process.env.NODE_ENV !== "production");
+    revalidateType("page");
     return json(res);
   }
 

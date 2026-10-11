@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import TestimonialWall from "@/components/TestimonialWall";
-import VideoSlider from "@/components/VideoSlider";
-import Testimonials from "@/components/Testimonials";
-import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
-import DesignerCta from "@/components/DesignerCta";
-import { testimonialsPage, trustindexWidgetId } from "@/lib/testimonialsPage";
-import { getTestimonials, getVideos } from "@/lib/site/data";
+import PageDoc from "@/components/site/PageDoc";
 
 export const metadata: Metadata = {
   title: "המלצות לקוחות | א. בית המטבחים",
@@ -22,109 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * עמוד ההמלצות.
- * סדר: באנר → פירורי לחם → קיר הצילומים → סרטונים → CTA.
- *
- * ⚠️ ה-noindex וההוצאה מ-sitemap.ts הוסרו - העמוד כבר לא ריק.
- * (הוא הוכנס כשהעמוד המתין לתוכן; ראה קומיט a8df7f0 ואילך.)
- *
- */
-export default async function Page() {
-  /* ⚠️ שלב 5א: ההמלצות והסרטונים מהמערכת. הקיר = צילומי מסך
-     מפורסמים, המוצמדים (המכתב) ראשונים */
-  const [{ wall, google: googleReviews }, { client }] = await Promise.all([getTestimonials(), getVideos()]);
-
-  return (
-    <>
-      {/* ===== הבאנר =====
-          ⚠️ hero-country.webp נבחרה כי היא **לא בשימוש בשום
-          מקום אחר באתר** - כל שאר התמונות הרחבות כבר מופיעות
-          בסליידר הבית, במאמרים או בפאנל המעצבת שיושב בתחתית
-          העמוד הזה עצמו.
-
-          alt ריק במכוון: התמונה דקורטיבית וה-h1 נושא את
-          המשמעות. אותה החלטה כמו ב-designerCta. */}
-      <section className="tbanner">
-        <Image
-          src="/images/hero-country.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="tbanner__img"
-        />
-        <span className="tbanner__scrim" aria-hidden="true" />
-        <h1 className="tbanner__title">{testimonialsPage.title}</h1>
-      </section>
-
-      {/* ⚠️ בלי crumbs--top: הבאנר כבר מפנה את ההדר הצף, בדיוק
-          כמו בעמודי המטבחים. */}
-      <Breadcrumbs
-        trail={[{ label: "דף הבית", href: "/" }, { label: "המלצות" }]}
-      />
-
-      {/* ===== גריד הצילומים המקוריים =====
-          ⚠️ כל ההמלצות כאן הן המקור עצמו - צילומים, בלי מלל
-          שלנו. גם המכתב בכתב יד. */}
-      <section className="treviews__wall" aria-label="המלצות מלקוחות">
-        {/* ⚠️ המכתב ראשון בקיר. עד 5.10 הייתה לו רצועה משלו
-            עם התמלול מימין; דניאל ביקש שיהיה צילום בין
-            הצילומים, בלי מלל. התמלול נשאר ב-alt. */}
-        <TestimonialWall items={wall} />
-      </section>
-
-      {/* ===== ביקורות מגוגל =====
-          ⚠️ אותו רכיב של דף הבית, עם תג הדירוג של גוגל - כך
-          המבקר מזהה מיד שאלה ביקורות גוגל אמיתיות. בלי כפתור
-          "לכל ההמלצות", כי אנחנו כבר בעמוד ההמלצות. */}
-      <GoogleReviewsWidget widgetId={trustindexWidgetId}>
-        <Testimonials reviews={googleReviews} showMore={false} plain />
-      </GoogleReviewsWidget>
-
-      {/* ===== סרטוני לקוחות =====
-          ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה
-          ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
-          נקראים בלי מאמץ ומחממים את הקרקע. */}
-      <section className="tvideos" aria-labelledby="videos-title">
-        {/* ⚠️ הכותרת נכנסה לתוך הקומפוננטה ולא נשארה כאן:
-            חצי הניווט חולקים state עם המסלול, והם חייבים
-            לשבת בשורת הכותרת - כלומר שלושתם תחת אותו רכיב. */}
-        <VideoSlider titleId="videos-title" videos={client} />
-      </section>
-
-      <DesignerCta />
-
-      {/* ⚠️ אותו @id של components/Schema.tsx, כדי שההמלצות
-          ייתלו בעסק הקיים ולא ייצרו ישות מתחרה באותו עמוד.
-          ⛔ בלי aggregateRating - הדירוג טרם אומת מול פרופיל
-          הגוגל (PROJECT.md §8). */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "@id": "https://www.ab-kitchens.co.il/#business",
-            review: [
-              ...wall
-                /* רק המלצות עם שם - ל-Review נדרש author */
-                .filter((t) => t.author)
-                .map((t) => ({
-                  "@type": "Review",
-                  author: { "@type": "Person", name: t.author },
-                  reviewBody: t.quote.join(" "),
-                })),
-              ...googleReviews.map((g) => ({
-                "@type": "Review",
-                author: { "@type": "Person", name: g.name },
-                reviewRating: { "@type": "Rating", ratingValue: g.rating },
-                reviewBody: g.text,
-              })),
-            ],
-          }),
-        }}
-      />
-    </>
-  );
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
+export default function Page() {
+  return <PageDoc path="/המלצות" />;
 }

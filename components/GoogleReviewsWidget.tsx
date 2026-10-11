@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * ביקורות גוגל חיות - הווידג'ט של Trustindex.
@@ -41,7 +42,7 @@ export default function GoogleReviewsWidget({
   if (!widgetId) return <>{children}</>;
 
   return (
-    <section className="greviews" aria-label="ביקורות בגוגל">
+    <section className="greviews" aria-label="ביקורות בגוגל" {...widgetMarker("googleReviews", { widgetId })}>
       <div className="greviews__inner" ref={box} />
     </section>
   );

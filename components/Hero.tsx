@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { heroSlideshow } from "@/lib/content";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * Hero - באנר ראשי עם רקע תמונות מתחלפות (Ken Burns + Cross Fade).
@@ -34,7 +35,7 @@ export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
 }`;
 
   return (
-    <section className="hero" aria-label="באנר ראשי">
+    <section className="hero" aria-label="באנר ראשי" {...widgetMarker("hero", { slideshow })}>
       {isAnimated && <style dangerouslySetInnerHTML={{ __html: keyframes }} />}
 
       {slides.map((slide, i) => (

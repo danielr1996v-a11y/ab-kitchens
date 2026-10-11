@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { designerCta } from "@/lib/content";
 import LeadForm from "@/components/LeadForm";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * סקשן "פגישה עם המעצב/ת" - כרטיס עם טופס ישיר.
@@ -17,7 +18,7 @@ export default function DesignerCta() {
   return (
     /* ⚠️ ה-id הוא יעד עוגן: הכפתור בבלוק ההמלצות בדף הבית
        מפנה לכאן במקום להחזיק טופס משלו. */
-    <section className="dcta" id="designer-cta">
+    <section className="dcta" id="designer-cta" {...widgetMarker("designerCta")}>
       <div className="dcta__card">
         <Image
           src={designerCta.image}

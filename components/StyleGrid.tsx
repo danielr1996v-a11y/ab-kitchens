@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ViewTransition } from "react";
 import { styleSection } from "@/lib/content";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * StyleGrid - "בחרו את הסגנון שלכם" כ-Bento Grid.
@@ -49,6 +50,7 @@ export default function StyleGrid({ content = styleSection }: StyleGridProps = {
       className={`section-block styles${isVisible ? " is-visible" : ""}`}
       id="styles"
       aria-labelledby="styles-title"
+      {...widgetMarker("styleGrid", { content })}
     >
       <h2 className="styles__title" id="styles-title">
         <span className="reveal-mask">

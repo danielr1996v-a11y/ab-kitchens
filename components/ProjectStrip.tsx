@@ -4,6 +4,7 @@ import { aboutProjects, kitchenKind } from "@/lib/content";
 import { getProjects } from "@/lib/site/data";
 import { renderHighlight } from "@/lib/richText";
 import Reveal from "./Reveal";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * ProjectStrip - הסקשן הפותח של עמוד אודות.
@@ -109,7 +110,7 @@ export default async function ProjectStrip() {
   const [right, left] = [items.slice(0, 8), items.slice(8)];
 
   return (
-    <section className="pstrip" aria-labelledby="projects-title">
+    <section className="pstrip" aria-labelledby="projects-title" {...widgetMarker("projectStrip")}>
       {/* ב-RTL הראשון ב-DOM הוא הימני */}
       <Column items={right} dir="up" />
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import ParallaxImage from "./ParallaxImage";
+import { widgetMarker } from "@/lib/site/marker";
 
 type Point = { x: number; y: number; label: string; pos: "top" | "bottom" };
 
@@ -38,7 +39,7 @@ export default function Hotspots({
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <figure className={`khot${tall ? " khot--tall" : ""}`}>
+    <figure className={`khot${tall ? " khot--tall" : ""}`} {...widgetMarker("hotspots", { image, alt, points, tall })}>
       {/* התמונה והנקודות יחד בשכבת הפרלקס, כדי שהנקודות יישארו
           נעולות על הפריטים שהן מסמנות */}
       {/* ⚠️ פרלקס מרוכך במסגרת הגבוהה. ברירת המחדל 0.12 מזיזה

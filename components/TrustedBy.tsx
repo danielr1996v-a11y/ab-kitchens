@@ -1,4 +1,5 @@
 import { trustedBy } from "@/lib/content";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * TrustedBy - "סומכים עלינו", שלוש שורות לפי קטגוריה.
@@ -26,7 +27,7 @@ export default function TrustedBy({
   note,
 }: TrustedByProps = {}) {
   return (
-    <section className="section-block trusted" aria-labelledby="trusted-title">
+    <section className="section-block trusted" aria-labelledby="trusted-title" {...widgetMarker("trustedBy", { content, note })}>
       <h2 className="trusted__title" id="trusted-title">
         {content.title}
       </h2>

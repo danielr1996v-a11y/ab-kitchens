@@ -1,3 +1,5 @@
+import { widgetMarker } from "@/lib/site/marker";
+
 /**
  * Placeholder - סקשן שממתין לתוכן מהלקוח.
  *
@@ -34,7 +36,7 @@ export default function Placeholder({
   if (process.env.NODE_ENV === "production") return null;
 
   return (
-    <section className="phold" aria-label={`${title} - ממתין לתוכן`}>
+    <section className="phold" aria-label={`${title} - ממתין לתוכן`} {...widgetMarker("placeholder", { title, slots, note, ratio })}>
       <div className="phold__head">
         <h2 className="phold__title">{title}</h2>
         <p className="phold__note">{note}</p>

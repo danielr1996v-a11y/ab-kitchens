@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { site, contactPage, leadCopy } from "@/lib/content";
 import { isValidPhone, leadWhatsappUrl, sendLead } from "@/lib/lead";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * טופס יצירת קשר.
@@ -62,7 +63,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form className="cform" onSubmit={send} noValidate>
+    <form className="cform" onSubmit={send} noValidate {...widgetMarker("contactForm")}>
       <p className="cform__title">{contactPage.formTitle}</p>
 
       <div className="cform__row">

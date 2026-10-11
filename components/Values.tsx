@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { values } from "@/lib/content";
 import { renderRichText, renderHighlight } from "@/lib/richText";
+import { widgetMarker } from "@/lib/site/marker";
 
 /**
  * Values - "מה שמוביל אותנו" כסקשן נעול (Pinned Section).
@@ -70,6 +71,7 @@ export default function Values({ content = values }: ValuesProps = {}) {
       id="process"  /* שמירת העוגן מהאתר הישן: /#process */
       aria-labelledby="values-title"
       style={{ "--values-count": items.length } as React.CSSProperties}
+      {...widgetMarker("values", { content })}
     >
       <div className="values__track">
         {/* סמנים בלתי-נראים - קובעים מתי כל ערך נכנס לפוקוס */}

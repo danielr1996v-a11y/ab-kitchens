@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import DesignersHero from "@/components/DesignersHero";
-import DesignerCta from "@/components/DesignerCta";
+import PageDoc from "@/components/site/PageDoc";
 
 export const metadata: Metadata = {
   title: "המעצבים שלנו | א. בית המטבחים",
@@ -15,22 +14,8 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * עמוד "המעצבים שלנו".
- *
- * הוכרע עם דניאל: העמוד מדבר ללקוח פרטי ולא מציג צוות בשמות
- * ותמונות. לכן הוא לא עוסק במי הם אלא בפגישה עצמה - מה שמסיר
- * את אי-הוודאות בדיוק לפני ה-CTA.
- *
- * נבנה סקשן אחר סקשן. כרגע: הפתיח בלבד.
- */
-export default function DesignersPage() {
-  /* ⚠️ העמוד הזה כל מטרתו להסיר אי-ודאות לפני הפגישה, והוא רץ
-     עד כה **בלי כפתור לקבוע אותה**. זה היה הפער הבולט מכולם. */
-  return (
-    <>
-      <DesignersHero />
-      <DesignerCta />
-    </>
-  );
+/* ⚠️ שלב 5ב: התוכן מעץ האלמנטים שבמסד (יובא מה-JSX שהיה כאן).
+   ה-JSX הישן נמחק - הוא בהיסטוריית git, קומיט 90c02b5 */
+export default function Page() {
+  return <PageDoc path="/designers" />;
 }
