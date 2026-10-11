@@ -71,8 +71,8 @@ export const navGroups: NavGroup[] = [
   {
     label: "תוכן האתר",
     views: [
-      { id: "pages", label: "עמודים", icon: "PanelsTopLeft", permission: "pages.text", stage: 6, about: "כל עמודי האתר, ועריכה ויזואלית על העמוד עצמו." },
-      { id: "shared", label: "תפריט עליון ופוטר", icon: "Menu", permission: "shared.edit", stage: 6, about: "ההדר, התפריט בטלפון והפוטר - נשמרים פעם אחת לכל האתר." },
+      { id: "pages", label: "עמודים", icon: "PanelsTopLeft", permission: "pages.text", about: "כל עמודי האתר, ועריכה ויזואלית על העמוד עצמו." },
+      { id: "shared", label: "תפריט עליון ופוטר", icon: "Menu", permission: "shared.edit", about: "ההדר, התפריט בטלפון והפוטר - נשמרים פעם אחת לכל האתר." },
     ],
   },
   {

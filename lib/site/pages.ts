@@ -37,3 +37,24 @@ export const getPart = unstable_cache(
   ["site-part"],
   { tags: [entriesTag("part")] },
 );
+
+/**
+ * עמוד או חלק לעריכה: **הטיוטה** אם יש, אחרת המפורסם. בלי מטמון -
+ * העורך צריך לראות כל שמירה מיד. נקרא רק בתצוגת טיוטה, ורק אחרי
+ * שנבדק שיש משתמש מחובר עם הרשאה (lib/site/editMode.ts).
+ */
+export async function getDraftDoc(where: { path?: string; partId?: string }): Promise<SiteDoc | null> {
+  const c = await db();
+  const { rows } = where.partId
+    ? await c.execute({
+        sql: "SELECT COALESCE(d.data, e.data) AS data FROM entries e LEFT JOIN drafts d ON d.entry_id = e.id WHERE e.id = ?",
+        args: [where.partId],
+      })
+    : await c.execute({
+        sql: `SELECT COALESCE(d.data, e.data) AS data FROM entries e LEFT JOIN drafts d ON d.entry_id = e.id
+              WHERE e.type = 'page' AND e.status != 'trash'
+                AND (json_extract(e.data, '$.path') = ? OR json_extract(d.data, '$.path') = ?)`,
+        args: [where.path ?? "", where.path ?? ""],
+      });
+  return rows[0] ? JSON.parse(String(rows[0].data)).doc : null;
+}

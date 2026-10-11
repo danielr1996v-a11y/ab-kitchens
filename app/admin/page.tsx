@@ -6,6 +6,7 @@ import AdminShell from "@/components/admin/AdminShell";
 import EmptyView from "@/components/admin/EmptyView";
 import UsersView from "@/components/admin/UsersView";
 import ItemsView from "@/components/admin/ItemsView";
+import PagesView from "@/components/admin/PagesView";
 import ItemEditor from "@/components/admin/ItemEditor";
 import { typeByView } from "@/lib/admin/schema";
 
@@ -43,6 +44,10 @@ export default async function AdminPage({
         <EmptyView title="אין לך גישה למסך הזה" text="המסך שמור למנהלי המערכת. אם צריך גישה - דברו עם דניאל." />
       ) : view.id === "users" ? (
         <UsersView me={user.email} />
+      ) : view.id === "pages" ? (
+        <PagesView kind="page" />
+      ) : view.id === "shared" ? (
+        <PagesView kind="part" />
       ) : contentType && params.item ? (
         /* key: מעבר בין פריטים בונה את העורך מחדש, בלי מצב שנשאר מהקודם */
         <ItemEditor key={params.item} type={contentType} id={params.item} backHref={`/admin?view=${view.id}`} />

@@ -47,6 +47,12 @@ export type SiteNode = {
   };
   /** הסתרה בלי מחיקה, לפי מכשיר (שלב 6) */
   hide?: { desktop?: boolean; tablet?: boolean; mobile?: boolean };
+  /**
+   * עיצוב מהעורך, לפי מכשיר (המפרט §3). הירושה: מחשב ← טאבלט ← טלפון.
+   * מרונדר כ-CSS על .n-<id> (lib/site/nodeCss.ts). רק תכונות מהרשימה
+   * הסגורה ב-lib/admin/sanitizeDoc.ts.
+   */
+  style?: { base: { desktop?: Record<string, string>; tablet?: Record<string, string>; mobile?: Record<string, string> } };
   children?: SiteNode[];
 };
 

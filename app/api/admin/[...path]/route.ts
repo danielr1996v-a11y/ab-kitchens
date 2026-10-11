@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import {
   createSessionValue,
   SESSION_COOKIE,
@@ -21,6 +21,8 @@ import {
 import { listMedia, MAX_UPLOAD, uploadImage } from "@/lib/admin/media";
 import { importRepoContent } from "@/lib/admin/import";
 import { importPages, importParts } from "@/lib/admin/pageImport";
+import { discardPageDraft, listPages, publishPage, savePageDraft } from "@/lib/admin/pageDocs";
+import { can } from "@/lib/admin/roles";
 import { defaultHeaderMenu } from "@/lib/content";
 import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
@@ -261,6 +263,64 @@ async function handle(req: Request, ctx: Ctx) {
     const res = await importPages(new URL(req.url).origin, paths, body.replace === true && process.env.NODE_ENV !== "production");
     revalidateType("page");
     return json(res);
+  }
+
+  /* ===== עורך העמודים (שלב 6) ===== */
+
+  /* מצב עריכה: עוגיית תצוגת הטיוטה של Next. היא לבדה לא חושפת כלום -
+     העמוד בודק גם משתמש מחובר עם הרשאה (lib/site/editMode.ts) */
+  if (method === "POST" && action === "edit-mode") {
+    await requireUser("pages.text");
+    const dm = await draftMode();
+    if ((await readBody(req)).on === false) dm.disable();
+    else dm.enable();
+    return json({ ok: true });
+  }
+
+  if (method === "GET" && action === "pages") {
+    await requireUser("pages.text");
+    return json({ pages: await listPages() });
+  }
+
+  if (method === "GET" && action === "page" && id) {
+    const user = await requireUser("pages.text");
+    const entry = await getEntry(id);
+    if (entry.type !== "page" && entry.type !== "part") throw new HttpError(404, "זה לא עמוד");
+    if (entry.type === "part" && !can(user.role, "shared.edit")) throw new HttpError(403, "אין לך הרשאה לערוך את התפריט והפוטר");
+    return json({ entry });
+  }
+
+  if (method === "POST" && action === "page-draft" && id) {
+    const user = await requireUser("pages.text");
+    const body = await readBody(req, 1024 * 1024);
+    return json(await savePageDraft(id, body, int(body.revision), user));
+  }
+
+  if (method === "POST" && action === "page-publish" && id) {
+    const user = await requireUser("pages.text");
+    const res = await publishPage(id, int((await readBody(req)).revision), user);
+    revalidateType("page");
+    revalidateType("part");
+    return json(res);
+  }
+
+  if (method === "POST" && action === "page-discard" && id) {
+    await requireUser("pages.text");
+    await discardPageDraft(id);
+    return json({ ok: true });
+  }
+
+  /* שחזור גרסה של עמוד - לטיוטה, ודרך אותו ניקוי והרשאות של שמירה רגילה */
+  if (method === "POST" && action === "page-restore" && id) {
+    const user = await requireUser("pages.text");
+    const body = await readBody(req);
+    const revs = await listRevisions(id);
+    const rev = revs.find((r) => r.id === int(body.revisionId));
+    if (!rev) throw new HttpError(404, "הגרסה לא נמצאה");
+    const { db } = await import("@/lib/admin/db");
+    const { rows } = await (await db()).execute({ sql: "SELECT data FROM revisions WHERE id = ?", args: [rev.id] });
+    const data = JSON.parse(String(rows[0].data));
+    return json(await savePageDraft(id, { nodes: data.doc?.nodes, title: data.title, path: data.path, seo: data.seo }, int(body.revision), user));
   }
 
   if (method === "POST" && action === "import-parts") {

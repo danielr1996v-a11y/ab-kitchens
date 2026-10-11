@@ -43,7 +43,7 @@ import {
  */
 
 /** הקשר הרינדור - העמוד כולו, בשביל רכיבים שנגזרים מתוכן העמוד */
-export type RenderContext = { nodes: SiteNode[] };
+export type RenderContext = { nodes: SiteNode[]; editing?: boolean };
 
 type D = Record<string, unknown>;
 type Renderer = (data: D, ctx: RenderContext) => ReactNode;

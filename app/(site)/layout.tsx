@@ -6,7 +6,6 @@ import SharedPart from "@/components/site/SharedPart";
 import FloatingActions from "@/components/FloatingActions";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
-import SanityBridge from "@/components/SanityBridge";
 
 /**
  * הלייאאוט של האתר עצמו - הדר, פוטר וכפתור צף.
@@ -33,8 +32,6 @@ export default function SiteLayout({
       </ViewTransition>
       <SharedPart kind="footer" />
       <FloatingActions />
-      {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
-      <SanityBridge />
       <Analytics />
       {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}
       <DevInspector />

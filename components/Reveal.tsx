@@ -16,10 +16,13 @@ export default function Reveal({
   children,
   className = "",
   threshold = 0.25,
+  "data-n": dataN,
 }: {
   children: React.ReactNode;
   className?: string;
   threshold?: number;
+  /** סימון לבחירה בעורך (components/site/RenderTree.tsx) */
+  "data-n"?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -55,6 +58,7 @@ export default function Reveal({
       ref={ref}
       className={`${className}${visible ? " is-visible" : ""}`}
       data-reveal={threshold === 0.25 ? "" : threshold}
+      data-n={dataN}
     >
       {children}
     </div>
