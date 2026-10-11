@@ -1,5 +1,5 @@
 import "server-only";
-import { unstable_cache } from "next/cache";
+import { cached } from "@/lib/site/cache";
 import { db } from "@/lib/admin/db";
 import type { EntryData } from "@/lib/admin/schema";
 import type { Article } from "@/lib/articles";
@@ -51,7 +51,7 @@ const shortId = (id: string, type: string) => id.replace(new RegExp(`^repo-${typ
 
 export type SiteArticle = Article & { path: string; seo: EntryData["seo"] };
 
-export const getArticles = unstable_cache(
+export const getArticles = cached(
   async (): Promise<SiteArticle[]> =>
     (await published("article")).map((r) => ({
       slug: shortId(r.id, "article"),
@@ -68,14 +68,14 @@ export const getArticles = unstable_cache(
       })),
     })),
   ["site-articles"],
-  { tags: [entriesTag("article")] },
+  [entriesTag("article")],
 );
 
 /* ===== המלצות ===== */
 
 export type HomeReview = { id: string; name: string; rating: number; text: string };
 
-export const getTestimonials = unstable_cache(
+export const getTestimonials = cached(
   async () => {
     const [rows, sizes] = await Promise.all([published("testimonial"), mediaSizes()]);
     const written: HomeReview[] = [];
@@ -111,12 +111,12 @@ export const getTestimonials = unstable_cache(
     return { written, google, wall };
   },
   ["site-testimonials"],
-  { tags: [entriesTag("testimonial")] },
+  [entriesTag("testimonial")],
 );
 
 /* ===== סרטונים ===== */
 
-export const getVideos = unstable_cache(
+export const getVideos = cached(
   async () => {
     const [rows, sizes] = await Promise.all([published("video"), mediaSizes()]);
     const client: (ClientVideo & { poster: string })[] = [];
@@ -133,14 +133,14 @@ export const getVideos = unstable_cache(
     return { client, channel };
   },
   ["site-videos"],
-  { tags: [entriesTag("video")] },
+  [entriesTag("video")],
 );
 
 /* ===== פרויקטים ===== */
 
 export type SiteProject = { id: string; src: string; alt: string; style: string; inStrip: boolean; inGallery: boolean };
 
-export const getProjects = unstable_cache(
+export const getProjects = cached(
   async (): Promise<SiteProject[]> =>
     (await published("project")).map((r) => ({
       id: shortId(r.id, "project"),
@@ -151,16 +151,16 @@ export const getProjects = unstable_cache(
       inGallery: r.fields.inGallery === true,
     })),
   ["site-projects"],
-  { tags: [entriesTag("project")] },
+  [entriesTag("project")],
 );
 
 /* ===== הפניות - כתובת שהשתנתה בפרסום ===== */
 
-export const getRedirect = unstable_cache(
+export const getRedirect = cached(
   async (path: string): Promise<string | null> => {
     const { rows } = await (await db()).execute({ sql: "SELECT to_path FROM redirects WHERE from_path = ?", args: [path] });
     return rows[0] ? String(rows[0].to_path) : null;
   },
   ["site-redirect"],
-  { tags: ["redirects"] },
+  ["redirects"],
 );

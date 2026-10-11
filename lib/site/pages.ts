@@ -1,5 +1,5 @@
 import "server-only";
-import { unstable_cache } from "next/cache";
+import { cached } from "@/lib/site/cache";
 import { db } from "@/lib/admin/db";
 import type { SiteDoc } from "./tree";
 import { entriesTag } from "./data";
@@ -11,7 +11,7 @@ import { entriesTag } from "./data";
 
 export type PageEntry = { id: string; title: string; path: string; doc: SiteDoc; seo?: { title?: string; description?: string; image?: string; noindex?: boolean } };
 
-export const getPage = unstable_cache(
+export const getPage = cached(
   async (path: string): Promise<PageEntry | null> => {
     const { rows } = await (await db()).execute({
       sql: "SELECT id, data FROM entries WHERE type = 'page' AND status = 'publish' AND json_extract(data, '$.path') = ?",
@@ -22,11 +22,11 @@ export const getPage = unstable_cache(
     return { id: String(rows[0].id), title: d.title ?? "", path: d.path, doc: d.doc, seo: d.seo };
   },
   ["site-page"],
-  { tags: [entriesTag("page")] },
+  [entriesTag("page")],
 );
 
 /** חלק משותף - הדר או פוטר. נשמר פעם אחת ומורכב לכל עמוד (המפרט §3) */
-export const getPart = unstable_cache(
+export const getPart = cached(
   async (kind: string): Promise<SiteDoc | null> => {
     const { rows } = await (await db()).execute({
       sql: "SELECT data FROM entries WHERE id = ? AND type = 'part' AND status = 'publish'",
@@ -35,7 +35,7 @@ export const getPart = unstable_cache(
     return rows[0] ? JSON.parse(String(rows[0].data)).doc : null;
   },
   ["site-part"],
-  { tags: [entriesTag("part")] },
+  [entriesTag("part")],
 );
 
 /**
@@ -60,7 +60,7 @@ export async function getDraftDoc(where: { path?: string; partId?: string }): Pr
 }
 
 /** עמודים שנוצרו במערכת ומפורסמים - למפת האתר */
-export const getCustomPages = unstable_cache(
+export const getCustomPages = cached(
   async (): Promise<{ path: string; noindex: boolean }[]> => {
     const { rows } = await (await db()).execute("SELECT data FROM entries WHERE type = 'page' AND status = 'publish' AND id LIKE 'page-%'");
     return rows.map((r) => {
@@ -69,5 +69,5 @@ export const getCustomPages = unstable_cache(
     });
   },
   ["site-custom-pages"],
-  { tags: [entriesTag("page")] },
+  [entriesTag("page")],
 );

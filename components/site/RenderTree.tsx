@@ -111,7 +111,8 @@ function renderNode(node: SiteNode, ctx: RenderContext): ReactNode {
        שקוף (display:contents לא משנה פריסה) כדי שיהיה אפשר לבחור בו */
     if (ctx.editing) el = <div data-n={node.id} data-locked="" style={{ display: "contents" }}>{el}</div>;
   } else if (node.type === "html") {
-    el = <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: node.props?.json ?? "" }} />;
+    /* JSON מיובא - לא נערך במערכת, ובכל זאת בלי דרך לסגור את התגית */
+    el = <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: (node.props?.json ?? "").replace(/<\/(script)/gi, "<\\/$1") }} />;
   } else if (node.type === "icon") {
     el = createElement("svg", { ...props, dangerouslySetInnerHTML: { __html: node.props?.svg ?? "" } });
   } else if (node.type === "image" && node.props?.attrs?.["data-nimg"]) {

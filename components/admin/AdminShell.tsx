@@ -207,7 +207,8 @@ export default function AdminShell({
             <Menu className="size-5" />
           </Button>
           <nav aria-label="מיקום" className="min-w-0 flex-1 truncate text-sm">
-            <Link href="/admin" className="text-muted-foreground hover:text-foreground">
+            {/* קו תחתון: קישור בתוך שורת טקסט חייב להיראות קישור גם בלי צבע (axe) */}
+            <Link href="/admin" className="text-muted-foreground underline decoration-muted-foreground/40 underline-offset-4 hover:text-foreground">
               ניהול
             </Link>
             {view.id !== "dashboard" && (

@@ -8,6 +8,7 @@ import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 import { trustindexWidgetId } from "@/lib/testimonialsPage";
 import { getArticles, getProjects, getTestimonials, getVideos } from "@/lib/site/data";
 import { widgetMarker } from "@/lib/site/marker";
+import { jsonLd } from "@/lib/site/jsonLd";
 
 /**
  * בלוקים שתוכנם מגיע מהמסד - שלב 5ב.
@@ -68,7 +69,7 @@ export function FaqSchema({ items }: { items: { q: string; a: string }[] }) {
       {...widgetMarker("faqSchema")}
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify({
+        __html: jsonLd({
           "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: items.map((item) => ({
@@ -140,7 +141,7 @@ export async function ReviewsSchema() {
       {...widgetMarker("reviewsSchema")}
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify({
+        __html: jsonLd({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           "@id": "https://www.ab-kitchens.co.il/#business",

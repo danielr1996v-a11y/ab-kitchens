@@ -1,4 +1,5 @@
 import { getSettings } from "@/lib/admin/settings";
+import { jsonLd } from "@/lib/site/jsonLd";
 
 const intl = (p: string) => {
   const d = p.replace(/\D/g, "").replace(/^0/, "");
@@ -54,7 +55,7 @@ export default async function Schema() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: jsonLd(data) }}
     />
   );
 }

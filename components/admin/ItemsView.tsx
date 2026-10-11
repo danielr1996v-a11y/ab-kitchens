@@ -63,7 +63,8 @@ function ItemCard({
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={cn(isDragging && "relative z-10")}>
       <Card className={cn("h-full gap-0 overflow-hidden py-0 transition-shadow hover:shadow-md", isDragging && "shadow-lg")}>
-        <Link href={href} className="focus-visible:outline-2 focus-visible:outline-ring">
+        {/* התמונה מקשרת לאותו מקום כמו השם - מחוץ לסדר הטאב, עם שם לקורא מסך */}
+        <Link href={href} tabIndex={-1} aria-label={item.title} className="focus-visible:outline-2 focus-visible:outline-ring">
           <Thumb src={item.image} />
         </Link>
         {/* שורה 1: שם ו-⋯ · שורה 2: תגיות וגרירה. בטלפון הכרטיס

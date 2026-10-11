@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { jsonLd } from "@/lib/site/jsonLd";
 
 const BASE = "https://www.ab-kitchens.co.il";
 
@@ -70,7 +71,7 @@ export default function Breadcrumbs({
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(data) }}
       />
     </nav>
   );

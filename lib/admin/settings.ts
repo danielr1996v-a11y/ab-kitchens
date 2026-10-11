@@ -1,5 +1,5 @@
 import "server-only";
-import { unstable_cache } from "next/cache";
+import { cached } from "@/lib/site/cache";
 import { db } from "./db";
 import { site } from "@/lib/content";
 
@@ -42,7 +42,7 @@ export const defaultSettings: SiteSettings = {
 
 export const SETTINGS_TAG = "settings";
 
-export const getSettings = unstable_cache(
+export const getSettings = cached(
   async (): Promise<SiteSettings> => {
     try {
       const { rows } = await (await db()).execute({ sql: "SELECT value FROM settings WHERE key = 'site'", args: [] });
@@ -52,7 +52,7 @@ export const getSettings = unstable_cache(
     }
   },
   ["site-settings"],
-  { tags: [SETTINGS_TAG] },
+  [SETTINGS_TAG],
 );
 
 const CONTROL = /[\u0000-\u001F\u007F]/g;
