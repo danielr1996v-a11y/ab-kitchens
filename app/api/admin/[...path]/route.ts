@@ -20,7 +20,8 @@ import {
 } from "@/lib/admin/entries";
 import { listMedia, MAX_UPLOAD, uploadImage } from "@/lib/admin/media";
 import { importRepoContent } from "@/lib/admin/import";
-import { importPages } from "@/lib/admin/pageImport";
+import { importPages, importParts } from "@/lib/admin/pageImport";
+import { defaultHeaderMenu } from "@/lib/content";
 import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
   checkLogin,
@@ -259,6 +260,14 @@ async function handle(req: Request, ctx: Ctx) {
     const paths = Array.isArray(body.paths) ? body.paths.filter((p): p is string => typeof p === "string" && p.startsWith("/")) : [];
     const res = await importPages(new URL(req.url).origin, paths, body.replace === true && process.env.NODE_ENV !== "production");
     revalidateType("page");
+    return json(res);
+  }
+
+  if (method === "POST" && action === "import-parts") {
+    await requireUser("settings.edit");
+    const body = await readBody(req);
+    const res = await importParts(new URL(req.url).origin, defaultHeaderMenu, body.replace === true && process.env.NODE_ENV !== "production");
+    revalidateType("part");
     return json(res);
   }
 

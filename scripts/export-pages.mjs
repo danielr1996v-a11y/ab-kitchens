@@ -12,7 +12,8 @@ import { createClient } from "@libsql/client";
 import { writeFileSync } from "node:fs";
 
 const db = createClient({ url: process.env.TURSO_DATABASE_URL || "file:.data/admin.db", authToken: process.env.TURSO_AUTH_TOKEN });
-const { rows } = await db.execute("SELECT id, data FROM entries WHERE type = 'page' AND status = 'publish' ORDER BY id");
-const pages = rows.map((r) => ({ id: String(r.id), ...JSON.parse(String(r.data)) }));
+/* עמודים + חלקים משותפים (הדר ופוטר, שלב 5ג) */
+const { rows } = await db.execute("SELECT id, type, data FROM entries WHERE type IN ('page', 'part') AND status = 'publish' ORDER BY type, id");
+const pages = rows.map((r) => ({ id: String(r.id), type: String(r.type), ...JSON.parse(String(r.data)) }));
 writeFileSync("content/pages.seed.json", JSON.stringify(pages, null, 1) + "\n");
-console.log(`${pages.length} עמודים יוצאו ל-content/pages.seed.json`);
+console.log(`${pages.length} עמודים וחלקים יוצאו ל-content/pages.seed.json`);

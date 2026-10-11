@@ -4,15 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
-import {
-  nav,
-  quickDial,
-  styleSection,
-  headerSocial,
-  kitchenTypes,
-  site,
-  whatsappHref,
-} from "@/lib/content";
+import { site, whatsappHref, defaultHeaderMenu, type HeaderMenu } from "@/lib/content";
 import MegaMenu from "./MegaMenu";
 import Icon from "./Icon";
 
@@ -21,11 +13,16 @@ import Icon from "./Icon";
  * הבר לבן תמיד, עם צל עדין מאוד שמעמיק קלות בגלילה.
  * הלוגו בגרסה הכהה, שמתאימה לבר הלבן בכל מצב.
  */
-// התמונה הראשית של התפריט נשאבת מכרטיס הקטגוריה בקובץ התוכן,
-// כך שאין כפילות: החלפה שם מתעדכנת גם כאן.
-const FEATURED = styleSection.cards.find((c) => c.id === "modern");
+/* התפריט - שלב 5ג: נשמר במסד כחלק משותף (הדר) ונערך במסך "תפריט
+   עליון ופוטר" (שלב 6). ברירת המחדל בקובץ התוכן = מה שהיה כאן */
+export type { HeaderMenu };
 
-export default function Header() {
+export default function Header({ menu = defaultHeaderMenu }: { menu?: HeaderMenu }) {
+  const { nav, quickDial, featuredImage } = menu;
+  const headerSocial = menu.social;
+  /* תת-התפריט "מטבחים" - מתוך הפריט שיש לו ילדים, ולא רשימה נפרדת,
+     כדי שעריכה של התפריט תתעדכן גם בתפריט הטלפון */
+  const kitchenTypes = nav.find((i) => "children" in i && i.children)?.children ?? [];
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -146,7 +143,7 @@ export default function Header() {
                 >
                   <MegaMenu
                     items={item.children}
-                    fallbackImage={FEATURED?.image ?? "/images/hero-modern.webp"}
+                    fallbackImage={featuredImage}
                     isOpen={openMenu === item.href}
                     onLinkBlur={scheduleClose}
                   />

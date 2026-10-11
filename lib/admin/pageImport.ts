@@ -108,6 +108,15 @@ function convert(n: Node): SiteNode | null {
   return node;
 }
 
+/** אלמנט שלם (למשל הפוטר) → צומת אחד, כולל האלמנט עצמו */
+export function htmlElementToNodes(html: string, selector: string): SiteNode[] {
+  const root = parse(html, { comment: false, blockTextElements: { script: true, style: true } });
+  const el = root.querySelector(selector);
+  if (!el) throw new Error(`לא נמצא ${selector} בעמוד`);
+  const node = convert(el);
+  return node ? [node] : [];
+}
+
 /** ה-HTML של עמוד → הצמתים שבתוך <main> */
 export function htmlToNodes(html: string): SiteNode[] {
   const root = parse(html, { comment: false, blockTextElements: { script: true, style: true } });
@@ -166,4 +175,36 @@ export async function importPages(origin: string, paths: string[], replace = fal
     done[path] = JSON.stringify(nodes).length;
   }
   return done;
+}
+
+/* ===== חלקים משותפים: הדר ופוטר (שלב 5ג) ===== */
+
+/**
+ * ההדר: רכיב נעול אחד (תפריט נפתח, המבורגר, מצב גלילה), והתפריט
+ * עצמו נשמר כנתונים - זה מה שמסך "תפריט עליון ופוטר" יערוך.
+ * הפוטר: צמתים רגילים, מה-HTML שהוא כבר מוציא - כמו העמודים.
+ */
+export async function importParts(origin: string, headerMenu: unknown, replace = false) {
+  if (process.env.TURSO_DATABASE_URL && process.env.ADMIN_ALLOW_IMPORT !== "1") {
+    throw new HttpError(403, "ייבוא למסד בענן דורש אישור מפורש (ADMIN_ALLOW_IMPORT)");
+  }
+  const res = await fetch(origin + "/contact", { cache: "no-store" });
+  if (!res.ok) throw new HttpError(502, `footer source: ${res.status}`);
+  const footer = htmlElementToNodes(await res.text(), "footer.footer");
+  const docs = [
+    { id: "part-header", title: "הדר ותפריט", nodes: [{ id: nodeId(), type: "widget", settings: { widget: "header", data: { menu: headerMenu } } }] },
+    { id: "part-footer", title: "פוטר", nodes: footer },
+  ];
+  const c = await db();
+  const t = now();
+  for (const d of docs) {
+    const kind = d.id === "part-header" ? "header" : "footer";
+    const data = JSON.stringify({ title: d.title, fields: {}, doc: { id: d.id, kind, nodes: d.nodes } });
+    await c.execute({
+      sql: `INSERT INTO entries (id, type, status, data, revision, updated_at) VALUES (?, 'part', 'publish', ?, 1, ?)
+            ON CONFLICT(id) DO ${replace ? "UPDATE SET data = excluded.data, revision = revision + 1, updated_at = excluded.updated_at" : "NOTHING"}`,
+      args: [d.id, data, t],
+    });
+  }
+  return { header: 1, footer: JSON.stringify(footer).length };
 }

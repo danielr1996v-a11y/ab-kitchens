@@ -50,11 +50,6 @@ export const headerSocial = [
   ...site.social,
 ];
 
-/**
- * הרשתות בפוטר - כולל וואטסאפ, בניגוד ל-site.social שהוא
- * הרשתות בלבד. אותה רשימה כמו בהדר.
- */
-export const footerSocial = headerSocial;
 
 /**
  * נתיבים בעברית - זהים לאתר הישן.
@@ -92,19 +87,23 @@ export const nav = [
   { href: "/contact", label: "יצירת קשר" },
 ];
 
-/** קישורי הפוטר - כולל העמודים המשפטיים שחובה עליהם בישראל */
-/**
- * עמודת "מידע" בפוטר - העמודים המשפטיים.
- * עלו מפס התחתית לעמודה משלהם, כמו ברפרנס.
- */
-export const footerLinks = [
-  { href: "/מדיניות-פרטיות", label: "מדיניות פרטיות" },
-  { href: "/תקנון-ומדיניות-פרטיות", label: "תקנון אתר" },
-  { href: "/הצהרת-נגישות", label: "הצהרת נגישות" },
-];
 
 export const quickDial = {
   label: "לחיוג מהיר",
+};
+
+/**
+ * התפריט העליון כיחידה אחת - שלב 5ג. ככה הוא נשמר במסד (חלק משותף
+ * "הדר") ונערך במסך "תפריט עליון ופוטר". כאן ברירת המחדל וגם מקור
+ * הייבוא. ⚠️ בקובץ הזה ולא ב-Header.tsx: Header הוא client component,
+ * וערך שמיובא ממנו לשרת מגיע כהפניה ולא כנתונים.
+ */
+export type HeaderMenu = {
+  nav: typeof nav;
+  social: typeof headerSocial;
+  quickDial: typeof quickDial;
+  /** התמונה בתפריט הנפתח, כשאין לכרטיס תמונה משלו */
+  featuredImage: string;
 };
 
 /**
@@ -219,17 +218,6 @@ export const values = {
   ],
 };
 
-/**
- * פוטר - לפי הפיגמה (node 2022:1255).
- * טופס יצירת קשר על כרטיס לבן, שני טורי ניווט, ופרטי קשר עם אייקונים.
- */
-export const footerNew = {
-  kitchensTitle: "המטבחים שלנו",
-  navTitle: "ניווט באתר",
-  hoursTitle: "שעות פעילות",
-  infoTitle: "מידע",
-  contactTitle: "דברו איתנו",
-};
 
 /**
  * סקשן "סומכים עלינו" - שלוש שורות לפי קטגוריה.
@@ -330,6 +318,14 @@ export const styleSection = {
       enabled: true,
     },
   ],
+};
+
+/* התמונה הראשית של התפריט נשאבת מכרטיס הקטגוריה, כך שאין כפילות */
+export const defaultHeaderMenu: HeaderMenu = {
+  nav,
+  social: headerSocial,
+  quickDial,
+  featuredImage: styleSection.cards.find((c) => c.id === "modern")?.image ?? "/images/hero-modern.webp",
 };
 
 /**

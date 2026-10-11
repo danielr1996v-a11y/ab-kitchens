@@ -13,6 +13,8 @@ import ProjectStrip from "@/components/ProjectStrip";
 import Hotspots from "@/components/Hotspots";
 import Placeholder from "@/components/Placeholder";
 import ChannelVideos from "@/components/ChannelVideos";
+import Header from "@/components/Header";
+import type { HeaderMenu } from "@/lib/content";
 import { getVideos } from "@/lib/site/data";
 import {
   ArticleGrid,
@@ -74,6 +76,8 @@ async function ChannelVideosBlock() {
 }
 
 const registry: Record<string, Renderer> = {
+  /* ההדר: התפריט נשמר כנתונים ונערך במסך "תפריט עליון ופוטר" */
+  header: (d) => <Header menu={(d.menu as HeaderMenu) ?? undefined} />,
   breadcrumbs: (d) => <Breadcrumbs trail={(d.trail as Crumb[]) ?? []} className={(d.className as string) ?? ""} />,
   leadForm: (d) => (
     <LeadForm source={String(d.source ?? "")} submitLabel={String(d.submitLabel ?? "")} variant={d.variant === "light" ? "light" : "dark"} />

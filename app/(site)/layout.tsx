@@ -2,8 +2,7 @@ import { ViewTransition } from "react";
 import "../globals.css";
 import Analytics from "@/components/Analytics";
 import DevInspector from "@/components/DevInspector";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import SharedPart from "@/components/site/SharedPart";
 import FloatingActions from "@/components/FloatingActions";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
@@ -24,14 +23,15 @@ export default function SiteLayout({
     <>
       <Schema />
       <SmoothScroll />
-      <Header />
+      {/* שלב 5ג: הדר ופוטר מהמסד - נשמרים פעם אחת לכל האתר */}
+      <SharedPart kind="header" />
       {/* רק תוכן העמוד מונפש. ההדר והפוטר נשארים מחוץ לעטיפה
           במכוון - הם העוגן שגורם למעבר להרגיש כמו משטח אחד
           רציף ולא כמו מצגת שקופיות. */}
       <ViewTransition name="page">
         <main className="flex-1 flex flex-col">{children}</main>
       </ViewTransition>
-      <Footer />
+      <SharedPart kind="footer" />
       <FloatingActions />
       {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
       <SanityBridge />

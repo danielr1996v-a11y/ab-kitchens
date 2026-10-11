@@ -24,3 +24,16 @@ export const getPage = unstable_cache(
   ["site-page"],
   { tags: [entriesTag("page")] },
 );
+
+/** חלק משותף - הדר או פוטר. נשמר פעם אחת ומורכב לכל עמוד (המפרט §3) */
+export const getPart = unstable_cache(
+  async (kind: "header" | "footer"): Promise<SiteDoc | null> => {
+    const { rows } = await (await db()).execute({
+      sql: "SELECT data FROM entries WHERE id = ? AND type = 'part' AND status = 'publish'",
+      args: [`part-${kind}`],
+    });
+    return rows[0] ? JSON.parse(String(rows[0].data)).doc : null;
+  },
+  ["site-part"],
+  { tags: [entriesTag("part")] },
+);
