@@ -90,7 +90,7 @@ function NavList({
         return (
           <div key={gi} className="grid gap-1">
             {group.label && !collapsed && (
-              <p className="px-3 pb-1 text-xs font-medium text-muted-foreground">{group.label}</p>
+              <p className="px-3 pb-1 text-xs text-sidebar-foreground/60">{group.label}</p>
             )}
             {views.map((v) => {
               const Icon = ICONS[v.icon];
@@ -102,9 +102,10 @@ function NavList({
                   aria-current={active ? "page" : undefined}
                   aria-label={collapsed ? v.label : undefined}
                   className={cn(
-                    "flex h-9 items-center gap-3 rounded-md px-3 text-sm transition-colors",
-                    "hover:bg-sidebar-accent focus-visible:outline-2 focus-visible:outline-ring",
-                    active && "bg-sidebar-accent font-medium text-sidebar-accent-foreground",
+                    "relative flex h-9 items-center gap-3 rounded-md px-3 text-sm text-sidebar-foreground/85 transition-colors",
+                    "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-2 focus-visible:outline-primary",
+                    /* המסך הפעיל: סימון בזהב הפעולה בצד ההתחלה - כמו המרקר באתר */
+                    active && "bg-sidebar-accent text-sidebar-accent-foreground before:absolute before:inset-y-2 before:start-0 before:w-0.5 before:rounded-full before:bg-primary",
                     collapsed && "justify-center px-0",
                   )}
                 >
@@ -148,9 +149,12 @@ export default function AdminShell({
     window.location.href = "/admin/login";
   };
 
+  /* הלוגו הבהיר של האתר (logo.png - אותו קובץ של התפריט הכהה בטלפון).
+     מקופל: רק הסמל, החלק הימני של הקובץ */
   const brand = (
-    <Link href="/admin" className="block truncate px-3 text-sm font-semibold" onClick={() => setMobileOpen(false)}>
-      {collapsed ? "א." : "א. בית המטבחים"}
+    <Link href="/admin" className="block px-3" onClick={() => setMobileOpen(false)} aria-label="א. בית המטבחים - לוח בקרה">
+      {/* eslint-disable-next-line @next/next/no-img-element -- לוגו קטן במערכת */}
+      <img src="/logo.png" alt="" className={cn("h-auto", collapsed ? "w-9 object-cover" : "w-36")} style={collapsed ? { aspectRatio: "1", objectPosition: "100% 50%" } : undefined} />
     </Link>
   );
 
@@ -170,7 +174,7 @@ export default function AdminShell({
         <Button
           variant="ghost"
           size="sm"
-          className={cn("justify-start gap-3 text-muted-foreground", collapsed && "justify-center")}
+          className={cn("justify-start gap-3 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", collapsed && "justify-center")}
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? "הרחבת התפריט" : "צמצום התפריט"}
         >
@@ -246,7 +250,7 @@ export default function AdminShell({
         </header>
 
         <main className="flex-1 px-4 py-6 md:px-8">
-          <h1 className="mb-6 text-2xl font-semibold">{view.label}</h1>
+          <h1 className="mb-6 text-3xl font-bold">{view.label}</h1>
           {children}
         </main>
       </div>

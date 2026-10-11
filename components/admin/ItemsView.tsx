@@ -71,7 +71,7 @@ function ItemCard({
             ברוחב 170px - בשורה אחת ה-⋯ נחתך מחוץ לכרטיס (נמדד ב-390) */}
         <div className="grid gap-2 p-3">
           <div className="flex items-start gap-1">
-            <Link href={href} className="line-clamp-2 flex-1 text-sm font-medium hover:underline">{item.title}</Link>
+            <Link href={href} className="line-clamp-2 flex-1 text-sm font-bold hover:underline">{item.title}</Link>
             {/* תפריט ⋯ במקום קבוע (המפרט §6) */}
             <DropdownMenu dir="rtl">
               <DropdownMenuTrigger asChild>

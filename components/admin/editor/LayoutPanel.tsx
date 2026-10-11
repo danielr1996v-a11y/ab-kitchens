@@ -82,7 +82,7 @@ function Chips({ options, value, onPick }: { options: { v: string; l: string }[]
           type="button"
           onClick={() => onPick(o.v)}
           aria-pressed={value === o.v}
-          className={cn("min-w-8 rounded border px-2 py-1 text-xs", value === o.v ? "border-primary bg-primary/10 text-primary" : "hover:bg-accent")}
+          className={cn("min-w-8 rounded border px-2 py-1 text-xs", value === o.v ? "border-brand-ink bg-primary/10 text-brand-ink" : "hover:bg-accent")}
         >
           {o.l}
         </button>
@@ -106,7 +106,7 @@ function Swatches({ value, onPick, palette }: { value?: string; onPick: (v: stri
             title={`${c.label}${c.use ? ` - ${c.use}` : ""}`}
             aria-label={c.label}
             aria-pressed={value === v}
-            className={cn("size-7 rounded-full border shadow-sm", value === v && "ring-2 ring-primary ring-offset-1")}
+            className={cn("size-7 rounded-full border shadow-sm", value === v && "ring-2 ring-ring ring-offset-1")}
             style={{ background: palette[c.name] || "#ccc" }}
           />
         );

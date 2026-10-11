@@ -107,7 +107,7 @@ export default function LeadsView({ canDelete }: { canDelete: boolean }) {
                       {l.name}
                       {(l.message || l.note) && <MessageSquare className="ms-1 inline size-3 text-muted-foreground" aria-label="יש הודעה או הערה" />}
                     </TableCell>
-                    <TableCell><a href={`tel:${l.phone}`} dir="ltr" className="text-primary hover:underline">{l.phone}</a></TableCell>
+                    <TableCell><a href={`tel:${l.phone}`} dir="ltr" className="text-brand-ink hover:underline">{l.phone}</a></TableCell>
                     <TableCell className="hidden max-w-48 truncate text-xs text-muted-foreground md:table-cell">{l.source}{!l.emailed && <span title="המייל לא נשלח - הפנייה שמורה כאן"> · בלי מייל</span>}</TableCell>
                     <TableCell>
                       {trash ? (
@@ -160,7 +160,7 @@ export default function LeadsView({ canDelete }: { canDelete: boolean }) {
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-3 text-sm">
-            <a href={`tel:${open?.phone}`} dir="ltr" className="w-fit text-primary hover:underline">{open?.phone}</a>
+            <a href={`tel:${open?.phone}`} dir="ltr" className="w-fit text-brand-ink hover:underline">{open?.phone}</a>
             {open?.message && <p className="whitespace-pre-wrap rounded-md bg-muted p-3">{open.message}</p>}
             <div className="grid gap-1.5">
               <Label htmlFor="lead-note">הערה פנימית</Label>

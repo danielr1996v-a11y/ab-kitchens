@@ -34,7 +34,7 @@ export default function AddPanel({ onAdd, hasSelection }: { onAdd: (kind: AddKin
           key={k.kind}
           type="button"
           onClick={() => (k.kind === "image" ? setImageMode(true) : onAdd(k.kind))}
-          className="flex items-center gap-3 rounded-md border p-3 text-start hover:border-primary hover:bg-primary/5"
+          className="flex items-center gap-3 rounded-md border p-3 text-start hover:border-brand-ink hover:bg-primary/10"
         >
           <k.icon className="size-5 text-muted-foreground" strokeWidth={1.75} />
           <span className="grid">

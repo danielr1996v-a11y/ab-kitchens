@@ -345,7 +345,7 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
           <Link href={backHref}><ArrowRight className="size-4" /></Link>
         </Button>
         <div className="grid min-w-0">
-          <h1 className="truncate text-sm font-semibold">{title}</h1>
+          <h1 className="truncate text-sm font-bold">{title}</h1>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <StatusBadge status={entry.status} hasDraft={entry.hasDraft} />
             <span aria-live="polite">

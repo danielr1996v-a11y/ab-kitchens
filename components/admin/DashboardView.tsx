@@ -11,7 +11,9 @@ import type { Lead } from "@/lib/admin/leads";
  * לוח הבקרה - המפרט §7, שלב 7.
  *
  * - פניות חדשות, ו-30 הימים האחרונים מול 30 שלפניהם
- * - גרף עמודות יומי: סדרה אחת (בלי מקרא - הכותרת אומרת מה זה),
+ * - גרף עמודות יומי בזהב (#b0832e - עבר את בדיקת dataviz: בהירות,
+ *   כרומה וניגוד 3:1; זהב הלוגו עצמו נכשל בכרומה ונקרא כאפור),
+ *   סדרה אחת (בלי מקרא - הכותרת אומרת מה זה),
  *   עמודה ≤24px עם קצה מעוגל 4px ובסיס ישר, רווח 2px, ריחוף עם
  *   מספר ותאריך, וטבלה נגישה מוסתרת (dataviz skill)
  * - "נשמר ועדיין לא פורסם", ופניות אחרונות
@@ -80,7 +82,7 @@ function LeadsChart({ data }: { data: { day: string; n: number }[] }) {
                   <path
                     /* קצה מעוגל 4px, בסיס ישר על קו האפס */
                     d={`M${x},${H} V${H - h + r} Q${x},${H - h} ${x + r},${H - h} H${x + bar - r} Q${x + bar},${H - h} ${x + bar},${H - h + r} V${H} Z`}
-                    fill="var(--primary)"
+                    fill="var(--chart)"
                     opacity={hover === null || hover === i ? 1 : 0.45}
                   />
                 )}
@@ -129,15 +131,15 @@ export default function DashboardView({ canLeads }: { canLeads: boolean }) {
           <Card className="gap-2">
             <CardHeader><CardTitle className="text-sm font-medium text-muted-foreground">פניות חדשות</CardTitle></CardHeader>
             <CardContent className="grid gap-1">
-              <span className="text-3xl font-semibold tabular-nums">{stats.newCount}</span>
-              <Link href="/admin?view=leads" className="text-xs text-primary hover:underline">לכל הפניות ←</Link>
+              <span className="text-3xl font-bold tabular-nums">{stats.newCount}</span>
+              <Link href="/admin?view=leads" className="text-xs text-brand-ink hover:underline">לכל הפניות ←</Link>
             </CardContent>
           </Card>
           <Card className="gap-2 md:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-baseline justify-between text-sm font-medium text-muted-foreground">
                 <span>פניות ב-30 הימים האחרונים</span>
-                <span className="text-2xl font-semibold tabular-nums text-foreground">{stats.total30}</span>
+                <span className="text-2xl font-bold tabular-nums text-foreground">{stats.total30}</span>
               </CardTitle>
               <Trend now={stats.total30} before={stats.totalPrev30} />
             </CardHeader>
@@ -179,7 +181,7 @@ export default function DashboardView({ canLeads }: { canLeads: boolean }) {
                   {recentLeads.map((l) => (
                     <li key={l.id} className="flex items-center gap-2 py-2 text-sm">
                       <span className="min-w-0 flex-1 truncate">{l.name}</span>
-                      <a href={`tel:${l.phone}`} dir="ltr" className="shrink-0 text-xs text-primary hover:underline">{l.phone}</a>
+                      <a href={`tel:${l.phone}`} dir="ltr" className="shrink-0 text-xs text-brand-ink hover:underline">{l.phone}</a>
                       <span className="shrink-0 text-xs text-muted-foreground">{when(l.createdAt)}</span>
                     </li>
                   ))}

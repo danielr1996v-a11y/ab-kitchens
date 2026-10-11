@@ -136,7 +136,7 @@ export default function ImageField({ id, value, onChange }: { id: string; value:
         onClick={() => setOpen(true)}
         className={cn(
           "grid size-28 shrink-0 place-items-center overflow-hidden rounded-md border bg-muted text-muted-foreground",
-          "hover:border-primary focus-visible:outline-2 focus-visible:outline-ring",
+          "hover:border-brand-ink focus-visible:outline-2 focus-visible:outline-ring",
         )}
         aria-label={value ? "החלפת התמונה" : "בחירת תמונה"}
       >

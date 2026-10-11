@@ -79,7 +79,7 @@ export default function PagesView({ kind, canLayout = false }: { kind: "page" | 
             <li key={p.id} className="flex items-center gap-3 px-4 py-3">
               <PanelsTopLeft className="size-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
               <div className="grid min-w-0 flex-1 gap-0.5">
-                <Link href={`/admin/edit?id=${encodeURIComponent(p.id)}${kind === "part" ? "&back=shared" : ""}`} className="truncate text-sm font-medium hover:underline">
+                <Link href={`/admin/edit?id=${encodeURIComponent(p.id)}${kind === "part" ? "&back=shared" : ""}`} className="truncate text-sm font-bold hover:underline">
                   {p.title}
                 </Link>
                 {p.path && <span className="truncate text-xs text-muted-foreground" dir="ltr">{p.path}</span>}

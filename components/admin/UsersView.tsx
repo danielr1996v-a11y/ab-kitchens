@@ -89,7 +89,7 @@ function RolePicker({ value, onChange }: { value: Role; onChange: (r: Role) => v
           onClick={() => onChange(r)}
           className={cn(
             "grid gap-1 rounded-md border p-3 text-start transition-colors",
-            value === r ? "border-primary bg-primary/5" : "hover:bg-accent",
+            value === r ? "border-brand-ink bg-primary/5" : "hover:bg-accent",
           )}
         >
           <span className="text-sm font-medium">{roleInfo[r].label}</span>
@@ -224,7 +224,7 @@ export default function UsersView({ me }: { me: string }) {
       </Card>
 
       <section aria-labelledby="roles-title" className="grid gap-3">
-        <h2 id="roles-title" className="text-sm font-semibold">מה כל תפקיד רשאי</h2>
+        <h2 id="roles-title" className="text-sm font-bold">מה כל תפקיד רשאי</h2>
         <div className="grid gap-3 md:grid-cols-2">
           {ROLES.map((r) => (
             <Card key={r} className="py-4">

@@ -1,18 +1,44 @@
 /* =========================================================
-   מערכת הניהול - שפה ניטרלית (המפרט §6)
-   ⚠️ לא צבעי המותג ולא Polin. צבעי המותג מופיעים רק בתוך
-   התצוגה של האתר ובבוחרי הצבע. הקובץ נטען רק ב-/admin,
-   ו-globals.css של האתר לא נטען כאן בכלל.
+   מערכת הניהול - בשפה של האתר (ADMIN-SPEC 10א, החלטת דניאל
+   12.10.26 - גוברת על "ממשק ניטרלי" של המפרט §6).
+
+   פולין · פחם · זהב · לבן חם. ⚠️ שני הזהבים בתפקידם:
+   --color-gold (#ddb143) = רקע של כפתור פעולה, עם טקסט כהה (9.15:1)
+   זהב הלוגו = המותג. ⚠️ **אף זהב לא קריא כטקסט קטן על בהיר**
+   (2.0 ו-3.4 - נמדד). לכן קישורים וטקסט מודגש ב-brand-ink, גוון
+   מוכהה של זהב הלוגו: #86652f = 4.96:1 על הרקע (RULES §7: מכהים,
+   לא מוותרים על הבדיקה).
+
+   הקובץ נטען רק ב-/admin. globals.css של האתר לא נטען כאן.
    ========================================================= */
 @import "tailwindcss";
 @import "tw-animate-css";
+
+/* פולין מקבצי הלקוח - אותם קבצים כמו האתר (public/fonts). רגיל
+   וכבד בלבד: 300 לא קריא בגדלים של ממשק (RULES §1) */
+@font-face {
+  font-family: "Polin";
+  src: url("/fonts/Polin-Regular.woff2") format("woff2"), url("/fonts/Polin-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Polin";
+  src: url("/fonts/Polin-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-sans: "Polin", "Arial Hebrew", "Segoe UI", Tahoma, sans-serif;
+  --color-brand-ink: var(--brand-ink);
+  --color-chart: var(--chart);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -42,33 +68,36 @@
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.985 0 0);
-  --foreground: oklch(0.205 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.205 0 0);
-  /* צבע ההדגשה היחיד במערכת. כחול: ניטרלי מספיק כדי לא להתחרות
-     בזהב של האתר כשהם מופיעים יחד בעורך */
-  --primary: oklch(0.488 0.217 264);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.967 0 0);
-  /* 0.5 ולא 0.556 של shadcn: על רקע ה-sidebar (0.97) הגוון
-     המקורי יורד מתחת ל-4.5:1 */
-  --muted-foreground: oklch(0.5 0 0);
-  --accent: oklch(0.955 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* לבן חם ולא #fff טהור (RULES §5); כרטיסים בהירים ממנו */
+  --background: #f7f6f3;
+  --foreground: #1a1a1a;
+  --card: #fdfdfc;
+  --card-foreground: #1a1a1a;
+  --popover: #fdfdfc;
+  --popover-foreground: #1a1a1a;
+  /* פעולה ראשית = זהב הפעולה של האתר, טקסט כהה - כמו "לחיוג מהיר" */
+  --primary: #ddb143;
+  --primary-foreground: #141416;
+  --brand-ink: #86652f;
+  --chart: #b0832e;
+  --secondary: #efede8;
+  --secondary-foreground: #1a1a1a;
+  --muted: #efede8;
+  /* 5.14:1 על הרקע - נמדד */
+  --muted-foreground: #6b6862;
+  --accent: #ebe8e1;
+  --accent-foreground: #1a1a1a;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.88 0 0);
-  --ring: oklch(0.488 0.217 264);
-  --sidebar: oklch(0.97 0 0);
-  --sidebar-foreground: oklch(0.205 0 0);
-  --sidebar-accent: oklch(0.922 0 0);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.922 0 0);
+  --border: #e4e1da;
+  --input: #d6d2c9;
+  /* טבעת פוקוס בזהב הלוגו - מסביב לשדה, ניגוד 3:1 מול הרקע */
+  --ring: #aa8347;
+  /* הסיידבר בפחם של האתר (#242323), כמו ההדר והפוטר */
+  --sidebar: #242323;
+  --sidebar-foreground: #f3f1ec;
+  --sidebar-accent: #34312f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #34312f;
 }
 
 @layer base {

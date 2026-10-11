@@ -12,7 +12,9 @@ export default function AuthCard({
 }) {
   return (
     <main className="mx-auto w-full max-w-sm px-4 pt-[12vh]">
-      <p className="mb-6 text-sm font-medium text-muted-foreground">א. בית המטבחים · ניהול</p>
+      {/* הלוגו הכהה של האתר - כמו בהדר הלבן */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- לוגו במסך הכניסה */}
+      <img src="/logo-dark.png" alt="א. בית המטבחים" className="mb-8 h-auto w-44" />
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">{title}</CardTitle>

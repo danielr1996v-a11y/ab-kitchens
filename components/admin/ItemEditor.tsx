@@ -201,7 +201,7 @@ export default function ItemEditor({ type, id, backHref }: { type: ContentType; 
           <Link href={backHref}><ArrowRight className="size-4" /></Link>
         </Button>
         <div className="grid min-w-0 flex-1">
-          <h2 className="truncate text-lg font-semibold">{title}</h2>
+          <h2 className="truncate text-lg font-bold">{title}</h2>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <StatusBadge status={entry.status} hasDraft={entry.hasDraft} />
             <span aria-live="polite">

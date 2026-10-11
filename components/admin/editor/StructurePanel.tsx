@@ -36,7 +36,7 @@ function Row({ node, depth, selectedId, open, toggle, onSelect }: { node: SiteNo
       <div
         className={cn(
           "flex h-8 items-center gap-1 rounded-md pe-2 text-sm",
-          selectedId === node.id ? "bg-primary/10 font-medium text-primary" : "hover:bg-accent",
+          selectedId === node.id ? "bg-primary/10 font-medium text-brand-ink" : "hover:bg-accent",
         )}
         style={{ paddingInlineStart: `${depth * 14 + 4}px` }}
       >

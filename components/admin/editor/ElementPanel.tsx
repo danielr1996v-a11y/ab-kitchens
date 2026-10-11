@@ -73,7 +73,7 @@ export default function ElementPanel({
         ))}
       </nav>
 
-      <h3 className="text-sm font-semibold">{nodeLabel(node)}</h3>
+      <h3 className="text-sm font-bold">{nodeLabel(node)}</h3>
 
       {node.type === "widget" ? (
         <WidgetContent node={node} onChange={(d) => onWidgetData(node.id, d)} />
@@ -98,7 +98,7 @@ function WidgetContent({ node, onChange }: { node: SiteNode; onChange: (d: Recor
     return (
       <div className="grid gap-2 rounded-md border bg-muted/50 p-3 text-sm">
         <p>הסקשן הזה משותף לכמה עמודים. שינוי בו מתעדכן בכולם.</p>
-        <Link className="font-medium text-primary hover:underline" href={`/admin/edit?id=${SHARED[name]}&back=shared`}>
+        <Link className="font-medium text-brand-ink hover:underline" href={`/admin/edit?id=${SHARED[name]}&back=shared`}>
           עריכת {WIDGET_LABEL[name]} ←
         </Link>
       </div>
