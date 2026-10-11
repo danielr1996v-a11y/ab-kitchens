@@ -534,25 +534,3 @@ export const articles: Article[] = [
     ],
   },
 ];
-
-/**
- * הנתיב הציבורי של מאמר.
- *
- * ⚠️ מקור אמת אחד. הכתובות בעברית ומתורגמות ל-/articles/<slug>
- * דרך rewrites ב-next.config.ts - שני המקומות חייבים להסכים,
- * ולכן המפה יושבת כאן ומיובאת לשם.
- * שניים מהנתיבים היו באתר הישן ונשמרו כלשונם.
- */
-export const ARTICLE_PATHS: Record<string, string> = {
-  classic: "/מטבח-קלאסי",
-  modern: "/מטבחים-מודרניים", // נתיב מהאתר הישן
-  rustic: "/מטבחים-כפריים", // נתיב מהאתר הישן
-  "stone-natural": "/שיש-טבעי",
-  "stone-quartz": "/שיש-קוורץ",
-  "stone-porcelain": "/שיש-פורצלן",
-};
-
-export const articleHref = (slug: string) => ARTICLE_PATHS[slug] ?? "/articles";
-
-export const byStyle = (style: Article["relatedStyle"]) =>
-  articles.filter((a) => a.relatedStyle === style);

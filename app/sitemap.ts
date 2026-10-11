@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getArticles } from "@/lib/site/data";
 
 const BASE = "https://www.ab-kitchens.co.il";
 
@@ -20,12 +21,6 @@ const routes: Array<{
   /* ⚠️ /מטבחים---כל-מה-שרצית-לדעת ירד מכאן במכוון: אין לו מאמר
      בחומרים של הלקוח, והוא היה עמוד ריק שיושב באינדקס. */
   { path: "/מאמרים-וטיפים", priority: 0.7, freq: "monthly" },
-  { path: "/מטבחים-מודרניים", priority: 0.7, freq: "monthly" },
-  { path: "/מטבחים-כפריים", priority: 0.7, freq: "monthly" },
-  { path: "/מטבח-קלאסי", priority: 0.7, freq: "monthly" },
-  { path: "/שיש-טבעי", priority: 0.7, freq: "monthly" },
-  { path: "/שיש-קוורץ", priority: 0.7, freq: "monthly" },
-  { path: "/שיש-פורצלן", priority: 0.7, freq: "monthly" },
   { path: "/אודותינו", priority: 0.6, freq: "monthly" },
   { path: "/המלצות", priority: 0.6, freq: "monthly" },
   { path: "/סרטונים", priority: 0.6, freq: "weekly" },
@@ -34,9 +29,14 @@ const routes: Array<{
   { path: "/הצהרת-נגישות", priority: 0.2, freq: "yearly" },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  return routes.map((r) => ({
+  /* ⚠️ שלב 5א: המאמרים מהמערכת - מאמר חדש נכנס למפה לבד, ומאמר
+     שמוסתר מגוגל (noindex) לא נכנס */
+  const articles = (await getArticles())
+    .filter((a) => !a.seo?.noindex)
+    .map((a) => ({ path: a.path, priority: 0.7, freq: "monthly" as const }));
+  return [...routes, ...articles].map((r) => ({
     url: `${BASE}${r.path}`,
     lastModified: now,
     changeFrequency: r.freq,

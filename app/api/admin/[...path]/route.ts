@@ -20,6 +20,7 @@ import {
 } from "@/lib/admin/entries";
 import { listMedia, MAX_UPLOAD, uploadImage } from "@/lib/admin/media";
 import { importRepoContent } from "@/lib/admin/import";
+import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
   checkLogin,
   completeSetup,
@@ -189,7 +190,9 @@ async function handle(req: Request, ctx: Ctx) {
   if (method === "POST" && action === "publish" && id) {
     const user = await requireUser("items.edit");
     const body = await readBody(req);
-    return json(await publishEntry(id, int(body.revision), user));
+    const res = await publishEntry(id, int(body.revision), user);
+    await revalidateEntry(id);
+    return json(res);
   }
 
   if (method === "POST" && action === "status" && id) {
@@ -197,6 +200,7 @@ async function handle(req: Request, ctx: Ctx) {
     const a = str((await readBody(req)).action);
     if (a !== "unpublish" && a !== "trash" && a !== "untrash") throw new HttpError(422, "פעולה לא מוכרת");
     await setStatus(id, a);
+    await revalidateEntry(id);
     return json({ ok: true });
   }
 
@@ -216,6 +220,7 @@ async function handle(req: Request, ctx: Ctx) {
     const body = await readBody(req, 64 * 1024);
     const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === "string") : [];
     await reorder(str(body.type), ids);
+    revalidateType(str(body.type));
     return json({ ok: true });
   }
 
@@ -240,7 +245,9 @@ async function handle(req: Request, ctx: Ctx) {
      רק באישור מפורש של דניאל (המפרט §0) - ראו import.ts */
   if (method === "POST" && action === "import") {
     await requireUser("settings.edit");
-    return json(await importRepoContent());
+    const res = await importRepoContent();
+    for (const t of ["article", "testimonial", "video", "project"]) revalidateType(t);
+    return json(res);
   }
 
   throw new HttpError(404, "פעולה לא מוכרת");

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { clientVideos, videosSection } from "@/lib/videos";
+import { videosSection, type ClientVideo } from "@/lib/videos";
 
 /**
  * סליידר סרטוני הלקוחות - כל סרטון מקבל את הבמה שלו.
@@ -33,7 +33,6 @@ const DUR = 650;
 const SHRINK = 0.09;
 const SHRINK_MAX = 2.5;
 
-const N = clientVideos.length;
 
 /** מרכז האלמנט בפיקסלים של המסך */
 const midOf = (el: Element) => {
@@ -41,7 +40,16 @@ const midOf = (el: Element) => {
   return r.left + r.width / 2;
 };
 
-export default function VideoSlider({ titleId }: { titleId: string }) {
+/* ⚠️ שלב 5א: הסרטונים מגיעים מהמסד דרך העמוד, ולא מ-lib/videos.
+   poster = תמונת הכיסוי מהמערכת. N נגזר מהרשימה, כמו קודם. */
+export default function VideoSlider({
+  titleId,
+  videos,
+}: {
+  titleId: string;
+  videos: (ClientVideo & { poster: string })[];
+}) {
+  const N = videos.length;
   const trackRef = useRef<HTMLUListElement>(null);
   /* אינדקס שטוח ברשימה המשולשת. null = כולם סגורים */
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -125,7 +133,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       behavior: "auto",
     });
     update();
-  }, [update]);
+  }, [update, N]);
 
   /**
    * עוצר אנימציה ומנקה **כל** עקבה שלה.
@@ -217,7 +225,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
      ה-rect כבר תקף כאן. */
   useEffect(() => {
     goTo(N, true);
-  }, [goTo]);
+  }, [goTo, N]);
 
   /* גלילה ושינוי גודל - מחשבים מחדש, ומנרמלים כשנעצרים */
   useEffect(() => {
@@ -374,7 +382,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
   /* שלושת העותקים. ⚠️ רק האמצעי אמיתי לקורא מסך - השניים
      האחרים הם אותו תוכן בדיוק, והקראתו שלוש פעמים היא רעש. */
   const slides = Array.from({ length: COPIES * N }, (_, flat) => ({
-    v: clientVideos[flat % N],
+    v: videos[flat % N],
     flat,
     clone: flat < N || flat >= N * 2,
   }));
@@ -479,7 +487,7 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
                 aria-label={`${videosSection.playLabel}: ${v.alt}`}
               >
                 <Image
-                  src={`/images/testimonials/video/${v.id}.webp`}
+                  src={v.poster || `https://i.ytimg.com/vi/${v.id}/oardefault.jpg`}
                   alt={clone ? "" : v.alt}
                   width={v.w}
                   height={v.h}

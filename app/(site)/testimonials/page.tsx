@@ -6,14 +6,8 @@ import VideoSlider from "@/components/VideoSlider";
 import Testimonials from "@/components/Testimonials";
 import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 import DesignerCta from "@/components/DesignerCta";
-import {
-  testimonialsPage,
-  featuredLetter,
-  featuredQuote,
-  testimonials,
-  googleReviews,
-  trustindexWidgetId,
-} from "@/lib/testimonialsPage";
+import { testimonialsPage, trustindexWidgetId } from "@/lib/testimonialsPage";
+import { getTestimonials, getVideos } from "@/lib/site/data";
 
 export const metadata: Metadata = {
   title: "המלצות לקוחות | א. בית המטבחים",
@@ -36,7 +30,11 @@ export const metadata: Metadata = {
  * (הוא הוכנס כשהעמוד המתין לתוכן; ראה קומיט a8df7f0 ואילך.)
  *
  */
-export default function Page() {
+export default async function Page() {
+  /* ⚠️ שלב 5א: ההמלצות והסרטונים מהמערכת. הקיר = צילומי מסך
+     מפורסמים, המוצמדים (המכתב) ראשונים */
+  const [{ wall, google: googleReviews }, { client }] = await Promise.all([getTestimonials(), getVideos()]);
+
   return (
     <>
       {/* ===== הבאנר =====
@@ -73,9 +71,7 @@ export default function Page() {
         {/* ⚠️ המכתב ראשון בקיר. עד 5.10 הייתה לו רצועה משלו
             עם התמלול מימין; דניאל ביקש שיהיה צילום בין
             הצילומים, בלי מלל. התמלול נשאר ב-alt. */}
-        <TestimonialWall
-          items={[featuredLetter, featuredQuote, ...testimonials]}
-        />
+        <TestimonialWall items={wall} />
       </section>
 
       {/* ===== ביקורות מגוגל =====
@@ -94,7 +90,7 @@ export default function Page() {
         {/* ⚠️ הכותרת נכנסה לתוך הקומפוננטה ולא נשארה כאן:
             חצי הניווט חולקים state עם המסלול, והם חייבים
             לשבת בשורת הכותרת - כלומר שלושתם תחת אותו רכיב. */}
-        <VideoSlider titleId="videos-title" />
+        <VideoSlider titleId="videos-title" videos={client} />
       </section>
 
       <DesignerCta />
@@ -111,7 +107,7 @@ export default function Page() {
             "@type": "LocalBusiness",
             "@id": "https://www.ab-kitchens.co.il/#business",
             review: [
-              ...[featuredLetter, ...testimonials]
+              ...wall
                 /* רק המלצות עם שם - ל-Review נדרש author */
                 .filter((t) => t.author)
                 .map((t) => ({

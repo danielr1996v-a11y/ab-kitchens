@@ -1,6 +1,7 @@
 import SectionRenderer from "@/components/SectionRenderer";
 import { homeSections } from "@/lib/sections";
 import DesignerCta from "@/components/DesignerCta";
+import { getTestimonials } from "@/lib/site/data";
 import { sanityFetch } from "@/lib/sanity/live";
 import { homeQuery, adaptHome } from "@/lib/sanity/queries";
 
@@ -27,6 +28,12 @@ export default async function HomePage() {
       // מאשר שגיאה של עכשיו.
     }
   }
+
+  /* ⚠️ שלב 5א: ההמלצות בדף הבית מהמערכת (כתובות, "מוצג בדף הבית"),
+     ולא מ-Sanity - שם יושב הנוסח הישן (ADMIN-SPEC §0, הנוסח העדכני
+     מהקוד הוא שיובא). שאר הסקשנים עוברים לעץ האלמנטים בשלב 5ב. */
+  const { written } = await getTestimonials();
+  sections = sections.map((sec) => (sec._type === "testimonials" ? { ...sec, reviews: written } : sec));
 
   /* ה-CTA אינו בלוק CMS בשלב הזה - הוא סקשן קבוע בסוף העמוד.
      לכן הוא מרונדר כאן ולא דרך SectionRenderer, שאחרת היה

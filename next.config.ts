@@ -59,15 +59,9 @@ const nextConfig: NextConfig = {
       { source: heb("/אודותינו"), destination: "/about" },
       { source: heb("/המלצות"), destination: "/testimonials" },
       { source: heb("/סרטונים"), destination: "/videos" },
-      /* ⚠️ המפה חייבת להסכים עם ARTICLE_PATHS ב-lib/articles.ts.
-         שני הראשונים הם נתיבים מהאתר הישן ונשמרו כלשונם. */
       { source: heb("/מאמרים-וטיפים"), destination: "/articles" },
-      { source: heb("/מטבחים-מודרניים"), destination: "/articles/modern" },
-      { source: heb("/מטבחים-כפריים"), destination: "/articles/rustic" },
-      { source: heb("/מטבח-קלאסי"), destination: "/articles/classic" },
-      { source: heb("/שיש-טבעי"), destination: "/articles/stone-natural" },
-      { source: heb("/שיש-קוורץ"), destination: "/articles/stone-quartz" },
-      { source: heb("/שיש-פורצלן"), destination: "/articles/stone-porcelain" },
+      /* ⚠️ כתובות המאמרים יצאו מכאן בשלב 5א: הן נקבעות במערכת הניהול
+         ונענות ב-app/(site)/[...path]. כך מאמר חדש מקבל כתובת בלי קוד */
       { source: heb("/שיש-למטבח"), destination: "/stone" },
       { source: heb("/תקנון-ומדיניות-פרטיות"), destination: "/terms" },
       { source: heb("/מדיניות-פרטיות"), destination: "/privacy" },

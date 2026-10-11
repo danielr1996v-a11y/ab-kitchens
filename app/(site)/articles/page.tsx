@@ -3,7 +3,8 @@ import ArticleCard from "@/components/ArticleCard";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import DesignerCta from "@/components/DesignerCta";
-import { articles, articlesPage } from "@/lib/articles";
+import { articlesPage } from "@/lib/articles";
+import { getArticles } from "@/lib/site/data";
 
 export const metadata: Metadata = {
   title: "מאמרים על מטבחים ושיש | א. בית המטבחים",
@@ -23,7 +24,8 @@ export const metadata: Metadata = {
  * הישן. היא הופנתה זמנית לדף הבית כשהעמוד ירד, וההפניה הוסרה
  * כשהעמוד חזר עם תוכן אמיתי.
  */
-export default function Page() {
+export default async function Page() {
+  const articles = await getArticles();
   return (
     <section className="alist" aria-labelledby="articles-title">
       <Breadcrumbs

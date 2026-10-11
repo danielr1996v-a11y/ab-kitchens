@@ -27,7 +27,9 @@ import {
  *
  * נגישות: תבנית tabs מלאה - role, aria-selected, וחיצי מקלדת.
  */
-export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
+/* ⚠️ שלב 5א: poster מגיע מהמערכת. ריק = סרטון בלי סטילס מקומי,
+   והתמונה נמשכת מיוטיוב (כמו סרטון חדש מהפיד עד היום) */
+export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { poster: string })[] }) {
   const [cat, setCat] = useState<VideoCategory>(videoCategories[0].id);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [openId, setOpenId] = useState<string | null>(null);
@@ -107,9 +109,9 @@ export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
                   onClick={() => setOpenId(v.id)}
                   aria-label={`${videosPage.playLabel}: ${v.title}`}
                 >
-                  {v.w ? (
+                  {v.poster && v.w ? (
                     <Image
-                      src={`/images/videos/${v.id}.webp`}
+                      src={v.poster}
                       alt=""
                       width={v.w}
                       height={v.h}

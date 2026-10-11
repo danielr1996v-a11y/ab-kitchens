@@ -130,7 +130,23 @@ function collect(): Item[] {
       }
     }
   }
-  items.push(...projects.values());
+  /* ⚠️ הסדר: לפי הגלריות של עמודי הסגנון, כי שם הסדר נראה ומכוון.
+     הרצועה באודות מערבבת סגנונות לבד (ProjectStrip). פריט שרק
+     ברצועה - אחרי הגלריה של הסגנון שלו, לפי סדר הרצועה */
+  const galleryIndex = new Map<string, number>();
+  for (const page of Object.values(kitchenPages)) page.gallery.forEach((g, i) => galleryIndex.set(g.image, i));
+  const styleOrder = ["rustic", "modern", "classic", "stone"];
+  const stripOrder = [...projects.keys()];
+  items.push(
+    ...[...projects.values()].sort((a, b) => {
+      const sa = styleOrder.indexOf(String(a.fields.style));
+      const sb = styleOrder.indexOf(String(b.fields.style));
+      if (sa !== sb) return sa - sb;
+      const ga = galleryIndex.get(String(a.fields.image)) ?? 1000 + stripOrder.indexOf(String(a.fields.image));
+      const gb = galleryIndex.get(String(b.fields.image)) ?? 1000 + stripOrder.indexOf(String(b.fields.image));
+      return ga - gb;
+    }),
+  );
 
   return items;
 }

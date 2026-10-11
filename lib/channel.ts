@@ -5,9 +5,9 @@
  * ההמלצות (lib/videos.ts) הועלו לערוץ נפרד; כאן זה הערוץ העסקי
  * שלו, @א.ביתהמטבחים - 60 סרטוני Shorts נכון ל-7.10, מתוכם 2 כפולים שהוסתרו (58).
  *
- * ⚠️ **מחובר לערוץ.** הרשימה כאן היא הבסיס, והעמוד מושך את
- * פיד ה-RSS של הערוץ פעם ביום (getChannelVideos). סרטון חדש
- * שאברהם מעלה מופיע לבד, ממוין לקטגוריה לפי מילות מפתח בכותרת.
+ * ⚠️ **שלב 5א: הרשימה כאן היא רק מקור לייבוא למערכת.** האתר קורא
+ * מהמסד. פעם ביום app/api/cron/youtube קורא את הפיד (fetchChannelFeed)
+ * וכל סרטון חדש נכנס כטיוטה לאישור, ממוין לקטגוריה לפי מילות מפתח.
  * ⚠️ הפיד מחזיר רק את 15 האחרונים - מספיק לתפוס כל חדש, לא
  * מספיק כדי לבנות ממנו את כל הרשימה. לכן הבסיס כאן.
  *
@@ -426,7 +426,7 @@ export const channelVideos: ChannelVideo[] = [
  * נשאר מכל זוג זה עם יותר צפיות (125 מול 13, 102 מול 11).
  *
  * ⚠️ **לא מספיק למחוק מהרשימה למעלה.** שניהם בין 15 האחרונים
- * בפיד, ו-getChannelVideos היה מחזיר אותם כ"חדשים" תוך יום.
+ * בפיד, וסנכרון הערוץ היה מוסיף אותם כ"חדשים" תוך יום.
  * הרשימה הזו מסננת גם את הפיד.
  */
 export const hiddenVideoIds = new Set(["W8BPvfF4Ug4", "bJG4UhW71KE"]);
@@ -444,33 +444,25 @@ const decode = (s: string) =>
     .replace(/&amp;/g, "&");
 
 /**
- * הבסיס + כל סרטון חדש מפיד ה-RSS של הערוץ.
- * ⚠️ נכשל בשקט: אם יוטיוב לא עונה, העמוד מוצג מהבסיס. עדיף
- * רשימה של אתמול מאשר עמוד שבור.
+ * הסרטונים בפיד ה-RSS של הערוץ (15 האחרונים), מהחדש לישן.
+ * ⚠️ שלב 5א: הפיד לא מוצג ישירות באתר יותר. app/api/cron/youtube
+ * קורא אותו פעם ביום ומוסיף כל סרטון שלא מוכר כ**טיוטה** במערכת.
+ * זורק אם יוטיוב לא עונה - מי שקורא מחליט מה לעשות.
  */
-export async function getChannelVideos(): Promise<ChannelVideo[]> {
-  const known = new Set(channelVideos.map((v) => v.id));
-  try {
-    const res = await fetch(
-      `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`,
-      { next: { revalidate: 86400 } },
-    );
-    if (!res.ok) return channelVideos;
-    const xml = await res.text();
-    const fresh: ChannelVideo[] = [];
-    for (const entry of xml.split("<entry>").slice(1)) {
-      const id = entry.match(/<yt:videoId>([^<]+)</)?.[1];
-      const raw = entry.match(/<title>([^<]+)</)?.[1] ?? "";
-      if (!id || known.has(id) || hiddenVideoIds.has(id)) continue;
-      const title = decode(raw)
-        .replace(/#[^\s#]+/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-      fresh.push({ id, cat: guessCategory(title), title, w: 0, h: 0 });
-    }
-    /* החדשים קודם - הפיד ממוין מהחדש לישן, וכך גם העמוד */
-    return [...fresh, ...channelVideos];
-  } catch {
-    return channelVideos;
+export async function fetchChannelFeed(): Promise<{ id: string; title: string; cat: VideoCategory }[]> {
+  const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`YouTube feed ${res.status}`);
+  const xml = await res.text();
+  const out: { id: string; title: string; cat: VideoCategory }[] = [];
+  for (const entry of xml.split("<entry>").slice(1)) {
+    const id = entry.match(/<yt:videoId>([^<]+)</)?.[1];
+    const raw = entry.match(/<title>([^<]+)</)?.[1] ?? "";
+    if (!id) continue;
+    const title = decode(raw)
+      .replace(/#[^\s#]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    out.push({ id, title, cat: guessCategory(title) });
   }
+  return out;
 }

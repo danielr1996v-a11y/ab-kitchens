@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Article } from "@/lib/articles";
-import { articleHref } from "@/lib/articles";
 
 /**
  * ArticleCard - תמונה, שם המאמר מתחתיה ותקציר קצר.
@@ -12,10 +11,14 @@ import { articleHref } from "@/lib/articles";
  *
  * server component - אין מצב, רק תצוגה.
  */
-export default function ArticleCard({ article }: { article: Article }) {
+/* ⚠️ שלב 5א: הכתובת מגיעה עם המאמר (path מהמערכת), ולא נגזרת
+   מטבלה בקוד - כך מאמר חדש מהמערכת מקבל קישור נכון לבד */
+type CardArticle = Pick<Article, "title" | "excerpt" | "image" | "imageAlt"> & { path: string };
+
+export default function ArticleCard({ article }: { article: CardArticle }) {
   return (
     <article className="acard">
-      <Link href={articleHref(article.slug)} className="acard__link">
+      <Link href={article.path} className="acard__link">
         {/* ⏸ בלי תמונה (ממתין לצילום מדניאל): משטח פחם עם הלוגו
             הבהיר, באותו יחס 16/9 - כך הרשת נשארת מיושרת. */}
         <span

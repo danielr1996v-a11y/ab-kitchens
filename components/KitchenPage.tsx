@@ -6,7 +6,7 @@ import DesignerCta from "./DesignerCta";
 import Placeholder from "./Placeholder";
 import ArticleCard from "./ArticleCard";
 import Breadcrumbs from "./Breadcrumbs";
-import { byStyle } from "@/lib/articles";
+import { getArticles, getProjects } from "@/lib/site/data";
 import Reveal from "./Reveal";
 import Hotspots from "./Hotspots";
 import Faq from "./Faq";
@@ -23,7 +23,7 @@ import { renderRichText } from "@/lib/richText";
  * הסקשן האחרון הוא LeadBanner הקיים - הפיגמה לא כללה סקשן
  * יצירת קשר, ואין סיבה לבנות שני פאנלים כהים שונים באתר.
  */
-export default function KitchenPage({
+export default async function KitchenPage({
   styleKey,
   beforeGallery,
 }: {
@@ -38,8 +38,14 @@ export default function KitchenPage({
   /* התהליך לפי עמוד. עמוד השיש מגדיר משלו, כי התהליך המשותף
      מדבר על הזמנת מטבח וסתר את ה-FAQ של אותו עמוד. */
   const flow = page.process ?? kitchenProcess;
-  const related = byStyle(styleKey as Parameters<typeof byStyle>[0]);
   if (!page) return null;
+  /* ⚠️ שלב 5א: המאמרים והגלריה מהמערכת. הגלריה = פרויקטים בסגנון
+     הזה שהמתג "בגלריית הסגנון" שלהם דלוק, לפי הסדר הידני */
+  const [articles, projects] = await Promise.all([getArticles(), getProjects()]);
+  const related = articles.filter((a) => a.relatedStyle === styleKey);
+  const gallery = projects
+    .filter((p) => p.inGallery && p.style === styleKey)
+    .map((p) => ({ image: p.src, alt: p.alt }));
 
   return (
     <>
@@ -158,7 +164,7 @@ export default function KitchenPage({
           {page.galleryTitle}
         </h2>
         <ul className="kpage__grid">
-          {page.gallery.map((item) => (
+          {gallery.map((item) => (
             <li className="kpage__shot" key={item.image}>
               <Image
                 src={item.image}

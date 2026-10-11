@@ -3,7 +3,8 @@ import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ChannelVideos from "@/components/ChannelVideos";
 import DesignerCta from "@/components/DesignerCta";
-import { getChannelVideos, videosPage } from "@/lib/channel";
+import { videosPage } from "@/lib/channel";
+import { getVideos } from "@/lib/site/data";
 
 export const metadata: Metadata = {
   title: "סרטונים - נגרות ושיש | א. בית המטבחים",
@@ -19,16 +20,15 @@ export const metadata: Metadata = {
 /**
  * עמוד הסרטונים - מערוץ היוטיוב של אברהם.
  *
- * ⚠️ הרשימה מתרעננת פעם ביום מפיד הערוץ (lib/channel.ts), ולכן
- * העמוד נבנה מחדש לכל היותר פעם ביום ולא בכל בקשה.
+ * ⚠️ שלב 5א: הרשימה מהמערכת (סרטונים מסוג "ערוץ", מפורסמים).
+ * סרטון חדש בערוץ נכנס פעם ביום כ**טיוטה** (app/api/cron/youtube),
+ * ומופיע כאן רק אחרי שמאשרים אותו במערכת - ADMIN-SPEC החלטה 1.
  *
  * ⚠️ בלי משפט פתיחה מתחת לכותרת, במכוון. דניאל ביקש עמוד
  * סרטונים, לא טקסט - ולא מוסיפים מלל שלא התבקש.
  */
-export const revalidate = 86400;
-
 export default async function Page() {
-  const videos = await getChannelVideos();
+  const videos = (await getVideos()).channel;
 
   return (
     <>

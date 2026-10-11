@@ -1,36 +1,72 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import LeadForm from "@/components/LeadForm";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { articles, articleHref } from "@/lib/articles";
+import { getArticles, getRedirect } from "@/lib/site/data";
 
-/* ⚠️ ב-Next 16 params הוא Promise וחייב await.
-   אומת ב-node_modules/next/dist/docs/.../generate-static-params.md */
-type Props = { params: Promise<{ slug: string }> };
+/**
+ * כל כתובת שאין לה עמוד קבוע - שלב 5א.
+ *
+ * 1. מאמר שהכתובת שלו (path מהמערכת) תואמת - מוצג.
+ * 2. כתובת ישנה של מאמר ששונתה בפרסום - הפניה קבועה (308) לחדשה,
+ *    כדי לא לאבד דירוג (ADMIN-SPEC §0).
+ * 3. אחרת - 404.
+ *
+ * ⚠️ עמודים קבועים (/אודותינו, /גלריה/...) לא מגיעים לכאן: ה-rewrites
+ * ב-next.config רצים לפני נתיבים דינמיים. עד שלב 5א גם כתובות
+ * המאמרים היו שם, ולכן מאמר חדש מהמערכת לא היה יכול לקבל כתובת.
+ */
 
-export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+type Props = { params: Promise<{ path: string[] }> };
+
+/* ⚠️ פרמטר בעברית יכול להגיע מקודד (%D7...) או מפוענח, תלוי
+   בשכבה. מפענחים בזהירות - פענוח כפול של % לגיטימי היה זורק */
+const toPath = (segments: string[]) =>
+  "/" +
+  segments
+    .map((s) => {
+      try {
+        return decodeURIComponent(s);
+      } catch {
+        return s;
+      }
+    })
+    .join("/");
+
+async function findArticle(segments: string[]) {
+  const path = toPath(segments);
+  return (await getArticles()).find((a) => a.path === path);
+}
+
+export async function generateStaticParams() {
+  return (await getArticles()).map((a) => ({ path: a.path.slice(1).split("/") }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const a = articles.find((x) => x.slug === slug);
+  const a = await findArticle((await params).path);
   if (!a) return {};
-  const url = articleHref(a.slug);
+  const title = a.seo?.title || a.title;
+  const description = a.seo?.description || a.excerpt;
+  const image = a.seo?.image || a.image;
   return {
-    title: `${a.title} | א. בית המטבחים`,
-    description: a.excerpt,
-    alternates: { canonical: url },
-    openGraph: { title: a.title, description: a.excerpt, url, type: "article" },
+    title: `${title} | א. בית המטבחים`,
+    description,
+    alternates: { canonical: a.path },
+    openGraph: { title, description, url: a.path, type: "article", ...(image ? { images: [image] } : {}) },
+    ...(a.seo?.noindex ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
 export default async function Page({ params }: Props) {
-  const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
-  if (!article) notFound();
+  const segments = (await params).path;
+  const article = await findArticle(segments);
+  if (!article) {
+    const to = await getRedirect(toPath(segments));
+    if (to) permanentRedirect(encodeURI(to));
+    notFound();
+  }
 
   return (
     <article className="apage">

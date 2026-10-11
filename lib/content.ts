@@ -1064,7 +1064,7 @@ export const designerCta = {
  * תמונה חדשה ל-public/images דורשת שורה אחת ברשימה ולא עריכה
  * של טבלת מיפוי.
  */
-const kitchenKind = {
+export const kitchenKind = {
   classic: { label: "מטבח קלאסי", href: "/גלריה/קלאסי" },
   modern: { label: "מטבח מודרני", href: "/גלריה/מודרני" },
   rustic: { label: "מטבח כפרי", href: "/גלריה/כפרי" },

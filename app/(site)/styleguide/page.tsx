@@ -13,7 +13,7 @@ import {
   motion,
   type Token,
 } from "@/lib/tokens";
-import { articles } from "@/lib/articles";
+import { getArticles } from "@/lib/site/data";
 import { kitchenPages } from "@/lib/content";
 import TokenValue from "@/components/TokenValue";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -52,10 +52,11 @@ function Row({ t, children }: { t: Token; children?: React.ReactNode }) {
   );
 }
 
-export default function StyleguidePage() {
+export default async function StyleguidePage() {
   if (process.env.VERCEL_ENV === "production") notFound();
 
   const classic = kitchenPages.classic;
+  const articles = await getArticles();
 
   return (
     <div className="sg">

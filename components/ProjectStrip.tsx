@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { aboutProjects } from "@/lib/content";
+import { aboutProjects, kitchenKind } from "@/lib/content";
+import { getProjects } from "@/lib/site/data";
 import { renderHighlight } from "@/lib/richText";
 import Reveal from "./Reveal";
 
@@ -20,11 +21,13 @@ import Reveal from "./Reveal";
  * server component - התנועה היא CSS בלבד.
  */
 
+type StripItem = { id: string; src: string; alt: string; label: string; href: string };
+
 function Card({
   item,
   duplicate = false,
 }: {
-  item: (typeof aboutProjects.columns)[number][number];
+  item: StripItem;
   duplicate?: boolean;
 }) {
   return (
@@ -68,7 +71,7 @@ function Card({
   );
 }
 
-function Column({ items, dir }: { items: typeof aboutProjects.columns[number]; dir: "up" | "down" }) {
+function Column({ items, dir }: { items: StripItem[]; dir: "up" | "down" }) {
   return (
     <div className={`pcol pcol--${dir}`} aria-label="פרויקטים">
       <ul className="pcol__group">
@@ -86,8 +89,24 @@ function Column({ items, dir }: { items: typeof aboutProjects.columns[number]; d
   );
 }
 
-export default function ProjectStrip() {
-  const [right, left] = aboutProjects.columns;
+/* ⚠️ שלב 5א: התמונות מהמערכת - פרויקטים שהמתג "ברצועת אודות" דלוק,
+   לפי הסדר הידני. 8 הראשונים בעמודה הימנית, השאר בשמאלית - אותה
+   חלוקה שהייתה בקוד. התווית והקישור נגזרים מהסגנון, כמו קודם. */
+export default async function ProjectStrip() {
+  const inStrip = (await getProjects()).filter((p) => p.inStrip && p.style in kitchenKind);
+  /* ⚠️ סבב בין הסגנונות - כפרי, מודרני, קלאסי, ושוב - כמו שהרצועה
+     נבנתה במקור, כדי שלא ייצאו שלושה כפריים ברצף. בתוך כל סגנון:
+     הסדר הידני מהמערכת (שהוא גם סדר הגלריה של אותו עמוד) */
+  const byStyle = (["rustic", "modern", "classic"] as const).map((style) => inStrip.filter((p) => p.style === style));
+  const rounds = Math.max(0, ...byStyle.map((l) => l.length));
+  const items: StripItem[] = Array.from({ length: rounds }, (_, i) => byStyle.map((l) => l[i]))
+    .flat()
+    .filter((p) => p !== undefined)
+    .map((p) => {
+      const kind = kitchenKind[p.style as keyof typeof kitchenKind];
+      return { id: p.id, src: p.src, alt: p.alt, label: kind.label, href: kind.href };
+    });
+  const [right, left] = [items.slice(0, 8), items.slice(8)];
 
   return (
     <section className="pstrip" aria-labelledby="projects-title">
