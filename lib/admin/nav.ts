@@ -7,8 +7,6 @@ import type { Permission } from "./roles";
  * (עמודים ותפריט+פוטר) / ניהול. מסך שאין עליו הרשאה לא מוצג
  * בסיידבר, **וגם נחסם בשרת** (app/admin/page.tsx).
  *
- * `stage` = השלב באפיון שבו המסך נבנה. עד אז מוצג מצב ריק שאומר
- * את זה במפורש, ולא מסך מזויף.
  */
 
 export type ViewId =
@@ -40,7 +38,6 @@ export type NavView = {
   label: string;
   icon: IconName;
   permission?: Permission;
-  stage?: number;
   /** מה המסך יעשה - מוצג במצב הריק עד שהוא נבנה */
   about: string;
 };
@@ -54,7 +51,6 @@ export const navGroups: NavGroup[] = [
         id: "dashboard",
         label: "לוח בקרה",
         icon: "LayoutDashboard",
-        stage: 7,
         about: "פניות חדשות, מגמה של 30 יום, ומה נשמר ועדיין לא פורסם.",
       },
     ],
@@ -78,9 +74,9 @@ export const navGroups: NavGroup[] = [
   {
     label: "ניהול",
     views: [
-      { id: "leads", label: "פניות", icon: "Inbox", permission: "leads.view", stage: 7, about: "כל פנייה מהטפסים: מי, מתי, מאיזה עמוד, וסטטוס טיפול." },
+      { id: "leads", label: "פניות", icon: "Inbox", permission: "leads.view", about: "כל פנייה מהטפסים: מי, מתי, מאיזה עמוד, וסטטוס טיפול." },
       { id: "users", label: "משתמשים", icon: "Users", permission: "users.manage", about: "" },
-      { id: "settings", label: "הגדרות", icon: "Settings", permission: "settings.edit", stage: 7, about: "שם האתר, פרטי קשר, \"להסתיר מגוגל\" ומזהה אנליטיקס." },
+      { id: "settings", label: "הגדרות", icon: "Settings", permission: "settings.edit", about: "שם האתר, פרטי קשר, \"להסתיר מגוגל\" ומזהה אנליטיקס." },
     ],
   },
 ];

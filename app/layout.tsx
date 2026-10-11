@@ -1,26 +1,28 @@
 import type { Metadata } from "next";
-import { site } from "@/lib/content";
+import { getSettings } from "@/lib/admin/settings";
 
 /* שכבת הגנה שנייה: תג noindex ברמת העמוד בכל דיפלוי שאינו פרודקשן.
    robots.txt לבדו אינו מספיק - מנועי חיפוש עשויים להגיע דרך קישור ישיר. */
 const isProduction = process.env.VERCEL_ENV === "production";
 
-export const metadata: Metadata = {
-  robots: isProduction
-    ? { index: true, follow: true }
-    : { index: false, follow: false },
+/* שלב 7: שם, תיאור ו"להסתיר מגוגל" מההגדרות במערכת */
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+  const hide = !isProduction || settings.hideFromGoogle;
+  return {
+  robots: hide ? { index: false, follow: false } : { index: true, follow: true },
   metadataBase: new URL("https://www.ab-kitchens.co.il"),
-  title: `${site.name} | מטבחים ושיש בהתאמה אישית`,
-  description:
-    "תכנון, ייצור והתקנה של מטבחים ושיש בהתאמה אישית - הכל תחת קורת גג אחת. המפעל והספק הישיר, ללא מתווכים.",
+  title: `${settings.name} | מטבחים ושיש בהתאמה אישית`,
+  description: settings.description,
   alternates: { canonical: "/" },
   openGraph: {
-    siteName: site.name,
+    siteName: settings.name,
     locale: "he_IL",
     type: "website",
   },
   twitter: { card: "summary_large_image" },
-};
+  };
+}
 
 export default function RootLayout({
   children,

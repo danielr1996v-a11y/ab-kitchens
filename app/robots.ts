@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getSettings } from "@/lib/admin/settings";
 
 /**
  * robots.txt
@@ -10,8 +11,9 @@ import type { MetadataRoute } from "next";
  */
 const isProduction = process.env.VERCEL_ENV === "production";
 
-export default function robots(): MetadataRoute.Robots {
-  if (!isProduction) {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  /* שלב 7: "להסתיר מגוגל" בהגדרות - חוסם גם ב-production, עד ההשקה */
+  if (!isProduction || (await getSettings()).hideFromGoogle) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
 

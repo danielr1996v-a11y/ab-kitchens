@@ -1,14 +1,21 @@
 import { site } from "@/lib/content";
 import { isValidPhone, type LeadResult } from "@/lib/lead";
+import { markEmailed, saveLead } from "@/lib/admin/leads";
+import { rateLimit } from "@/lib/admin/session";
+import { getSettings } from "@/lib/admin/settings";
 
 /**
- * POST /api/lead - שולח מייל לאברהם על כל פנייה מהאתר.
+ * POST /api/lead - שומר כל פנייה מהאתר במערכת, ושולח מייל לאברהם.
+ *
+ * ⚠️ שלב 7: **הפנייה נשמרת קודם.** אם היא נשמרה, הגולש מקבל "נשלח"
+ * גם כשהמייל נכשל או שאין מפתח - הפנייה ממתינה במסך "פניות". רק
+ * כשגם השמירה וגם המייל נכשלו - הגולש מקבל וואטסאפ וטלפון.
  *
  * ⚠️ **השליחה דרך Resend, ובלי מפתח היא לא עובדת.** המפתח
  * (RESEND_API_KEY) הוא סוד שרת - דניאל מזין אותו ב-Vercel
  * ובקובץ .env.local, והוא לא עובר דרך הקוד ולא נכנס לריפו.
- * כל עוד אין מפתח, התשובה היא not-configured והטופס מציג
- * לגולש וואטסאפ וטלפון - פנייה לא נבלעת בשקט.
+ * בלי מפתח הפנייה עדיין נשמרת במערכת. not-configured חוזר רק אם
+ * גם השמירה נכשלה - ואז הטופס מציג לגולש וואטסאפ וטלפון.
  *
  * ⚠️ **שולח (from):** Resend מאפשר לשלוח מ-onboarding@resend.dev
  * **רק לכתובת של בעל החשבון.** לכן או שהחשבון נפתח עם המייל
@@ -47,8 +54,23 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "invalid" }, 422);
   }
 
+  /* הגבלת קצב: 8 פניות ל-10 דקות מאותה כתובת (המפרט §5) */
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() || "local";
+  try {
+    if (!(await rateLimit(`lead:${ip}`, 8, 600))) return json({ ok: false, error: "invalid" }, 429);
+  } catch {
+    /* מסד לא זמין - לא חוסמים פנייה בגלל זה */
+  }
+
+  let storedId: string | null = null;
+  try {
+    storedId = await saveLead({ name, phone, message, source });
+  } catch (e) {
+    console.error("[lead] save failed", e);
+  }
+
   const key = process.env.RESEND_API_KEY;
-  if (!key) return json({ ok: false, error: "not-configured" }, 503);
+  if (!key) return storedId ? json({ ok: true }) : json({ ok: false, error: "not-configured" }, 503);
 
   const text = [
     `שם: ${name}`,
@@ -68,15 +90,17 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         from: process.env.LEAD_FROM ?? `${site.name} <onboarding@resend.dev>`,
-        to: [process.env.LEAD_TO ?? site.email],
+        /* היעד: LEAD_TO בסביבה, אחרת "מייל לפניות" מההגדרות, אחרת מייל העסק */
+        to: [process.env.LEAD_TO ?? ((await getSettings()).leadEmail || (await getSettings()).email)],
         subject: `פנייה חדשה מהאתר - ${name}`,
         text,
       }),
     });
-    if (!res.ok) return json({ ok: false, error: "send-failed" }, 502);
+    if (!res.ok) return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
   } catch {
-    return json({ ok: false, error: "send-failed" }, 502);
+    return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
   }
 
+  if (storedId) await markEmailed(storedId).catch(() => {});
   return json({ ok: true });
 }

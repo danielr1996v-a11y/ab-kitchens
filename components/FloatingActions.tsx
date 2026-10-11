@@ -1,4 +1,4 @@
-import { site, whatsappHref } from "@/lib/content";
+import { getSettings } from "@/lib/admin/settings";
 import Icon from "./Icon";
 
 /**
@@ -10,7 +10,10 @@ import Icon from "./Icon";
  * שמאל ולא ימין: בעברית הטקסט זורם ימינה, וכפתור צף בימין
  * נופל בדיוק על סוף השורות. משמאל הוא לא מתחרה בקריאה.
  */
-export default function FloatingActions() {
+/* שלב 7: הטלפון והוואטסאפ מההגדרות במערכת */
+export default async function FloatingActions() {
+  const site = await getSettings();
+  const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`שלום, אשמח לקבל פרטים על מטבח מ${site.name}`)}`;
   return (
     <div className="fab">
       <a

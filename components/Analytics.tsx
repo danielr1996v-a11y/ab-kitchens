@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { getSettings } from "@/lib/admin/settings";
 
 /**
  * Analytics - פיקסלים וכלי מדידה.
@@ -7,9 +8,11 @@ import Script from "next/script";
  * וההמרות שנצברו. strategy="afterInteractive" מבטיח שהוא לא
  * יעכב את הציור הראשוני של הדף.
  */
-const FB_PIXEL_ID = "981884166678578";
 
-export default function Analytics() {
+/* שלב 7: המזהה מההגדרות במערכת. ריק = בלי פיקסל בכלל */
+export default async function Analytics() {
+  const FB_PIXEL_ID = (await getSettings()).pixelId;
+  if (!FB_PIXEL_ID) return null;
   return (
     <>
       <Script id="fb-pixel" strategy="afterInteractive">

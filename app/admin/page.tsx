@@ -7,6 +7,9 @@ import EmptyView from "@/components/admin/EmptyView";
 import UsersView from "@/components/admin/UsersView";
 import ItemsView from "@/components/admin/ItemsView";
 import PagesView from "@/components/admin/PagesView";
+import DashboardView from "@/components/admin/DashboardView";
+import LeadsView from "@/components/admin/LeadsView";
+import SettingsView from "@/components/admin/SettingsView";
 import ItemEditor from "@/components/admin/ItemEditor";
 import { typeByView } from "@/lib/admin/schema";
 
@@ -44,6 +47,12 @@ export default async function AdminPage({
         <EmptyView title="אין לך גישה למסך הזה" text="המסך שמור למנהלי המערכת. אם צריך גישה - דברו עם דניאל." />
       ) : view.id === "users" ? (
         <UsersView me={user.email} />
+      ) : view.id === "dashboard" ? (
+        <DashboardView canLeads={can(user.role, "leads.view")} />
+      ) : view.id === "leads" ? (
+        <LeadsView canDelete={can(user.role, "leads.delete")} />
+      ) : view.id === "settings" ? (
+        <SettingsView />
       ) : view.id === "pages" ? (
         <PagesView kind="page" canLayout={can(user.role, "pages.layout")} />
       ) : view.id === "shared" ? (
@@ -56,7 +65,6 @@ export default async function AdminPage({
       ) : (
         <EmptyView
           text={view.about}
-          note={view.stage ? `המסך הזה נבנה בשלב ${view.stage} של הפרויקט.` : undefined}
         />
       )}
     </AdminShell>

@@ -23,6 +23,9 @@ import { importRepoContent } from "@/lib/admin/import";
 import { importPages, importParts } from "@/lib/admin/pageImport";
 import { createPage, discardPageDraft, isCustomPage, listPages, publishPage, savePageDraft } from "@/lib/admin/pageDocs";
 import { can } from "@/lib/admin/roles";
+import { deleteLead, leadStats, listLeads, toCsv, updateLead } from "@/lib/admin/leads";
+import { getSettings, saveSettings, SETTINGS_TAG } from "@/lib/admin/settings";
+import { revalidateTag } from "next/cache";
 import { defaultHeaderMenu, designerCta, leadBanner } from "@/lib/content";
 import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
@@ -263,6 +266,76 @@ async function handle(req: Request, ctx: Ctx) {
     const res = await importPages(new URL(req.url).origin, paths, body.replace === true && process.env.NODE_ENV !== "production");
     revalidateType("page");
     return json(res);
+  }
+
+  /* ===== פניות, לוח בקרה והגדרות (שלב 7) ===== */
+
+  if (method === "GET" && action === "leads") {
+    await requireUser("leads.view");
+    const trash = new URL(req.url).searchParams.get("trash") === "1";
+    return json({ leads: await listLeads(trash) });
+  }
+
+  if (method === "PATCH" && action === "lead" && id) {
+    await requireUser("leads.view");
+    const body = await readBody(req);
+    /* העברה לסל מותרת לכולם (הפיכה); מחיקה לצמיתות - רק עם leads.delete */
+    await updateLead(id, { status: typeof body.status === "string" ? body.status : undefined, note: typeof body.note === "string" ? body.note : undefined });
+    return json({ ok: true });
+  }
+
+  if (method === "POST" && action === "lead-delete" && id) {
+    await requireUser("leads.delete");
+    await deleteLead(id);
+    return json({ ok: true });
+  }
+
+  if (method === "GET" && action === "leads.csv") {
+    await requireUser("leads.view");
+    const csv = toCsv(await listLeads(false));
+    return new Response(csv, {
+      headers: {
+        "Content-Type": "text/csv; charset=utf-8",
+        "Content-Disposition": `attachment; filename="leads-${new Date().toISOString().slice(0, 10)}.csv"`,
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  if (method === "GET" && action === "dashboard") {
+    const user = await requireUser();
+    const [stats, pages, recentLeads] = await Promise.all([
+      can(user.role, "leads.view") ? leadStats() : null,
+      listPages(),
+      can(user.role, "leads.view") ? listLeads(false).then((l) => l.slice(0, 5)) : [],
+    ]);
+    const { db } = await import("@/lib/admin/db");
+    /* "נשמר ועדיין לא פורסם": פריטים עם טיוטה, ופריטים שלא פורסמו מעולם */
+    const { rows } = await (await db()).execute(
+      `SELECT e.id, e.type, e.status, COALESCE(d.data, e.data) AS data, COALESCE(d.updated_at, e.updated_at) AS at
+       FROM entries e LEFT JOIN drafts d ON d.entry_id = e.id
+       WHERE e.type IN ('article','testimonial','video','project') AND ((d.entry_id IS NOT NULL AND e.status = 'publish') OR e.status = 'draft')
+       ORDER BY at DESC LIMIT 12`,
+    );
+    const drafts = [
+      ...pages.filter((p) => p.hasDraft || p.status === "draft").map((p) => ({ id: p.id, kind: p.type, title: p.title, at: p.updatedAt, status: p.status })),
+      ...rows.map((r) => ({ id: String(r.id), kind: String(r.type), title: JSON.parse(String(r.data)).title || "", at: String(r.at), status: String(r.status) })),
+    ].sort((a, b) => b.at.localeCompare(a.at));
+    return json({ stats, drafts, recentLeads });
+  }
+
+  if (action === "settings") {
+    if (method === "GET") {
+      await requireUser("settings.edit");
+      return json({ settings: await getSettings() });
+    }
+    if (method === "POST") {
+      await requireUser("settings.edit");
+      const settings = await saveSettings(await readBody(req));
+      /* ההגדרות נוגעות בכל עמוד (שם, גוגל, פיקסל, טלפון) */
+      revalidateTag(SETTINGS_TAG, { expire: 0 });
+      return json({ settings });
+    }
   }
 
   /* ===== עורך העמודים (שלב 6) ===== */
