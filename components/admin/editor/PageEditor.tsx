@@ -21,7 +21,11 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import SeoPanel from "@/components/admin/fields/SeoPanel";
 import ElementPanel, { type ElementEdit } from "./ElementPanel";
 import StructurePanel from "./StructurePanel";
-import { isSimpleText, pathTo, updateNode } from "./treeOps";
+import { findNode, isSimpleText, pathTo, updateNode } from "./treeOps";
+import LayoutPanel from "./LayoutPanel";
+import AddPanel from "./AddPanel";
+import { canMove, deleteNode, duplicateNode, insertAfter, makeNode, moveNode, setStyle, toggleHide, type AddKind } from "./ops";
+import { brandColors } from "@/lib/tokens";
 
 /**
  * העורך הוויזואלי - המפרט §8, שלב 6א.
@@ -40,6 +44,8 @@ const DEVICE_LABEL: Record<Device, string> = { desktop: "מחשב", tablet: "ט�
 const AUTOSAVE_MS = 1000;
 /* הקלדה רצופה = צעד אחד בביטול, ולא צעד לכל אות */
 const UNDO_GROUP_MS = 800;
+/* מחוץ לרכיב: נקרא רק מתוך פעולות משתמש, לא ברינדור */
+const clock = () => Date.now();
 
 type PageData = { title: string; path?: string; seo?: Seo; doc: { id: string; kind: string; nodes: SiteNode[] } };
 type SaveState = "idle" | "dirty" | "saving" | "saved" | "error";
@@ -58,6 +64,8 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
   const [ready, setReady] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [past, setPast] = useState<SiteNode[][]>([]);
+  /* צבעי המותג כפי שהם באתר - נקראים מה-iframe (LayoutPanel) */
+  const [palette, setPalette] = useState<Record<string, string>>({});
   const [future, setFuture] = useState<SiteNode[][]>([]);
 
   const frame = useRef<HTMLIFrameElement>(null);
@@ -69,6 +77,7 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
   /* שינוי שאי אפשר להראות חי (טקסט עם הדגשה בתוכו, ביטול) - טעינה מחדש אחרי השמירה */
   const needsReload = useRef(false);
   const scrollY = useRef(0);
+  const isPartRef = useRef(false);
   const latest = useRef({ nodes, title, path, seo });
   useLayoutEffect(() => {
     latest.current = { nodes, title, path, seo };
@@ -115,9 +124,17 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
     const onMsg = (e: MessageEvent) => {
       if (e.origin !== location.origin || e.data?.source !== "abk-page") return;
       if (e.data.type === "select") {
-        setSelected(e.data.id);
+        /* בעריכת חלק משותף (כרטיס, באנר): הלחיצה בעמוד פוגעת ברכיב של
+           העמוד ולא של החלק - בוחרים את החלק עצמו */
+        const own = latest.current.nodes;
+        const hit = e.data.id && findNode(own, e.data.id);
+        setSelected(hit || !isPartRef.current ? e.data.id : own[0]?.id ?? null);
         setTab("element");
       } else if (e.data.type === "ready") {
+        try {
+          const cs = getComputedStyle(frame.current!.contentDocument!.documentElement);
+          setPalette(Object.fromEntries(brandColors.map((c) => [c.name, cs.getPropertyValue(c.name).trim()])));
+        } catch {}
         /* אחרי טעינה מחדש - חזרה לאותו מקום בעמוד ולאותה בחירה */
         post({ type: "scroll", y: scrollY.current });
         if (selected) post({ type: "select", id: selected, quiet: true });
@@ -173,9 +190,11 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
 
   /* ===== עריכה ===== */
 
-  const commit = (next: SiteNode[]) => {
-    const now = Date.now();
-    if (now - lastEdit.current > UNDO_GROUP_MS) {
+  /* reload: שינוי מבנה - העמוד נטען מחדש אחרי השמירה */
+  const commit = (next: SiteNode[], reload = false) => {
+    const now = clock();
+    if (reload) needsReload.current = true;
+    if (reload || now - lastEdit.current > UNDO_GROUP_MS) {
       setPast((p) => [...p.slice(-49), nodes]);
       setFuture([]);
     }
@@ -201,11 +220,34 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
     }
   };
 
+  /* ===== מבנה ועיצוב (שלב 6ב, מנהל בלבד) ===== */
+
+  const onStyle = (nodeId: string, prop: string, value: string | null) => commit(setStyle(nodes, nodeId, device, prop, value));
+  const onHide = (nodeId: string, d: "desktop" | "tablet" | "mobile") => commit(toggleHide(nodes, nodeId, d));
+  const onMove = (nodeId: string, dir: -1 | 1) => commit(moveNode(nodes, nodeId, dir), true);
+  const onDuplicate = (nodeId: string) => {
+    const r = duplicateNode(nodes, nodeId);
+    commit(r.nodes, true);
+    if (r.newId) setSelected(r.newId);
+  };
+  const onDelete = (nodeId: string) => {
+    commit(deleteNode(nodes, nodeId), true);
+    setSelected(null);
+    toast("האלמנט נמחק", { action: { label: "בטל", onClick: () => undoRef.current() } });
+  };
+  const onAdd = (kind: AddKind, image?: { src: string; alt: string }) => {
+    const node = makeNode(kind, image);
+    commit(insertAfter(nodes, selected, node), true);
+    setSelected(node.id);
+    setTab("element");
+  };
+
   const select = (nodeId: string) => {
     setSelected(nodeId);
     post({ type: "select", id: nodeId });
   };
 
+  const undoRef = useRef<() => void>(() => {});
   const undo = () => {
     if (!past.length) return;
     setFuture((f) => [nodes, ...f]);
@@ -225,6 +267,11 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
     schedule();
   };
 
+  useLayoutEffect(() => {
+    undoRef.current = undo;
+    isPartRef.current = entry?.type === "part";
+  });
+
   /* קיצורי מקלדת: Cmd/Ctrl+Z ביטול, Shift+Cmd/Ctrl+Z החזרה - מחוץ לשדות */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -240,7 +287,13 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
 
   /* העיצוב מהעורך - נשלח לעמוד חי (שלב 6ב משתמש בזה) */
   useEffect(() => {
-    if (ready) post({ type: "css", css: nodeCss(nodes) });
+    if (!ready) return;
+    /* אלמנטים שקיבלו עיצוב עכשיו עוד אין להם מחלקת n-<id> בעמוד - הגשר
+       מוסיף אותה, כדי שהעיצוב ייראה מיד בלי טעינה מחדש */
+    const ids: string[] = [];
+    const walk = (l: SiteNode[]) => l.forEach((n) => ((n.style || n.hide) && ids.push(n.id), n.children && walk(n.children)));
+    walk(nodes);
+    post({ type: "css", css: nodeCss(nodes), ids });
   }, [nodes, ready, post]);
 
   /* ===== פרסום ===== */
@@ -277,8 +330,9 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
   }
 
   const isPart = entry.type === "part";
-  /* חלק משותף מוצג על עמוד אמיתי - צור קשר, שהוא קצר */
-  const previewPath = isPart ? "/contact" : entry.publishedPath || path || "/";
+  /* חלק משותף מוצג על עמוד אמיתי שבו הוא מופיע */
+  const PART_PREVIEW: Record<string, string> = { "part-designerCta": "/designers", "part-leadBanner": "/גלריה/כפרי" };
+  const previewPath = isPart ? PART_PREVIEW[id] ?? "/contact" : entry.publishedPath || path || "/";
   const width = WIDTH[device];
   const scale = Math.min(1, (stageSize.w - 32) / width);
   const pending = entry.hasDraft || entry.status === "draft";
@@ -362,8 +416,9 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
         {/* ===== פאנל צד ===== */}
         <aside className="flex w-80 shrink-0 flex-col border-l bg-background">
           <Tabs value={tab} onValueChange={setTab} dir="rtl" className="flex min-h-0 flex-1 flex-col gap-0">
-            <TabsList className="m-2 grid grid-cols-3">
+            <TabsList className={cn("m-2 grid", canLayout ? "grid-cols-4" : "grid-cols-3")}>
               <TabsTrigger value="structure">מבנה</TabsTrigger>
+              {canLayout && <TabsTrigger value="add">הוספה</TabsTrigger>}
               <TabsTrigger value="element">אלמנט</TabsTrigger>
               <TabsTrigger value="page">עמוד</TabsTrigger>
             </TabsList>
@@ -371,8 +426,37 @@ export default function PageEditor({ id, canLayout, backHref }: { id: string; ca
               <TabsContent value="structure">
                 <StructurePanel nodes={nodes} selectedId={selected} onSelect={select} />
               </TabsContent>
+              {canLayout && (
+                <TabsContent value="add">
+                  <AddPanel onAdd={onAdd} hasSelection={!!selected && !!findNode(nodes, selected)} />
+                </TabsContent>
+              )}
               <TabsContent value="element">
-                <ElementPanel nodes={nodes} selectedId={selected} onEdit={onEdit} onSelect={select} />
+                <ElementPanel
+                  nodes={nodes}
+                  selectedId={selected}
+                  onEdit={onEdit}
+                  onSelect={select}
+                  onWidgetData={(nid, data) => commit(updateNode(nodes, nid, (n) => ({ ...n, settings: { ...n.settings, data } })), true)}
+                  layoutSlot={(() => {
+                    const node = selected ? findNode(nodes, selected) : null;
+                    if (!canLayout || !node) return null;
+                    return (
+                      <LayoutPanel
+                        node={node}
+                        device={device}
+                        palette={palette}
+                        onStyle={(p, v) => onStyle(node.id, p, v)}
+                        onHide={(d) => onHide(node.id, d)}
+                        onMove={(dir) => onMove(node.id, dir)}
+                        onDuplicate={() => onDuplicate(node.id)}
+                        onDelete={() => onDelete(node.id)}
+                        canMoveUp={canMove(nodes, node.id, -1)}
+                        canMoveDown={canMove(nodes, node.id, 1)}
+                      />
+                    );
+                  })()}
+                />
               </TabsContent>
               <TabsContent value="page" className="grid gap-6 p-4">
                 <div className="grid gap-2">

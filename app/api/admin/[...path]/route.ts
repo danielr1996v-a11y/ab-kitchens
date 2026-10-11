@@ -21,9 +21,9 @@ import {
 import { listMedia, MAX_UPLOAD, uploadImage } from "@/lib/admin/media";
 import { importRepoContent } from "@/lib/admin/import";
 import { importPages, importParts } from "@/lib/admin/pageImport";
-import { discardPageDraft, listPages, publishPage, savePageDraft } from "@/lib/admin/pageDocs";
+import { createPage, discardPageDraft, isCustomPage, listPages, publishPage, savePageDraft } from "@/lib/admin/pageDocs";
 import { can } from "@/lib/admin/roles";
-import { defaultHeaderMenu } from "@/lib/content";
+import { defaultHeaderMenu, designerCta, leadBanner } from "@/lib/content";
 import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
 import {
   checkLogin,
@@ -304,6 +304,24 @@ async function handle(req: Request, ctx: Ctx) {
     return json(res);
   }
 
+  if (method === "POST" && action === "page-new") {
+    await requireUser("pages.layout");
+    const body = await readBody(req);
+    return json({ id: await createPage(str(body.title), str(body.path)) }, 201);
+  }
+
+  /* סל מיחזור לעמוד - רק לעמודים שנוצרו במערכת. לעמודי הבסיס יש
+     קובץ נתיב קבוע, ומחיקה הייתה משאירה אותו מחזיר 404 */
+  if (method === "POST" && action === "page-status" && id) {
+    await requireUser("pages.layout");
+    const a = str((await readBody(req)).action);
+    if (!isCustomPage(id)) throw new HttpError(422, "אי אפשר למחוק עמוד בסיס של האתר. אפשר להסתיר אותו מגוגל");
+    if (a !== "trash" && a !== "untrash") throw new HttpError(422, "פעולה לא מוכרת");
+    await setStatus(id, a);
+    revalidateType("page");
+    return json({ ok: true });
+  }
+
   if (method === "POST" && action === "page-discard" && id) {
     await requireUser("pages.text");
     await discardPageDraft(id);
@@ -326,7 +344,7 @@ async function handle(req: Request, ctx: Ctx) {
   if (method === "POST" && action === "import-parts") {
     await requireUser("settings.edit");
     const body = await readBody(req);
-    const res = await importParts(new URL(req.url).origin, defaultHeaderMenu, body.replace === true && process.env.NODE_ENV !== "production");
+    const res = await importParts(new URL(req.url).origin, defaultHeaderMenu, body.replace === true && process.env.NODE_ENV !== "production", { designerCta, leadBanner });
     revalidateType("part");
     return json(res);
   }

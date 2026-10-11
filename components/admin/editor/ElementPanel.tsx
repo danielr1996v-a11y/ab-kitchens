@@ -7,6 +7,8 @@ import { Label } from "@/components/admin/ui/label";
 import ImageField from "@/components/admin/fields/ImageField";
 import type { SiteNode } from "@/lib/site/tree";
 import { nodeLabel, pathTo, textLeaves, TYPE_LABEL, WIDGET_LABEL } from "./treeOps";
+import DataForm from "./DataForm";
+import Link from "next/link";
 
 /**
  * לשונית "אלמנט" - מה שנבחר בעמוד (המפרט §8).
@@ -25,12 +27,15 @@ export default function ElementPanel({
   selectedId,
   onEdit,
   onSelect,
+  onWidgetData,
   layoutSlot,
 }: {
   nodes: SiteNode[];
   selectedId: string | null;
   onEdit: (id: string, edit: ElementEdit) => void;
   onSelect: (id: string) => void;
+  /** תוכן של רכיב נעול (שלב 6ג) */
+  onWidgetData: (id: string, data: Record<string, unknown>) => void;
   /** עיצוב ופריסה - רק למנהל (שלב 6ב) */
   layoutSlot?: React.ReactNode;
 }) {
@@ -71,18 +76,49 @@ export default function ElementPanel({
       <h3 className="text-sm font-semibold">{nodeLabel(node)}</h3>
 
       {node.type === "widget" ? (
-        <div className="flex gap-3 rounded-md border bg-muted/50 p-3 text-sm">
-          <Lock className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
-          <div className="grid gap-1">
-            <p>רכיב עם התנהגות משלו, שנשאר כמו שהוא.</p>
-            <p className="text-muted-foreground">{lockedHint(node.settings?.widget)}</p>
-          </div>
-        </div>
+        <WidgetContent node={node} onChange={(d) => onWidgetData(node.id, d)} />
       ) : (
         <ContentFields node={node} onEdit={(e) => onEdit(node.id, e)} />
       )}
 
       {layoutSlot}
+    </div>
+  );
+}
+
+/* רכיבים שהתוכן שלהם נערך כאן, בטופס שנבנה מהנתונים */
+const EDITABLE = new Set(["hero", "values", "trustedBy", "styleGrid", "hotspots", "leadForm", "header", "designerCta", "leadBanner"]);
+/* משותפים לכמה עמודים - בעמוד רגיל נערכים בחלק המשותף */
+const SHARED: Record<string, string> = { designerCta: "part-designerCta", leadBanner: "part-leadBanner" };
+
+function WidgetContent({ node, onChange }: { node: SiteNode; onChange: (d: Record<string, unknown>) => void }) {
+  const name = node.settings?.widget ?? "";
+  const data = (node.settings?.data ?? {}) as Record<string, unknown>;
+  if (SHARED[name] && !data.content) {
+    return (
+      <div className="grid gap-2 rounded-md border bg-muted/50 p-3 text-sm">
+        <p>הסקשן הזה משותף לכמה עמודים. שינוי בו מתעדכן בכולם.</p>
+        <Link className="font-medium text-primary hover:underline" href={`/admin/edit?id=${SHARED[name]}&back=shared`}>
+          עריכת {WIDGET_LABEL[name]} ←
+        </Link>
+      </div>
+    );
+  }
+  if (EDITABLE.has(name) && Object.keys(data).length) {
+    return (
+      <div className="grid gap-3">
+        <p className="text-xs text-muted-foreground">הרכיב עצמו נעול - העיצוב וההתנהגות שלו נשארים. התוכן נערך כאן, והעמוד מתעדכן אחרי השמירה.</p>
+        <DataForm data={data} onChange={onChange} />
+      </div>
+    );
+  }
+  return (
+    <div className="flex gap-3 rounded-md border bg-muted/50 p-3 text-sm">
+      <Lock className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+      <div className="grid gap-1">
+        <p>רכיב עם התנהגות משלו, שנשאר כמו שהוא.</p>
+        <p className="text-muted-foreground">{lockedHint(name)}</p>
+      </div>
     </div>
   );
 }

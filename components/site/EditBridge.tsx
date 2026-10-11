@@ -18,7 +18,7 @@ type Msg =
   | { type: "scroll"; y: number }
   | { type: "text"; id: string; text: string }
   | { type: "image"; id: string; src: string; alt: string }
-  | { type: "css"; css: string };
+  | { type: "css"; css: string; ids?: string[] };
 
 const OUTLINE = "#2563eb";
 
@@ -111,6 +111,7 @@ export default function EditBridge({ docId }: { docId: string }) {
           document.head.appendChild(tag);
         }
         tag.textContent = m.css;
+        for (const id of m.ids ?? []) document.querySelector(`[data-n="${CSS.escape(id)}"]`)?.classList.add(`n-${id}`);
         requestAnimationFrame(() => place(chosen, selected));
       }
     };

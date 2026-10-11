@@ -14,15 +14,17 @@ import { widgetMarker } from "@/lib/site/marker";
  *
  * server component - כל המצב יושב בתוך LeadForm.
  */
-export default function DesignerCta() {
+/* התוכן - שלב 6ג: חלק משותף במסד (part-designerCta), נערך פעם אחת
+   לכל העמודים. ברירת המחדל = מה שהיה בקוד */
+export default function DesignerCta({ content = designerCta }: { content?: typeof designerCta } = {}) {
   return (
     /* ⚠️ ה-id הוא יעד עוגן: הכפתור בבלוק ההמלצות בדף הבית
        מפנה לכאן במקום להחזיק טופס משלו. */
     <section className="dcta" id="designer-cta" {...widgetMarker("designerCta")}>
       <div className="dcta__card">
         <Image
-          src={designerCta.image}
-          alt={designerCta.imageAlt}
+          src={content.image}
+          alt={content.imageAlt}
           fill
           sizes="90vw"
           className="dcta__img"
@@ -30,13 +32,13 @@ export default function DesignerCta() {
 
         <div className="dcta__body">
           <div className="dcta__text">
-            <p className="dcta__eyebrow">{designerCta.eyebrow}</p>
-            <h2 className="dcta__title">{designerCta.title}</h2>
-            <p className="dcta__lead">{designerCta.lead}</p>
+            <p className="dcta__eyebrow">{content.eyebrow}</p>
+            <h2 className="dcta__title">{content.title}</h2>
+            <p className="dcta__lead">{content.lead}</p>
 
             <LeadForm
               source="כרטיס פגישה עם המעצב/ת"
-              submitLabel={designerCta.ctaText}
+              submitLabel={content.ctaText}
               variant="dark"
             />
           </div>

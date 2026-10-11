@@ -58,7 +58,7 @@ export type SiteNode = {
 
 export type SiteDoc = {
   id: string;
-  kind: "page" | "header" | "footer";
+  kind: "page" | "header" | "footer" | "block";
   nodes: SiteNode[];
 };
 

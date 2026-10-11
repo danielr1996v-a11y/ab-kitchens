@@ -20,7 +20,14 @@ export default async function PageDoc({ path }: { path: string }) {
     if (!doc) notFound();
     return (
       <>
-        <RenderTree nodes={doc.nodes} editing />
+        {doc.nodes.length ? (
+          <RenderTree nodes={doc.nodes} editing />
+        ) : (
+          /* עמוד חדש - מסגרת בעורך בלבד (המפרט §12). בטיוטה, לא באתר */
+          <div style={{ margin: "calc(var(--header-clearance)) var(--side-padding) var(--section-gap)", padding: "4rem 1rem", border: "2px dashed var(--color-border)", textAlign: "center", color: "var(--color-muted)" }}>
+            העמוד ריק - הוסיפו אזור מהלשונית &quot;הוספה&quot;
+          </div>
+        )}
         <EditBridge docId={doc.id} />
       </>
     );

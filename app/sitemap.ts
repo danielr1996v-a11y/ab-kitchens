@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getArticles } from "@/lib/site/data";
+import { getCustomPages } from "@/lib/site/pages";
 
 const BASE = "https://www.ab-kitchens.co.il";
 
@@ -36,7 +37,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = (await getArticles())
     .filter((a) => !a.seo?.noindex)
     .map((a) => ({ path: a.path, priority: 0.7, freq: "monthly" as const }));
-  return [...routes, ...articles].map((r) => ({
+  /* עמודים שנוצרו במערכת (שלב 6ג) - מפורסמים ולא מוסתרים מגוגל */
+  const pages = (await getCustomPages()).filter((p) => !p.noindex).map((p) => ({ path: p.path, priority: 0.6, freq: "monthly" as const }));
+  return [...routes, ...articles, ...pages].map((r) => ({
     url: `${BASE}${r.path}`,
     lastModified: now,
     changeFrequency: r.freq,

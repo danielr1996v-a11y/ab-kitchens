@@ -6140,6 +6140,12 @@
      ]
     }
    ]
+  },
+  "seo": {
+   "title": "",
+   "description": "",
+   "image": "",
+   "noindex": false
   }
  },
  {
@@ -10934,6 +10940,41 @@
   }
  },
  {
+  "id": "part-designerCta",
+  "type": "part",
+  "title": "כרטיס פגישה עם המעצבת",
+  "fields": {},
+  "doc": {
+   "id": "part-designerCta",
+   "kind": "block",
+   "nodes": [
+    {
+     "id": "n2uifw8",
+     "type": "widget",
+     "settings": {
+      "widget": "designerCta",
+      "data": {
+       "content": {
+        "image": "/images/hero-modern.webp",
+        "imageAlt": "",
+        "eyebrow": "לא בטוחים איך להתחיל?",
+        "title": "פגישה עם המעצב/ת שלנו, ללא עלות",
+        "lead": "משאירים שם וטלפון, ואנחנו חוזרים אליכם לתיאום. בלי עלות ובלי התחייבות.",
+        "ctaText": "לקביעת פגישה"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "seo": {
+   "title": "",
+   "description": "",
+   "image": "",
+   "noindex": false
+  }
+ },
+ {
   "id": "part-footer",
   "type": "part",
   "title": "פוטר",
@@ -12043,6 +12084,49 @@
         },
         "featuredImage": "/images/style-modern.webp"
        }
+      }
+     }
+    }
+   ]
+  }
+ },
+ {
+  "id": "part-leadBanner",
+  "type": "part",
+  "title": "באנר לידים",
+  "fields": {},
+  "doc": {
+   "id": "part-leadBanner",
+   "kind": "block",
+   "nodes": [
+    {
+     "id": "n2v1mfb",
+     "type": "widget",
+     "settings": {
+      "widget": "leadBanner",
+      "data": {
+       "content": {
+        "displaySeconds": 3,
+        "transitionSeconds": 2,
+        "slides": [
+         {
+          "image": "/images/style-modern.webp",
+          "alt": "מטבח מודרני עם אי שיש מרכזי"
+         },
+         {
+          "image": "/images/lead-2.webp",
+          "alt": "מטבח לבן עם אי מרכזי ותאורה תלויה"
+         },
+         {
+          "image": "/images/lead-3.webp",
+          "alt": "מטבח לבן עם חיפוי שיש ומשטח עבודה"
+         }
+        ],
+        "titleBold": "מובילים את תחום המטבחים",
+        "titleLight": "עם ניסיון של מעל 30 שנה!",
+        "subtitle": "הופכים את החזון שלכם למציאות"
+       },
+       "withForm": true
       }
      }
     }

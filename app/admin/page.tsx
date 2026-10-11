@@ -45,7 +45,7 @@ export default async function AdminPage({
       ) : view.id === "users" ? (
         <UsersView me={user.email} />
       ) : view.id === "pages" ? (
-        <PagesView kind="page" />
+        <PagesView kind="page" canLayout={can(user.role, "pages.layout")} />
       ) : view.id === "shared" ? (
         <PagesView kind="part" />
       ) : contentType && params.item ? (

@@ -83,6 +83,10 @@ export async function savePageDraft(
     ...(layout && raw.seo !== undefined ? { seo: sanitizeSeo(raw.seo) } : {}),
   };
 
+  if (next.path && next.path !== data.path && (await pathTaken(next.path, id))) {
+    throw new HttpError(409, `הכתובת ${next.path} כבר בשימוש. בחרו כתובת אחרת`);
+  }
+
   const revision = baseRevision + 1;
   const t = now();
   await (await db()).execute({
@@ -126,3 +130,42 @@ export async function publishPage(id: string, baseRevision: number, user: AdminU
 export async function discardPageDraft(id: string) {
   await (await db()).execute({ sql: "DELETE FROM drafts WHERE entry_id = ?", args: [id] });
 }
+
+/* ===== עמוד חדש (שלב 6ג) ===== */
+
+/** כתובות שכבר יש להן עמוד קבוע באתר או שמורות למערכת */
+const RESERVED = [
+  "/", "/אודותינו", "/המלצות", "/סרטונים", "/מאמרים-וטיפים", "/שיש-למטבח", "/contact", "/designers",
+  "/תקנון-ומדיניות-פרטיות", "/מדיניות-פרטיות", "/הצהרת-נגישות", "/גלריה", "/מחשבון", "/המעצבים-שלנו",
+];
+const RESERVED_PREFIX = ["/admin", "/api", "/studio", "/media", "/images", "/fonts", "/logos", "/_next", "/styleguide", "/articles", "/gallery", "/about", "/testimonials", "/videos", "/stone", "/terms", "/privacy", "/accessibility", "/coming-soon"];
+
+async function pathTaken(path: string, exceptId?: string) {
+  if (RESERVED.includes(path) || RESERVED_PREFIX.some((p) => path === p || path.startsWith(p + "/"))) return true;
+  const { rows } = await (await db()).execute({
+    sql: `SELECT e.id FROM entries e LEFT JOIN drafts d ON d.entry_id = e.id
+          WHERE e.status != 'trash' AND e.type IN ('page', 'article') AND e.id != ?
+            AND (json_extract(e.data, '$.path') = ? OR json_extract(d.data, '$.path') = ?)`,
+    args: [exceptId ?? "", path, path],
+  });
+  return rows.length > 0;
+}
+
+/** עמוד חדש נפתח ריק - רק תפריט ופוטר (המפרט §12: לא מעתיקים את דף הבית) */
+export async function createPage(title: string, rawPath: string): Promise<string> {
+  const path = safePath(rawPath || title);
+  const name = title.trim().slice(0, 120);
+  if (!name) throw new HttpError(422, "צריך שם לעמוד");
+  if (!path) throw new HttpError(422, "צריך כתובת לעמוד");
+  if (await pathTaken(path)) throw new HttpError(409, `הכתובת ${path} כבר בשימוש. בחרו כתובת אחרת`);
+  const id = "page-" + crypto.randomUUID().slice(0, 8);
+  const data: PageData = { title: name, path, fields: {}, seo: {}, doc: { id, kind: "page", nodes: [] } };
+  await (await db()).execute({
+    sql: "INSERT INTO entries (id, type, status, data, revision, updated_at) VALUES (?, 'page', 'draft', ?, 1, ?)",
+    args: [id, JSON.stringify(data), now()],
+  });
+  return id;
+}
+
+/** עמוד שנוצר במערכת - אפשר להעביר לסל. עמודי הבסיס של האתר - לא */
+export const isCustomPage = (id: string) => id.startsWith("page-");

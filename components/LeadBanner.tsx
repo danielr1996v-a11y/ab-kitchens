@@ -18,10 +18,13 @@ import { widgetMarker } from "@/lib/site/marker";
  */
 export default function LeadBanner({
   withForm = false,
+  content = leadBanner,
 }: {
   withForm?: boolean;
+  /** שלב 6ג: חלק משותף במסד (part-leadBanner). ברירת המחדל = הקוד */
+  content?: typeof leadBanner;
 }) {
-  const { slides, displaySeconds, transitionSeconds } = leadBanner;
+  const { slides, displaySeconds, transitionSeconds } = content;
   const count = slides.length;
 
   // המחזור נגזר ממספר השקופיות, כך שהוספה או הסרה מסתדרת לבד
@@ -36,9 +39,9 @@ export default function LeadBanner({
       <div className="lead__panel">
         <div className="lead__content">
           <h2 className="lead__title" id="lead-title">
-            <strong className="lead__title-bold">{leadBanner.titleBold}</strong>
+            <strong className="lead__title-bold">{content.titleBold}</strong>
             <br />
-            <span className="lead__title-light">{leadBanner.titleLight}</span>
+            <span className="lead__title-light">{content.titleLight}</span>
           </h2>
 
           {withForm ? (
@@ -61,7 +64,7 @@ export default function LeadBanner({
             </>
           ) : (
             <>
-              <p className="lead__subtitle">{leadBanner.subtitle}</p>
+              <p className="lead__subtitle">{content.subtitle}</p>
             </>
           )}
         </div>

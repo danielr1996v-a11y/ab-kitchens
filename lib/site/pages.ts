@@ -9,7 +9,7 @@ import { entriesTag } from "./data";
  * `doc?:{nodes}` ברשומה). רק הגרסה המפורסמת מגיעה לאתר.
  */
 
-export type PageEntry = { id: string; title: string; path: string; doc: SiteDoc };
+export type PageEntry = { id: string; title: string; path: string; doc: SiteDoc; seo?: { title?: string; description?: string; image?: string; noindex?: boolean } };
 
 export const getPage = unstable_cache(
   async (path: string): Promise<PageEntry | null> => {
@@ -19,7 +19,7 @@ export const getPage = unstable_cache(
     });
     if (!rows[0]) return null;
     const d = JSON.parse(String(rows[0].data));
-    return { id: String(rows[0].id), title: d.title ?? "", path: d.path, doc: d.doc };
+    return { id: String(rows[0].id), title: d.title ?? "", path: d.path, doc: d.doc, seo: d.seo };
   },
   ["site-page"],
   { tags: [entriesTag("page")] },
@@ -27,7 +27,7 @@ export const getPage = unstable_cache(
 
 /** חלק משותף - הדר או פוטר. נשמר פעם אחת ומורכב לכל עמוד (המפרט §3) */
 export const getPart = unstable_cache(
-  async (kind: "header" | "footer"): Promise<SiteDoc | null> => {
+  async (kind: string): Promise<SiteDoc | null> => {
     const { rows } = await (await db()).execute({
       sql: "SELECT data FROM entries WHERE id = ? AND type = 'part' AND status = 'publish'",
       args: [`part-${kind}`],
@@ -58,3 +58,16 @@ export async function getDraftDoc(where: { path?: string; partId?: string }): Pr
       });
   return rows[0] ? JSON.parse(String(rows[0].data)).doc : null;
 }
+
+/** עמודים שנוצרו במערכת ומפורסמים - למפת האתר */
+export const getCustomPages = unstable_cache(
+  async (): Promise<{ path: string; noindex: boolean }[]> => {
+    const { rows } = await (await db()).execute("SELECT data FROM entries WHERE type = 'page' AND status = 'publish' AND id LIKE 'page-%'");
+    return rows.map((r) => {
+      const d = JSON.parse(String(r.data));
+      return { path: d.path, noindex: d.seo?.noindex === true };
+    });
+  },
+  ["site-custom-pages"],
+  { tags: [entriesTag("page")] },
+);

@@ -5,14 +5,18 @@ import { notFound, permanentRedirect } from "next/navigation";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { getArticles, getRedirect } from "@/lib/site/data";
+import { getDraftDoc, getPage } from "@/lib/site/pages";
+import { isEditing } from "@/lib/site/editMode";
+import PageDoc from "@/components/site/PageDoc";
 
 /**
  * כל כתובת שאין לה עמוד קבוע - שלב 5א.
  *
  * 1. מאמר שהכתובת שלו (path מהמערכת) תואמת - מוצג.
- * 2. כתובת ישנה של מאמר ששונתה בפרסום - הפניה קבועה (308) לחדשה,
+ * 2. עמוד שנוצר במערכת (שלב 6ג) - מעץ האלמנטים. בעריכה גם טיוטה.
+ * 3. כתובת ישנה ששונתה בפרסום - הפניה קבועה (308) לחדשה,
  *    כדי לא לאבד דירוג (ADMIN-SPEC §0).
- * 3. אחרת - 404.
+ * 4. אחרת - 404.
  *
  * ⚠️ עמודים קבועים (/אודותינו, /גלריה/...) לא מגיעים לכאן: ה-rewrites
  * ב-next.config רצים לפני נתיבים דינמיים. עד שלב 5א גם כתובות
@@ -44,9 +48,29 @@ export async function generateStaticParams() {
   return (await getArticles()).map((a) => ({ path: a.path.slice(1).split("/") }));
 }
 
+/** עמוד מהמערכת בכתובת הזו - מפורסם, או בעריכה גם טיוטה */
+async function findPage(segments: string[]) {
+  const path = toPath(segments);
+  if (await isEditing()) return (await getDraftDoc({ path })) ? path : null;
+  return (await getPage(path)) ? path : null;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const a = await findArticle((await params).path);
-  if (!a) return {};
+  const segments = (await params).path;
+  const a = await findArticle(segments);
+  if (!a) {
+    const page = await getPage(toPath(segments));
+    if (!page) return {};
+    const seo = page.seo ?? {};
+    const title = seo.title || page.title;
+    return {
+      title: `${title} | א. בית המטבחים`,
+      ...(seo.description ? { description: seo.description } : {}),
+      alternates: { canonical: page.path },
+      openGraph: { title, url: page.path, ...(seo.image ? { images: [seo.image] } : {}) },
+      ...(seo.noindex ? { robots: { index: false, follow: true } } : {}),
+    };
+  }
   const title = a.seo?.title || a.title;
   const description = a.seo?.description || a.excerpt;
   const image = a.seo?.image || a.image;
@@ -63,6 +87,8 @@ export default async function Page({ params }: Props) {
   const segments = (await params).path;
   const article = await findArticle(segments);
   if (!article) {
+    const pagePath = await findPage(segments);
+    if (pagePath) return <PageDoc path={pagePath} />;
     const to = await getRedirect(toPath(segments));
     if (to) permanentRedirect(encodeURI(to));
     notFound();

@@ -184,7 +184,7 @@ export async function importPages(origin: string, paths: string[], replace = fal
  * עצמו נשמר כנתונים - זה מה שמסך "תפריט עליון ופוטר" יערוך.
  * הפוטר: צמתים רגילים, מה-HTML שהוא כבר מוציא - כמו העמודים.
  */
-export async function importParts(origin: string, headerMenu: unknown, replace = false) {
+export async function importParts(origin: string, headerMenu: unknown, replace = false, blocks: { designerCta: unknown; leadBanner: unknown }) {
   if (process.env.TURSO_DATABASE_URL && process.env.ADMIN_ALLOW_IMPORT !== "1") {
     throw new HttpError(403, "ייבוא למסד בענן דורש אישור מפורש (ADMIN_ALLOW_IMPORT)");
   }
@@ -194,11 +194,14 @@ export async function importParts(origin: string, headerMenu: unknown, replace =
   const docs = [
     { id: "part-header", title: "הדר ותפריט", nodes: [{ id: nodeId(), type: "widget", settings: { widget: "header", data: { menu: headerMenu } } }] },
     { id: "part-footer", title: "פוטר", nodes: footer },
+    /* שלב 6ג: סקשנים שחוזרים בכמה עמודים - נערכים פעם אחת */
+    { id: "part-designerCta", title: "כרטיס פגישה עם המעצבת", nodes: [{ id: nodeId(), type: "widget", settings: { widget: "designerCta", data: { content: blocks.designerCta } } }] },
+    { id: "part-leadBanner", title: "באנר לידים", nodes: [{ id: nodeId(), type: "widget", settings: { widget: "leadBanner", data: { content: blocks.leadBanner, withForm: true } } }] },
   ];
   const c = await db();
   const t = now();
   for (const d of docs) {
-    const kind = d.id === "part-header" ? "header" : "footer";
+    const kind = d.id === "part-header" ? "header" : d.id === "part-footer" ? "footer" : "block";
     const data = JSON.stringify({ title: d.title, fields: {}, doc: { id: d.id, kind, nodes: d.nodes } });
     await c.execute({
       sql: `INSERT INTO entries (id, type, status, data, revision, updated_at) VALUES (?, 'part', 'publish', ?, 1, ?)

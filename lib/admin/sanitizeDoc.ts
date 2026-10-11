@@ -101,6 +101,43 @@ export function safeHref(v: unknown): string | null {
 
 const ID = /^[a-z0-9]{3,24}$/i;
 
+/* ===== תוכן של רכיב נעול (שלב 6ג) ===== */
+
+const IMAGE_KEY = /^(image|src|logo|poster|img|photo|featuredImage)$/i;
+const HREF_KEY = /^(href|url|link)$/i;
+
+/**
+ * הנתונים של רכיב נעול (שקופיות, ערכים, לוגואים, תפריט) - **רק בצורה
+ * שכבר קיימת**: אותם מפתחות, אותם סוגים. מחרוזת נשארת מחרוזת, תמונה
+ * רק מהאתר, קישור רק בטוח. רשימה יכולה לגדול ולקטון - פריט חדש
+ * מקבל את הצורה של הפריט הראשון. מפתח שלא היה - נזרק.
+ */
+export function cleanDataLike(incoming: unknown, trusted: unknown, key = ""): unknown {
+  if (typeof trusted === "string") {
+    if (IMAGE_KEY.test(key)) return safeImageUrl(incoming) || (incoming === "" ? "" : trusted);
+    if (HREF_KEY.test(key)) return safeHref(incoming) ?? trusted;
+    return typeof incoming === "string" ? cleanText(incoming, 2000) : trusted;
+  }
+  if (typeof trusted === "number") {
+    const n = Number(incoming);
+    return Number.isFinite(n) && incoming !== "" && incoming !== null ? Math.max(-100000, Math.min(100000, n)) : trusted;
+  }
+  if (typeof trusted === "boolean") return typeof incoming === "boolean" ? incoming : trusted;
+  if (Array.isArray(trusted)) {
+    if (!Array.isArray(incoming)) return trusted;
+    const template = trusted[0];
+    if (template === undefined) return trusted;
+    return incoming.slice(0, 60).map((item, i) => cleanDataLike(item, trusted[i] ?? template, key));
+  }
+  if (trusted && typeof trusted === "object") {
+    if (!incoming || typeof incoming !== "object" || Array.isArray(incoming)) return trusted;
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(trusted)) out[k] = cleanDataLike((incoming as Record<string, unknown>)[k], v, k);
+    return out;
+  }
+  return trusted;
+}
+
 /* ===== אלמנטים חדשים ===== */
 
 const NEW_TAGS: Partial<Record<NodeType, string[]>> = {
@@ -167,6 +204,10 @@ function cleanNode(raw: unknown, trusted: Map<string, SiteNode>, seen: Set<strin
   const hide = cleanHide(r.hide);
   if (hide) node.hide = hide;
 
+  /* תוכן הרכיב הנעול - רק בצורה של העותק המהימן */
+  if (node.type === "widget" && source?.settings?.data && r.settings?.data) {
+    node.settings = { ...node.settings, data: cleanDataLike(r.settings.data, source.settings.data) as Record<string, unknown> };
+  }
   /* רכיב נעול, svg ו-JSON-LD: הילדים לא שייכים לעורך */
   if (node.type === "widget" || node.type === "icon" || node.type === "html") {
     if (source?.children) node.children = structuredClone(source.children);

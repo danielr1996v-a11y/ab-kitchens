@@ -16,6 +16,7 @@ import ChannelVideos from "@/components/ChannelVideos";
 import Header from "@/components/Header";
 import type { HeaderMenu } from "@/lib/content";
 import { getVideos } from "@/lib/site/data";
+import { SharedDesignerCta, SharedLeadBanner } from "./sharedBlocks";
 import {
   ArticleGrid,
   FaqSchema,
@@ -83,8 +84,9 @@ const registry: Record<string, Renderer> = {
     <LeadForm source={String(d.source ?? "")} submitLabel={String(d.submitLabel ?? "")} variant={d.variant === "light" ? "light" : "dark"} />
   ),
   contactForm: () => <ContactForm />,
-  designerCta: () => <DesignerCta />,
-  leadBanner: (d) => <LeadBanner withForm={d.withForm === true} />,
+  /* משותפים: בתוך החלק עצמו - מהנתונים שלו; בעמוד - מהחלק המשותף */
+  designerCta: (d) => (d.content ? <DesignerCta content={d.content as never} /> : <SharedDesignerCta />),
+  leadBanner: (d) => (d.content ? <LeadBanner withForm={d.withForm === true} content={d.content as never} /> : <SharedLeadBanner withForm={d.withForm === true} />),
   /* התוכן של אלה הגיע מ-Sanity ונשמר בעץ כמו שהוא */
   hero: (d) => <Hero slideshow={d.slideshow as never} />,
   values: (d) => <Values content={d.content as never} />,
