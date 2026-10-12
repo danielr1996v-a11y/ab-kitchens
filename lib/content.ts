@@ -117,8 +117,10 @@ export const heroSlideshow = {
   transitionSeconds: 2, // משך המעבר בין תמונות
   slides: [
     {
-      image: "/images/hero-modern.webp",
-      alt: "מטבח מודרני עם ארונות עץ אגוז ואי מרכזי - א. בית המטבחים",
+      /* 12.10: hero-modern (המיקסר) הוחלפה לבקשת דניאל. צילום
+         unsplash מהדרייב של הלקוח - לא מופיע בשום מקום אחר בדף הבית */
+      image: "/images/hero-home-dark.webp",
+      alt: "מטבח מודרני כהה עם פינת אוכל ותאורה תלויה - א. בית המטבחים",
     },
     /* ⛔ style-classic.webp הוסרה מכאן (5.10) - דניאל פסל אותה.
        ⚠️ **לא הוחלפה באחרת, ובכוונה.** כל התמונות הרחבות
@@ -633,8 +635,10 @@ type KitchenPageContent = {
 export const kitchenPages: Record<string, KitchenPageContent> = {
   modern: {
     heroTitle: "מטבח מודרני",
-    heroImage: "/images/hero-modern.webp",
-    heroAlt: "מטבח מודרני עם חיפוי אבן טבעית ומשטח שיש",
+    /* 12.10: hero-modern (המיקסר) הוחלפה לבקשת דניאל. צילום אמיתי
+       מהדרייב - אותו מטבח כמו stone-real-1, אבל לא באותו עמוד */
+    heroImage: "/images/hero-modern-real.webp",
+    heroAlt: "מטבח מודרני לבן עם אי מחופה שיש בהיר ותאורה תלויה",
     article: [
       {
         heading: "מטבח מודרני בהתאמה אישית",
