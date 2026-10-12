@@ -1799,6 +1799,12 @@ main > *:first-child:not(.hero) {
 }
 /* ⛔ בריחוף לא ממלאים בזהב: לבן על aa8347 נותן 3.47, מתחת
    לסף 4.5 של טקסט רגיל. רקע אפור בהיר עם טקסט כהה עובר. */
+/* בעמוד ההמלצות הכפתור יושב אחרי הסקשן ולא בתוכו, אז הריפוד
+   הצדדי שלו לא יורש מהסקשן */
+.reviews__more--google {
+  margin-top: 0;
+  padding: 0 var(--side-padding) var(--space-6);
+}
 .reviews__more-btn:hover,
 .reviews__more-btn:focus-visible,
 .chv__more-btn:hover,

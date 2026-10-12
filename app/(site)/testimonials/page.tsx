@@ -12,6 +12,7 @@ import {
   featuredQuote,
   testimonials,
   googleReviews,
+  googleReviewsLink,
   trustindexWidgetId,
 } from "@/lib/testimonialsPage";
 
@@ -85,6 +86,28 @@ export default function Page() {
       <GoogleReviewsWidget widgetId={trustindexWidgetId}>
         <Testimonials reviews={googleReviews} showMore={false} plain />
       </GoogleReviewsWidget>
+      {/* מחוץ לווידג'ט ולא בתוכו: כש-Trustindex נדלק הוא מחליף את
+          כל התוכן שבפנים, והכפתור חייב להישאר */}
+      <div className="reviews__more reviews__more--google">
+        <a
+          className="reviews__more-btn"
+          href={googleReviewsLink.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {googleReviewsLink.label}
+          {/* ב-RTL "קדימה" הוא שמאלה */}
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+            <path
+              d="M15 6l-6 6 6 6"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
 
       {/* ===== סרטוני לקוחות =====
           ⚠️ אחרי הצילומים ולא לפניהם: סרטון הוא ההוכחה החזקה
