@@ -884,11 +884,11 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
   },
   rustic: {
     heroTitle: "מטבח כפרי",
-    heroImage: "/images/style-rustic.webp",
-    heroAlt: "מטבח כפרי עם ארונות קרם וחיפוי עץ",
-    /* במרכז יש בטלפון רק קיר לבן וסיר. משמאל - חזיתות המסגרת וחיפוי
-       העץ המחורץ, שהם מה שהופך את המטבח לכפרי */
-    heroMobilePosition: "18% center",
+    /* 12.10: style-rustic הייתה תקריב (סיר וקומקום) - לא רואים מטבח.
+       real-rustic-7 מראה את כל המטבח: חזיתות מסגרת, אי ותקרת עץ.
+       היא יצאה מהגלריה למטה כדי שלא תופיע פעמיים בעמוד */
+    heroImage: "/images/real-rustic-7.webp",
+    heroAlt: "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
     article: [
       {
         heading: "מטבח כפרי בהתאמה אישית",
@@ -952,7 +952,6 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
          מהדרייב "3. תמונות מטבחים": חזיתות מסגרת. real-rustic-6 כאן
          היא צילום אחר מזה שהוסר ב-7.10 (קיר הלבנים) */
       { image: "/images/real-rustic-6.webp", alt: "מטבח לבן עם חזיתות מסגרת, אי כהה ומשטח אבן אפור" },
-      { image: "/images/real-rustic-7.webp", alt: "מטבח לבן בסגנון כפרי עם אי מרכזי ותאורה שקועה בתקרה" },
       { image: "/images/real-rustic-8.webp", alt: "מטבח לבן עם חיפוי שיש שחור ומגירות פתוחות לאחסון" },
       { image: "/images/real-rustic-9.webp", alt: "מטבח לבן עם חזיתות מסגרת בצורת ר ודלפק בר" },
       { image: "/images/real-rustic-10.webp", alt: "מטבח לבן עם חזיתות מסגרת, עיטורי עץ כהה ופינת קפה" },
