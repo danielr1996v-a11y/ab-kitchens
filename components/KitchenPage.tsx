@@ -175,13 +175,6 @@ export default function KitchenPage({
       {/* ⛔ חריצים שממתינים לתוכן מאברהם. חסומים ב-production
           ולכן לא נראים בתצוגת הלקוח - ראה Placeholder.tsx.
           נשלפים לפי styleKey ולא מקודדים בכל עמוד בנפרד. */}
-      {styleKey === "classic" && (
-        <Placeholder
-          title="זוויות נוספות"
-          slots={3}
-          note="ממתין לצילומים מזוויות נוספות - בקשה מהסבב של 17.09"
-        />
-      )}
       {styleKey === "stone" && (
         <Placeholder
           title="פרויקטים נבחרים"

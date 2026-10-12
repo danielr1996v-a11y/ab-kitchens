@@ -158,8 +158,10 @@ export const leadBanner = {
   displaySeconds: 3,
   transitionSeconds: 2, // מעבר ארוך במכוון - הצלבה רכה ולא החלפה
   slides: [
-    { image: "/images/style-modern.webp", alt: "מטבח מודרני עם אי שיש מרכזי" },
-    { image: "/images/lead-2.webp", alt: "מטבח לבן עם אי מרכזי ותאורה תלויה" },
+    /* 11.10: צילומים אמיתיים מהדרייב. style-modern ו-lead-2 הופיעו
+       פעמיים באותו עמוד (בגלריה המודרנית ובסליידר של דף הבית) */
+    { image: "/images/lead-real-2.webp", alt: "מטבח לבן עם אי מרכזי אפור" },
+    { image: "/images/lead-real-1.webp", alt: "מטבח עם אי שחור ותאורה תלויה" },
     { image: "/images/lead-3.webp", alt: "מטבח לבן עם חיפוי שיש ומשטח עבודה" },
   ],
   titleBold: "מובילים את תחום המטבחים",
@@ -182,8 +184,9 @@ export const values = {
       // מתוך הבריף: "החברה אינה מתווכת בין הלקוח למפעל. בית המטבחים היא המפעל עצמו."
       description:
         "בית המטבחים **אינה מתווכת** בין הלקוח למפעל - היא **המפעל עצמו**.\nתכנון, ייצור, נגרות, שיש והתקנה מבוצעים **ישירות על ידינו**, ללא תלות בגורמים חיצוניים.",
-      image: "/images/hero-modern.webp",
-      alt: "המפעל של א. בית המטבחים",
+      /* 11.10: hero-modern כבר בסליידר שבראש דף הבית */
+      image: "/images/style-standard.webp",
+      alt: "מטבח כהה עם אי מרכזי וכיסאות בר",
       enabled: true,
     },
     {
@@ -192,8 +195,10 @@ export const values = {
       // מתוך הבריף: רשימת המשמעויות עבור הלקוח
       description:
         "אנחנו **מעבד מורשה** של חברות השיש, ולא עובדים דרך מעבדים חיצוניים.\nהמשמעות עבורכם: בקרת איכות מלאה, התאמה מדויקת, גימור מקצועי ו**אחריות על העבודה**.",
-      image: "/images/style-modern.webp",
-      alt: "עיבוד שיש במפעל",
+      /* 11.10: style-modern כבר בכרטיס "מודרני" בדף הבית. צילום
+         אמיתי של אי שיש - אין לנו צילום מהמפעל, וה-alt אומר מה רואים */
+      image: "/images/value-stone.webp",
+      alt: "אי מטבח מחופה שיש בהיר",
       enabled: true,
     },
     {
@@ -212,8 +217,9 @@ export const values = {
       // מתוך הבריף: "כמעט 10 שנות ניסיון", "דור שני בענף", "שירות גם לאחר ההתקנה"
       description:
         "**דור שני** בענף המטבחים, עם **מאות מטבחים** שתוכננו ויוצרו לאורך השנים.\nמלווים אתכם אישית לאורך כל הדרך - **וגם אחרי ההתקנה**.",
-      image: "/images/hero-3.webp",
-      alt: "ליווי אישי לאורך התהליך",
+      /* 11.10: hero-3 כבר בסליידר שבראש דף הבית */
+      image: "/images/real-rustic-7.webp",
+      alt: "מטבח לבן עם חזיתות מסגרת ואי מרכזי",
       enabled: true,
     },
   ],
@@ -683,6 +689,13 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
       { image: "/images/real-modern-3.webp", alt: "מטבח כהה עם אי שיש בגוון קלקטה וברז זהב" },
       { image: "/images/real-modern-4.webp", alt: "מטבח לבן ועץ עם אי שיש מרכזי" },
       { image: "/images/real-modern-5.webp", alt: "מטבח בגווני קרם ועץ עם אי וגוף תאורה לינארי" },
+      /* 11.10: מהדרייב "3. תמונות מטבחים". real-modern-7 היא אותו
+         מטבח כמו real-modern-1 שנפסלה, בחיתוך אחר ובלי הרגליים.
+         שתי תמונות ה-unsplash הן סטוק - הועלו לבקשת דניאל */
+      { image: "/images/real-modern-6.webp", alt: "מטבח מודרני לבן עם אי אפור וכיסאות בר" },
+      { image: "/images/real-modern-7.webp", alt: "מטבח בגוון שמנת עם חיפוי שיש דרמטי בגב המטבח" },
+      { image: "/images/unsplash-modern-1.webp", alt: "מטבח מודרני פתוח עם אי עץ ופינת אוכל" },
+      { image: "/images/unsplash-modern-2.webp", alt: "מטבח מודרני כהה עם מדף עץ ותאורה נסתרת" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -769,7 +782,13 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     gallery: [
       { image: "/images/real-classic-2.webp", alt: "מטבח קו ארוך בגוון קרם עם משטח בהיר" },
       { image: "/images/real-classic-4.webp", alt: "מטבח קרם עם חיפוי שיש מנומר ואי עם מושבים" },
-      { image: "/images/real-classic-5.webp", alt: "מטבח קרם עם חיפוי אבן אפורה ועמודת תנורים" },
+      /* 11.10: real-classic-5 יצאה מהגלריה - היא כבר ההירו של העמוד.
+         החדשות מהדרייב "3. תמונות מטבחים": חזיתות חלקות בגוונים רכים */
+      { image: "/images/real-classic-6.webp", alt: "מטבח בגוון ירוק מרווה עם בר ישיבה וכיסאות עץ" },
+      { image: "/images/real-classic-7.webp", alt: "מטבח בגוון בז׳ עם עמודת תנורים" },
+      { image: "/images/real-classic-8.webp", alt: "מטבח בגוון בז׳ עם משטח וחיפוי שחורים" },
+      { image: "/images/real-classic-9.webp", alt: "מטבח לבן ארוך עם פינת אוכל ומדפי עץ" },
+      { image: "/images/real-classic-10.webp", alt: "פינת אוכל צמודה למטבח עם מדפי עץ פתוחים" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -817,7 +836,12 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
        לבקשתו - שולחן השיש הכחול עם היד על הכיסא, המטבח עם
        המקרר הלבן והפרקט, ותקריבי הכיור והלד. נשארה אחת. */
     gallery: [
-      { image: "/images/stone-wa-6.webp", alt: "משטח שיש וחיפוי קיר תואם" },
+      /* 11.10: stone-wa-6 יצאה - היא כבר תמונת המאמר על פורצלן שמופיע
+         בעמוד הזה. stone-real-3 הוא תקריב הכיורים, הועלה לבקשת דניאל */
+      { image: "/images/stone-shish.webp", alt: "מטבח עם משטחי שיש אפור בהיר וחיפוי תואם" },
+      { image: "/images/stone-real-1.webp", alt: "אי מטבח מחופה שיש בהיר בעיבוד המשכי עד הרצפה" },
+      { image: "/images/stone-real-2.webp", alt: "אי מטבח עם משטח אבן כהה ומעוטר" },
+      { image: "/images/stone-real-3.webp", alt: "כיור כפול שחור עם חיפוי ומשטח אבן כהים" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -908,9 +932,18 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     gallery: [
       { image: "/images/real-rustic-1.webp", alt: "מטבח לבן עם חזיתות בחריטה וחלון לגינה" },
       { image: "/images/real-rustic-2.webp", alt: "מטבח לבן עם ברזי פליז ומשטח שיש בהיר" },
-      { image: "/images/real-rustic-3.webp", alt: "מטבח לבן עם תאורה נסתרת ומשטח שיש" },
       { image: "/images/real-rustic-4.webp", alt: "מטבח לבן עם כיריים ומשטח שיש בהיר" },
       { image: "/images/real-rustic-5.webp", alt: "מטבח בגווני עץ ולבן עם משטח שיש ותאורה נסתרת" },
+      /* 11.10: real-rustic-3 יצאה - כמעט זהה ל-real-rustic-2. החדשות
+         מהדרייב "3. תמונות מטבחים": חזיתות מסגרת. real-rustic-6 כאן
+         היא צילום אחר מזה שהוסר ב-7.10 (קיר הלבנים) */
+      { image: "/images/real-rustic-6.webp", alt: "מטבח לבן עם חזיתות מסגרת, אי כהה ומשטח אבן אפור" },
+      { image: "/images/real-rustic-7.webp", alt: "מטבח לבן בסגנון כפרי עם אי מרכזי ותאורה שקועה בתקרה" },
+      { image: "/images/real-rustic-8.webp", alt: "מטבח לבן עם חיפוי שיש שחור ומגירות פתוחות לאחסון" },
+      { image: "/images/real-rustic-9.webp", alt: "מטבח לבן עם חזיתות מסגרת בצורת ר ודלפק בר" },
+      { image: "/images/real-rustic-10.webp", alt: "מטבח לבן עם חזיתות מסגרת, עיטורי עץ כהה ופינת קפה" },
+      { image: "/images/real-rustic-11.webp", alt: "מטבח לבן ארוך עם חזיתות מסגרת וברזים מוזהבים" },
+      { image: "/images/real-rustic-12.webp", alt: "מטבח לבן עם חזיתות מסגרת בצורת ח וכיריים מקצועיות" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -1069,7 +1102,9 @@ export const designersPage = {
    ========================================================= */
 export const designerCta = {
   /* רקע: צילום איכותי + שכבת פחם. הטקסט חייב להיקרא מעליו. */
-  image: "/images/hero-modern.webp",
+  /* 11.10: style-classic ולא hero-modern, שהופיעה פעמיים בדף הבית
+     ובעמוד המודרני. style-classic לא בשימוש בשום מקום אחר */
+  image: "/images/style-classic.webp",
   imageAlt: "",           // דקורטיבי - הטקסט נושא את המשמעות
   eyebrow: "לא בטוחים איך להתחיל?",
   title: "פגישה עם המעצב/ת שלנו, ללא עלות",
@@ -1106,7 +1141,7 @@ const kitchenKind = {
    "שם.webp" לא תופס אותם - כך זה כמעט נשאר עם ארבע תמונות
    שבורות. בכל הסרה של תמונה - לחפש גם את השם בלי סיומת. */
 const projectFiles = [
-  "real-rustic-3", "real-modern-2", "real-classic-4", "real-rustic-1",
+  "real-modern-2", "real-classic-4", "real-rustic-1",
   "real-modern-3", "real-classic-2", "real-rustic-5", "real-modern-4",
   "real-rustic-2", "real-modern-5", "real-classic-5", "real-rustic-4",
 ];

@@ -120,8 +120,9 @@ export const articles: Article[] = [
     title: "מטבח מודרני – עיצוב נקי שפוגש פונקציונליות",
     excerpt:
       "קו אחיד, אחסון מתוכנן ותאורה שעושה את ההבדל - ולמה מודרני לא חייב להרגיש קר.",
-    image: "/images/style-modern.webp",
-    imageAlt: "מטבח מודרני עם קווים ישרים ואי מרכזי",
+    /* 11.10: style-modern כבר ברקע של העמוד המודרני, שבו מופיע הכרטיס */
+    image: "/images/article-modern.webp",
+    imageAlt: "מטבח מודרני כהה עם פינת אוכל ותאורה תלויה",
     relatedStyle: "modern",
     blocks: [
       {
@@ -212,8 +213,9 @@ export const articles: Article[] = [
     title: "מטבח כפרי – עיצוב שמכניס הביתה חמימות ואופי",
     excerpt:
       "חזיתות מסגרת, חומרים טבעיים והפרטים הקטנים שעושים את ההבדל - בלי להרגיש מיושן.",
-    image: "/images/style-rustic.webp",
-    imageAlt: "מטבח כפרי עם חזיתות מסגרת וגוונים חמים",
+    /* 11.10: style-rustic היא ההירו של העמוד הכפרי, שבו מופיע הכרטיס */
+    image: "/images/article-rustic.webp",
+    imageAlt: "מטבח לבן עם חזיתות מסגרת, אי מרכזי ומנורה תלויה",
     relatedStyle: "rustic",
     blocks: [
       {
