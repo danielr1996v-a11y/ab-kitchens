@@ -133,6 +133,9 @@ export const heroSlideshow = {
     {
       image: "/images/hero-3.webp",
       alt: "מטבח מודרני כהה עם חיפוי זכוכית ואי שיש - א. בית המטבחים",
+      /* פנורמה 2.4:1 - בטלפון נראה רק כשליש מהרוחב. 65% שם במרכז
+         את הברז, שני כיסאות והאי, במקום חלון וכיסא אחד */
+      mobilePosition: "65% center",
     },
     {
       image: "/images/lead-2.webp",
@@ -186,9 +189,11 @@ export const values = {
       // מתוך הבריף: "החברה אינה מתווכת בין הלקוח למפעל. בית המטבחים היא המפעל עצמו."
       description:
         "בית המטבחים **אינה מתווכת** בין הלקוח למפעל - היא **המפעל עצמו**.\nתכנון, ייצור, נגרות, שיש והתקנה מבוצעים **ישירות על ידינו**, ללא תלות בגורמים חיצוניים.",
-      /* 11.10: hero-modern כבר בסליידר שבראש דף הבית */
-      image: "/images/style-standard.webp",
-      alt: "מטבח כהה עם אי מרכזי וכיסאות בר",
+      /* 11.10: hero-modern כבר בסליידר שבראש דף הבית. ⚠️ לא
+         style-standard - זה אותו צילום כמו real-modern-2, עם יריעת
+         הניילון והסולם שבגללם הוא הוצא מדף הבית */
+      image: "/images/real-classic-7.webp",
+      alt: "מטבח בגוון בז׳ עם עמודת תנורים",
       enabled: true,
     },
     {
@@ -582,6 +587,8 @@ type KitchenPageContent = {
   heroTitle: string;
   heroImage: string;
   heroAlt: string;
+  /** נקודת המיקוד בטלפון (object-position). ריק = מרכז */
+  heroMobilePosition?: string;
   /**
    * גוף המאמר, מקובץ לפי כותרת.
    * כל בלוק מרונדר כזוג עמודות - כותרת מימין, תוכן משמאל - כדי
@@ -879,6 +886,9 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     heroTitle: "מטבח כפרי",
     heroImage: "/images/style-rustic.webp",
     heroAlt: "מטבח כפרי עם ארונות קרם וחיפוי עץ",
+    /* במרכז יש בטלפון רק קיר לבן וסיר. משמאל - חזיתות המסגרת וחיפוי
+       העץ המחורץ, שהם מה שהופך את המטבח לכפרי */
+    heroMobilePosition: "18% center",
     article: [
       {
         heading: "מטבח כפרי בהתאמה אישית",

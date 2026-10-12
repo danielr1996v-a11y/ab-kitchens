@@ -698,6 +698,25 @@ h1, h2, h3, h4 {
   object-position: center;
 }
 
+/* טלפון: המסגרת צרה וגבוהה והתמונות רחבות, אז cover חותך את רוב
+   הרוחב - זה מרגיש כמו זום. שלושה תיקונים (12.10, לבקשת דניאל):
+   1. גובה 54vh ולא 64vh: ב-812px זה 440 במקום 520, ונראה בערך
+      20% יותר מכל צילום.
+   2. בלי ה-scale של Ken Burns - בטלפון הוא רק מוסיף זום על זום.
+      נשאר המעבר הרך.
+   3. נקודת מיקוד לכל שקופית (mobilePosition בתוכן), ברירת מחדל מרכז. */
+@media (max-width: 700px) {
+  .hero {
+    height: clamp(22rem, 54vh, 40rem);
+  }
+  .hero__slide--animated {
+    animation-name: heroFade;
+  }
+  .hero__img {
+    object-position: var(--hero-mpos, center);
+  }
+}
+
 /* נגישות + מכשירים חלשים: ללא אנימציה, מציגים את התמונה הראשונה בלבד */
 @media (prefers-reduced-motion: reduce) {
   .hero__slide--animated {
@@ -2751,6 +2770,16 @@ a.footer__contact-link:hover {
 }
 .kpage__hero-img {
   object-fit: cover;
+}
+/* טלפון: אותו היגיון כמו בדף הבית (12.10) - 50vh ולא 58vh (406px
+   ב-812 במקום 471), כדי שייראה יותר מהצילום, ונקודת מיקוד לכל עמוד */
+@media (max-width: 700px) {
+  .kpage__hero {
+    height: clamp(22rem, 50vh, 34rem);
+  }
+  .kpage__hero-img {
+    object-position: var(--hero-mpos, center);
+  }
 }
 /* שכבת הכהות - חזקה בתחתית בלבד, כדי שהכותרת תיקרא
    בלי לכבות את התמונה עצמה */

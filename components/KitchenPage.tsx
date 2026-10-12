@@ -55,6 +55,7 @@ export default function KitchenPage({
             priority
             sizes="100vw"
             className="kpage__hero-img"
+            style={page.heroMobilePosition ? ({ "--hero-mpos": page.heroMobilePosition } as React.CSSProperties) : undefined}
           />
         </ViewTransition>
         <h1 className="kpage__hero-title">{page.heroTitle}</h1>
