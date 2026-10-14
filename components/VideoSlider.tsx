@@ -45,7 +45,11 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
   const trackRef = useRef<HTMLUListElement>(null);
   /* אינדקס שטוח ברשימה המשולשת. null = כולם סגורים */
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [active, setActive] = useState(N);
+  /* ⚠️ **הכרטיס הפעיל ב-ref ולא ב-state (14.10).** כ-state, כל
+     החלפת כרטיס מרכזי בזמן גלילה רינדרה מחדש את כל 36 הכרטיסים
+     ואת 36 ה-Image שבהם - על ה-main thread, באמצע גלילת מגע.
+     הכיתה vcard--active נכתבת ישירות ל-DOM מתוך update. */
+  const active = useRef(N);
 
   const anim = useRef(0);
   /* טיימר רשת הביטחון של האנימציה. ראה stopAnim */
@@ -67,6 +71,20 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
    * ⚠️ הסקייל נכתב כ-inline style **בלי transition ב-CSS**. הוא
    * מחושב בכל פריים של גלילה, וכך עוקב אחרי האצבע בדיוק;
    * transition היה גורם לו לרדוף אחריה בפיגור קבוע.
+   *
+   * ⚠️ **ההבהוב באייפון (14.10) - שני תיקונים כאן, לא אחד.**
+   * דניאל: "הסרטונים של ההמלצות מהבהב". הסרת ה-will-change
+   * ב-12.10 לא פתרה. המנגנון: בגלילת מגע ספארי גולל את המסלול
+   * ב-compositor, ובמקביל ה-JS כותב transform ל-36 כרטיסים בכל
+   * פריים. כרטיס בלי שכבה משלו נצבע מחדש בתוך אריחי הגוללן על
+   * ה-main thread, ואם הצביעה לא מספיקה לפריים ספארי מציג אריח
+   * ריק - זה ההבהוב. לכן:
+   * 1. כותבים transform רק כשהערך באמת השתנה. כרטיסים רחוקים
+   *    מהמרכז יושבים על SHRINK_MAX קבוע ולא נוגעים בהם בכלל.
+   * 2. רק הכרטיסים שעדיין מתכווצים (בטווח SHRINK_MAX מהמרכז,
+   *    עד 5 בו-זמנית) מקבלים vcard--near עם will-change - שכבה
+   *    משלהם, וה-compositor מקטין אותם בלי לצבוע. 36 שכבות
+   *    קבועות היו הבעיה של 12.10; 5 נודדות הן זולות.
    */
   const update = useCallback(() => {
     const track = trackRef.current;
@@ -85,7 +103,12 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
     cards.forEach((card, i) => {
       const dist = Math.abs(midOf(card) - center);
       const t = Math.min(dist / step, SHRINK_MAX);
-      card.style.transform = `scale(${(1 - t * SHRINK).toFixed(3)})`;
+      const scale = (1 - t * SHRINK).toFixed(3);
+      if (card.dataset.scale !== scale) {
+        card.dataset.scale = scale;
+        card.style.transform = `scale(${scale})`;
+      }
+      card.classList.toggle("vcard--near", t < SHRINK_MAX);
 
       if (dist < nearestDist) {
         nearestDist = dist;
@@ -93,7 +116,11 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       }
     });
 
-    setActive(nearest);
+    if (nearest !== active.current) {
+      cards[active.current]?.classList.remove("vcard--active");
+      cards[nearest].classList.add("vcard--active");
+      active.current = nearest;
+    }
     /* באמצע אנימציה היעד כבר קדימה - לא לדרוס אותו */
     if (!busy.current) target.current = nearest;
     return nearest;
@@ -442,7 +469,8 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
       >
         {slides.map(({ v, flat, clone }) => (
           <li
-            className={`vcard${flat === active ? " vcard--active" : ""}`}
+            /* הכיתה ההתחלתית ל-SSR בלבד. מכאן והלאה update מנהל אותה ב-DOM */
+            className={`vcard${flat === N ? " vcard--active" : ""}`}
             key={flat}
             aria-hidden={clone || undefined}
           >
