@@ -28,7 +28,7 @@ export const site = {
     {
       id: "instagram" as const,
       label: "אינסטגרם",
-      href: "https://www.instagram.com/ab_kitchen_design",
+      href: "https://www.instagram.com/ab_kitchens.il",
     },
   ],
 };

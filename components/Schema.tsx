@@ -39,7 +39,7 @@ export default function Schema() {
     ],
     sameAs: [
       "https://www.facebook.com/profile.php?id=100066265492507",
-      "https://www.instagram.com/ab_kitchen_design",
+      "https://www.instagram.com/ab_kitchens.il",
     ],
     areaServed: { "@type": "Country", name: "ישראל" },
   };
