@@ -27,7 +27,13 @@ const TARGET = "/coming-soon";
    את הפרטים עד שסוגרים אותו, ואין מה לעצב או לתחזק לנעילה זמנית.
    ⚠️ שינוי משתנים ב-Vercel תופס רק מהדיפלוי הבא.
    ========================================================= */
+/* מתג הנעילה. false = האתר פתוח, גם כשהמשתנים מוגדרים ב-Vercel.
+   כך פותחים ונועלים בלי לגעת במשתנים ובלי להקליד סיסמה מחדש:
+   מחליפים ל-true ומעלים. (15.10.26: נפתח זמנית לבקשת דניאל) */
+const SITE_LOCK_ENABLED = false;
+
 function locked(request: NextRequest): boolean {
+  if (!SITE_LOCK_ENABLED) return false;
   const user = process.env.SITE_USER;
   const pass = process.env.SITE_PASSWORD;
   if (!user || !pass) return false;
