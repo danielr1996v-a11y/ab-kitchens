@@ -964,6 +964,9 @@ main > *:first-child:not(.hero) {
   flex-direction: column;
   align-items: center;
   gap: 0.375rem;
+  /* ⚠️ 18.10: שטח המגע היה 20px רוחב. הריפוד השקוף מרחיב אותו
+     ל-44 בלי להזיז את הקו - הוא ממורכז ב-translateX ממילא. */
+  padding-inline: 0.75rem;
   color: rgba(255, 255, 255, 0.85);
   transition: color var(--dur) var(--ease);
 }
@@ -4080,6 +4083,11 @@ a.footer__contact-link:hover {
   .cform__row {
     grid-template-columns: 1fr;
   }
+  /* ⚠️ 18.10: בשתי עמודות המייל (~200px) דרס את הכתובת שלידו
+     בטלפון. עמודה אחת - ארבע שורות, כל אחת שלמה. */
+  .contact__list {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* =========================================================
@@ -4593,6 +4601,13 @@ a.footer__contact-link:hover {
   flex-shrink: 0;
   color: var(--color-gold);
 }
+/* ⚠️ 18.10: המייל נחתך בפוטר הדו-עמודתי בנייד (ראה BreakableEmail).
+   min-width: 0 כדי שפריט ה-flex יסכים להתכווץ מתחת לרוחב המילה,
+   ו-anywhere כרשת ביטחון למסך צר מאוד - בלעדיהם ה-wbr לא מספיק. */
+.footer__contact-link span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .footer__contact-link:not(.footer__contact-link--static):hover,
 .footer__contact-link:not(.footer__contact-link--static):focus-visible {
   color: #fff;
@@ -4630,6 +4645,15 @@ a.footer__contact-link:hover {
   /* המותג תופס את שתי העמודות - הלוגו והרשתות צריכים רוחב */
   .footer__brand {
     grid-column: 1 / -1;
+  }
+  /* ⚠️ 18.10: "ראשון - חמישי" ו-"10:00 - 18:00" נשברו כל אחת לשתי
+     שורות ב-375: 13rem לא מכיל את שתיהן ב-17px. 16rem מכיל, ובלי
+     שבירה בתוך טווח ימים או שעות. */
+  .footer__hours {
+    max-width: 16rem;
+  }
+  .footer__hours span {
+    white-space: nowrap;
   }
 }
 
@@ -5567,6 +5591,12 @@ a.footer__contact-link:hover {
   color: var(--color-muted);
   text-decoration: none;
   transition: color var(--dur) var(--ease);
+  /* ⚠️ 18.10: הקישור היה 17px גובה - שליש מתקן המגע של 44.
+     הריפוד מגדיל את שטח המגע והמרג׳ין השלילי מבטל אותו בפריסה,
+     כך שהשורה נשארת באותו גובה בדיוק. */
+  display: inline-block;
+  padding-block: 0.8125rem;
+  margin-block: -0.8125rem;
 }
 .crumbs__link:hover,
 .crumbs__link:focus-visible {

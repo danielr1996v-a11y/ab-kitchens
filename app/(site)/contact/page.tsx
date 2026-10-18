@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BreakableEmail from "@/components/BreakableEmail";
 import Image from "next/image";
 import { site, contactPage } from "@/lib/content";
 import ContactForm from "@/components/ContactForm";
@@ -61,7 +62,9 @@ export default function ContactPage() {
               <li>
                 <a href={`mailto:${site.email}`} className="contact__link">
                   <Icon id="mail" />
-                  <span>{site.email}</span>
+                  <span>
+                    <BreakableEmail email={site.email} />
+                  </span>
                 </a>
               </li>
               <li className="contact__link contact__link--static">

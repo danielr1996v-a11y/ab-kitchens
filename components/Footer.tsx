@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BreakableEmail from "./BreakableEmail";
 import Image from "next/image";
 import { site, nav, kitchenTypes, footerLinks, footerNew, footerSocial } from "@/lib/content";
 import Icon from "./Icon";
@@ -125,7 +126,9 @@ export default function Footer() {
             <li>
               <a href={`mailto:${site.email}`} className="footer__contact-link">
                 <Icon id="mail" />
-                <span>{site.email}</span>
+                <span>
+                  <BreakableEmail email={site.email} />
+                </span>
               </a>
             </li>
             <li className="footer__contact-link footer__contact-link--static">
