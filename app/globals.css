@@ -4063,9 +4063,12 @@ a.footer__contact-link:hover {
 }
 
 @media (max-width: 900px) {
-  /* עמודה אחת: הצילום למעלה, התוכן מתחת */
+  /* עמודה אחת: הצילום למעלה, התוכן מתחת.
+     ⚠️ minmax(0, 1fr) ולא 1fr (18.10): 1fr הוא minmax(auto, 1fr),
+     והפאנל התרחב לרוחב התוכן המינימלי שלו - 325px על מסך של 320
+     וגלילה אופקית של 5px. אותה מלכודת כמו בפוטר. */
   .contact {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     min-height: 0;
   }
   .contact__media {
