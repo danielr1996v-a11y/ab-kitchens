@@ -111,7 +111,7 @@ export default function Footer() {
         </nav>
 
         {/* ===== דברו איתנו - שמאל ===== */}
-        <div className="footer__col">
+        <div className="footer__col footer__col--contact">
           <h3 className="footer__title">דברו איתנו</h3>
           <ul className="footer__contact">
             <li>
