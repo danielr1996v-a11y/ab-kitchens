@@ -28,7 +28,7 @@ export default function About({ content = about }: AboutProps = {}) {
           <Image
             src={content.logo}
             alt={content.logoAlt}
-            width={1640}
+            width={1936}
             height={460}
             sizes="(max-width: 700px) 200px, 280px"
             className="about__logo"

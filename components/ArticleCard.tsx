@@ -33,7 +33,7 @@ export default function ArticleCard({ article }: { article: Article }) {
             <Image
               src="/logo.png"
               alt=""
-              width={1640}
+              width={1936}
               height={460}
               className="acard__logo"
             />

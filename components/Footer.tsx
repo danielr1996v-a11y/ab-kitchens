@@ -23,7 +23,7 @@ export default function Footer() {
             <Image
               src="/logo.png"
               alt={site.name}
-              width={1640}
+              width={1936}
               height={460}
               sizes="160px"
               className="footer__logo-img"

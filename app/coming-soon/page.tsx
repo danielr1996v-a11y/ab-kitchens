@@ -35,7 +35,7 @@ export default function ComingSoonPage() {
         <Image
           src="/logo.png"
           alt={site.name}
-          width={1640}
+          width={1936}
           height={460}
           sizes="(max-width: 700px) 220px, 320px"
           className="soon__logo"
