@@ -1,8 +1,11 @@
-import { site, whatsappHref } from "@/lib/content";
+import { whatsappHref } from "@/lib/content";
 import Icon from "./Icon";
 
 /**
- * שני כפתורי פעולה צפים בצד שמאל - חיוג ווואטסאפ.
+ * כפתור צף אחד בצד שמאל - וואטסאפ.
+ *
+ * ⚠️ 19.10: כפתור החיוג הוסר לבקשת הלקוח - שני עיגולים ירוקים
+ * יצרו עומס והסתירו טקסט. חיוג נשאר בהדר ("לחיוג מהיר") ובפוטר.
  *
  * החליף את WhatsAppButton שהיה בצד ימין. שני כפתורי וואטסאפ
  * באתר אחד הם באג, ולכן הימני הוסר ולא נשאר במקביל.
@@ -13,14 +16,6 @@ import Icon from "./Icon";
 export default function FloatingActions() {
   return (
     <div className="fab">
-      <a
-        href={`tel:${site.phone1.replace(/-/g, "")}`}
-        className="fab__btn"
-        aria-label={`חיוג ל${site.phone1}`}
-      >
-        <Icon id="phone" />
-      </a>
-
       <a
         href={whatsappHref}
         target="_blank"

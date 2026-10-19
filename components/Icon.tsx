@@ -1,6 +1,7 @@
 export type IconId =
   | "facebook"
   | "instagram"
+  | "youtube"
   | "phone"
   | "mail"
   | "whatsapp"
@@ -51,6 +52,16 @@ export default function Icon({ id }: { id: IconId }) {
           <rect x="3" y="3" width="18" height="18" rx="5" strokeWidth="1.5" />
           <circle cx="12" cy="12" r="4" strokeWidth="1.5" />
           <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      );
+
+    case "youtube":
+      /* אותו סטנדרט כמו פייסבוק ואינסטגרם: קו 1.5, currentColor.
+         מסגרת מעוגלת ומשולש "נגן" - הצורה שמזהים כיוטיוב */
+      return (
+        <svg {...common}>
+          <rect x="2.5" y="5.5" width="19" height="13" rx="4" strokeWidth="1.5" />
+          <path d="M10.2 9.4v5.2l4.4-2.6z" strokeWidth="1.5" strokeLinejoin="round" />
         </svg>
       );
 

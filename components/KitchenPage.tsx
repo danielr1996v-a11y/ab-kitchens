@@ -9,6 +9,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import { byStyle } from "@/lib/articles";
 import Reveal from "./Reveal";
 import ParallaxImage from "./ParallaxImage";
+import GalleryLightbox from "./GalleryLightbox";
 import Hotspots from "./Hotspots";
 import { renderRichText } from "@/lib/richText";
 
@@ -158,19 +159,8 @@ export default function KitchenPage({
         <h2 className="kpage__section-title" id="gallery-title">
           {page.galleryTitle}
         </h2>
-        <ul className="kpage__grid">
-          {page.gallery.map((item) => (
-            <li className="kpage__shot" key={item.image}>
-              <Image
-                src={item.image}
-                alt={item.alt}
-                fill
-                sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 30vw"
-                className="kpage__shot-img"
-              />
-            </li>
-          ))}
-        </ul>
+        {/* 19.10: כל תמונה נפתחת בהגדלה - הרשת עצמה עברה לרכיב */}
+        <GalleryLightbox items={page.gallery} />
       </section>
 
       {/* ⛔ חריצים שממתינים לתוכן מאברהם. חסומים ב-production

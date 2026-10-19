@@ -6458,12 +6458,167 @@ a.footer__contact-link:hover {
 }
 
 /* =========================================================
-   פינוי מהכפתורים הצפים בסוף העמוד (18.10.26)
-   נמדד: הטלפון והוואטסאפ תופסים 148px מתחתית המסך, ולפוטר היה
-   ריפוד של 24px - בסוף הגלילה הוואטסאפ ישב על שורת הזכויות.
+   פינוי מהכפתור הצף בסוף העמוד (18.10.26, עודכן 19.10)
+   נמדד: הוואטסאפ תופס 80px מתחתית המסך (היו 148 עם כפתור החיוג,
+   שהוסר ב-19.10). בלי הריפוד הוא ישב על שורת הזכויות.
    ========================================================= */
 @media (max-width: 700px) {
   .footer {
-    padding-bottom: calc(148px + var(--space-3));
+    padding-bottom: calc(80px + var(--space-3));
+  }
+}
+
+/* =========================================================
+   גלריית המטבחים - תצוגה מוגדלת (19.10, לבקשת הלקוח)
+   ========================================================= */
+/* הכפתור ממלא את האריח, כך שכל התמונה לחיצה. הזום בריחוף של
+   .kpage__shot:hover ממשיך לעבוד כי האריח לא השתנה */
+.kpage__shot-btn {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.kpage__shot-btn:focus-visible {
+  outline: 2px solid var(--color-logo-gold);
+  outline-offset: -4px;
+}
+
+/* מסך מלא כהה - התמונה היא הכל, הממשק נסוג.
+   ⚠️ dvh ולא vh: בספארי של האייפון vh כולל את סרגל הכתובת,
+   והכפתורים בתחתית היו נופלים מתחתיו. */
+.glight {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* אטום ולא 0.96: 4% שקיפות נראו כ"רוחות" של העמוד מאחורה -
+     ההדר והאריחים - על הרקע הכהה */
+  background: #141313;
+  color: #fff;
+  overflow: hidden;
+}
+.glight[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  animation: glightIn 0.25s var(--ease-soft);
+}
+.glight::backdrop {
+  background: transparent;
+}
+@keyframes glightIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.glight__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) var(--side-padding);
+}
+.glight__count {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.75);
+  /* מספרים בכיוון שמאל-לימין גם בעמוד עברי: "3 / 10" */
+  direction: ltr;
+}
+.glight__close,
+.glight__nav {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.glight__close:hover,
+.glight__nav:hover,
+.glight__close:focus-visible,
+.glight__nav:focus-visible {
+  background: rgba(255, 255, 255, 0.22);
+  outline: none;
+}
+.glight__close:focus-visible,
+.glight__nav:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-gold);
+}
+.glight__close svg,
+.glight__nav svg {
+  width: 22px;
+  height: 22px;
+}
+.glight__stage {
+  position: relative;
+  margin: 0 var(--side-padding) var(--space-3);
+  /* החלקה אופקית שלנו - בלי שהדפדפן יגלול/יזום במקביל */
+  touch-action: pan-y pinch-zoom;
+}
+.glight__img {
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* החצים יושבים על הקצוות של שטח התמונה, באמצע הגובה */
+.glight__nav {
+  position: absolute;
+  top: 50%;
+  margin-top: -24px;
+}
+.glight__nav--prev {
+  right: var(--space-2);
+}
+.glight__nav--next {
+  left: var(--space-2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .glight[open] {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   נקודות חמות - כיול בטלפון (19.10, לבקשת הלקוח: "ידיות")
+
+   ⚠️ נמדד: בעמוד המודרני, בטלפון, הנקודות זזו 16%-26% מהפריט
+   שהן מסמנות ("ידיות אינטגרליות" - 24%). בדסקטופ 0%-1%.
+   הסיבה: .khot גבוה 70vh, ובטלפון זו מסגרת לאורך. התמונה (1400x798)
+   ממלאת אותה ב-cover ונחתכת מהצדדים - והנקודות, שהן אחוזים מהמסגרת,
+   כבר לא יושבות על אותו פריט.
+   הפתרון: במסגרת צרה המסגרת מקבלת את יחס התמונה עצמה, כך ש-cover
+   לא חותך כלום והאחוזים מדויקים בכל רוחב.
+   2.21 = 1400/798 (1.754) × 1.26 - כי .kparallax גבוהה ב-126%
+   מהמסגרת, והתמונה נפגשת עם יחס השכבה ולא עם יחס המסגרת.
+   (הקלאסי כבר פתר את זה ב-.khot--tall, ולכן הוא לא נוגע כאן.)
+   ========================================================= */
+@media (max-width: 1100px) {
+  .khot:not(.khot--tall) {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2.21;
+  }
+
+  /* ⚠️ נמדד: בקלאסי בטלפון שלוש מארבע התוויות נחתכו בתחתית התמונה
+     (25-93px) - בטלפון כל תווית נפתחת מתחת לנקודה, והנקודות שלהן
+     יושבות ב-58%-80% מהגובה. נקודה שמוגדרת "top" נפתחת למעלה גם כאן. */
+  .khot__point--top .khot__label {
+    top: auto;
+    bottom: calc(50% + 1rem);
+  }
+  /* תווית ממוקמת absolute ב-left: 50% מתכווצת לרוחב שנשאר מימין
+     לנקודה, ו"חלוקה מסודרת של הארונות" נשברה לארבע שורות של מילה.
+     max-content נותן לה את הרוחב הטבעי, עד תקרה שעדיין נכנסת. */
+  .khot__label {
+    width: max-content;
+    max-width: min(55vw, 13rem);
   }
 }

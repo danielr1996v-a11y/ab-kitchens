@@ -1,3 +1,4 @@
+import { CHANNEL_URL } from "./channel";
 // תוכן אמיתי - מבריף הלקוח (אברהם ביטון, א. בית המטבחים) + מהאתר הקיים ab-kitchens.co.il
 // טקסטים ניתנים לעריכה כאן במקום אחד - אין טקסט חופשי בתוך הקומפוננטות
 
@@ -29,6 +30,13 @@ export const site = {
       id: "instagram" as const,
       label: "אינסטגרם",
       href: "https://www.instagram.com/ab_kitchens.il",
+    },
+    /* 19.10: לבקשת הלקוח - יוטיוב בהדר, בפוטר ובתפריט הטלפון.
+       הכתובת מגיעה מעמוד הסרטונים - מקור אחד */
+    {
+      id: "youtube" as const,
+      label: "יוטיוב",
+      href: CHANNEL_URL,
     },
   ],
 };
@@ -853,8 +861,9 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
        המקרר הלבן והפרקט, ותקריבי הכיור והלד. נשארה אחת. */
     gallery: [
       /* 11.10: stone-wa-6 יצאה - היא כבר תמונת המאמר על פורצלן שמופיע
-         בעמוד הזה. stone-real-3 הוא תקריב הכיורים, הועלה לבקשת דניאל */
-      { image: "/images/stone-shish.webp", alt: "מטבח עם משטחי שיש אפור בהיר וחיפוי תואם" },
+         בעמוד הזה. stone-real-3 הוא תקריב הכיורים, הועלה לבקשת דניאל.
+         19.10: stone-shish יצאה לבקשת הלקוח - ארונות בלי חזיתות, שלב
+         הרכבה. הגלריה מראה רק עבודות גמורות */
       { image: "/images/stone-real-1.webp", alt: "אי מטבח מחופה שיש בהיר בעיבוד המשכי עד הרצפה" },
       { image: "/images/stone-real-2.webp", alt: "אי מטבח עם משטח אבן כהה ומעוטר" },
       { image: "/images/stone-real-3.webp", alt: "כיור כפול שחור עם חיפוי ומשטח אבן כהים" },
