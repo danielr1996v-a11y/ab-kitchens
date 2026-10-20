@@ -1,410 +1,133 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { clientVideos, videosSection } from "@/lib/videos";
 
 /**
  * סליידר סרטוני הלקוחות - כל סרטון מקבל את הבמה שלו.
  *
- * ⚠️ **רצף אינסופי, ולא רשימה עם התחלה וסוף.** הגרסה הראשונה
- * הייתה רשימה לינארית ודניאל עלה על שתי בעיות שנובעות מאותו
- * מקום: מימין לסרטון הראשון לא היה **כלום** (ריפוד המירכוז
- * חשוף), והסליידר "נתקע" בקצה כשהחץ הושבת. שלושת העותקים
- * מוחקים את שתיהן - תמיד יש כרטיסים משני הצדדים, והחצים
- * לעולם לא נגמרים.
+ * ⚠️ **נבנה מחדש ב-20.10, אחרי שלושה תיקונים שלא עצרו את ההבהוב
+ * באייפון.** הגרסה הקודמת הייתה גוללן נייטיבי עם שלושה עותקים של
+ * כל סרטון (36 כרטיסים), "קפיצה" שקטה חזרה לעותק האמצעי כשהגלילה
+ * נחה, וסקייל שנכתב לכל כרטיס בכל פריים של גלילה. באייפון הגלילה
+ * ממשיכה בתנופה אחרי שהאצבע עוזבת, והקפיצה נפלה באמצע התנופה -
+ * זה ההבהוב. אי אפשר לתקן את זה מבחוץ, כי זה המנגנון עצמו.
  *
- * ⚠️ **וגם גרירה בעכבר, וזה תיקון ולא נוחות.** גוללן אופקי לא
- * מגיב לגלגלת אנכית, ובדסקטופ בלי גרירה הדרך **היחידה** להזיז
- * אותו הייתה החצים. זה מה שנקרא "נתקע".
+ * עכשיו אין גלילה בכלל. כל כרטיס יודע את המרחק שלו מהמרכז במעגל
+ * (k), והמיקום שלו הוא transform עם transition - תזוזה אחת לכל
+ * מעבר, על כרטיס המסך, בלי JS בכל פריים ובלי עותקים.
  *
- * ⚠️ **הנגן נטען רק בלחיצה.** מה שנטען בהתחלה הוא סטילס ששמור
- * אצלנו; youtube-nocookie נכנס רק כשהמבקר בחר לצפות, ועד אז
- * לגוגל אין שום מגע איתו. סרטון אחד פתוח בכל רגע.
+ * מה שנשמר מהגרסאות הקודמות, ולמה:
+ * - **מעגלי, בלי קצה.** משני צדי הסרטון הראשון תמיד יש כרטיסים,
+ *   והחצים לעולם לא "נתקעים" - שתי התלונות של דניאל על הגרסה
+ *   הלינארית הראשונה.
+ * - **גרירה בעכבר וגם החלקה באצבע.** הכרטיסים עוקבים אחרי האצבע
+ *   ומתיישבים על הסרטון הבא. גלילה אנכית של העמוד לא נפגעת.
+ * - **הנגן נטען רק בלחיצה.** עד אז רק סטילס ששמור אצלנו, בלי מגע
+ *   עם יוטיוב. סרטון אחד פתוח בכל רגע.
+ * - 650ms למעבר - "המעבר בין סרטונים מאוד מהיר" (דניאל).
  */
 
-/* ⚠️ שלושה עותקים ולא שניים: הנורמליזציה קופצת עותק שלם, וצריך
-   עותק שלם **משני הצדדים** של האמצעי כדי שהקפיצה לא תיראה. */
-const COPIES = 3;
-/* ⚠️ 650 ולא 480. דניאל: "המעבר בין סרטונים מאוד מהיר".
-   ברירת המחדל שלי אגרסיבית מדי כמעט תמיד. */
-const DUR = 650;
-/* כמה מתכווץ כל צעד מהמרכז, ואיפה זה נעצר */
+const N = clientVideos.length;
+/* כמה מתכווץ כל צעד מהמרכז, ואיפה זה נעצר - כמו קודם */
 const SHRINK = 0.09;
 const SHRINK_MAX = 2.5;
+/* כרטיס רחוק מזה מוסתר. ⚠️ חייב להיות קטן מחצי המעגל: כרטיס
+   שעובר מצד לצד (מ-k=-5 ל-k=6 ב-12 סרטונים) עושה את זה כשהוא
+   מוסתר, ולכן לא נראה עף לרוחב המסך. */
+const HIDE = Math.max(1, Math.min(3, Math.floor(N / 2) - 1));
+/* מתחת לזה זו נגיעה רועדת ולא החלקה */
+const SWIPE_MIN = 50;
+/* גרירה מתחילה רק אחרי תזוזה אופקית אמיתית - אחרת זו לחיצה */
+const DRAG_START = 8;
 
-const N = clientVideos.length;
-
-/** מרכז האלמנט בפיקסלים של המסך */
-const midOf = (el: Element) => {
-  const r = el.getBoundingClientRect();
-  return r.left + r.width / 2;
+/** המרחק במעגל מהמרכז: 0 = הבמה, חיובי = הבא (משמאל ב-RTL) */
+const kOf = (i: number, active: number) => {
+  let k = (((i - active) % N) + N) % N;
+  if (k > N / 2) k -= N;
+  return k;
 };
 
 export default function VideoSlider({ titleId }: { titleId: string }) {
-  const trackRef = useRef<HTMLUListElement>(null);
-  /* אינדקס שטוח ברשימה המשולשת. null = כולם סגורים */
+  const stageRef = useRef<HTMLUListElement>(null);
+  const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  /* ⚠️ **הכרטיס הפעיל ב-ref ולא ב-state (14.10).** כ-state, כל
-     החלפת כרטיס מרכזי בזמן גלילה רינדרה מחדש את כל 36 הכרטיסים
-     ואת 36 ה-Image שבהם - על ה-main thread, באמצע גלילת מגע.
-     הכיתה vcard--active נכתבת ישירות ל-DOM מתוך update. */
-  const active = useRef(N);
+  const drag = useRef({ id: -1, x: 0, y: 0, on: false, dx: 0 });
+  /* גרירה שהסתיימה על כרטיס היא לא לחיצה - נצרך פעם אחת */
+  const swallowClick = useRef(false);
+  const wheel = useRef({ acc: 0, until: 0 });
 
-  const anim = useRef(0);
-  /* טיימר רשת הביטחון של האנימציה. ראה stopAnim */
-  const guard = useRef(0);
-  /* ⚠️ **יעד הניווט חי ב-ref ולא ב-state.** הכפתורים קראו את
-     `active` מה-state, שמתעדכן רק אחרי רינדור - ולכן שתי
-     לחיצות מהירות שתיהן חישבו מאותו מקור ישן, ביטלו זו את
-     האנימציה של זו, והסליידר נתקע במקום. ref מתעדכן מיד. */
-  const target = useRef(N);
-  const idle = useRef(0);
-  /* ננעל בזמן אנימציה או גרירה - אסור לנרמל באמצע תנועה */
-  const busy = useRef(false);
-  const openRef = useRef<number | null>(null);
-  openRef.current = openIndex;
+  const go = (d: number) => {
+    /* נגן שנשאר פתוח מחוץ לבמה ממשיך להשמיע קול. עוזבים - סוגרים */
+    setOpenIndex(null);
+    setActive((a) => (a + d + N) % N);
+  };
 
-  /**
-   * מחשב מחדש את הסקייל של כל כרטיס ומחזיר את מי שבמרכז.
-   *
-   * ⚠️ הסקייל נכתב כ-inline style **בלי transition ב-CSS**. הוא
-   * מחושב בכל פריים של גלילה, וכך עוקב אחרי האצבע בדיוק;
-   * transition היה גורם לו לרדוף אחריה בפיגור קבוע.
-   *
-   * ⚠️ **ההבהוב באייפון (14.10) - שני תיקונים כאן, לא אחד.**
-   * דניאל: "הסרטונים של ההמלצות מהבהב". הסרת ה-will-change
-   * ב-12.10 לא פתרה. המנגנון: בגלילת מגע ספארי גולל את המסלול
-   * ב-compositor, ובמקביל ה-JS כותב transform ל-36 כרטיסים בכל
-   * פריים. כרטיס בלי שכבה משלו נצבע מחדש בתוך אריחי הגוללן על
-   * ה-main thread, ואם הצביעה לא מספיקה לפריים ספארי מציג אריח
-   * ריק - זה ההבהוב. לכן:
-   * 1. כותבים transform רק כשהערך באמת השתנה. כרטיסים רחוקים
-   *    מהמרכז יושבים על SHRINK_MAX קבוע ולא נוגעים בהם בכלל.
-   * 2. רק הכרטיסים שעדיין מתכווצים (בטווח SHRINK_MAX מהמרכז,
-   *    עד 5 בו-זמנית) מקבלים vcard--near עם will-change - שכבה
-   *    משלהם, וה-compositor מקטין אותם בלי לצבוע. 36 שכבות
-   *    קבועות היו הבעיה של 12.10; 5 נודדות הן זולות.
-   */
-  const update = useCallback(() => {
-    const track = trackRef.current;
-    if (!track) return;
+  const setDrag = (px: number) =>
+    stageRef.current?.style.setProperty("--drag", `${px}px`);
 
-    const cards = Array.from(track.children) as HTMLElement[];
-    if (cards.length === 0) return;
+  const onPointerDown = (e: React.PointerEvent) => {
+    /* ⚠️ גרירה עם pointer capture לא תמיד מייצרת click על הכרטיס,
+       ואז הדגל נשאר דולק ובולע את הלחיצה האמיתית הבאה. כל מחווה
+       חדשה מתחילה נקי. */
+    swallowClick.current = false;
+    drag.current = { id: e.pointerId, x: e.clientX, y: e.clientY, on: false, dx: 0 };
+  };
 
-    const center = midOf(track);
-    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    const step = cards[0].offsetWidth + gap;
-
-    let nearest = 0;
-    let nearestDist = Infinity;
-
-    cards.forEach((card, i) => {
-      const dist = Math.abs(midOf(card) - center);
-      const t = Math.min(dist / step, SHRINK_MAX);
-      const scale = (1 - t * SHRINK).toFixed(3);
-      if (card.dataset.scale !== scale) {
-        card.dataset.scale = scale;
-        card.style.transform = `scale(${scale})`;
-      }
-      card.classList.toggle("vcard--near", t < SHRINK_MAX);
-
-      if (dist < nearestDist) {
-        nearestDist = dist;
-        nearest = i;
-      }
-    });
-
-    if (nearest !== active.current) {
-      cards[active.current]?.classList.remove("vcard--active");
-      cards[nearest].classList.add("vcard--active");
-      active.current = nearest;
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = drag.current;
+    if (d.id !== e.pointerId) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    if (!d.on) {
+      /* אנכי = גלילת העמוד. לא לוקחים אותו */
+      if (Math.abs(dx) < DRAG_START || Math.abs(dx) < Math.abs(dy)) return;
+      d.on = true;
+      stageRef.current?.classList.add("vslider--drag");
+      stageRef.current?.setPointerCapture(e.pointerId);
     }
-    /* באמצע אנימציה היעד כבר קדימה - לא לדרוס אותו */
-    if (!busy.current) target.current = nearest;
-    return nearest;
-  }, []);
-
-  /**
-   * מחזיר את הגלילה לעותק האמצעי, בלי שרואים.
-   *
-   * ⚠️ **הקפיצה היא scrollBy עם דלתא של מרכזים, ולא השמה
-   * ל-scrollLeft.** ב-RTL כרום מחזיר scrollLeft שלילי ופיירפוקס
-   * וספארי לא מסכימים איתו על אפס, ולכן כל חשבון על הערך עצמו
-   * שביר. דלתא בין שני מרכזים היא פיזית ונכונה בכל דפדפן.
-   *
-   * ⛔ לא נוגעים כשמשהו בתנועה או כשנגן פתוח: קפיצה באמצע
-   * אנימציה נראית, וקפיצה עם נגן פתוח מזיזה אותו מהבמה.
-   */
-  const normalize = useCallback(() => {
-    const track = trackRef.current;
-    if (!track || busy.current || openRef.current !== null) return;
-
-    const cards = Array.from(track.children);
-    const nearest = update();
-    if (nearest === undefined) return;
-    if (nearest >= N && nearest < N * 2) return;
-
-    const target = N + (nearest % N);
-    track.scrollBy({
-      left: midOf(cards[target]) - midOf(cards[nearest]),
-      behavior: "auto",
-    });
-    update();
-  }, [update]);
-
-  /**
-   * עוצר אנימציה ומנקה **כל** עקבה שלה.
-   *
-   * ⚠️ זה תיקון של באג אמיתי ולא סידור. קודם `vslider--free`
-   * ו-`busy` נוקו רק בפריים האחרון של הלולאה. כל דבר שקטע
-   * אותה באמצע - לחיצה נוספת, גרירה, גלגלת - השאיר את ה-snap
-   * מכובה ואת `busy` דלוק לנצח, ואז הנורמליזציה של הלולאה
-   * הפסיקה לרוץ והסליידר נתקע. עכשיו יש מקום אחד שמנקה.
-   */
-  const stopAnim = useCallback(() => {
-    const track = trackRef.current;
-    window.cancelAnimationFrame(anim.current);
-    window.clearTimeout(guard.current);
-    busy.current = false;
-    track?.classList.remove("vslider--free");
-  }, []);
-
-  /** מביא כרטיס למרכז הבמה */
-  const goTo = useCallback(
-    (index: number, instant = false) => {
-      const track = trackRef.current;
-      if (!track) return;
-
-      const cards = track.children;
-      const card = cards[Math.max(0, Math.min(cards.length - 1, index))];
-      if (!card) return;
-
-      const delta = midOf(card) - midOf(track);
-      stopAnim();
-
-      /* ⚠️ prefers-reduced-motion נבדק כאן ב-JS ולא נסמך על
-         ה-CSS: הכלל הגלובלי מכבה משכי אנימציה, והלולאה הזאת
-         היא JS ולא תיתפס בו. */
-      if (
-        instant ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        track.scrollBy({ left: delta, behavior: "auto" });
-        update();
-        return;
-      }
-
-      /* ⚠️ **אנימציה ידנית ולא scrollBy({behavior:"smooth"}).**
-         הנייטיבי נשען על הגדרה שאפשר לכבות, ואז החץ פשוט לא זז
-         בלי שגיאה ובלי סימן. לולאת rAF עובדת תמיד, וגם נותנת
-         את אותו ה-ease-out של SmoothScroll.
-
-         ⚠️ ה-snap מושהה למשך הלולאה: כל פריים כותב scrollLeft,
-         ו-mandatory היה מצמיד בחזרה באמצע. */
-      const from = track.scrollLeft;
-      const t0 = performance.now();
-      busy.current = true;
-      track.classList.add("vslider--free");
-
-      const finish = () => {
-        track.scrollLeft = from + delta;
-        stopAnim();
-        normalize();
-      };
-
-      /* ⚠️ **רשת ביטחון, והיא הכרחית.** requestAnimationFrame
-         לא מובטח: בלשונית שלא מצוירת הדפדפן מרעיב פריימים,
-         ואז הלולאה לא מתחילה - הסליידר פשוט לא זז ונשאר תקוע
-         עם snap מכובה. נמדד כאן: ארבע לחיצות רצופות, אפס
-         תזוזה. הטיימר מבטיח שהיעד מושג תמיד. */
-      guard.current = window.setTimeout(finish, DUR + 300);
-
-      const tick = (now: number) => {
-        const p = Math.min((now - t0) / DUR, 1);
-        track.scrollLeft = from + delta * (1 - Math.pow(1 - p, 3));
-        if (p < 1) {
-          anim.current = window.requestAnimationFrame(tick);
-        } else {
-          finish();
-        }
-      };
-      anim.current = window.requestAnimationFrame(tick);
-    },
-    [update, normalize, stopAnim],
-  );
-
-  /* מתמקמים על הסרטון הראשון של העותק האמצעי.
-     ⚠️ זה מה שנותן את הרצף: מימין יושב הזנב של העותק הקודם.
-     ⚠️ **ישירות ולא בתוך requestAnimationFrame.** העטיפה ב-rAF
-     הייתה הבאג: בלשונית שלא מצוירת הדפדפן מרעיב פריימים,
-     המיקום ההתחלתי לא קרה, והסליידר נשאר על כרטיס 0 - כלומר
-     שוב בלי כלום מימין. ה-effect רץ אחרי הפריסה ממילא, ולכן
-     ה-rect כבר תקף כאן. */
-  useEffect(() => {
-    goTo(N, true);
-  }, [goTo]);
-
-  /* גלילה ושינוי גודל - מחשבים מחדש, ומנרמלים כשנעצרים */
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-
-    let ticking = false;
-    const onScroll = () => {
-      window.clearTimeout(idle.current);
-      /* ⚠️ מנרמלים רק כשהגלילה נחה. באמצע תנופה הקפיצה נראית. */
-      idle.current = window.setTimeout(normalize, 140);
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(() => {
-        ticking = false;
-        update();
-      });
-    };
-
-    update();
-    track.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      track.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      window.cancelAnimationFrame(anim.current);
-      window.clearTimeout(guard.current);
-      window.clearTimeout(idle.current);
-      window.clearTimeout(wheelIdle.current);
-    };
-  }, [update, normalize]);
-
-  /** צעד אחד מהיעד הנוכחי, לא ממה שה-state הספיק לדעת */
-  const step = useCallback(
-    (dir: 1 | -1) => {
-      target.current += dir;
-      /* ⚠️ נגן שנשאר פתוח מחוץ לבמה ממשיך להשמיע קול, וגם חוסם
-         את הנורמליזציה של הלולאה. עוזבים סרטון - סוגרים אותו. */
-      setOpenIndex(null);
-      goTo(target.current);
-    },
-    [goTo],
-  );
-
-  /**
-   * גרירה בעכבר.
-   *
-   * ⚠️ **רק עכבר.** במגע הגלילה הנייטיבית עושה את זה טוב יותר
-   * מכל חיקוי, ולעקוף אותה רק היה מקלקל את התנופה.
-   */
-  const drag = useRef({ on: false, x: 0, left: 0, moved: false });
-
-  /**
-   * גלגלת אופקית בלבד. אנכית ממשיכה לעמוד דרך Lenis.
-   *
-   * ⚠️ **ה-snap חייב להיות מושהה כאן.** בלעדיו mandatory מצמיד
-   * בחזרה לאותו כרטיס בזמן הגלילה - נמדד: המסלול לא זז
-   * בפיקסל. אותה מלכודת בדיוק כמו באנימציית החץ.
-   */
-  const wheelIdle = useRef(0);
-
-  const onWheel = (e: React.WheelEvent<HTMLUListElement>) => {
-    const track = trackRef.current;
-    if (!track || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-
-    stopAnim();
-    busy.current = true;
-    track.classList.add("vslider--free");
-    /* ⛔ **לא כותבים deltaX בעצמנו.** הדפדפן כבר גולל אופקית
-       לבד, וההוספה הידנית נספרה פעמיים ובסימן הפוך ב-RTL:
-       נמדד קפיצה של 10 כרטיסים מתוך 360px של תנועה. התפקיד
-       היחיד שלנו כאן הוא להוריד את ה-snap מהדרך. */
-
-    /* מתיישבים על הכרטיס הקרוב כשהתנופה נגמרת */
-    window.clearTimeout(wheelIdle.current);
-    wheelIdle.current = window.setTimeout(() => {
-      track.classList.remove("vslider--free");
-      busy.current = false;
-      const nearest = update();
-      if (nearest !== undefined) {
-        target.current = nearest;
-        goTo(nearest);
-      }
-    }, 120);
+    d.dx = dx;
+    setDrag(dx);
   };
 
-  /* ⚠️ **גרירה מתחילה רק אחרי תזוזה אמיתית, לא בלחיצה.** זה
-     היה באג חמור: `vslider--drag` נוסף כבר ב-pointerdown,
-     והוא מכבה `pointer-events` על הכרטיסים. כלומר עצם לחיצת
-     העכבר הפכה את הכרטיס לשקוף ללחיצות, והדפדפן לא ייצר
-     click עליו - **אף סרטון לא נפתח.** נמדד עם
-     elementFromPoint: לפני הלחיצה `vcard__poster`, מיד אחריה
-     `vslider`. גם setPointerCapture נדחה לאותו רגע, מאותה
-     סיבה בדיוק. */
-  const onPointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
-    if (e.pointerType !== "mouse") return;
-    const track = trackRef.current;
-    if (!track) return;
-    /* רק רושמים מאיפה התחילו. שום דבר עוד לא קורה. */
-    drag.current = {
-      on: true,
-      x: e.clientX,
-      left: track.scrollLeft,
-      moved: false,
-    };
+  const endDrag = (e: React.PointerEvent) => {
+    const d = drag.current;
+    if (d.id !== e.pointerId) return;
+    d.id = -1;
+    if (!d.on) return;
+    const stage = stageRef.current;
+    stage?.classList.remove("vslider--drag");
+    if (stage?.hasPointerCapture(e.pointerId)) stage.releasePointerCapture(e.pointerId);
+    setDrag(0);
+    swallowClick.current = true;
+    /* האצבע זזה ימינה = הבא, כי ב-RTL הבא יושב משמאל ונמשך פנימה */
+    if (Math.abs(d.dx) >= SWIPE_MIN) go(d.dx > 0 ? 1 : -1);
   };
 
-  const onPointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
-    const track = trackRef.current;
-    if (!track || !drag.current.on) return;
-
-    const dx = e.clientX - drag.current.x;
-
-    /* סף של 4px: מתחת לזה זו לחיצה, לא גרירה */
-    if (!drag.current.moved) {
-      if (Math.abs(dx) <= 4) return;
-      drag.current.moved = true;
-      stopAnim();
-      busy.current = true;
-      track.classList.add("vslider--drag");
-      track.setPointerCapture(e.pointerId);
-    }
-
-    /* גרירה ימינה מזיזה את התוכן ימינה, כלומר scrollLeft קטן.
-       נכון גם ב-LTR וגם ב-RTL - הסמנטיקה של scrollLeft זהה. */
-    track.scrollLeft = drag.current.left - dx;
-  };
-
-  const endDrag = (e: React.PointerEvent<HTMLUListElement>) => {
-    const track = trackRef.current;
-    if (!track || !drag.current.on) return;
-
-    drag.current.on = false;
-
-    /* לחיצה רגילה: לא נגענו בכלום, ושהקליק ימשיך לכפתור.
-       ⚠️ `moved` נשאר false, ולכן הנגן ייפתח כרגיל. */
-    if (!drag.current.moved) return;
-
-    busy.current = false;
-    track.classList.remove("vslider--drag");
-    if (track.hasPointerCapture(e.pointerId))
-      track.releasePointerCapture(e.pointerId);
-
-    /* מתיישבים על הכרטיס הקרוב */
-    const nearest = update();
-    if (nearest !== undefined) {
-      target.current = nearest;
-      goTo(nearest);
+  /* גלגלת/משטח מגע אופקי בלבד. אנכי ממשיך לגלול את העמוד */
+  const onWheel = (e: React.WheelEvent) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    const w = wheel.current;
+    if (e.timeStamp < w.until) return;
+    w.acc += e.deltaX;
+    if (Math.abs(w.acc) > 60) {
+      go(w.acc > 0 ? 1 : -1);
+      w.acc = 0;
+      /* תנופה של משטח מגע שולחת עוד אירועים - צעד אחד לכל מחווה */
+      w.until = e.timeStamp + 600;
     }
   };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") go(1);
+    else if (e.key === "ArrowRight") go(-1);
+  };
+
+  /* ניקוי משתנה הגרירה אם הרכיב יוצא באמצע מחווה */
+  useEffect(() => () => setDrag(0), []);
 
   if (N === 0) return null;
-
-  /* שלושת העותקים. ⚠️ רק האמצעי אמיתי לקורא מסך - השניים
-     האחרים הם אותו תוכן בדיוק, והקראתו שלוש פעמים היא רעש. */
-  const slides = Array.from({ length: COPIES * N }, (_, flat) => ({
-    v: clientVideos[flat % N],
-    flat,
-    clone: flat < N || flat >= N * 2,
-  }));
 
   return (
     <>
@@ -412,40 +135,17 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
         <h2 className="tvideos__title" id={titleId}>
           {videosSection.title}
         </h2>
-        {/* ⚠️ ב-RTL "הקודם" נמצא מימין, ולכן החץ שלו מצביע ימינה.
-            ⚠️ ובלי מצב מושבת: הרשימה מעגלית ואין לה קצה. הקצה
-            הוא בדיוק מה שנתן את תחושת ה"נתקע". */}
+        {/* ⚠️ ב-RTL "הקודם" מימין, ולכן החץ שלו מצביע ימינה.
+            בלי מצב מושבת: המעגל אין לו קצה. */}
         <div className="vnav">
-          <button
-            type="button"
-            className="vnav__btn"
-            onClick={() => step(-1)}
-            aria-label="הסרטון הקודם"
-          >
+          <button type="button" className="vnav__btn" onClick={() => go(-1)} aria-label="הסרטון הקודם">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
-              <path
-                d="M9 6l6 6-6 6"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
-          <button
-            type="button"
-            className="vnav__btn"
-            onClick={() => step(1)}
-            aria-label="הסרטון הבא"
-          >
+          <button type="button" className="vnav__btn" onClick={() => go(1)} aria-label="הסרטון הבא">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
-              <path
-                d="M15 6l-6 6 6 6"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
@@ -453,76 +153,77 @@ export default function VideoSlider({ titleId }: { titleId: string }) {
 
       <ul
         className="vslider"
-        ref={trackRef}
+        ref={stageRef}
         aria-roledescription="carousel"
         aria-label={videosSection.title}
-        /* ⛔ **data-lenis-prevent הוסר, וזה היה הבאג.** הוא אמר
-           ל-Lenis להתעלם מהגלגלת מעל הסליידר, ולמסלול אין מה
-           לגלול אנכית - ולכן גלילת העמוד נעצרה לגמרי כשהעכבר
-           היה מעל הסקשן. נמדד: 0px תזוזה. במקומו onWheel
-           שמטפל רק באופקי ומשאיר את האנכי ל-Lenis. */
-        onWheel={onWheel}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
+        onWheel={onWheel}
+        onKeyDown={onKeyDown}
       >
-        {slides.map(({ v, flat, clone }) => (
-          <li
-            /* הכיתה ההתחלתית ל-SSR בלבד. מכאן והלאה update מנהל אותה ב-DOM */
-            className={`vcard${flat === N ? " vcard--active" : ""}`}
-            key={flat}
-            aria-hidden={clone || undefined}
-          >
-            {openIndex === flat ? (
-              <iframe
-                className="vcard__frame"
-                src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&playsinline=1`}
-                title={v.alt}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            ) : (
-              <button
-                type="button"
-                className="vcard__btn"
-                tabIndex={clone ? -1 : undefined}
-                onClick={() => {
-                  /* ⚠️ גרירה שהסתיימה על כרטיס היא לא לחיצה -
-                     והדגל **נצרך פעם אחת** ומתאפס מיד. אחרת,
-                     במכשיר עם מסך מגע גם עכבר, גרירה בעכבר
-                     הייתה משאירה אותו דלוק ומבטלת את ההקשה
-                     הבאה באצבע (ב-touch אין pointerdown שמאפס
-                     אותו). */
-                  if (drag.current.moved) {
-                    drag.current.moved = false;
-                    return;
-                  }
-                  setOpenIndex(flat);
-                  /* היעד עובר לכרטיס שנפתח, אחרת החץ הבא יקפוץ
-                     מהמקום הישן */
-                  target.current = flat;
-                  goTo(flat);
-                }}
-                aria-label={`${videosSection.playLabel}: ${v.alt}`}
-              >
-                <Image
-                  src={`/images/testimonials/video/${v.id}.webp`}
-                  alt={clone ? "" : v.alt}
-                  width={v.w}
-                  height={v.h}
-                  className="vcard__poster"
-                  sizes="(max-width: 700px) 68vw, 320px"
+        {clientVideos.map((v, i) => {
+          const k = kOf(i, active);
+          const far = Math.abs(k) > HIDE;
+          const scale = 1 - Math.min(Math.abs(k), SHRINK_MAX) * SHRINK;
+          return (
+            <li
+              key={v.id}
+              className={`vcard${k === 0 ? " vcard--active" : ""}${far ? " vcard--far" : ""}`}
+              style={{ "--k": k, "--s": scale } as React.CSSProperties}
+              /* רק הבמה והשכנים הקרובים אמיתיים לקורא מסך */
+              aria-hidden={Math.abs(k) > 1 || undefined}
+            >
+              {openIndex === i && k === 0 ? (
+                <iframe
+                  className="vcard__frame"
+                  src={`https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&playsinline=1`}
+                  title={v.alt}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
                 />
-                <span className="vcard__play" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5.14v13.72L19 12z" />
-                  </svg>
-                </span>
-              </button>
-            )}
-          </li>
-        ))}
+              ) : (
+                <button
+                  type="button"
+                  className="vcard__btn"
+                  tabIndex={Math.abs(k) > 1 ? -1 : undefined}
+                  onClick={() => {
+                    if (swallowClick.current) {
+                      swallowClick.current = false;
+                      return;
+                    }
+                    /* כרטיס בצד - קודם מביאים אותו לבמה, ורק בלחיצה עליו שם נפתח */
+                    if (k !== 0) {
+                      setOpenIndex(null);
+                      setActive(i);
+                      return;
+                    }
+                    setOpenIndex(i);
+                  }}
+                  aria-label={`${videosSection.playLabel}: ${v.alt}`}
+                >
+                  <Image
+                    src={`/images/testimonials/video/${v.id}.webp`}
+                    alt={v.alt}
+                    width={v.w}
+                    height={v.h}
+                    className="vcard__poster"
+                    sizes="(max-width: 700px) 68vw, 320px"
+                    /* הבמה והשכנים נטענים מראש - שלא יופיע כרטיס ריק בהגעה */
+                    loading={far ? "lazy" : "eager"}
+                    draggable={false}
+                  />
+                  <span className="vcard__play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5.14v13.72L19 12z" />
+                    </svg>
+                  </span>
+                </button>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </>
   );

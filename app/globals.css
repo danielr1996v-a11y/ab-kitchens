@@ -6082,71 +6082,82 @@ a.footer__contact-link:hover {
   height: 1.25rem;
 }
 
-/* ===== המסלול =====
-   ⚠️ **direction נשאר rtl.** במסלול marquee (.pcol) נאלצנו
-   לעבור ל-ltr, אבל שם הבעיה הייתה translateX על שתי קבוצות.
-   כאן זה גוללן נייטיבי, padding-inline הוא לוגי ונפתר נכון,
-   והכרטיס הראשון צריך ממילא לשבת מימין. ⛔ ל-ltr יש גם מחיר
-   נסתר: .vcard__play ממורכז ב-translate(50%) חיובי, שנכון רק
-   תחת RTL - הוא היה קופץ חצי-רוחב הצידה. */
+/* ===== הבמה (נבנתה מחדש 20.10) =====
+   ⚠️ **אין כאן גלילה.** הגוללן הנייטיבי עם 36 כרטיסים וקפיצה
+   חזרה לעותק האמצעי הבהב באייפון שלוש פעמים, וזה נבע מהמנגנון
+   עצמו. עכשיו כל כרטיס יושב במרכז הבמה ומוזז ממנו ב-transform:
+   --k = כמה צעדים מהמרכז (מ-VideoSlider), --s = הסקייל שלו,
+   --drag = כמה האצבע משכה. תזוזה אחת לכל מעבר, על ה-compositor.
+   ⚠️ direction נשאר rtl - .vcard__play ממורכז ב-translate(50%)
+   חיובי, שנכון רק תחת RTL. */
 .vslider {
   /* ⚠️ הרצפה 15rem ולא 13rem, ונמדדה מול הקפיצה בנקודת
      המעבר: מתחת ל-700 הכרטיס הוא 68vw, ומעל 700 הוא 17vw.
      עם רצפה של 13rem הכרטיס צנח מ-272 ל-208 בפיקסל אחד.
      15rem מצמצם את הקפיצה ל-272→240. */
   --vcard-w: clamp(15rem, 17vw, 20rem);
+  --vcard-gap: var(--space-3);
+  --vcard-dur: 650ms;
+  position: relative;
   list-style: none;
   margin: 0;
-  display: flex;
-  gap: var(--space-3);
-  /* ⚠️ זה מה שמאפשר לראשון ולאחרון להגיע למרכז הבמה, ובלעדיו
-     הסרטון הראשון נתקע בקצה. חצי המסלול פחות חצי כרטיס. */
-  padding: var(--space-2) calc(50% - var(--vcard-w) / 2);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
+  padding: 0;
+  /* הכרטיסים מוחלטים, אז הגובה נגזר מהם: 9:16 + מקום לצל */
+  height: calc(var(--vcard-w) * 16 / 9 + var(--space-2) * 2);
+  /* ⚠️ clip ולא hidden: חותך רק לרוחב, והצל של הכרטיס הפעיל
+     לא נחתך למעלה ולמטה. hidden היה גם הופך את הבמה לגוללן. */
+  overflow-x: clip;
+  /* גלילה אנכית של העמוד נשארת לדפדפן, אופקית - לנו */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.vslider::-webkit-scrollbar {
-  display: none;
-}
-/* ⚠️ מושהה רק למשך אנימציית החץ. ראה את ההערה ב-VideoSlider */
-.vslider--free {
-  scroll-snap-type: none;
-}
-/* ⚠️ גרירה בעכבר, ורק בו. הסמן מופיע רק במצביע מדויק - במגע
-   הוא חסר משמעות, ושם הגלילה הנייטיבית ממילא טובה יותר. */
 @media (pointer: fine) {
   .vslider {
     cursor: grab;
   }
 }
 .vslider--drag {
-  scroll-snap-type: none;
   cursor: grabbing;
 }
-/* ⚠️ בלי זה גרירה שמסתיימת על כרטיס נספרת כלחיצה ופותחת נגן */
-.vslider--drag .vcard {
-  pointer-events: none;
-}
 .vcard {
-  flex: 0 0 var(--vcard-w);
-  scroll-snap-align: center;
-  /* ⚠️ הסקייל נכתב inline מ-JS בכל פריים של גלילה, **ובכוונה
-     בלי transition כאן**: כך הוא עוקב אחרי האצבע בדיוק ולא
-     רודף אחריה בפיגור קבוע. */
+  position: absolute;
+  inset-block-start: var(--space-2);
+  left: 50%;
+  width: var(--vcard-w);
+  margin-left: calc(var(--vcard-w) / -2);
+  /* ⚠️ מינוס: ב-RTL הבא (k חיובי) יושב משמאל */
+  transform: translateX(
+      calc(var(--k) * (var(--vcard-w) + var(--vcard-gap)) * -1 + var(--drag, 0px))
+    )
+    scale(var(--s));
   transform-origin: 50% 50%;
-  /* ⚠️ בלי will-change על כל הכרטיסים (12.10). הסליידר מרנדר כל
-     כרטיס פעמיים נוספות ללולאה - 36 כרטיסים בעמוד ההמלצות - ו-36
-     שכבות קבועות עם תמונה מיצו את זיכרון השכבות באייפון. */
-}
-/* ⚠️ שכבה רק לכרטיסים שבאמת משנים סקייל ברגע זה (14.10) - עד 5
-   סביב המרכז, VideoSlider מסמן אותם ב-update. בלי שכבה, כל שינוי
-   transform בזמן גלילת מגע צובע את הכרטיס מחדש על ה-main thread
-   בתוך אריחי הגוללן, וספארי מציג אריח ריק כשלא מספיק - זה ההבהוב
-   שנשאר גם אחרי 12.10. עם שכבה ה-compositor מקטין בלי לצבוע. */
-.vcard--near {
+  transition: transform var(--vcard-dur) var(--ease-soft),
+    opacity var(--vcard-dur) var(--ease-soft);
+  /* ⚠️ שכבה קבועה רק ל-7 הכרטיסים שעל הבמה (12 בסך הכל, לא 36).
+     בלי שכבה ספארי מקדם כרטיס לשכבה רק כשהמעבר מתחיל, וצובע אותו
+     מחדש בפריים הראשון - זה ההבזק. */
   will-change: transform;
+}
+/* הכרטיס במרכז מעל השכנים, שהצל שלו לא ייבלע מתחתם */
+.vcard--active {
+  z-index: 1;
+}
+/* ⚠️ הכרטיס שחוצה את המעגל (מקצה אחד לשני) עושה את זה כשהוא
+   מוסתר, ולכן לא נראה עף לרוחב המסך. visibility מתעכב עד סוף
+   הדעיכה, שהכרטיס לא ייעלם בבת אחת. */
+.vcard--far {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  will-change: auto;
+  transition: transform var(--vcard-dur) var(--ease-soft),
+    opacity var(--vcard-dur) var(--ease-soft),
+    visibility 0s linear var(--vcard-dur);
+}
+/* בזמן גרירה הכרטיסים צמודים לאצבע, בלי פיגור */
+.vslider--drag .vcard {
+  transition: none;
 }
 .vcard__btn {
   position: relative;
@@ -6221,6 +6232,7 @@ a.footer__contact-link:hover {
   border: 0;
 }
 @media (prefers-reduced-motion: reduce) {
+  .vcard,
   .vcard__poster,
   .vcard__play {
     transition: none;
@@ -6247,7 +6259,7 @@ a.footer__contact-link:hover {
        ⚠️ והתקרה 17rem חובה: בלעדיה, ברוחב 700 הכרטיס יצא 476
        רוחב ו-**846 גובה** - גבוה ממסך הטלפון שהוא נועד לו. */
     --vcard-w: min(68vw, 17rem);
-    gap: var(--space-2);
+    --vcard-gap: var(--space-2);
   }
   .vcard__play {
     width: 3rem;
