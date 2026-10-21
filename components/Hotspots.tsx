@@ -30,6 +30,7 @@ export default function Hotspots({
   points,
   ratio,
   mobile,
+  whole = false,
 }: {
   image: string;
   alt: string;
@@ -38,12 +39,14 @@ export default function Hotspots({
   ratio?: number;
   /** תמונה מלאה לטלפון - ראה ההערה ב-lib/content.ts */
   mobile?: Mobile;
+  /** כל התמונה גלויה בתוך מסך אחד - ראה ההערה ב-.khot--whole */
+  whole?: boolean;
 }) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
     <figure
-      className={`khot${ratio ? " khot--tall" : ""}`}
+      className={`khot${ratio ? " khot--tall" : ""}${whole ? " khot--whole" : ""}`}
       style={
         ratio
           ? ({
@@ -59,7 +62,7 @@ export default function Hotspots({
           את השכבה ב-15% מגובה המסגרת, והנקודה העליונה בתמונה
           של המטבח הקלאסי יושבת ב-12% - כלומר בקצה התנודה היא
           יצאה מהמסגרת לגמרי. נמדד -2.8%. */}
-      <ParallaxImage amount={ratio ? 0.05 : undefined}>
+      <ParallaxImage amount={whole ? 0.02 : ratio ? 0.05 : undefined}>
         <Image
           src={image}
           alt={alt}

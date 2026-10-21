@@ -638,6 +638,12 @@ type KitchenPageContent = {
        * שאין כיול שני. x לא משתנה - החיתוך הוא לרוחב מלא.
        */
       mobile?: { image: string; ratio: number; band: [number, number] };
+      /**
+       * כל התמונה גלויה, בתוך מסך אחד (21.10, דניאל על הכפרי: "להקטין
+       * את התמונה או לעשות משהו, כדי שיראו את כל התמונה - גם במובייל").
+       * מקטין את מרווח הפרלקס מ-26% ל-6% ומגביל את המסגרת לגובה המסך.
+       */
+      whole?: boolean;
       points: Array<{
         x: number;
         y: number;
@@ -943,6 +949,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           ratio: 1512 / 1380,
           /* 200/2016 = 9.92% · 1380/2016 = 68.45% */
           mobile: { image: "/images/rustic-hotspots-m.webp", ratio: 1000 / 1333, band: [9.92, 68.45] },
+          whole: true,
           points: [
             { x: 72.7, y: 77.2, label: "ידית בסגנון כפרי", pos: "top" },
             { x: 81.7, y: 63, label: "חריטה כפרית", pos: "top" },

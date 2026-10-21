@@ -6480,6 +6480,30 @@ a.footer__contact-link:hover {
     top: var(--ym);
   }
 }
+/* --- כל התמונה גלויה (כפרי, 21.10) ---
+   דניאל: "להקטין את התמונה או לעשות משהו, כדי שיראו את כל התמונה -
+   גם במובייל". שתי סיבות שלא ראו:
+   1. שכבת הפרלקס גבוהה ב-26% מהמסגרת - חמישית מהתמונה תמיד מוסתרת.
+      כאן 6% בלבד (3% מכל צד), והפרלקס 0.02 כדי לא לחשוף קצה ריק:
+      התזוזה המרבית 2% מהשכבה < 2.8% שיש בכל צד.
+   2. המסגרת יצאה 992x719 - גבוהה מהמסך. כאן הרוחב מוגבל כך שהגובה
+      לא יעבור 78vh, והיא ממורכזת.
+   ⚠️ הנקודות הן אחוזים מהשכבה = מהתמונה, ולכן לא זזות. */
+.khot--whole {
+  aspect-ratio: calc(var(--khot-ratio) * 1.06);
+  width: min(100%, calc(78vh * var(--khot-ratio) * 1.06));
+  margin-inline: auto;
+}
+.khot--whole .kparallax {
+  top: -3%;
+  height: 106%;
+}
+@media (max-width: 700px) {
+  .khot--whole.khot--tall:has(.khot__img--m) {
+    aspect-ratio: calc(var(--khot-ratio-m) * 1.06);
+    width: min(100%, calc(78vh * var(--khot-ratio-m) * 1.06));
+  }
+}
 @media (max-width: 1100px) {
   .khot:not(.khot--tall) {
     height: auto;
