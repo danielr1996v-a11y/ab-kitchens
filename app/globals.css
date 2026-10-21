@@ -6476,26 +6476,6 @@ a.footer__contact-link:hover {
    יחס התמונה, 2.21 = 1400/798 × 1.26 (.kparallax גבוהה ב-126%).
    21.10: הוחזר אחרי שדניאל ביקש את התמונה הקודמת במודרני.
    ========================================================= */
-/* תמונה מלאה לטלפון - כרגע רק כפרי (דניאל: "רק הכפרי דרוש תיקון"). ⚠️ עד 700 ולא 1100: בטאבלט
-   הפס לרוחב כבר גבוה מספיק (468px ב-768), ותמונה לאורך ברוחב
-   מלא שם הייתה ~1000px גובה. */
-.khot__img--m {
-  display: none;
-}
-@media (max-width: 700px) {
-  .khot--tall:has(.khot__img--m) {
-    aspect-ratio: calc(var(--khot-ratio-m) * 1.26);
-  }
-  .khot__img--desk {
-    display: none;
-  }
-  .khot__img--m {
-    display: block;
-  }
-  .khot:has(.khot__img--m) .khot__point {
-    top: var(--ym);
-  }
-}
 /* --- כל התמונה גלויה (כפרי, 21.10) ---
    דניאל: "להקטין את התמונה או לעשות משהו, כדי שיראו את כל התמונה -
    גם במובייל". שתי סיבות שלא ראו:
@@ -6513,12 +6493,6 @@ a.footer__contact-link:hover {
 .khot--whole .kparallax {
   top: -3%;
   height: 106%;
-}
-@media (max-width: 700px) {
-  .khot--whole.khot--tall:has(.khot__img--m) {
-    aspect-ratio: calc(var(--khot-ratio-m) * 1.06);
-    width: min(100%, calc(78vh * var(--khot-ratio-m) * 1.06));
-  }
 }
 @media (max-width: 1100px) {
   .khot:not(.khot--tall) {

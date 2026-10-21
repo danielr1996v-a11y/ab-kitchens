@@ -5,7 +5,6 @@ import Image from "next/image";
 import ParallaxImage from "./ParallaxImage";
 
 type Point = { x: number; y: number; label: string; pos: "top" | "bottom" };
-type Mobile = { image: string; ratio: number; band: [number, number] };
 
 /**
  * Hotspots - התמונה עם הנקודות הפועמות.
@@ -29,7 +28,6 @@ export default function Hotspots({
   alt,
   points,
   ratio,
-  mobile,
   whole = false,
 }: {
   image: string;
@@ -37,8 +35,6 @@ export default function Hotspots({
   points: readonly Point[];
   /** יחס התמונה. המסגרת נגזרת ממנו - ראה ההערה ב-.khot--tall */
   ratio?: number;
-  /** תמונה מלאה לטלפון - ראה ההערה ב-lib/content.ts */
-  mobile?: Mobile;
   /** כל התמונה גלויה בתוך מסך אחד - ראה ההערה ב-.khot--whole */
   whole?: boolean;
 }) {
@@ -47,14 +43,7 @@ export default function Hotspots({
   return (
     <figure
       className={`khot${ratio ? " khot--tall" : ""}${whole ? " khot--whole" : ""}`}
-      style={
-        ratio
-          ? ({
-              "--khot-ratio": ratio,
-              ...(mobile && { "--khot-ratio-m": mobile.ratio }),
-            } as React.CSSProperties)
-          : undefined
-      }
+      style={ratio ? ({ "--khot-ratio": ratio } as React.CSSProperties) : undefined}
     >
       {/* התמונה והנקודות יחד בשכבת הפרלקס, כדי שהנקודות יישארו
           נעולות על הפריטים שהן מסמנות */}
@@ -68,19 +57,8 @@ export default function Hotspots({
           alt={alt}
           fill
           sizes="(max-width: 1100px) 100vw, 75vw"
-          className={`khot__img${mobile ? " khot__img--desk" : ""}`}
+          className="khot__img"
         />
-        {/* ⚠️ שתי תמונות ולא אחת: display:none + lazy לא נטען
-            בדפדפן, כך שכל מכשיר מוריד רק את שלו */}
-        {mobile && (
-          <Image
-            src={mobile.image}
-            alt=""
-            fill
-            sizes="100vw"
-            className="khot__img khot__img--m"
-          />
-        )}
         {points.map((p, i) => (
           <button
             type="button"
@@ -92,11 +70,6 @@ export default function Hotspots({
               {
                 "--x": `${p.x}%`,
                 "--y": `${p.y}%`,
-                /* בטלפון: אותה נקודה בתמונה המלאה. החיתוך של
-                   הדסקטופ הוא פס [התחלה, גובה] בתוכה, באחוזים */
-                ...(mobile && {
-                  "--ym": `${mobile.band[0] + (p.y * mobile.band[1]) / 100}%`,
-                }),
                 "--anchor": anchorFor(p.x),
               } as React.CSSProperties
             }
