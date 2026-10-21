@@ -127,6 +127,7 @@ export default function KitchenPage({
                   alt={block.hotspots.alt}
                   points={block.hotspots.points}
                   ratio={block.hotspots.ratio}
+                  mobile={block.hotspots.mobile}
                 />
               )}
 

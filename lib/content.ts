@@ -632,6 +632,15 @@ type KitchenPageContent = {
        * קלאסי, מודרני וכפרי (21.10).
        */
       ratio?: number;
+      /**
+       * תמונה מלאה לטלפון (21.10, דניאל: "התמונות של הנקודות במובייל
+       * לא נראות טוב... שהתמונה תהיה קצת יותר מלאה"). בטלפון הפס
+       * לרוחב יצא ~240px גובה; הצילום המקורי לאורך ממלא ~410.
+       * band = איפה החיתוך של הדסקטופ יושב בתוך התמונה המלאה
+       * [התחלה, גובה] באחוזים. ממנו מחושב ה-y של כל נקודה, כך
+       * שאין כיול שני. x לא משתנה - החיתוך הוא לרוחב מלא.
+       */
+      mobile?: { image: string; ratio: number; band: [number, number] };
       points: Array<{
         x: number;
         y: number;
@@ -930,6 +939,8 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           image: "/images/rustic-hotspots.webp",
           alt: "חזיתות לבנות בחריטה עם ידיות פליז, ברזים מוזהבים ומשטח וחיפוי שיש בהיר",
           ratio: 1512 / 1380,
+          /* 200/2016 = 9.92% · 1380/2016 = 68.45% */
+          mobile: { image: "/images/rustic-hotspots-m.webp", ratio: 1000 / 1333, band: [9.92, 68.45] },
           points: [
             { x: 72.7, y: 77.2, label: "ידית בסגנון כפרי", pos: "top" },
             { x: 81.7, y: 63, label: "חריטה כפרית", pos: "top" },
