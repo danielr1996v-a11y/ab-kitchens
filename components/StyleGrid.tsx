@@ -9,9 +9,8 @@ import { styleSection } from "@/lib/content";
 /**
  * StyleGrid - "בחרו את הסגנון שלכם" כ-Bento Grid.
  *
- * קומפוזיציה: כרטיס גדול (2x2) + כרטיסים קטנים (1x1), לפי שדה size בכל כרטיס.
- * ב-RTL העמודה הראשונה היא הימנית, ולכן הכרטיס הגדול נוחת מימין למעלה -
- * שם העין הישראלית נעצרת ראשונה.
+ * קומפוזיציה: שלוש קוביות שוות בשורה אחת (21.10, לבקשת דניאל). ב-RTL
+ * הכרטיס הראשון במערך נוחת מימין - שם העין הישראלית נעצרת ראשונה.
  *
  * ההופעה בגלילה נעשית ב-IntersectionObserver (מובנה בדפדפן, בלי ספריות),
  * וההשהיה המדורגת מוזרקת כמשתנה CSS לכל כרטיס.
@@ -62,7 +61,7 @@ export default function StyleGrid({ content = styleSection }: StyleGridProps = {
           <Link
             key={card.id}
             href={card.href}
-            className={`bento__card bento__card--${card.size}`}
+            className="bento__card"
             style={{ "--i": i } as React.CSSProperties}
           >
             {/* שם ייחודי לכל סגנון: שם משותף אחד לשלושת הכרטיסים
@@ -73,13 +72,7 @@ export default function StyleGrid({ content = styleSection }: StyleGridProps = {
                 src={card.image}
                 alt={card.alt}
                 fill
-                sizes={
-                  {
-                    full: "(max-width: 900px) 90vw, 90vw",
-                    wide: "(max-width: 900px) 90vw, 63vw",
-                    narrow: "(max-width: 900px) 90vw, 27vw",
-                  }[card.size]
-                }
+                sizes="(max-width: 900px) 90vw, 30vw"
                 className="bento__img"
               />
               <span className="bento__overlay" aria-hidden="true" />

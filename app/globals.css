@@ -1091,27 +1091,18 @@ main > *:first-child:not(.hero) {
 
 .bento {
   --bento-gap: 1.5vw;
-  /* גובה השורה נגזר מגובה המסך ולא מרוחבו, כדי שכל הרשת
-     תיכנס במסך אחד גם בצג רחב. clamp שומר על מינימום קריא. */
-  --bento-row: clamp(11rem, 36vh, 23rem);
+  /* גובה השורה נגזר מגובה המסך ולא מרוחבו, כדי שהרשת תיכנס
+     במסך אחד גם בצג רחב. clamp שומר על מינימום קריא. */
+  --bento-row: clamp(18rem, 52vh, 30rem);
   --bento-radius: 1rem;
 
+  /* 21.10: שלוש קוביות שוות בשורה אחת, לבקשת דניאל - "לא רואים
+     את המטבח הכפרי טוב". קודם 70/30 ומתחת כפרי ברוחב מלא ונמוך,
+     שחתך את התמונה לפס. */
   display: grid;
-  grid-template-columns: 70fr 30fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: var(--bento-row);
   gap: var(--bento-gap);
-}
-
-/* המיקום ברשת נקבע במפורש לפי size, ולא לפי סדר הכרטיסים.
-   בלי זה הסרת כרטיס אחד מזיזה את כל השאר ושוברת את הקומפוזיציה. */
-.bento__card--wide {
-  grid-column: 1;
-}
-.bento__card--narrow {
-  grid-column: 2;
-}
-.bento__card--full {
-  grid-column: 1 / -1;
 }
 
 .bento__card {
@@ -1222,13 +1213,6 @@ main > *:first-child:not(.hero) {
     --bento-gap: 3vw;
     --bento-row: 55vw;
     grid-template-columns: 1fr; /* עמודה אחת - שומר על יחס תמונה נכון */
-  }
-  /* ברשת של עמודה אחת המיקום המפורש לפי size לא רלוונטי,
-     ובלי האיפוס הזה narrow היה יוצר עמודה שנייה מרומזת */
-  .bento__card--wide,
-  .bento__card--narrow,
-  .bento__card--full {
-    grid-column: 1 / -1;
   }
   .bento__label {
     bottom: 1rem;

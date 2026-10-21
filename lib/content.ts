@@ -327,7 +327,6 @@ export const styleSection = {
       href: "/גלריה/מודרני",
       image: "/images/style-modern.webp",
       alt: "מטבח מודרני בגווני קרם עם אי שיש ותאורה תלויה",
-      size: "wide" as const,
       enabled: true,
     },
     {
@@ -336,7 +335,6 @@ export const styleSection = {
       href: "/גלריה/קלאסי",
       image: "/images/real-classic-5.webp",
       alt: "מטבח קלאסי בגוון קרם עם חיפוי שיש ותנורים בנויים",
-      size: "narrow" as const,
       enabled: true,
     },
     {
@@ -345,7 +343,6 @@ export const styleSection = {
       href: "/גלריה/כפרי",
       image: "/images/style-rustic.webp",
       alt: "מטבח כפרי עם ארונות קרם וחיפוי עץ מחורץ",
-      size: "full" as const,
       enabled: true,
     },
   ],
