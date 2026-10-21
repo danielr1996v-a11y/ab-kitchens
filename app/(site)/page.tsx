@@ -1,6 +1,7 @@
 import SectionRenderer from "@/components/SectionRenderer";
 import { homeSections } from "@/lib/sections";
 import DesignerCta from "@/components/DesignerCta";
+import HomeVideos from "@/components/HomeVideos";
 import { sanityFetch } from "@/lib/sanity/live";
 import { homeQuery, adaptHome } from "@/lib/sanity/queries";
 
@@ -42,6 +43,7 @@ export default async function HomePage() {
         א. בית המטבחים - מטבחים ושיש בהתאמה אישית בירושלים
       </h1>
       <SectionRenderer sections={sections} />
+      <HomeVideos />
       <DesignerCta />
     </>
   );

@@ -6133,6 +6133,11 @@ a.footer__contact-link:hover {
 .chv-section {
   padding: var(--section-gap) var(--side-padding);
 }
+/* דף הבית: הסרטונים אחרי ההמלצות (21.10). הכותרת והרשת יורשות
+   את הרוחב והריפוד של .tvideos__head / __body מעמוד ההמלצות. */
+.hvideos {
+  padding-block: var(--section-gap);
+}
 .chv {
   max-width: 76rem;
   margin-inline: auto;
@@ -6219,6 +6224,13 @@ a.footer__contact-link:hover {
     flex: 1;
     justify-content: center;
     padding: 0 var(--space-2);
+  }
+}
+/* ⚠️ דף הבית: 4 סרטונים בדיוק. ברשת של 3 (701-1100) הם יצאו 3+1,
+   שורה עם כרטיס יתום. לכן 4 בשורה עד הטלפון, ובטלפון 2x2. */
+@media (min-width: 701px) {
+  .hvideos .chv__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

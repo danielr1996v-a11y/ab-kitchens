@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   videoCategories,
   videosPage,
@@ -27,7 +28,17 @@ import {
  *
  * נגישות: תבנית tabs מלאה - role, aria-selected, וחיצי מקלדת.
  */
-export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
+export default function ChannelVideos({
+  videos,
+  initial = videosPage.initial,
+  moreHref,
+}: {
+  videos: ChannelVideo[];
+  /** כמה מוצגים בכל קטגוריה. דף הבית: 4 (21.10, לבקשת דניאל) */
+  initial?: number;
+  /** כשמוגדר, "לכל הסרטונים" הוא קישור לעמוד הסרטונים ולא הרחבה במקום */
+  moreHref?: string;
+}) {
   const [cat, setCat] = useState<VideoCategory>(videoCategories[0].id);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [openId, setOpenId] = useState<string | null>(null);
@@ -35,7 +46,7 @@ export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
 
   const list = videos.filter((v) => v.cat === cat);
   const all = expanded[cat] ?? false;
-  const shown = all ? list : list.slice(0, videosPage.initial);
+  const shown = all ? list : list.slice(0, initial);
 
   const pick = (next: VideoCategory) => {
     setCat(next);
@@ -137,7 +148,15 @@ export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
           ))}
         </ul>
 
-        {!all && list.length > videosPage.initial && (
+        {moreHref ? (
+          <div className="chv__more">
+            <Link href={moreHref} className="chv__more-btn">
+              {videosPage.showAll}
+            </Link>
+          </div>
+        ) : (
+          !all &&
+          list.length > initial && (
           <div className="chv__more">
             <button
               type="button"
@@ -147,6 +166,7 @@ export default function ChannelVideos({ videos }: { videos: ChannelVideo[] }) {
               {videosPage.showAll} ({list.length})
             </button>
           </div>
+          )
         )}
       </div>
     </div>
