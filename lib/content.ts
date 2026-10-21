@@ -50,19 +50,17 @@ export const whatsappHref = `https://wa.me/${site.whatsappNumber}?text=${encodeU
 )}`;
 
 /**
- * שורת האייקונים בהדר. וואטסאפ ראשון כי הוא ערוץ הפנייה המרכזי,
- * ואחריו הרשתות מתוך site.social - כך שאין שתי רשימות לתחזק.
+ * הרשתות בפוטר. וואטסאפ ראשון כי הוא ערוץ הפנייה המרכזי, ואחריו
+ * הרשתות מתוך site.social - כך שאין שתי רשימות לתחזק.
  */
-export const headerSocial = [
+export const footerSocial = [
   { id: "whatsapp" as const, label: "וואטסאפ", href: whatsappHref },
   ...site.social,
 ];
 
-/**
- * הרשתות בפוטר - כולל וואטסאפ, בניגוד ל-site.social שהוא
- * הרשתות בלבד. אותה רשימה כמו בהדר.
- */
-export const footerSocial = headerSocial;
+/* ⚠️ יוטיוב רק בפוטר (21.10, דניאל: "כאן אתה יכול להוריד את
+   היוטיוב, שיהיה רק בפוטר"). חל גם על תפריט המובייל. */
+export const headerSocial = footerSocial.filter((s) => s.id !== "youtube");
 
 /**
  * נתיבים בעברית - זהים לאתר הישן.
