@@ -6138,6 +6138,10 @@ a.footer__contact-link:hover {
 .hvideos {
   padding-block: var(--section-gap);
 }
+/* הכותרת באמצע, מעל הלשוניות הממורכזות (21.10, לבקשת דניאל) */
+.hvideos .tvideos__title {
+  text-align: center;
+}
 .chv {
   max-width: 76rem;
   margin-inline: auto;

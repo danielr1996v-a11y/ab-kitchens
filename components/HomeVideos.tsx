@@ -19,7 +19,7 @@ export default async function HomeVideos() {
         </h2>
       </div>
       <div className="tvideos__body">
-        <ChannelVideos videos={videos} initial={4} moreHref="/סרטונים" />
+        <ChannelVideos videos={videos} initial={4} moreHref="/סרטונים" showCount={false} />
       </div>
     </section>
   );

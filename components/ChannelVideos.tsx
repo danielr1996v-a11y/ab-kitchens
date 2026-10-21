@@ -32,12 +32,15 @@ export default function ChannelVideos({
   videos,
   initial = videosPage.initial,
   moreHref,
+  showCount = true,
 }: {
   videos: ChannelVideo[];
   /** כמה מוצגים בכל קטגוריה. דף הבית: 4 (21.10, לבקשת דניאל) */
   initial?: number;
   /** כשמוגדר, "לכל הסרטונים" הוא קישור לעמוד הסרטונים ולא הרחבה במקום */
   moreHref?: string;
+  /** המספר ליד שם הלשונית. בדף הבית מוסתר (21.10, לבקשת דניאל) */
+  showCount?: boolean;
 }) {
   const [cat, setCat] = useState<VideoCategory>(videoCategories[0].id);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -88,7 +91,7 @@ export default function ChannelVideos({
               onKeyDown={(e) => onKey(e, i)}
             >
               {c.label}
-              <span className="chv__count">{count}</span>
+              {showCount && <span className="chv__count">{count}</span>}
             </button>
           );
         })}
