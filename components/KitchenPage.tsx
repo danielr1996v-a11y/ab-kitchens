@@ -126,7 +126,7 @@ export default function KitchenPage({
                   image={block.hotspots.image}
                   alt={block.hotspots.alt}
                   points={block.hotspots.points}
-                  tall={block.hotspots.tall}
+                  ratio={block.hotspots.ratio}
                 />
               )}
 
