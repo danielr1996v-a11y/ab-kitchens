@@ -277,7 +277,9 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  height: 72%;
+  /* 72% → 60% (21.10, דניאל: "תקטין קצת את הלוגו גם במחשב וגם
+     בנייד"). נמדד לפני: 218x52 בכל רוחב. */
+  height: 60%;
 }
 .header__logo-img {
   height: 100%;
@@ -6015,37 +6017,30 @@ a.footer__contact-link:hover {
     columns: 1;
   }
 }
-/* ===== סרטוני לקוחות ===== */
-/* ⚠️ **בלי ריפוד צדדי על הסקשן**, וזה לא סגנון אלא תיקון.
-   המסלול מרכז את הכרטיס הראשון ב-calc(50% - חצי כרטיס), ואחוז
-   בריפוד נפתר תמיד מול **בלוק ההכלה** ולא מול האלמנט עצמו.
-   כשהסקשן היה מרופד והמסלול יצא ממנו במרג׳ין שלילי, ה-50%
-   נמדד מ-1360 במקום מ-1512 והכרטיס הראשון נפל 78px מהמרכז.
-   הריפוד עבר לכותרת, והמסלול מקבל את הרוחב המלא באמת. */
+/* ===== סרטוני לקוחות =====
+   21.10: רשת כמו עמוד הסרטונים (.chv__grid), במקום הסליידר -
+   לבקשת דניאל. הריפוד הצדדי על הכותרת ועל הרשת, לא על הסקשן. */
 .tvideos {
   /* ⚠️ ריפוד עליון (7.10). קודם 0, כי הסקשן ישב צמוד לקיר
      הצילומים שכבר נותן ריפוד תחתון. כשנכנס מעליו סקשן ביקורות
      גוגל עם רקע, כותרת הסרטונים נצמדה לקצה שלו - 0px. */
   padding: var(--section-gap) 0;
 }
-/* הכותרת והחצים באותה שורה: הכותרת מימין, הניווט משמאל */
-.tvideos__head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-3);
-  /* 76rem לתוכן עצמו, בדיוק כמו שאר הסקשנים בעמוד */
+/* הכותרת והרשת באותו רוחב: 76rem לתוכן, כמו שאר הסקשנים בעמוד */
+.tvideos__head,
+.tvideos__body {
   max-width: calc(76rem + var(--side-padding) * 2);
-  margin: 0 auto var(--space-4);
+  margin: 0 auto;
   padding-inline: var(--side-padding);
+}
+.tvideos__head {
+  margin-bottom: var(--space-4);
 }
 .tvideos__title {
   margin: 0;
   /* ⚠️ text-wrap: balance ולא שבירה חופשית. במובייל הכותרת
      נשברה ל-"תשמעו מה יש ללקוחות שלנו" + "להגיד" - מילה
-     בודדה בשורה אחרונה, מה שאסור אצלנו.
-     ⚠️ והיום זה קריטי יותר ולא פחות: הכותרת חולקת שורה עם
-     החצים ומקבלת פחות רוחב, ולכן הסיכון ליתומה גדל. */
+     בודדה בשורה אחרונה, מה שאסור אצלנו. */
   text-wrap: balance;
   font-size: var(--fs-h1);
   font-weight: 700;
@@ -6053,114 +6048,6 @@ a.footer__contact-link:hover {
   color: var(--color-fg);
 }
 
-/* ===== חצי הניווט ===== */
-.vnav {
-  display: flex;
-  gap: var(--space-1);
-  flex-shrink: 0;
-}
-.vnav__btn {
-  display: grid;
-  place-items: center;
-  /* 3rem = 48px, מעל תקן המגע של 44 */
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  background: none;
-  /* ⚠️ מרובע ובלי border-radius - כך הוכרע מול דניאל, בשונה
-     מהרפרנס שהחצים בו עגולים. */
-  border: 1px solid var(--color-border);
-  color: var(--color-fg);
-  cursor: pointer;
-  transition: border-color var(--dur) var(--ease),
-    opacity var(--dur) var(--ease);
-}
-.vnav__btn:hover,
-.vnav__btn:focus-visible {
-  border-color: var(--color-fg);
-}
-.vnav__btn svg {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* ===== הבמה (נבנתה מחדש 20.10) =====
-   ⚠️ **אין כאן גלילה.** הגוללן הנייטיבי עם 36 כרטיסים וקפיצה
-   חזרה לעותק האמצעי הבהב באייפון שלוש פעמים, וזה נבע מהמנגנון
-   עצמו. עכשיו כל כרטיס יושב במרכז הבמה ומוזז ממנו ב-transform:
-   --k = כמה צעדים מהמרכז (מ-VideoSlider), --s = הסקייל שלו,
-   --drag = כמה האצבע משכה. תזוזה אחת לכל מעבר, על ה-compositor.
-   ⚠️ direction נשאר rtl - .vcard__play ממורכז ב-translate(50%)
-   חיובי, שנכון רק תחת RTL. */
-.vslider {
-  /* ⚠️ הרצפה 15rem ולא 13rem, ונמדדה מול הקפיצה בנקודת
-     המעבר: מתחת ל-700 הכרטיס הוא 68vw, ומעל 700 הוא 17vw.
-     עם רצפה של 13rem הכרטיס צנח מ-272 ל-208 בפיקסל אחד.
-     15rem מצמצם את הקפיצה ל-272→240. */
-  --vcard-w: clamp(15rem, 17vw, 20rem);
-  --vcard-gap: var(--space-3);
-  --vcard-dur: 650ms;
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  /* הכרטיסים מוחלטים, אז הגובה נגזר מהם: 9:16 + מקום לצל */
-  height: calc(var(--vcard-w) * 16 / 9 + var(--space-2) * 2);
-  /* ⚠️ clip ולא hidden: חותך רק לרוחב, והצל של הכרטיס הפעיל
-     לא נחתך למעלה ולמטה. hidden היה גם הופך את הבמה לגוללן. */
-  overflow-x: clip;
-  /* גלילה אנכית של העמוד נשארת לדפדפן, אופקית - לנו */
-  touch-action: pan-y;
-  user-select: none;
-  -webkit-user-select: none;
-}
-@media (pointer: fine) {
-  .vslider {
-    cursor: grab;
-  }
-}
-.vslider--drag {
-  cursor: grabbing;
-}
-.vcard {
-  position: absolute;
-  inset-block-start: var(--space-2);
-  left: 50%;
-  width: var(--vcard-w);
-  margin-left: calc(var(--vcard-w) / -2);
-  /* ⚠️ מינוס: ב-RTL הבא (k חיובי) יושב משמאל */
-  transform: translateX(
-      calc(var(--k) * (var(--vcard-w) + var(--vcard-gap)) * -1 + var(--drag, 0px))
-    )
-    scale(var(--s));
-  transform-origin: 50% 50%;
-  transition: transform var(--vcard-dur) var(--ease-soft),
-    opacity var(--vcard-dur) var(--ease-soft);
-  /* ⚠️ שכבה קבועה רק ל-7 הכרטיסים שעל הבמה (12 בסך הכל, לא 36).
-     בלי שכבה ספארי מקדם כרטיס לשכבה רק כשהמעבר מתחיל, וצובע אותו
-     מחדש בפריים הראשון - זה ההבזק. */
-  will-change: transform;
-}
-/* הכרטיס במרכז מעל השכנים, שהצל שלו לא ייבלע מתחתם */
-.vcard--active {
-  z-index: 1;
-}
-/* ⚠️ הכרטיס שחוצה את המעגל (מקצה אחד לשני) עושה את זה כשהוא
-   מוסתר, ולכן לא נראה עף לרוחב המסך. visibility מתעכב עד סוף
-   הדעיכה, שהכרטיס לא ייעלם בבת אחת. */
-.vcard--far {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  will-change: auto;
-  transition: transform var(--vcard-dur) var(--ease-soft),
-    opacity var(--vcard-dur) var(--ease-soft),
-    visibility 0s linear var(--vcard-dur);
-}
-/* בזמן גרירה הכרטיסים צמודים לאצבע, בלי פיגור */
-.vslider--drag .vcard {
-  transition: none;
-}
 .vcard__btn {
   position: relative;
   display: block;
@@ -6186,11 +6073,6 @@ a.footer__contact-link:hover {
 .vcard__btn:hover .vcard__poster,
 .vcard__btn:focus-visible .vcard__poster {
   transform: scale(1.03);
-}
-/* הכרטיס שבמרכז מורם מהרקע. הצל הוא ההבדל היחיד מלבד הגודל */
-.vcard--active .vcard__btn {
-  box-shadow: 0 2px 8px rgba(20, 19, 19, 0.08),
-    0 12px 32px rgba(20, 19, 19, 0.14);
 }
 /* כפתור הנגן. עיגול זהב, לא המשולש האדום של יוטיוב - זה
    האתר שלנו ולא שלהם. */
@@ -6234,7 +6116,6 @@ a.footer__contact-link:hover {
   border: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .vcard,
   .vcard__poster,
   .vcard__play {
     transition: none;
@@ -6250,19 +6131,6 @@ a.footer__contact-link:hover {
   }
 }
 @media (max-width: 700px) {
-  /* החצים יורדים מתחת לכותרת. ב-RTL flex-start הוא ימין */
-  .tvideos__head {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-  }
-  .vslider {
-    /* ⚠️ 68vw ולא הטוקן: 17vw על מסך של 375 יוצא כרטיס של 64px.
-       ⚠️ והתקרה 17rem חובה: בלעדיה, ברוחב 700 הכרטיס יצא 476
-       רוחב ו-**846 גובה** - גבוה ממסך הטלפון שהוא נועד לו. */
-    --vcard-w: min(68vw, 17rem);
-    --vcard-gap: var(--space-2);
-  }
   .vcard__play {
     width: 3rem;
     height: 3rem;

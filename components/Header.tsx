@@ -107,8 +107,9 @@ export default function Header() {
             alt="א. בית המטבחים"
             width={1936}
             height={460}
-            /* נמדד 19.10 עם הלוגו החדש (יחס 4.21): 218px בכל רוחב */
-            sizes="220px"
+            /* 21.10: הלוגו הוקטן ל-60% מגובה ההדר - כ-182px. ⚠️ לעדכן
+               יחד עם height ב-.header__logo */
+            sizes="190px"
             priority
             className="header__logo-img"
           />

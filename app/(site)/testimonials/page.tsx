@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import TestimonialWall from "@/components/TestimonialWall";
-import VideoSlider from "@/components/VideoSlider";
+import ClientVideos from "@/components/ClientVideos";
+import { videosSection } from "@/lib/videos";
 import Testimonials from "@/components/Testimonials";
 import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 import DesignerCta from "@/components/DesignerCta";
@@ -114,10 +115,14 @@ export default function Page() {
           ביותר, אבל הוא גם דורש מהמבקר להחליט לצפות. הצילומים
           נקראים בלי מאמץ ומחממים את הקרקע. */}
       <section className="tvideos" aria-labelledby="videos-title">
-        {/* ⚠️ הכותרת נכנסה לתוך הקומפוננטה ולא נשארה כאן:
-            חצי הניווט חולקים state עם המסלול, והם חייבים
-            לשבת בשורת הכותרת - כלומר שלושתם תחת אותו רכיב. */}
-        <VideoSlider titleId="videos-title" />
+        <div className="tvideos__head">
+          <h2 className="tvideos__title" id="videos-title">
+            {videosSection.title}
+          </h2>
+        </div>
+        <div className="tvideos__body">
+          <ClientVideos />
+        </div>
       </section>
 
       <DesignerCta />
