@@ -832,8 +832,10 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
   stone: {
     heroTitle: "שיש למטבח",
     process: stoneProcess,
-    heroImage: "/images/stone-unsplash-1.webp",
-    heroAlt: "משטח שיש בהיר במטבח - א. בית המטבחים",
+    /* 29.10, לבקשת דניאל: צילום אמיתי (IMG_8872) במקום הסטוק.
+       פס לרוחב מהצילום לאורך - חיפוי, ברזים ומשטח (y 720-1290). */
+    heroImage: "/images/stone-hero.webp",
+    heroAlt: "משטח וחיפוי שיש בהיר עם כיור וברזים מוזהבים - א. בית המטבחים",
     article: [
       {
         heading: "השיש הוא מה שנוגעים בו כל יום",
