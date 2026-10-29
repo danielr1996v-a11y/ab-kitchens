@@ -832,10 +832,8 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
   stone: {
     heroTitle: "שיש למטבח",
     process: stoneProcess,
-    /* 29.10, לבקשת דניאל: צילום אמיתי (IMG_8872) במקום הסטוק.
-       פס לרוחב מהצילום לאורך - חיפוי, ברזים ומשטח (y 720-1290). */
-    heroImage: "/images/stone-hero.webp",
-    heroAlt: "משטח וחיפוי שיש בהיר עם כיור וברזים מוזהבים - א. בית המטבחים",
+    heroImage: "/images/stone-unsplash-1.webp",
+    heroAlt: "משטח שיש בהיר במטבח - א. בית המטבחים",
     article: [
       {
         heading: "השיש הוא מה שנוגעים בו כל יום",
@@ -862,6 +860,8 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
       { image: "/images/stone-real-1.webp", alt: "אי מטבח מחופה שיש בהיר בעיבוד המשכי עד הרצפה" },
       { image: "/images/stone-real-2.webp", alt: "אי מטבח עם משטח אבן כהה ומעוטר" },
       { image: "/images/stone-real-3.webp", alt: "כיור כפול שחור עם חיפוי ומשטח אבן כהים" },
+      /* 29.10, לבקשת דניאל (IMG_8872) - בגלריה ולא בבאנר */
+      { image: "/images/stone-real-4.webp", alt: "מטבח לבן ארוך עם משטח וחיפוי שיש בהיר, כיור שטוח וברזים מוזהבים" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
