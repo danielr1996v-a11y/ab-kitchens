@@ -6494,6 +6494,18 @@ a.footer__contact-link:hover {
   top: -3%;
   height: 106%;
 }
+/* ⚠️ בלי תקרת ה-62rem של .khot--tall (29.10, דניאל: "תמתח יותר
+   לרוחב, כרגע זה קטן מאוד"). הגבול היחיד הוא גובה המסך (78vh) -
+   תמונה לרוחב נפתחת כמעט לכל הרוחב, ותמונה לאורך (שיש) נשארת
+   ממורכזת כמו שהייתה. */
+@media (min-width: 1100px) {
+  /* ⚠️ גם השוליים חוזרים: כלל ה-62rem החליף אותם ב-auto, ובלי
+     השליליים הגוף רחב מהעמוד ברוחב שני ריפודים - נמדד 76px גלישה. */
+  .kpage__block--full .kpage__block-body:has(.khot--whole) {
+    max-width: none;
+    margin-inline: calc(-1 * var(--side-padding));
+  }
+}
 @media (max-width: 1100px) {
   .khot:not(.khot--tall) {
     height: auto;
