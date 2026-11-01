@@ -2776,6 +2776,19 @@ a.footer__contact-link:hover {
     object-position: var(--hero-mpos, center);
   }
 }
+/* --- כל הצילום בבאנר (קלאסי, 1.11) ---
+   הבאנר רחב ונמוך (1512x522), והצילום 1.30 - ב-cover רואים רק חצי
+   מגובהו. כאן הצילום ב-contain, והצדדים מתמלאים בגרסה מטושטשת וכהה
+   שלו, כדי שלא יישארו פסים ריקים. */
+.kpage__hero--whole .kpage__hero-img {
+  object-fit: contain;
+}
+.kpage__hero-bg {
+  object-fit: cover;
+  filter: blur(28px) brightness(0.7);
+  /* הטשטוש מבהיר את השוליים - הגדלה קלה מסתירה אותם */
+  transform: scale(1.15);
+}
 /* שכבת הכהות - חזקה בתחתית בלבד, כדי שהכותרת תיקרא
    בלי לכבות את התמונה עצמה */
 .kpage__hero::after {

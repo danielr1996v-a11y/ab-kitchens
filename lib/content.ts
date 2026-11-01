@@ -600,6 +600,11 @@ type KitchenPageContent = {
   /** נקודת המיקוד בטלפון (object-position). ריק = מרכז */
   heroMobilePosition?: string;
   /**
+   * כל הצילום גלוי בבאנר: התמונה במלואה במרכז, והצדדים מתמלאים
+   * בגרסה מטושטשת שלה (1.11, דניאל על הקלאסי: "שיראו את כל התמונה").
+   */
+  heroWhole?: boolean;
+  /**
    * גוף המאמר, מקובץ לפי כותרת.
    * כל בלוק מרונדר כזוג עמודות - כותרת מימין, תוכן משמאל - כדי
    * שהמאמר יישב על אותו גריד כמו שאר הסקשנים ולא יצוף באמצע.
@@ -755,6 +760,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     heroTitle: "מטבח קלאסי",
     /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד */
     heroImage: "/images/classic-hotspots.webp",
+    heroWhole: true,
     heroAlt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
     article: [
       {

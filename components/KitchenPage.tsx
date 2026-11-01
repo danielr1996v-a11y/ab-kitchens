@@ -45,7 +45,18 @@ export default function KitchenPage({
   return (
     <>
       {/* ===== הירו - תמונה בפול-בליד עם שכבת כהות ===== */}
-      <section className="kpage__hero">
+      <section className={`kpage__hero${page.heroWhole ? " kpage__hero--whole" : ""}`}>
+        {/* רקע מטושטש מאותה תמונה - ממלא את הצדדים כשהצילום מוצג במלואו */}
+        {page.heroWhole && (
+          <Image
+            src={page.heroImage}
+            alt=""
+            fill
+            sizes="50vw"
+            className="kpage__hero-bg"
+            aria-hidden="true"
+          />
+        )}
         {/* אותו שם כמו הכרטיס בבנטו - זה מה שגורם לתמונה
             למורף במקום להחליף */}
         <ViewTransition name={`kitchen-shot-${styleKey}`}>
