@@ -333,8 +333,9 @@ export const styleSection = {
       id: "classic",
       title: "קלאסי",
       href: "/גלריה/קלאסי",
-      image: "/images/real-classic-5.webp",
-      alt: "מטבח קלאסי בגוון קרם עם חיפוי שיש ותנורים בנויים",
+      /* 1.11, לבקשת דניאל: תמונת הנקודות של עמוד הקלאסי */
+      image: "/images/classic-hotspots.webp",
+      alt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
       enabled: true,
     },
     {
@@ -752,8 +753,7 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
      דניאל אמר שיש לו טקסטים - להחליף כשיגיעו. */
   classic: {
     heroTitle: "מטבח קלאסי",
-    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד.
-       real-classic-5 נשארת - היא כרטיס "קלאסי" בדף הבית. */
+    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד */
     heroImage: "/images/classic-hotspots.webp",
     heroAlt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
     article: [
