@@ -657,10 +657,9 @@ type KitchenPageContent = {
 export const kitchenPages: Record<string, KitchenPageContent> = {
   modern: {
     heroTitle: "מטבח מודרני",
-    /* 12.10: hero-modern (המיקסר) הוחלפה לבקשת דניאל. צילום אמיתי
-       מהדרייב - אותו מטבח כמו stone-real-1, אבל לא באותו עמוד */
-    heroImage: "/images/hero-modern-real.webp",
-    heroAlt: "מטבח מודרני לבן עם אי מחופה שיש בהיר ותאורה תלויה",
+    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד (style-modern) */
+    heroImage: "/images/style-modern.webp",
+    heroAlt: "מטבח מודרני עם אי אבן, תאורה תלויה וחזיתות חלקות",
     article: [
       {
         heading: "מטבח מודרני בהתאמה אישית",
