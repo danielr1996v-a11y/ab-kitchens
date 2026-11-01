@@ -45,18 +45,11 @@ export default function KitchenPage({
   return (
     <>
       {/* ===== הירו - תמונה בפול-בליד עם שכבת כהות ===== */}
-      <section className={`kpage__hero${page.heroWhole ? " kpage__hero--whole" : ""}`}>
-        {/* רקע מטושטש מאותה תמונה - ממלא את הצדדים כשהצילום מוצג במלואו */}
-        {page.heroWhole && (
-          <Image
-            src={page.heroImage}
-            alt=""
-            fill
-            sizes="50vw"
-            className="kpage__hero-bg"
-            aria-hidden="true"
-          />
-        )}
+      <section
+        className={`kpage__hero${page.heroRatio ? " kpage__hero--tall" : ""}`}
+        style={page.heroRatio ? ({ "--hero-ratio": page.heroRatio } as React.CSSProperties) : undefined}
+      >
+
         {/* אותו שם כמו הכרטיס בבנטו - זה מה שגורם לתמונה
             למורף במקום להחליף */}
         <ViewTransition name={`kitchen-shot-${styleKey}`}>

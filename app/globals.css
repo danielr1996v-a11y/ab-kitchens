@@ -2776,18 +2776,17 @@ a.footer__contact-link:hover {
     object-position: var(--hero-mpos, center);
   }
 }
-/* --- כל הצילום בבאנר (קלאסי, 1.11) ---
-   הבאנר רחב ונמוך (1512x522), והצילום 1.30 - ב-cover רואים רק חצי
-   מגובהו. כאן הצילום ב-contain, והצדדים מתמלאים בגרסה מטושטשת וכהה
-   שלו, כדי שלא יישארו פסים ריקים. */
-.kpage__hero--whole .kpage__hero-img {
-  object-fit: contain;
+/* --- באנר גבוה לפי יחס הצילום (קלאסי, 1.11) ---
+   הבאנר הרגיל רחב ונמוך (1512x522), והצילום 1.30 - רואים רק חצי
+   מגובהו. כאן הגובה = רוחב המסך / יחס הצילום, כך שבטלפון רואים את
+   כולו ובמחשב כמה שנכנס עד 88vh. ברוחב מלא תמיד - בלי פסים בצדדים. */
+.kpage__hero--tall {
+  height: min(calc(100vw / var(--hero-ratio)), 88vh);
 }
-.kpage__hero-bg {
-  object-fit: cover;
-  filter: blur(28px) brightness(0.7);
-  /* הטשטוש מבהיר את השוליים - הגדלה קלה מסתירה אותם */
-  transform: scale(1.15);
+@media (max-width: 700px) {
+  .kpage__hero--tall {
+    height: calc(100vw / var(--hero-ratio));
+  }
 }
 /* שכבת הכהות - חזקה בתחתית בלבד, כדי שהכותרת תיקרא
    בלי לכבות את התמונה עצמה */
