@@ -341,8 +341,9 @@ export const styleSection = {
       id: "rustic",
       title: "כפרי",
       href: "/גלריה/כפרי",
-      image: "/images/style-rustic.webp",
-      alt: "מטבח כפרי עם ארונות קרם וחיפוי עץ מחורץ",
+      /* 1.11, לבקשת דניאל: הצילום מהבאנר של עמוד הכפרי */
+      image: "/images/real-rustic-7.webp",
+      alt: "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
       enabled: true,
     },
   ],
@@ -751,8 +752,10 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
      דניאל אמר שיש לו טקסטים - להחליף כשיגיעו. */
   classic: {
     heroTitle: "מטבח קלאסי",
-    heroImage: "/images/real-classic-5.webp",
-    heroAlt: "מטבח קלאסי לבן עם אי שיש",
+    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד.
+       real-classic-5 נשארת - היא כרטיס "קלאסי" בדף הבית. */
+    heroImage: "/images/classic-hotspots.webp",
+    heroAlt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
     article: [
       {
         heading: "מטבח קלאסי בהתאמה אישית",
