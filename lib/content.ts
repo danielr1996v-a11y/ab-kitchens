@@ -67,11 +67,13 @@ export const headerSocial = footerSocial.filter((s) => s.id !== "youtube");
  * זו החלטת SEO מכוונת: URL שלא משתנה = אפס אובדן דירוג.
  * אין לשנות נתיב שכבר מאונדקס בגוגל בלי בדיקת השפעה.
  */
+/* 3.11, לבקשת דניאל: התמונות בתפריט = התמונות של כל סגנון בדף הבית
+   ובבאנר העמוד (קלאסי ומודרני - תמונת הנקודות, כפרי - real-rustic-7) */
 export const kitchenTypes = [
   {
     href: "/גלריה/קלאסי",
     label: "מטבח קלאסי",
-    image: "/images/real-classic-5.webp",
+    image: "/images/classic-hotspots.webp",
   },
   {
     href: "/גלריה/מודרני",
@@ -81,7 +83,7 @@ export const kitchenTypes = [
   {
     href: "/גלריה/כפרי",
     label: "מטבח כפרי",
-    image: "/images/style-country.webp",
+    image: "/images/real-rustic-7.webp",
   },
 ];
 
