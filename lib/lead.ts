@@ -6,7 +6,7 @@ import { site } from "@/lib/content";
  * ⚠️ **עד 7.10 אף טופס באתר לא שלח לשום מקום.** חלקם פתחו את
  * תוכנת המייל של הגולש (mailto) וחלקם שלחו ל-action="#" -
  * כלומר מי שמילא פשוט נעלם. דניאל בחר: מייל לאברהם.
- * כל הטפסים עוברים עכשיו דרך /api/lead, במקום אחד.
+ * כל הטפסים עוברים דרך sendLead, במקום אחד.
  */
 export type LeadInput = {
   name: string;
@@ -32,15 +32,47 @@ export const isValidPhone = (phone: string) => {
   return d.length >= 9 && d.length <= 13;
 };
 
-/** שליחה מהדפדפן. לעולם לא זורק - כל כישלון חוזר כתוצאה */
+/**
+ * שליחה מהדפדפן ישירות ל-FormSubmit. לעולם לא זורק - כל כישלון
+ * חוזר כתוצאה.
+ *
+ * ⚠️ **מהדפדפן ולא מהשרת (9.11).** השליחה דרך /api/lead נכשלה
+ * מהשרת של Vercel (send-failed) - FormSubmit לא מקבל בקשות מכתובות
+ * של שרתים. אותה בקשה בדיוק מהדפדפן, מהדומיין של האתר, עברה. זה
+ * גם השימוש ש-FormSubmit מתעד: AJAX מהעמוד עצמו.
+ *
+ * המחיר: כתובת המייל של אברהם גלויה בקוד של הדף - היא כבר גלויה
+ * בפוטר ובעמוד יצירת קשר, אז לא נחשף כאן שום דבר חדש.
+ */
 export async function sendLead(input: LeadInput): Promise<LeadResult> {
+  /* מלכודת לבוטים: שדה חבוי שאדם לא רואה ולא ממלא. בוט שמילא
+     אותו מקבל "הצלחה" - כך הוא לא לומד לעקוף */
+  if (input.company?.trim()) return { ok: true };
+
+  const name = input.name.trim().slice(0, 80);
+  const phone = input.phone.trim().slice(0, 30);
+  const message = (input.message ?? "").trim().slice(0, 2000);
+  const source = (input.source || "האתר").trim().slice(0, 60);
+  if (!name || !isValidPhone(phone)) return { ok: false, error: "invalid" };
+
   try {
-    const res = await fetch("/api/lead", {
+    const res = await fetch(`https://formsubmit.co/ajax/${site.email}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        שם: name,
+        טלפון: phone,
+        ...(message && { הודעה: message }),
+        "נשלח מ": source,
+        _subject: `פנייה חדשה מהאתר - ${name}`,
+        _template: "table",
+        _captcha: "false",
+      }),
     });
-    return (await res.json()) as LeadResult;
+    /* ⚠️ לפני הפעלה חד-פעמית FormSubmit מחזיר success=false - והטופס
+       מציג לגולש וואטסאפ וטלפון, כך שפנייה לא נבלעת בשקט */
+    const data = (await res.json().catch(() => null)) as { success?: string | boolean } | null;
+    return res.ok && String(data?.success) === "true" ? { ok: true } : { ok: false, error: "send-failed" };
   } catch {
     return { ok: false, error: "network" };
   }
