@@ -457,6 +457,26 @@ export const leadCopy = {
   failedWhatsapp: "שליחה בוואטסאפ",
 };
 
+/**
+ * תפריט הנגישות הצף (AccessibilityMenu) - הטקסטים.
+ * הקישור להצהרה משתמש בנתיב העברי הקיים.
+ */
+export const a11yCopy = {
+  open: "תפריט נגישות",
+  title: "נגישות",
+  textSize: "גודל טקסט",
+  smaller: "הקטנת טקסט",
+  larger: "הגדלת טקסט",
+  options: [
+    { id: "contrast", label: "ניגודיות גבוהה" },
+    { id: "links", label: "הדגשת קישורים" },
+    { id: "font", label: "גופן קריא" },
+    { id: "still", label: "עצירת אנימציות" },
+  ],
+  reset: "איפוס הגדרות",
+  statement: { href: "/הצהרת-נגישות", label: "הצהרת נגישות" },
+} as const;
+
 export const leadForm = {
   /* שתי שורות: הראשונה קלה, השנייה מודגשת - היא הקריאה לפעולה */
   titleLight: "לתיאום פגישה עם מעצב/ת ללא עלות",

@@ -2,6 +2,7 @@ import { ViewTransition } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingActions from "@/components/FloatingActions";
+import AccessibilityMenu from "@/components/AccessibilityMenu";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
 import SanityBridge from "@/components/SanityBridge";
@@ -29,6 +30,7 @@ export default function SiteLayout({
       </ViewTransition>
       <Footer />
       <FloatingActions />
+      <AccessibilityMenu />
       {/* עדכון חי + עריכה ויזואלית. ריק כל עוד Sanity לא חובר */}
       <SanityBridge />
     </>

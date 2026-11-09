@@ -8,6 +8,7 @@ export type IconId =
   | "pin"
   | "menu"
   | "close"
+  | "accessibility"
   /* חמישה לערכי עמוד אודות. מצוירים באותו סטנדרט - קו 1.5
      על גריד 24, currentColor - ולא מספרייה חיצונית. */
   | "ruler"
@@ -139,6 +140,21 @@ export default function Icon({ id }: { id: IconId }) {
             d="M6 6l12 12M18 6L6 18"
             strokeWidth="1.5"
             strokeLinecap="round"
+          />
+        </svg>
+      );
+
+    case "accessibility":
+      /* הדמות הבינלאומית של נגישות: ראש, ידיים פרושות ורגליים,
+         באותו קו 1.5 של שאר הספרייה */
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="4.5" r="1.75" strokeWidth="1.5" />
+          <path
+            d="M5 8.5l7 1.5 7-1.5M12 10v4.5M12 14.5l-3 6M12 14.5l3 6"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       );

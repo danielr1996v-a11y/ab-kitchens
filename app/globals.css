@@ -3790,14 +3790,13 @@ a.footer__contact-link:hover {
    inset-inline-start ולא left: ב-RTL זה הצד הימני.
    ========================================================= */
 /* =========================================================
-   כפתורי פעולה צפים - חיוג ווואטסאפ, בצד שמאל
-   שמאל ולא ימין: בעברית הטקסט זורם ימינה, וכפתור צף בימין
-   נופל בדיוק על סוף השורות.
+   כפתור וואטסאפ צף - בצד ימין
+   ⚠️ 9.11: עבר משמאל לימין לבקשת דניאל. השמאל שייך עכשיו
+   לתפריט הנגישות (.a11y), באותו גובה ובאותו מרחק מהקצה.
    ========================================================= */
 .fab {
   position: fixed;
-  inset-inline-start: auto;
-  left: var(--space-3);
+  right: var(--space-3);
   bottom: var(--space-3);
   z-index: 90; /* מתחת לתפריט המובייל (101) */
   display: flex;
@@ -3808,8 +3807,10 @@ a.footer__contact-link:hover {
 .fab__btn {
   display: grid;
   place-items: center;
-  width: 3.5rem; /* מטרת מגע נדיבה */
-  height: 3.5rem;
+  /* px ולא rem - כמו כפתור הנגישות בפינה השנייה, כדי ששניהם
+     יישארו באותו גודל גם כשהגולש מגדיל טקסט */
+  width: 56px; /* מטרת מגע נדיבה */
+  height: 56px;
   border-radius: 50%;
   background: #25d366; /* הירוק הרשמי של וואטסאפ */
   color: #fff;
@@ -6355,6 +6356,8 @@ a.footer__contact-link:hover {
    פינוי מהכפתור הצף בסוף העמוד (18.10.26, עודכן 19.10)
    נמדד: הוואטסאפ תופס 80px מתחתית המסך (היו 148 עם כפתור החיוג,
    שהוסר ב-19.10). בלי הריפוד הוא ישב על שורת הזכויות.
+   מ-9.11 כפתור הנגישות יושב בפינה השנייה באותו גובה, ולכן
+   אותו ריפוד מפנה את שניהם.
    ========================================================= */
 @media (max-width: 700px) {
   .footer {
@@ -6537,5 +6540,198 @@ a.footer__contact-link:hover {
   .khot__label {
     width: max-content;
     max-width: min(55vw, 13rem);
+  }
+}
+
+/* =========================================================
+   תפריט נגישות צף (AccessibilityMenu) - בצד שמאל
+   מראה כמו כפתור הוואטסאפ מימין: אותו גודל 56px, אותו מרחק
+   מהקצה, כדי ששתי הפינות ייקראו כזוג. פחם ולא צבע - כחול
+   נגישות "רשמי" היה מתחרה בירוק של הוואטסאפ.
+
+   ⚠️ התפריט עצמו ב-px ולא ב-rem: הגדלת טקסט משנה את ה-rem,
+   והפאנל היה גדל ומזיז את כפתור ה-"א+" מתחת לאצבע באמצע
+   הלחיצות. נמדד בתצוגה - הלחיצה השנייה נחתה על "ניגודיות".
+   ========================================================= */
+.a11y {
+  position: fixed;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 90; /* כמו .fab - מתחת לתפריט המובייל (101) */
+}
+.a11y__toggle {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-header-bg);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  transition: transform 0.3s var(--ease-soft);
+}
+.a11y__toggle svg {
+  width: 28px;
+  height: 28px;
+}
+.a11y__toggle:hover,
+.a11y__toggle:focus-visible {
+  transform: scale(1.04);
+}
+.a11y__toggle:focus-visible,
+.a11y__panel button:focus-visible,
+.a11y__link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* הפאנל נפתח מעל הכפתור. רוחב קבוע ב-px כדי שלא יתכווץ
+   במובייל - ובמסך צר הוא מוגבל לרוחב המסך פחות השוליים. */
+.a11y__panel {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + var(--space-2));
+  width: min(272px, calc(100vw - var(--space-3) * 2));
+  padding: var(--space-3);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+  font-size: 14px;
+}
+.a11y__panel[hidden] {
+  display: none;
+}
+.a11y__title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: var(--space-2);
+}
+.a11y__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space-2);
+}
+.a11y__size span {
+  flex: 1;
+}
+.a11y__size button {
+  min-width: 44px; /* מטרת מגע */
+  height: 44px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-fg);
+  font-weight: 700;
+  cursor: pointer;
+}
+.a11y__size button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.a11y__list {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.a11y__opt {
+  width: 100%;
+  min-height: 44px;
+  padding-inline: 12px;
+  text-align: start;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  cursor: pointer;
+}
+/* מצב פעיל: מסגרת וסימון בזהב הלוגו, לא רק צבע רקע - כדי
+   שגם מי שלא מבחין בצבעים יראה מה דלוק */
+.a11y__opt[aria-pressed="true"] {
+  border-color: var(--color-logo-gold);
+  box-shadow: inset 4px 0 0 var(--color-logo-gold);
+  font-weight: 700;
+}
+.a11y__opt[aria-pressed="true"]::after {
+  content: " ✓";
+}
+.a11y__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+.a11y__reset,
+.a11y__link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+/* ----- ההתאמות עצמן. מחלקות על <html> ----- */
+
+/* כל הפונטים באתר ב-rem, ולכן זה מגדיל את כולם יחד */
+html.a11y-fs-1 {
+  font-size: 112.5%;
+}
+html.a11y-fs-2 {
+  font-size: 125%;
+}
+
+/* ניגודיות: טקסט משני אפור (#767676) הופך לשחור, וגבולות
+   מתחזקים. דרך הטוקנים ולא filter - filter על body שובר את
+   ההדר הקבוע. */
+html.a11y-contrast {
+  --color-fg: #000;
+  --color-muted: #1a1a1a;
+  --color-border: #555;
+}
+html.a11y-contrast img,
+html.a11y-contrast video {
+  filter: contrast(1.15);
+}
+
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 2px !important;
+}
+html.a11y-links a:not(.fab__btn) {
+  outline: 1px dashed currentColor;
+  outline-offset: 2px;
+}
+
+html.a11y-font body,
+html.a11y-font body * {
+  font-family: Arial, "Helvetica Neue", sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+html.a11y-still *,
+html.a11y-still *::before,
+html.a11y-still *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a11y__toggle {
+    transition: none;
+  }
+  .a11y__toggle:hover,
+  .a11y__toggle:focus-visible {
+    transform: none;
   }
 }
