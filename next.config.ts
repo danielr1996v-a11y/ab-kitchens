@@ -25,6 +25,18 @@ const nextConfig: NextConfig = {
     viewTransition: true,
   },
 
+  /* ⚠️ sharp (העלאת תמונות במערכת) ב-Vercel: מעקב הקבצים של Turbopack
+     לא אסף את libvips - נמדד 9.11, ERR_DLOPEN_FAILED על
+     libvips-cpp.so. כאן מצרפים אותו ידנית לנתיב של מערכת הניהול */
+  serverExternalPackages: ["sharp"],
+  outputFileTracingIncludes: {
+    "/api/admin/[...path]": [
+      "./node_modules/sharp/**/*",
+      "./node_modules/@img/sharp-linux-x64/**/*",
+      "./node_modules/@img/sharp-libvips-linux-x64/**/*",
+    ],
+  },
+
   images: {
     /* ⚠️ מייעל התמונות של Vercel מכובה במכוון. לא להחזיר אותו
        בלי לבדוק קודם את מכסת הטרנספורמציות.

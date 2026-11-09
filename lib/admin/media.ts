@@ -1,6 +1,6 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
-import sharp, { type OutputInfo } from "sharp";
+import type { OutputInfo } from "sharp";
 import { db, now } from "./db";
 import { HttpError } from "./session";
 
@@ -40,6 +40,10 @@ export async function uploadImage(file: File): Promise<MediaItem> {
 
   let out: { data: Buffer; info: OutputInfo };
   try {
+    /* ⚠️ טעינה רק כאן ולא בראש הקובץ (9.11): הקובץ נטען בכל בקשה של
+       /api/admin, ו-sharp שלא נטען ב-Vercel הפיל גם את הגדרת הסיסמה
+       והכניסה. עכשיו תקלה ב-sharp פוגעת רק בהעלאת תמונה */
+    const sharp = (await import("sharp")).default;
     out = await sharp(input, { limitInputPixels: 60_000_000 })
       .rotate()
       .resize({ width: MAX_SIDE, height: MAX_SIDE, fit: "inside", withoutEnlargement: true })
