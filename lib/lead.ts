@@ -23,7 +23,7 @@ export type LeadResult =
   | { ok: true }
   | {
       ok: false;
-      error: "invalid" | "not-configured" | "send-failed" | "network";
+      error: "invalid" | "send-failed" | "network";
     };
 
 /** טלפון ישראלי סביר: 9-13 ספרות אחרי ניקוי רווחים ומקפים */

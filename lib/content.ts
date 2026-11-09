@@ -1,3 +1,4 @@
+import { CHANNEL_URL } from "./channel";
 // תוכן אמיתי - מבריף הלקוח (אברהם ביטון, א. בית המטבחים) + מהאתר הקיים ab-kitchens.co.il
 // טקסטים ניתנים לעריכה כאן במקום אחד - אין טקסט חופשי בתוך הקומפוננטות
 
@@ -30,6 +31,13 @@ export const site = {
       label: "אינסטגרם",
       href: "https://www.instagram.com/ab_kitchens.il",
     },
+    /* 19.10: לבקשת הלקוח - יוטיוב בהדר, בפוטר ובתפריט הטלפון.
+       הכתובת מגיעה מעמוד הסרטונים - מקור אחד */
+    {
+      id: "youtube" as const,
+      label: "יוטיוב",
+      href: CHANNEL_URL,
+    },
   ],
 };
 
@@ -44,23 +52,27 @@ export const whatsappHref = `https://wa.me/${site.whatsappNumber}?text=${encodeU
 /**
  * שורת האייקונים בהדר. וואטסאפ ראשון כי הוא ערוץ הפנייה המרכזי,
  * ואחריו הרשתות מתוך site.social - כך שאין שתי רשימות לתחזק.
+ *
+ * ⚠️ יוטיוב רק בפוטר (21.10, דניאל: "כאן אתה יכול להוריד את
+ * היוטיוב, שיהיה רק בפוטר"). חל גם על תפריט המובייל.
  */
 export const headerSocial = [
   { id: "whatsapp" as const, label: "וואטסאפ", href: whatsappHref },
-  ...site.social,
+  ...site.social.filter((s) => s.id !== "youtube"),
 ];
-
 
 /**
  * נתיבים בעברית - זהים לאתר הישן.
  * זו החלטת SEO מכוונת: URL שלא משתנה = אפס אובדן דירוג.
  * אין לשנות נתיב שכבר מאונדקס בגוגל בלי בדיקת השפעה.
  */
+/* 3.11, לבקשת דניאל: התמונות בתפריט = התמונות של כל סגנון בדף הבית
+   ובבאנר העמוד (קלאסי ומודרני - תמונת הנקודות, כפרי - real-rustic-7) */
 export const kitchenTypes = [
   {
     href: "/גלריה/קלאסי",
     label: "מטבח קלאסי",
-    image: "/images/real-classic-5.webp",
+    image: "/images/classic-hotspots.webp",
   },
   {
     href: "/גלריה/מודרני",
@@ -70,7 +82,7 @@ export const kitchenTypes = [
   {
     href: "/גלריה/כפרי",
     label: "מטבח כפרי",
-    image: "/images/style-country.webp",
+    image: "/images/real-rustic-7.webp",
   },
 ];
 
@@ -116,8 +128,10 @@ export const heroSlideshow = {
   transitionSeconds: 2, // משך המעבר בין תמונות
   slides: [
     {
-      image: "/images/hero-modern.webp",
-      alt: "מטבח מודרני עם ארונות עץ אגוז ואי מרכזי - א. בית המטבחים",
+      /* 12.10: hero-modern (המיקסר) הוחלפה לבקשת דניאל. צילום
+         unsplash מהדרייב של הלקוח - לא מופיע בשום מקום אחר בדף הבית */
+      image: "/images/hero-home-dark.webp",
+      alt: "מטבח מודרני כהה עם פינת אוכל ותאורה תלויה - א. בית המטבחים",
     },
     /* ⛔ style-classic.webp הוסרה מכאן (5.10) - דניאל פסל אותה.
        ⚠️ **לא הוחלפה באחרת, ובכוונה.** כל התמונות הרחבות
@@ -130,6 +144,9 @@ export const heroSlideshow = {
     {
       image: "/images/hero-3.webp",
       alt: "מטבח מודרני כהה עם חיפוי זכוכית ואי שיש - א. בית המטבחים",
+      /* פנורמה 2.4:1 - בטלפון נראה רק כשליש מהרוחב. 65% שם במרכז
+         את הברז, שני כיסאות והאי, במקום חלון וכיסא אחד */
+      mobilePosition: "65% center",
     },
     {
       image: "/images/lead-2.webp",
@@ -157,8 +174,10 @@ export const leadBanner = {
   displaySeconds: 3,
   transitionSeconds: 2, // מעבר ארוך במכוון - הצלבה רכה ולא החלפה
   slides: [
-    { image: "/images/style-modern.webp", alt: "מטבח מודרני עם אי שיש מרכזי" },
-    { image: "/images/lead-2.webp", alt: "מטבח לבן עם אי מרכזי ותאורה תלויה" },
+    /* 11.10: צילומים אמיתיים מהדרייב. style-modern ו-lead-2 הופיעו
+       פעמיים באותו עמוד (בגלריה המודרנית ובסליידר של דף הבית) */
+    { image: "/images/lead-real-2.webp", alt: "מטבח לבן עם אי מרכזי אפור" },
+    { image: "/images/lead-real-1.webp", alt: "מטבח עם אי שחור ותאורה תלויה" },
     { image: "/images/lead-3.webp", alt: "מטבח לבן עם חיפוי שיש ומשטח עבודה" },
   ],
   titleBold: "מובילים את תחום המטבחים",
@@ -181,8 +200,11 @@ export const values = {
       // מתוך הבריף: "החברה אינה מתווכת בין הלקוח למפעל. בית המטבחים היא המפעל עצמו."
       description:
         "בית המטבחים **אינה מתווכת** בין הלקוח למפעל - היא **המפעל עצמו**.\nתכנון, ייצור, נגרות, שיש והתקנה מבוצעים **ישירות על ידינו**, ללא תלות בגורמים חיצוניים.",
-      image: "/images/hero-modern.webp",
-      alt: "המפעל של א. בית המטבחים",
+      /* 11.10: hero-modern כבר בסליידר שבראש דף הבית. ⚠️ לא
+         style-standard - זה אותו צילום כמו real-modern-2, עם יריעת
+         הניילון והסולם שבגללם הוא הוצא מדף הבית */
+      image: "/images/real-classic-7.webp",
+      alt: "מטבח בגוון בז׳ עם עמודת תנורים",
       enabled: true,
     },
     {
@@ -191,8 +213,10 @@ export const values = {
       // מתוך הבריף: רשימת המשמעויות עבור הלקוח
       description:
         "אנחנו **מעבד מורשה** של חברות השיש, ולא עובדים דרך מעבדים חיצוניים.\nהמשמעות עבורכם: בקרת איכות מלאה, התאמה מדויקת, גימור מקצועי ו**אחריות על העבודה**.",
-      image: "/images/style-modern.webp",
-      alt: "עיבוד שיש במפעל",
+      /* 11.10: style-modern כבר בכרטיס "מודרני" בדף הבית. צילום
+         אמיתי של אי שיש - אין לנו צילום מהמפעל, וה-alt אומר מה רואים */
+      image: "/images/value-stone.webp",
+      alt: "אי מטבח מחופה שיש בהיר",
       enabled: true,
     },
     {
@@ -211,8 +235,9 @@ export const values = {
       // מתוך הבריף: "כמעט 10 שנות ניסיון", "דור שני בענף", "שירות גם לאחר ההתקנה"
       description:
         "**דור שני** בענף המטבחים, עם **מאות מטבחים** שתוכננו ויוצרו לאורך השנים.\nמלווים אתכם אישית לאורך כל הדרך - **וגם אחרי ההתקנה**.",
-      image: "/images/hero-3.webp",
-      alt: "ליווי אישי לאורך התהליך",
+      /* 11.10: hero-3 כבר בסליידר שבראש דף הבית */
+      image: "/images/real-rustic-7.webp",
+      alt: "מטבח לבן עם חזיתות מסגרת ואי מרכזי",
       enabled: true,
     },
   ],
@@ -296,25 +321,24 @@ export const styleSection = {
       href: "/גלריה/מודרני",
       image: "/images/style-modern.webp",
       alt: "מטבח מודרני בגווני קרם עם אי שיש ותאורה תלויה",
-      size: "wide" as const,
       enabled: true,
     },
     {
       id: "classic",
       title: "קלאסי",
       href: "/גלריה/קלאסי",
-      image: "/images/real-classic-5.webp",
-      alt: "מטבח קלאסי בגוון קרם עם חיפוי שיש ותנורים בנויים",
-      size: "narrow" as const,
+      /* 1.11, לבקשת דניאל: תמונת הנקודות של עמוד הקלאסי */
+      image: "/images/classic-hotspots.webp",
+      alt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
       enabled: true,
     },
     {
       id: "rustic",
       title: "כפרי",
       href: "/גלריה/כפרי",
-      image: "/images/style-rustic.webp",
-      alt: "מטבח כפרי עם ארונות קרם וחיפוי עץ מחורץ",
-      size: "full" as const,
+      /* 1.11, לבקשת דניאל: הצילום מהבאנר של עמוד הכפרי */
+      image: "/images/real-rustic-7.webp",
+      alt: "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
       enabled: true,
     },
   ],
@@ -433,6 +457,26 @@ export const leadCopy = {
   failedWhatsapp: "שליחה בוואטסאפ",
 };
 
+/**
+ * תפריט הנגישות הצף (AccessibilityMenu) - הטקסטים.
+ * הקישור להצהרה משתמש בנתיב העברי הקיים.
+ */
+export const a11yCopy = {
+  open: "תפריט נגישות",
+  title: "נגישות",
+  textSize: "גודל טקסט",
+  smaller: "הקטנת טקסט",
+  larger: "הגדלת טקסט",
+  options: [
+    { id: "contrast", label: "ניגודיות גבוהה" },
+    { id: "links", label: "הדגשת קישורים" },
+    { id: "font", label: "גופן קריא" },
+    { id: "still", label: "עצירת אנימציות" },
+  ],
+  reset: "איפוס הגדרות",
+  statement: { href: "/הצהרת-נגישות", label: "הצהרת נגישות" },
+} as const;
+
 export const leadForm = {
   /* שתי שורות: הראשונה קלה, השנייה מודגשת - היא הקריאה לפעולה */
   titleLight: "לתיאום פגישה עם מעצב/ת ללא עלות",
@@ -515,8 +559,9 @@ export const kitchenProcess: ProcessFlow = {
  * "מודדים רק אחרי שהארונות כבר מותקנים בבית". שני חלקים
  * באותו עמוד סתרו זה את זה. השלב השני כאן מיישב את הסתירה.
  */
-/* ⏸ **ארבעת השלבים בלי תמונה - ממתינים לצילומים מדניאל (7.10).**
-   כל ארבע התמונות (stone-wa-1/2/3/5) הוסרו לבקשתו. */
+/* 12.10: ארבע התמונות (stone-wa-1/3/2/5) חזרו לבקשת דניאל - "מה שכבר
+   היה שם לפני תחזיר". הוסרו ב-7.10 עד לצילומים חדשים, שלא הגיעו.
+   הגלריה והמאמרים נשארו כפי שהיו. */
 export const stoneProcess: ProcessFlow = {
   title: "איך עובד התהליך?",
   steps: [
@@ -524,21 +569,25 @@ export const stoneProcess: ProcessFlow = {
       id: "material",
       title: "בוחרים את החומר",
       text: "באים לראות לוחות אמיתיים, לא תמונה בקטלוג. אותו גוון נראה אחרת לגמרי בגודל מלא ובתאורה של הבית, ולכן שווה לבחור מול הלוח עצמו.",
+      image: "/images/stone-wa-1.webp",
     },
     {
       id: "measure",
       title: "מודדים אחרי שהארונות בפנים",
       text: "לא לפי תוכנית. קירות כמעט אף פעם לא יוצאים ישרים לגמרי, ומדידה על הארונות המותקנים היא מה שמונע פערים בקצוות.",
+      image: "/images/stone-wa-3.webp",
     },
     {
       id: "cut",
       title: "חותכים אצלנו",
       text: "אנחנו מעבד מורשה, והחיתוך והגימור נעשים אצלנו ולא אצל גורם חיצוני. הכיור, הקנטים והחיתוכים לכיריים - הכל לפי מה שסוכם מראש.",
+      image: "/images/stone-wa-2.webp",
     },
     {
       id: "install",
       title: "מתקינים ונשארים זמינים",
       text: "מגיעים, מתקינים ומשלימים את החיבורים. אם משהו צריך תשומת לב אחר כך, מרימים טלפון ואנחנו מגיעים.",
+      image: "/images/stone-wa-5.webp",
     },
   ],
 };
@@ -548,6 +597,14 @@ type KitchenPageContent = {
   heroTitle: string;
   heroImage: string;
   heroAlt: string;
+  /** נקודת המיקוד בטלפון (object-position). ריק = מרכז */
+  heroMobilePosition?: string;
+  /**
+   * באנר גבוה יותר, לפי יחס הצילום, כדי שיראו כמעט את כולו ברוחב מלא
+   * (1.11, דניאל על הקלאסי: "שיראו את כל התמונה", ואחרי זה: "שימתח
+   * לכל האורך" - בלי פסים מטושטשים בצדדים). המספר = רוחב/גובה.
+   */
+  heroRatio?: number;
   /**
    * גוף המאמר, מקובץ לפי כותרת.
    * כל בלוק מרונדר כזוג עמודות - כותרת מימין, תוכן משמאל - כדי
@@ -572,13 +629,20 @@ type KitchenPageContent = {
       image: string;
       alt: string;
       /**
-       * מסגרת גבוהה יותר. ⚠️ לא קישוט: המסגרת הרגילה היא 70vh,
-       * וביחד עם 26% של שכבת הפרלקס נשאר לטרבוקס רדוד. תמונה
-       * שהנקודות בה פרושות מהארונות העליונים עד התחתונים לא
-       * נכנסת בו באף חיתוך - נמדד ששתי נקודות נופלות מחוץ
-       * למסגרת. במקרה כזה מפעילים את זה.
+       * יחס התמונה (רוחב/גובה) כשהמסגרת צריכה לקבל אותו.
+       * ⚠️ לא קישוט: המסגרת הרגילה היא 70vh, וביחד עם 26% של שכבת
+       * הפרלקס נשאר לטרבוקס רדוד. בתמונה שהנקודות בה פרושות לגובה
+       * נקודות נופלות מחוץ למסגרת. עם ratio המסגרת נגזרת מהתמונה
+       * (× 1.26) ו-cover לא חותך כלום - האחוזים מדויקים בכל רוחב.
+       * קלאסי, מודרני וכפרי (21.10).
        */
-      tall?: boolean;
+      ratio?: number;
+      /**
+       * כל התמונה גלויה, בתוך מסך אחד (21.10, דניאל על הכפרי: "להקטין
+       * את התמונה או לעשות משהו, כדי שיראו את כל התמונה - גם במובייל").
+       * מקטין את מרווח הפרלקס מ-26% ל-6% ומגביל את המסגרת לגובה המסך.
+       */
+      whole?: boolean;
       points: Array<{
         x: number;
         y: number;
@@ -601,8 +665,9 @@ type KitchenPageContent = {
 export const kitchenPages: Record<string, KitchenPageContent> = {
   modern: {
     heroTitle: "מטבח מודרני",
-    heroImage: "/images/hero-modern.webp",
-    heroAlt: "מטבח מודרני עם חיפוי אבן טבעית ומשטח שיש",
+    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד (style-modern) */
+    heroImage: "/images/style-modern.webp",
+    heroAlt: "מטבח מודרני עם אי אבן, תאורה תלויה וחזיתות חלקות",
     article: [
       {
         heading: "מטבח מודרני בהתאמה אישית",
@@ -657,6 +722,13 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
       { image: "/images/real-modern-3.webp", alt: "מטבח כהה עם אי שיש בגוון קלקטה וברז זהב" },
       { image: "/images/real-modern-4.webp", alt: "מטבח לבן ועץ עם אי שיש מרכזי" },
       { image: "/images/real-modern-5.webp", alt: "מטבח בגווני קרם ועץ עם אי וגוף תאורה לינארי" },
+      /* 11.10: מהדרייב "3. תמונות מטבחים". real-modern-7 היא אותו
+         מטבח כמו real-modern-1 שנפסלה, בחיתוך אחר ובלי הרגליים.
+         שתי תמונות ה-unsplash הן סטוק - הועלו לבקשת דניאל */
+      { image: "/images/real-modern-6.webp", alt: "מטבח מודרני לבן עם אי אפור וכיסאות בר" },
+      { image: "/images/real-modern-7.webp", alt: "מטבח בגוון שמנת עם חיפוי שיש דרמטי בגב המטבח" },
+      { image: "/images/unsplash-modern-1.webp", alt: "מטבח מודרני פתוח עם אי עץ ופינת אוכל" },
+      { image: "/images/unsplash-modern-2.webp", alt: "מטבח מודרני כהה עם מדף עץ ותאורה נסתרת" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -687,8 +759,10 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
      דניאל אמר שיש לו טקסטים - להחליף כשיגיעו. */
   classic: {
     heroTitle: "מטבח קלאסי",
-    heroImage: "/images/real-classic-5.webp",
-    heroAlt: "מטבח קלאסי לבן עם אי שיש",
+    /* 1.11, לבקשת דניאל: הבאנר הוא תמונת הנקודות של העמוד */
+    heroImage: "/images/classic-hotspots.webp",
+    heroRatio: 1512 / 1160,
+    heroAlt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
     article: [
       {
         heading: "מטבח קלאסי בהתאמה אישית",
@@ -709,28 +783,19 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           "תכנון שמנצל כל פינה בחלל",
         ],
         hotspots: {
-          /* ⚠️ מכויל ל-real-classic-hotspots.webp בלבד. החלפת
-             התמונה מחייבת כיול מחדש של כל ארבע הנקודות.
-
-             מקור: צילום של אברהם, "הערות לאתר" בדרייב. הוא סימן
-             את המיקומים בכחול על עותק נפרד, והמספרים כאן נקראו
-             מהסימונים בקוד ולא נאמדו בעין. הקובץ שבאתר הוא
-             הגרסה הנקייה, בלי הסימונים.
-
-             ⚠️ המקור ריבועי (2048x2048) ו-.khot חותך ב-cover
-             ליחס ~1.81. תמונה ריבועית הייתה מציגה 55% מגובהה
-             בלבד ושתי נקודות היו נחתכות החוצה, ולכן היא נחתכה
-             מראש ל-1600x884 והאחוזים חושבו בתוך החיתוך. */
-          image: "/images/real-classic-hotspots.webp",
-          alt: "מטבח קלאסי בגוון חול עם חזיתות חלקות ומשטח אבן",
-          tall: true,
+          /* ⚠️ מכויל ל-classic-hotspots.webp בלבד (29.10). המטבח עם
+             השיש הכהה (IMG_8874), במקום התמונה הקודמת - לבקשת דניאל.
+             נחתך מראש (1512x2016 → פס y 300-1460) כדי שארבע הנקודות
+             ייכנסו למסגרת לרוחב. המיקומים נקראו בפיקסלים מהעותק
+             שסימן, והתוויות מילה במילה מהסימונים שלו. */
+          image: "/images/classic-hotspots.webp",
+          alt: "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
+          ratio: 1512 / 1160,
           points: [
-            { x: 49.6, y: 20, label: "חזיתות חלקות", pos: "bottom" },
-            { x: 35.3, y: 58.6, label: "משטח עבודה בגוון נעים", pos: "top" },
-            /* "ידיות פשוטות" → "ידיות חיצוניות" לבקשת הלקוח. "פשוטות"
-               נשמע כמו ויתור; "חיצוניות" הוא תיאור של סוג הפרזול. */
-            { x: 63.6, y: 73.4, label: "ידיות חיצוניות", pos: "top" },
-            { x: 42.6, y: 80, label: "חלוקה מסודרת של הארונות", pos: "top" },
+            { x: 43.3, y: 22.8, label: "חזיתות בקו נקי", pos: "bottom" },
+            { x: 87.3, y: 78.2, label: "ידית רוכבת", pos: "top" },
+            { x: 19.8, y: 78.9, label: "משטח שיש מחובר לאי", pos: "top" },
+            { x: 58.7, y: 65.3, label: "כיורים וברזים בגוון תואם", pos: "top" },
           ],
         },
       },
@@ -743,7 +808,13 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     gallery: [
       { image: "/images/real-classic-2.webp", alt: "מטבח קו ארוך בגוון קרם עם משטח בהיר" },
       { image: "/images/real-classic-4.webp", alt: "מטבח קרם עם חיפוי שיש מנומר ואי עם מושבים" },
-      { image: "/images/real-classic-5.webp", alt: "מטבח קרם עם חיפוי אבן אפורה ועמודת תנורים" },
+      /* 11.10: real-classic-5 יצאה מהגלריה - היא כבר ההירו של העמוד.
+         החדשות מהדרייב "3. תמונות מטבחים": חזיתות חלקות בגוונים רכים */
+      { image: "/images/real-classic-6.webp", alt: "מטבח בגוון ירוק מרווה עם בר ישיבה וכיסאות עץ" },
+      { image: "/images/real-classic-7.webp", alt: "מטבח בגוון בז׳ עם עמודת תנורים" },
+      { image: "/images/real-classic-8.webp", alt: "מטבח בגוון בז׳ עם משטח וחיפוי שחורים" },
+      { image: "/images/real-classic-9.webp", alt: "מטבח לבן ארוך עם פינת אוכל ומדפי עץ" },
+      { image: "/images/real-classic-10.webp", alt: "פינת אוכל צמודה למטבח עם מדפי עץ פתוחים" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -786,12 +857,20 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
         ],
       },
     ],
-    galleryTitle: "עבודות שיש שיצאו מאיתנו",
+    galleryTitle: "עבודות שיש",
     /* ⏸ **ממתין לצילומים מדניאל (7.10).** stone-wa-1 עד 5 הוסרו
        לבקשתו - שולחן השיש הכחול עם היד על הכיסא, המטבח עם
        המקרר הלבן והפרקט, ותקריבי הכיור והלד. נשארה אחת. */
     gallery: [
-      { image: "/images/stone-wa-6.webp", alt: "משטח שיש וחיפוי קיר תואם" },
+      /* 11.10: stone-wa-6 יצאה - היא כבר תמונת המאמר על פורצלן שמופיע
+         בעמוד הזה. stone-real-3 הוא תקריב הכיורים, הועלה לבקשת דניאל.
+         19.10: stone-shish יצאה לבקשת הלקוח - ארונות בלי חזיתות, שלב
+         הרכבה. הגלריה מראה רק עבודות גמורות */
+      { image: "/images/stone-real-1.webp", alt: "אי מטבח מחופה שיש בהיר בעיבוד המשכי עד הרצפה" },
+      { image: "/images/stone-real-2.webp", alt: "אי מטבח עם משטח אבן כהה ומעוטר" },
+      { image: "/images/stone-real-3.webp", alt: "כיור כפול שחור עם חיפוי ומשטח אבן כהים" },
+      /* 29.10, לבקשת דניאל (IMG_8872) - בגלריה ולא בבאנר */
+      { image: "/images/stone-real-4.webp", alt: "מטבח לבן ארוך עם משטח וחיפוי שיש בהיר, כיור שטוח וברזים מוזהבים" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -823,8 +902,11 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
   },
   rustic: {
     heroTitle: "מטבח כפרי",
-    heroImage: "/images/style-rustic.webp",
-    heroAlt: "מטבח כפרי עם ארונות קרם וחיפוי עץ",
+    /* 12.10: style-rustic הייתה תקריב (סיר וקומקום) - לא רואים מטבח.
+       real-rustic-7 מראה את כל המטבח: חזיתות מסגרת, אי ותקרת עץ.
+       היא יצאה מהגלריה למטה כדי שלא תופיע פעמיים בעמוד */
+    heroImage: "/images/real-rustic-7.webp",
+    heroAlt: "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
     article: [
       {
         heading: "מטבח כפרי בהתאמה אישית",
@@ -849,25 +931,22 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
           "תאורה רכה שמדגישה את החומרים",
         ],
         hotspots: {
-          /* ⚠️ **מכויל ל-hero-country.webp בלבד (7.10).** הוחלפה
-             מ-style-rustic לבקשת דניאל: "חתוכה צפוף מדי על מחבת
-             וסיר" - תקריב של קומקום וסיר, בלי חלל מטבח.
-
-             ⚠️ הנקודות הן אחוזים מ**השכבה** ולא מהתמונה. התמונה
-             2.41 והשכבה 1.8-2.2 בדסקטופ (נמדד: 1512x794 ב-1512),
-             ולכן cover חותך 4-13% מכל צד. הנקודות הוצבו על
-             מאפיינים גדולים ליד המרכז, ונבדקו ברינדור של החיתוך
-             המדויק ב-1280 וב-2560 - נוחתות על המטרה בשניהם.
-             כיול: x = (px/2000 − 0.104) / 0.7915 , y = px/831 */
-          image: "/images/hero-country.webp",
-          alt: "מטבח כפרי בהיר עם מדפי עץ פתוחים, ארונות שייקר וידיות פליז",
+          /* ⚠️ מכויל ל-rustic-hotspots.webp בלבד (29.10). תקריב הידיות
+             והברזים המוזהבים (IMG_8873), חתוך לפס 16:10 (y 170-1120) -
+             דניאל: "שהתמונה של הכפרי תמתח יותר לרוחב". הקשת של הברז
+             נשארת בפנים; פס רחב יותר חתך אותה. המיקומים נקראו בפיקסלים
+             מהמקור ותורגמו לאחוזי החיתוך.
+             ⚠️ "ידית" על המגירה העליונה האמצעית ו"חריטה" על מסגרת הדלת
+             מימין: הידית והמגירה השמאלית שסומנו נמצאות מתחת לחיתוך. */
+          image: "/images/rustic-hotspots.webp",
+          alt: "חזיתות לבנות בחריטה עם ידיות פליז, ברזים מוזהבים ומשטח וחיפוי שיש בהיר",
+          ratio: 1512 / 950,
+          whole: true,
           points: [
-            /* המדף הפתוח העליון, צמוד לארון הסגור משמאלו */
-            { x: 27.9, y: 34.3, label: "אחסון פתוח וסגור", pos: "bottom" },
-            /* מדף העץ הצף מימין לקולט */
-            { x: 59.8, y: 45, label: "שילוב חומר טבעי - עץ", pos: "bottom" },
-            /* ידית הקערה מפליז על המגירה התחתונה */
-            { x: 33.9, y: 70.8, label: "ידיות בסגנון כפרי", pos: "top" },
+            { x: 70.8, y: 72.3, label: "ידית בסגנון כפרי", pos: "top" },
+            { x: 82, y: 83.2, label: "חריטה כפרית", pos: "top" },
+            { x: 47.5, y: 32, label: "ברז יוקרתי תואם", pos: "bottom" },
+            { x: 17.1, y: 51.6, label: "משטח וחיפוי משיש", pos: "top" },
           ],
         },
       },
@@ -882,9 +961,17 @@ export const kitchenPages: Record<string, KitchenPageContent> = {
     gallery: [
       { image: "/images/real-rustic-1.webp", alt: "מטבח לבן עם חזיתות בחריטה וחלון לגינה" },
       { image: "/images/real-rustic-2.webp", alt: "מטבח לבן עם ברזי פליז ומשטח שיש בהיר" },
-      { image: "/images/real-rustic-3.webp", alt: "מטבח לבן עם תאורה נסתרת ומשטח שיש" },
       { image: "/images/real-rustic-4.webp", alt: "מטבח לבן עם כיריים ומשטח שיש בהיר" },
       { image: "/images/real-rustic-5.webp", alt: "מטבח בגווני עץ ולבן עם משטח שיש ותאורה נסתרת" },
+      /* 11.10: real-rustic-3 יצאה - כמעט זהה ל-real-rustic-2. החדשות
+         מהדרייב "3. תמונות מטבחים": חזיתות מסגרת. real-rustic-6 כאן
+         היא צילום אחר מזה שהוסר ב-7.10 (קיר הלבנים) */
+      { image: "/images/real-rustic-6.webp", alt: "מטבח לבן עם חזיתות מסגרת, אי כהה ומשטח אבן אפור" },
+      { image: "/images/real-rustic-8.webp", alt: "מטבח לבן עם חיפוי שיש שחור ומגירות פתוחות לאחסון" },
+      { image: "/images/real-rustic-9.webp", alt: "מטבח לבן עם חזיתות מסגרת בצורת ר ודלפק בר" },
+      { image: "/images/real-rustic-10.webp", alt: "מטבח לבן עם חזיתות מסגרת, עיטורי עץ כהה ופינת קפה" },
+      { image: "/images/real-rustic-11.webp", alt: "מטבח לבן ארוך עם חזיתות מסגרת וברזים מוזהבים" },
+      { image: "/images/real-rustic-12.webp", alt: "מטבח לבן עם חזיתות מסגרת בצורת ח וכיריים מקצועיות" },
     ],
     faqTitle: "שאלות ותשובות",
     faq: [
@@ -1043,7 +1130,9 @@ export const designersPage = {
    ========================================================= */
 export const designerCta = {
   /* רקע: צילום איכותי + שכבת פחם. הטקסט חייב להיקרא מעליו. */
-  image: "/images/hero-modern.webp",
+  /* 11.10: style-classic ולא hero-modern, שהופיעה פעמיים בדף הבית
+     ובעמוד המודרני. style-classic לא בשימוש בשום מקום אחר */
+  image: "/images/style-classic.webp",
   imageAlt: "",           // דקורטיבי - הטקסט נושא את המשמעות
   eyebrow: "לא בטוחים איך להתחיל?",
   title: "פגישה עם המעצב/ת שלנו, ללא עלות",
@@ -1080,7 +1169,7 @@ export const kitchenKind = {
    "שם.webp" לא תופס אותם - כך זה כמעט נשאר עם ארבע תמונות
    שבורות. בכל הסרה של תמונה - לחפש גם את השם בלי סיומת. */
 const projectFiles = [
-  "real-rustic-3", "real-modern-2", "real-classic-4", "real-rustic-1",
+  "real-modern-2", "real-classic-4", "real-rustic-1",
   "real-modern-3", "real-classic-2", "real-rustic-5", "real-modern-4",
   "real-rustic-2", "real-modern-5", "real-classic-5", "real-rustic-4",
 ];

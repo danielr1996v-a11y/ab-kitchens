@@ -1,8 +1,9 @@
-import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import ArticleCard from "@/components/ArticleCard";
+import GalleryLightbox from "@/components/GalleryLightbox";
 import TestimonialWall from "@/components/TestimonialWall";
-import VideoSlider from "@/components/VideoSlider";
+import ClientVideos from "@/components/ClientVideos";
+import { videosSection } from "@/lib/videos";
 import Testimonials from "@/components/Testimonials";
 import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 import { trustindexWidgetId } from "@/lib/testimonialsPage";
@@ -20,24 +21,11 @@ import { jsonLd } from "@/lib/site/jsonLd";
 
 /* ===== עמודי הסגנון ===== */
 
-/** הגלריה: פרויקטים בסגנון, שהמתג "בגלריית הסגנון" דלוק, בסדר הידני */
+/** הגלריה: פרויקטים בסגנון, שהמתג "בגלריית הסגנון" דלוק, בסדר הידני.
+    19.10: כל תמונה נפתחת בהגדלה (GalleryLightbox) */
 export async function ProjectGallery({ style }: { style: string }) {
   const gallery = (await getProjects()).filter((p) => p.inGallery && p.style === style);
-  return (
-    <ul className="kpage__grid" {...widgetMarker("projectGallery", { style })}>
-      {gallery.map((item) => (
-        <li className="kpage__shot" key={item.src}>
-          <Image
-            src={item.src}
-            alt={item.alt}
-            fill
-            sizes="(max-width: 700px) 90vw, (max-width: 1100px) 45vw, 30vw"
-            className="kpage__shot-img"
-          />
-        </li>
-      ))}
-    </ul>
-  );
+  return <GalleryLightbox items={gallery.map((p) => ({ image: p.src, alt: p.alt }))} />;
 }
 
 /** קוביית המאמרים בעמוד הסגנון. אין מאמרים - אין סקשן */
@@ -124,11 +112,20 @@ export async function TestimonialWallSection() {
   );
 }
 
+/* ⚠️ רשת ולא סליידר (21.10, לבקשת דניאל) - כמו עמוד הסרטונים.
+   שם ה-widget נשאר videoSlider כדי שהעצים במסד לא ישתנו */
 export async function VideoSliderSection() {
   const { client } = await getVideos();
   return (
     <section className="tvideos" aria-labelledby="videos-title" {...widgetMarker("videoSlider")}>
-      <VideoSlider titleId="videos-title" videos={client} />
+      <div className="tvideos__head">
+        <h2 className="tvideos__title" id="videos-title">
+          {videosSection.title}
+        </h2>
+      </div>
+      <div className="tvideos__body">
+        <ClientVideos videos={client} />
+      </div>
     </section>
   );
 }

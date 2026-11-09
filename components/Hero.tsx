@@ -32,6 +32,13 @@ export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
   ${pctHoldEnd.toFixed(3)}% { opacity: 1; }
   ${pctFadeOut.toFixed(3)}% { opacity: 0; transform: scale(1.05); }
   100% { opacity: 0; transform: scale(1.05); }
+}
+@keyframes heroFade {
+  0% { opacity: 0; }
+  ${pctFadeIn.toFixed(3)}% { opacity: 1; }
+  ${pctHoldEnd.toFixed(3)}% { opacity: 1; }
+  ${pctFadeOut.toFixed(3)}% { opacity: 0; }
+  100% { opacity: 0; }
 }`;
 
   return (
@@ -65,6 +72,7 @@ export default function Hero({ slideshow = heroSlideshow }: HeroProps = {}) {
             loading={i === 1 ? "eager" : undefined}
             sizes="100vw"
             className="hero__img"
+            style={"mobilePosition" in slide ? ({ "--hero-mpos": slide.mobilePosition } as React.CSSProperties) : undefined}
           />
         </div>
       ))}

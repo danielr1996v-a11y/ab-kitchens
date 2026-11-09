@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   videoCategories,
   videosPage,
@@ -30,7 +31,20 @@ import { widgetMarker } from "@/lib/site/marker";
  */
 /* ⚠️ שלב 5א: poster מגיע מהמערכת. ריק = סרטון בלי סטילס מקומי,
    והתמונה נמשכת מיוטיוב (כמו סרטון חדש מהפיד עד היום) */
-export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { poster: string })[] }) {
+export default function ChannelVideos({
+  videos,
+  initial = videosPage.initial,
+  moreHref,
+  showCount = true,
+}: {
+  videos: (ChannelVideo & { poster: string })[];
+  /** כמה מוצגים בכל קטגוריה. דף הבית: 4 (21.10, לבקשת דניאל) */
+  initial?: number;
+  /** כשמוגדר, "לכל הסרטונים" הוא קישור לעמוד הסרטונים ולא הרחבה במקום */
+  moreHref?: string;
+  /** המספר ליד שם הלשונית. בדף הבית מוסתר (21.10, לבקשת דניאל) */
+  showCount?: boolean;
+}) {
   const [cat, setCat] = useState<VideoCategory>(videoCategories[0].id);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [openId, setOpenId] = useState<string | null>(null);
@@ -38,7 +52,7 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
 
   const list = videos.filter((v) => v.cat === cat);
   const all = expanded[cat] ?? false;
-  const shown = all ? list : list.slice(0, videosPage.initial);
+  const shown = all ? list : list.slice(0, initial);
 
   const pick = (next: VideoCategory) => {
     setCat(next);
@@ -58,7 +72,7 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
   };
 
   return (
-    <div className="chv" {...widgetMarker("channelVideos")}>
+    <div className="chv" {...widgetMarker("channelVideos", { initial, moreHref, showCount })}>
       <div className="chv__tabs" role="tablist" aria-label={videosPage.title}>
         {videoCategories.map((c, i) => {
           const count = videos.filter((v) => v.cat === c.id).length;
@@ -80,7 +94,7 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
               onKeyDown={(e) => onKey(e, i)}
             >
               {c.label}
-              <span className="chv__count">{count}</span>
+              {showCount && <span className="chv__count">{count}</span>}
             </button>
           );
         })}
@@ -140,7 +154,15 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
           ))}
         </ul>
 
-        {!all && list.length > videosPage.initial && (
+        {moreHref ? (
+          <div className="chv__more">
+            <Link href={moreHref} className="chv__more-btn">
+              {videosPage.showAll}
+            </Link>
+          </div>
+        ) : (
+          !all &&
+          list.length > initial && (
           <div className="chv__more">
             <button
               type="button"
@@ -150,6 +172,7 @@ export default function ChannelVideos({ videos }: { videos: (ChannelVideo & { po
               {videosPage.showAll} ({list.length})
             </button>
           </div>
+          )
         )}
       </div>
     </div>

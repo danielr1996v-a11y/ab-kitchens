@@ -1,12 +1,14 @@
 export type IconId =
   | "facebook"
   | "instagram"
+  | "youtube"
   | "phone"
   | "mail"
   | "whatsapp"
   | "pin"
   | "menu"
   | "close"
+  | "accessibility"
   /* חמישה לערכי עמוד אודות. מצוירים באותו סטנדרט - קו 1.5
      על גריד 24, currentColor - ולא מספרייה חיצונית. */
   | "ruler"
@@ -51,6 +53,16 @@ export default function Icon({ id }: { id: IconId }) {
           <rect x="3" y="3" width="18" height="18" rx="5" strokeWidth="1.5" />
           <circle cx="12" cy="12" r="4" strokeWidth="1.5" />
           <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+        </svg>
+      );
+
+    case "youtube":
+      /* אותו סטנדרט כמו פייסבוק ואינסטגרם: קו 1.5, currentColor.
+         מסגרת מעוגלת ומשולש "נגן" - הצורה שמזהים כיוטיוב */
+      return (
+        <svg {...common}>
+          <rect x="2.5" y="5.5" width="19" height="13" rx="4" strokeWidth="1.5" />
+          <path d="M10.2 9.4v5.2l4.4-2.6z" strokeWidth="1.5" strokeLinejoin="round" />
         </svg>
       );
 
@@ -128,6 +140,21 @@ export default function Icon({ id }: { id: IconId }) {
             d="M6 6l12 12M18 6L6 18"
             strokeWidth="1.5"
             strokeLinecap="round"
+          />
+        </svg>
+      );
+
+    case "accessibility":
+      /* הדמות הבינלאומית של נגישות: ראש, ידיים פרושות ורגליים,
+         באותו קו 1.5 של שאר הספרייה */
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="4.5" r="1.75" strokeWidth="1.5" />
+          <path
+            d="M5 8.5l7 1.5 7-1.5M12 10v4.5M12 14.5l-3 6M12 14.5l3 6"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       );

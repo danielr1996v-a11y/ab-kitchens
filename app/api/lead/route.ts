@@ -1,4 +1,3 @@
-import { site } from "@/lib/content";
 import { isValidPhone, type LeadResult } from "@/lib/lead";
 import { markEmailed, saveLead } from "@/lib/admin/leads";
 import { rateLimit } from "@/lib/admin/session";
@@ -8,19 +7,15 @@ import { getSettings } from "@/lib/admin/settings";
  * POST /api/lead - שומר כל פנייה מהאתר במערכת, ושולח מייל לאברהם.
  *
  * ⚠️ שלב 7: **הפנייה נשמרת קודם.** אם היא נשמרה, הגולש מקבל "נשלח"
- * גם כשהמייל נכשל או שאין מפתח - הפנייה ממתינה במסך "פניות". רק
+ * גם כשהמייל נכשל (למשל לפני הפעלת FormSubmit) - הפנייה ממתינה במסך "פניות". רק
  * כשגם השמירה וגם המייל נכשלו - הגולש מקבל וואטסאפ וטלפון.
  *
- * ⚠️ **השליחה דרך Resend, ובלי מפתח היא לא עובדת.** המפתח
- * (RESEND_API_KEY) הוא סוד שרת - דניאל מזין אותו ב-Vercel
- * ובקובץ .env.local, והוא לא עובר דרך הקוד ולא נכנס לריפו.
- * בלי מפתח הפנייה עדיין נשמרת במערכת. not-configured חוזר רק אם
- * גם השמירה נכשלה - ואז הטופס מציג לגולש וואטסאפ וטלפון.
+ * ⚠️ **השליחה דרך FormSubmit (9.11), לא Resend.** דניאל ביקש את
+ * הדרך הפשוטה ביותר: בלי חשבון, בלי מפתח ובלי רשומות DNS. המחיר:
+ * המייל מגיע מכתובת של FormSubmit, ויש סיכוי גבוה יותר לספאם.
  *
- * ⚠️ **שולח (from):** Resend מאפשר לשלוח מ-onboarding@resend.dev
- * **רק לכתובת של בעל החשבון.** לכן או שהחשבון נפתח עם המייל
- * של אברהם, או שמאמתים את הדומיין ab-kitchens.co.il ומגדירים
- * LEAD_FROM. אחרת Resend ידחה את השליחה.
+ * FormSubmit דוחה בקשה בלי Referer, ולכן מעבירים את הכתובת
+ * של האתר שממנו הגיעה הפנייה.
  */
 const json = (body: LeadResult, status = 200) =>
   Response.json(body, { status });
@@ -69,34 +64,36 @@ export async function POST(request: Request) {
     console.error("[lead] save failed", e);
   }
 
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return storedId ? json({ ok: true }) : json({ ok: false, error: "not-configured" }, 503);
-
-  const text = [
-    `שם: ${name}`,
-    `טלפון: ${phone}`,
-    message ? `\nהודעה:\n${message}` : "",
-    `\nנשלח מ: ${source}`,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  /* היעד: "מייל לפניות" מההגדרות, אחרת מייל העסק */
+  const settings = await getSettings();
+  const to = settings.leadEmail || settings.email;
+  const origin = new URL(request.url).origin;
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
+        Accept: "application/json",
+        Origin: origin,
+        Referer: `${origin}/`,
       },
       body: JSON.stringify({
-        from: process.env.LEAD_FROM ?? `${site.name} <onboarding@resend.dev>`,
-        /* היעד: LEAD_TO בסביבה, אחרת "מייל לפניות" מההגדרות, אחרת מייל העסק */
-        to: [process.env.LEAD_TO ?? ((await getSettings()).leadEmail || (await getSettings()).email)],
-        subject: `פנייה חדשה מהאתר - ${name}`,
-        text,
+        שם: name,
+        טלפון: phone,
+        ...(message && { הודעה: message }),
+        "נשלח מ": source,
+        _subject: `פנייה חדשה מהאתר - ${name}`,
+        _template: "table",
+        _captcha: "false",
       }),
     });
-    if (!res.ok) return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
+    const data = (await res.json().catch(() => null)) as {
+      success?: string | boolean;
+    } | null;
+    if (!res.ok || String(data?.success) !== "true") {
+      return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
+    }
   } catch {
     return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
   }

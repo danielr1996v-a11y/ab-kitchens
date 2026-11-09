@@ -7,8 +7,11 @@ import { site } from "@/lib/content";
  * הגדרות האתר - שלב 7 (המפרט §7, "הגדרות").
  *
  * ברירת המחדל = מה שבקוד (lib/content), כך שהאתר עובד גם לפני
- * שמישהו שמר משהו. ⚠️ hideFromGoogle פעיל כברירת מחדל - עד ההשקה
- * האתר החדש לא נכנס לגוגל (המפרט: "להסתיר מגוגל - ברירת המחדל עד ההשקה").
+ * שמישהו שמר משהו.
+ *
+ * ⚠️ hideFromGoogle כבוי כברירת מחדל מאז ההשקה (9.11.26). עד אז היה
+ * דלוק, לפי המפרט ("להסתיר מגוגל - ברירת המחדל עד ההשקה"). האתר באוויר
+ * ומאונדקס, ומסד חדש בענן לא אמור להעלים אותו מגוגל.
  */
 
 export type SiteSettings = {
@@ -35,7 +38,7 @@ export const defaultSettings: SiteSettings = {
   email: site.email,
   address: site.address,
   whatsapp: site.whatsappNumber,
-  hideFromGoogle: true,
+  hideFromGoogle: false,
   pixelId: "981884166678578",
   leadEmail: "",
 };

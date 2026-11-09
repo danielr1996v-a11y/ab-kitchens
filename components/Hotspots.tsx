@@ -28,25 +28,32 @@ export default function Hotspots({
   image,
   alt,
   points,
-  tall = false,
+  ratio,
+  whole = false,
 }: {
   image: string;
   alt: string;
   points: readonly Point[];
-  /** מסגרת גבוהה יותר - ראה ההערה ב-.khot--tall */
-  tall?: boolean;
+  /** יחס התמונה. המסגרת נגזרת ממנו - ראה ההערה ב-.khot--tall */
+  ratio?: number;
+  /** כל התמונה גלויה בתוך מסך אחד - ראה ההערה ב-.khot--whole */
+  whole?: boolean;
 }) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
-    <figure className={`khot${tall ? " khot--tall" : ""}`} {...widgetMarker("hotspots", { image, alt, points, tall })}>
+    <figure
+      className={`khot${ratio ? " khot--tall" : ""}${whole ? " khot--whole" : ""}`}
+      style={ratio ? ({ "--khot-ratio": ratio } as React.CSSProperties) : undefined}
+      {...widgetMarker("hotspots", { image, alt, points, ratio, whole })}
+    >
       {/* התמונה והנקודות יחד בשכבת הפרלקס, כדי שהנקודות יישארו
           נעולות על הפריטים שהן מסמנות */}
       {/* ⚠️ פרלקס מרוכך במסגרת הגבוהה. ברירת המחדל 0.12 מזיזה
           את השכבה ב-15% מגובה המסגרת, והנקודה העליונה בתמונה
           של המטבח הקלאסי יושבת ב-12% - כלומר בקצה התנודה היא
           יצאה מהמסגרת לגמרי. נמדד -2.8%. */}
-      <ParallaxImage amount={tall ? 0.05 : undefined}>
+      <ParallaxImage amount={whole ? 0.02 : ratio ? 0.05 : undefined}>
         <Image
           src={image}
           alt={alt}

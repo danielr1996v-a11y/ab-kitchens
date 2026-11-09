@@ -72,8 +72,16 @@ function faqFromTree(nodes: SiteNode[]) {
   }));
 }
 
-async function ChannelVideosBlock() {
-  return <ChannelVideos videos={(await getVideos()).channel} />;
+/* דף הבית: 4 מכל סוג, קישור לעמוד הסרטונים ובלי מספר בלשונית (21.10) */
+async function ChannelVideosBlock({ d }: { d: D }) {
+  return (
+    <ChannelVideos
+      videos={(await getVideos()).channel}
+      initial={typeof d.initial === "number" ? d.initial : undefined}
+      moreHref={typeof d.moreHref === "string" ? d.moreHref : undefined}
+      showCount={d.showCount !== false}
+    />
+  );
 }
 
 const registry: Record<string, Renderer> = {
@@ -99,7 +107,7 @@ const registry: Record<string, Renderer> = {
   googleReviews: () => <GoogleReviews />,
   testimonialWall: () => <TestimonialWallSection />,
   videoSlider: () => <VideoSliderSection />,
-  channelVideos: () => <ChannelVideosBlock />,
+  channelVideos: (d) => <ChannelVideosBlock d={d} />,
   projectStrip: () => <ProjectStrip />,
   projectGallery: (d) => <ProjectGallery style={String(d.style)} />,
   relatedArticles: (d) => <RelatedArticles style={String(d.style)} />,

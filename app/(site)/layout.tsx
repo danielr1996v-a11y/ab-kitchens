@@ -4,6 +4,7 @@ import Analytics from "@/components/Analytics";
 import DevInspector from "@/components/DevInspector";
 import SharedPart from "@/components/site/SharedPart";
 import FloatingActions from "@/components/FloatingActions";
+import AccessibilityMenu from "@/components/AccessibilityMenu";
 import SmoothScroll from "@/components/SmoothScroll";
 import Schema from "@/components/Schema";
 
@@ -32,6 +33,7 @@ export default function SiteLayout({
       </ViewTransition>
       <SharedPart kind="footer" />
       <FloatingActions />
+      <AccessibilityMenu />
       <Analytics />
       {/* כלי פנימי - לא מרנדר כלום עד שמפעילים אותו ב-Ctrl+Shift+D */}
       <DevInspector />

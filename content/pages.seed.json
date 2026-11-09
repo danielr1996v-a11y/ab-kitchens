@@ -282,10 +282,22 @@
                    "tag": "span",
                    "children": [
                     {
-                     "id": "nsvra5b",
+                     "id": "n1ipyw0",
                      "type": "text",
                      "props": {
-                      "text": "bk0552775488@gmail.com"
+                      "text": "bk0552775488@"
+                     }
+                    },
+                    {
+                     "id": "nvygxxd",
+                     "type": "container",
+                     "tag": "wbr"
+                    },
+                    {
+                     "id": "nswucuz",
+                     "type": "text",
+                     "props": {
+                      "text": "gmail.com"
                      }
                     }
                    ]
@@ -1030,11 +1042,11 @@
        },
        "props": {
         "attrs": {
-         "alt": "מטבח כפרי עם ארונות קרם וחיפוי עץ",
+         "alt": "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
          "decoding": "async",
          "data-nimg": "fill",
          "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
-         "src": "/images/style-rustic.webp",
+         "src": "/images/real-rustic-7.webp",
          "vt-name": "kitchen-shot-rustic",
          "vt-update": "auto",
          "vt-share": "auto"
@@ -1680,29 +1692,36 @@
            "settings": {
             "widget": "hotspots",
             "data": {
-             "image": "/images/hero-country.webp",
-             "alt": "מטבח כפרי בהיר עם מדפי עץ פתוחים, ארונות שייקר וידיות פליז",
+             "image": "/images/rustic-hotspots.webp",
+             "alt": "חזיתות לבנות בחריטה עם ידיות פליז, ברזים מוזהבים ומשטח וחיפוי שיש בהיר",
              "points": [
               {
-               "x": 27.9,
-               "y": 34.3,
-               "label": "אחסון פתוח וסגור",
+               "x": 70.8,
+               "y": 72.3,
+               "label": "ידית בסגנון כפרי",
+               "pos": "top"
+              },
+              {
+               "x": 82,
+               "y": 83.2,
+               "label": "חריטה כפרית",
+               "pos": "top"
+              },
+              {
+               "x": 47.5,
+               "y": 32,
+               "label": "ברז יוקרתי תואם",
                "pos": "bottom"
               },
               {
-               "x": 59.8,
-               "y": 45,
-               "label": "שילוב חומר טבעי - עץ",
-               "pos": "bottom"
-              },
-              {
-               "x": 33.9,
-               "y": 70.8,
-               "label": "ידיות בסגנון כפרי",
+               "x": 17.1,
+               "y": 51.6,
+               "label": "משטח וחיפוי משיש",
                "pos": "top"
               }
              ],
-             "tall": false
+             "ratio": 1.591578947368421,
+             "whole": true
             }
            }
           },
@@ -2635,11 +2654,11 @@
        },
        "props": {
         "attrs": {
-         "alt": "מטבח מודרני עם חיפוי אבן טבעית ומשטח שיש",
+         "alt": "מטבח מודרני עם אי אבן, תאורה תלויה וחזיתות חלקות",
          "decoding": "async",
          "data-nimg": "fill",
          "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
-         "src": "/images/hero-modern.webp",
+         "src": "/images/style-modern.webp",
          "vt-name": "kitchen-shot-modern",
          "vt-update": "auto",
          "vt-share": "auto"
@@ -3290,8 +3309,7 @@
                "label": "משטחים קו נקי",
                "pos": "top"
               }
-             ],
-             "tall": false
+             ]
             }
            }
           },
@@ -4195,7 +4213,8 @@
      "type": "section",
      "tag": "section",
      "classes": [
-      "kpage__hero"
+      "kpage__hero",
+      "kpage__hero--tall"
      ],
      "children": [
       {
@@ -4210,11 +4229,11 @@
        },
        "props": {
         "attrs": {
-         "alt": "מטבח קלאסי לבן עם אי שיש",
+         "alt": "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
          "decoding": "async",
          "data-nimg": "fill",
          "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
-         "src": "/images/real-classic-5.webp",
+         "src": "/images/classic-hotspots.webp",
          "vt-name": "kitchen-shot-classic",
          "vt-update": "auto",
          "vt-share": "auto"
@@ -4284,7 +4303,12 @@
         }
        ]
       }
-     ]
+     ],
+     "props": {
+      "attrs": {
+       "style": "--hero-ratio:1.303448275862069"
+      }
+     }
     },
     {
      "id": "n2quv5d",
@@ -4860,35 +4884,35 @@
            "settings": {
             "widget": "hotspots",
             "data": {
-             "image": "/images/real-classic-hotspots.webp",
-             "alt": "מטבח קלאסי בגוון חול עם חזיתות חלקות ומשטח אבן",
+             "image": "/images/classic-hotspots.webp",
+             "alt": "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
              "points": [
               {
-               "x": 49.6,
-               "y": 20,
-               "label": "חזיתות חלקות",
+               "x": 43.3,
+               "y": 22.8,
+               "label": "חזיתות בקו נקי",
                "pos": "bottom"
               },
               {
-               "x": 35.3,
-               "y": 58.6,
-               "label": "משטח עבודה בגוון נעים",
+               "x": 87.3,
+               "y": 78.2,
+               "label": "ידית רוכבת",
                "pos": "top"
               },
               {
-               "x": 63.6,
-               "y": 73.4,
-               "label": "ידיות חיצוניות",
+               "x": 19.8,
+               "y": 78.9,
+               "label": "משטח שיש מחובר לאי",
                "pos": "top"
               },
               {
-               "x": 42.6,
-               "y": 80,
-               "label": "חלוקה מסודרת של הארונות",
+               "x": 58.7,
+               "y": 65.3,
+               "label": "כיורים וברזים בגוון תואם",
                "pos": "top"
               }
              ],
-             "tall": true
+             "ratio": 1.303448275862069
             }
            }
           },
@@ -5025,19 +5049,6 @@
        }
       }
      ]
-    },
-    {
-     "id": "n5aupvf",
-     "type": "widget",
-     "settings": {
-      "widget": "placeholder",
-      "data": {
-       "title": "זוויות נוספות",
-       "slots": 3,
-       "note": "ממתין לצילומים מזוויות נוספות - בקשה מהסבב של 17.09",
-       "ratio": "4 / 3"
-      }
-     }
     },
     {
      "id": "n5b0v7n",
@@ -5763,6 +5774,55 @@
       "widget": "googleReviews",
       "data": {}
      }
+    },
+    {
+     "id": "nrq4iyh",
+     "type": "container",
+     "tag": "div",
+     "classes": [
+      "reviews__more",
+      "reviews__more--google"
+     ],
+     "children": [
+      {
+       "id": "n030fn1",
+       "type": "link",
+       "tag": "a",
+       "classes": [
+        "reviews__more-btn"
+       ],
+       "props": {
+        "attrs": {
+         "class": "",
+         "href": "https://www.google.com/maps/search/?api=1&query=%D7%90.%20%D7%91%D7%99%D7%AA%20%D7%94%D7%9E%D7%98%D7%91%D7%97%D7%99%D7%9D%2C%20%D7%91%D7%99%D7%AA%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%202%2C%20%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D",
+         "target": "_blank",
+         "rel": "noopener noreferrer"
+        }
+       },
+       "children": [
+        {
+         "id": "nh1ppzg",
+         "type": "text",
+         "props": {
+          "text": "לכל ההמלצות שלנו בגוגל"
+         }
+        },
+        {
+         "id": "nxkapu5",
+         "type": "icon",
+         "tag": "svg",
+         "props": {
+          "attrs": {
+           "viewBox": "0 0 24 24",
+           "aria-hidden": "true",
+           "fill": "none"
+          },
+          "svg": "<path d=\"M15 6l-6 6 6 6\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>"
+         }
+        }
+       ]
+      }
+     ]
     },
     {
      "id": "nrqvzd5",
@@ -9009,7 +9069,7 @@
          "id": "np82pdn",
          "type": "text",
          "props": {
-          "text": "עבודות שיש שיצאו מאיתנו"
+          "text": "עבודות שיש"
          }
         }
        ]
@@ -9109,6 +9169,25 @@
          ],
          "children": [
           {
+           "id": "n7z6vvb",
+           "type": "image",
+           "tag": "img",
+           "classes": [
+            "kstep__img"
+           ],
+           "props": {
+            "attrs": {
+             "alt": "",
+             "loading": "lazy",
+             "decoding": "async",
+             "data-nimg": "fill",
+             "class": "",
+             "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
+             "src": "/images/stone-wa-1.webp"
+            }
+           }
+          },
+          {
            "id": "npiytaz",
            "type": "container",
            "tag": "div",
@@ -9162,6 +9241,25 @@
           "kstep"
          ],
          "children": [
+          {
+           "id": "np260ng",
+           "type": "image",
+           "tag": "img",
+           "classes": [
+            "kstep__img"
+           ],
+           "props": {
+            "attrs": {
+             "alt": "",
+             "loading": "lazy",
+             "decoding": "async",
+             "data-nimg": "fill",
+             "class": "",
+             "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
+             "src": "/images/stone-wa-3.webp"
+            }
+           }
+          },
           {
            "id": "npoq84x",
            "type": "container",
@@ -9217,6 +9315,25 @@
          ],
          "children": [
           {
+           "id": "n0ne60i",
+           "type": "image",
+           "tag": "img",
+           "classes": [
+            "kstep__img"
+           ],
+           "props": {
+            "attrs": {
+             "alt": "",
+             "loading": "lazy",
+             "decoding": "async",
+             "data-nimg": "fill",
+             "class": "",
+             "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
+             "src": "/images/stone-wa-2.webp"
+            }
+           }
+          },
+          {
            "id": "npu2ih7",
            "type": "container",
            "tag": "div",
@@ -9270,6 +9387,25 @@
           "kstep"
          ],
          "children": [
+          {
+           "id": "n9246c7",
+           "type": "image",
+           "tag": "img",
+           "classes": [
+            "kstep__img"
+           ],
+           "props": {
+            "attrs": {
+             "alt": "",
+             "loading": "lazy",
+             "decoding": "async",
+             "data-nimg": "fill",
+             "class": "",
+             "style": "position:absolute;height:100%;width:100%;left:0;top:0;right:0;bottom:0;color:transparent",
+             "src": "/images/stone-wa-5.webp"
+            }
+           }
+          },
           {
            "id": "nq006zr",
            "type": "container",
@@ -10487,12 +10623,17 @@
         "transitionSeconds": 2,
         "slides": [
          {
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/842df3a78938a315a651c526ce041353ef284adf-2000x831.webp?auto=format",
-          "alt": "מטבח כפרי בגווני קרם עם מדפי עץ ואי שיש - א. בית המטבחים"
+          "image": "/images/hero-home-dark.webp",
+          "alt": "מטבח מודרני כהה עם פינת אוכל ותאורה תלויה - א. בית המטבחים"
          },
          {
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/6d856c5919270c018893f53f4bdee2dc734bb2d0-2000x831.webp?auto=format",
-          "alt": "מטבח מודרני עם ארונות עץ אגוז ואי מרכזי - א. בית המטבחים"
+          "image": "/images/hero-3.webp",
+          "alt": "מטבח מודרני כהה עם חיפוי זכוכית ואי שיש - א. בית המטבחים",
+          "mobilePosition": "65% center"
+         },
+         {
+          "image": "/images/lead-2.webp",
+          "alt": "מטבח לבן עם אי מרכזי ותאורה תלויה - א. בית המטבחים"
          }
         ],
         "scrollIndicator": {
@@ -10548,7 +10689,7 @@
             "attrs": {
              "alt": "א. בית המטבחים",
              "loading": "lazy",
-             "width": "1640",
+             "width": "1936",
              "height": "460",
              "decoding": "async",
              "data-nimg": "1",
@@ -10712,27 +10853,24 @@
           "id": "modern",
           "title": "מודרני",
           "href": "/גלריה/מודרני",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/6b019545ff1056b2c020d2e2ae87a799795b34fe-1400x798.webp?auto=format",
+          "image": "/images/style-modern.webp",
           "alt": "מטבח מודרני בגווני קרם עם אי שיש ותאורה תלויה",
-          "size": "wide",
           "enabled": true
          },
          {
           "id": "classic",
           "title": "קלאסי",
           "href": "/גלריה/קלאסי",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/bc7dded955709b91729ef48c9cca5c494c1ad633-1600x1000.webp?auto=format",
-          "alt": "מטבח קלאסי לבן עם אי שיש ופרטי זהב",
-          "size": "narrow",
+          "image": "/images/classic-hotspots.webp",
+          "alt": "מטבח עם חזיתות מבריקות בגוון חול, משטח וחיפוי שיש כהה וברזים שחורים",
           "enabled": true
          },
          {
           "id": "rustic",
           "title": "כפרי",
           "href": "/גלריה/כפרי",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/c196dffc44f500fc3afb8129a5baa03630736559-1200x684.webp?auto=format",
-          "alt": "מטבח כפרי עם ארונות קרם וחיפוי עץ מחורץ",
-          "size": "full",
+          "image": "/images/real-rustic-7.webp",
+          "alt": "מטבח כפרי לבן עם חזיתות מסגרת, אי מרכזי ותקרת עץ",
           "enabled": true
          }
         ]
@@ -10754,23 +10892,23 @@
           "id": "supplier",
           "title": "אנחנו הספק, לא מתווך",
           "description": "בית המטבחים **אינה מתווכת** בין הלקוח למפעל - היא **המפעל עצמו**.\nתכנון, ייצור, נגרות, שיש והתקנה מבוצעים **ישירות על ידינו**, ללא תלות בגורמים חיצוניים.",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/23432faf572d817c36212be3354aafdd6da53b58-1417x589.webp?auto=format",
-          "alt": "המפעל של א. בית המטבחים",
+          "image": "/images/real-classic-7.webp",
+          "alt": "מטבח בגוון בז׳ עם עמודת תנורים",
           "enabled": true
          },
          {
           "id": "certified",
           "title": "מעבדים מורשים של חברות השיש",
           "description": "אנחנו **מעבד מורשה** של חברות השיש, ולא עובדים דרך מעבדים חיצוניים.\nהמשמעות עבורכם: בקרת איכות מלאה, התאמה מדויקת, גימור מקצועי ו**אחריות על העבודה**.",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/6b019545ff1056b2c020d2e2ae87a799795b34fe-1400x798.webp?auto=format",
-          "alt": "עיבוד שיש במפעל",
+          "image": "/images/value-stone.webp",
+          "alt": "אי מטבח מחופה שיש בהיר",
           "enabled": true
          },
          {
           "id": "one-roof",
           "title": "הכל תחת קורת גג אחת",
           "description": "מטבח, שיש, פרזול, נגרות, עיצוב והתקנה - **במקום אחד**.\nבמקום לעבוד מול מספר בעלי מקצוע, אתם מקבלים את כל השירות **מגורם אחד**.",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/1ffec11b45c9bd7517c2f0674f90c41ad48e9191-600x600.webp?auto=format",
+          "image": "/images/style-country.webp",
           "alt": "מטבח שלם מתוצרת א. בית המטבחים",
           "enabled": true
          },
@@ -10778,8 +10916,8 @@
           "id": "second-gen",
           "title": "דור שני, ליווי אישי",
           "description": "**דור שני** בענף המטבחים, עם **מאות מטבחים** שתוכננו ויוצרו לאורך השנים.\nמלווים אתכם אישית לאורך כל הדרך - **וגם אחרי ההתקנה**.",
-          "image": "https://cdn.sanity.io/images/wn7wudix/production/cce3bfa0ed533dc83348ce9b3dd89b8e3c76379d-1800x748.webp?auto=format",
-          "alt": "ליווי אישי לאורך התהליך",
+          "image": "/images/real-rustic-7.webp",
+          "alt": "מטבח לבן עם חזיתות מסגרת ואי מרכזי",
           "enabled": true
          }
         ]
@@ -10802,27 +10940,27 @@
           "direction": "rtl",
           "logos": [
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/dc256e8bf77538d7c57923f98d1955dac29a1614-360x128.webp?auto=format",
+            "src": "/logos/avrabuch.webp",
             "name": "אברבוך"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/25312ef46078a08bf886d4596115d0cd0e23b408-360x128.webp?auto=format",
+            "src": "/logos/domicile.webp",
             "name": "דומיסיל"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/33c03309b9192aeb296241bfdc3d1cb12f4edec3-360x128.webp?auto=format",
+            "src": "/logos/orard.webp",
             "name": "אורארד"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/5c76a5373879c5021d0e05e019283bdc0624dc6b-360x128.webp?auto=format",
+            "src": "/logos/formix.webp",
             "name": "פורמיקס"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/219648144aa3e5acfcbe0462bcc44b5614d70670-360x128.webp?auto=format",
+            "src": "/logos/nilson.webp",
             "name": "נילסון"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/79bab377f1dd65b99b0f1c1601893b6bae49a1ac-360x128.webp?auto=format",
+            "src": "/logos/birman.webp",
             "name": "בירמן"
            }
           ]
@@ -10833,31 +10971,31 @@
           "direction": "ltr",
           "logos": [
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/2d406d1c60acb0df3f37f53d7c8378cc61edfd49-360x128.webp?auto=format",
+            "src": "/logos/caesarstone.webp",
             "name": "אבן קיסר"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/8b7da297c2cff81aaa7b81cd3c5165b7a1b1c3a4-360x128.webp?auto=format",
+            "src": "/logos/novo.webp",
             "name": "נובו"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/4d20abb14aac15bfe567e19f255216795ed8c4e3-360x128.webp?auto=format",
+            "src": "/logos/flurim.webp",
             "name": "פלורים"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/8160fecd60428ad10d42f00d8417c298bca4c4c8-360x128.webp?auto=format",
+            "src": "/logos/grandmassimo.webp",
             "name": "גראנד מסימו"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/779a940af7c29208883f1e1bbe24053d68fee9f5-360x128.webp?auto=format",
+            "src": "/logos/lumixstone.webp",
             "name": "לומיקס סטון"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/4aba6c4bf954356baa7fc584031bcc702cec985c-360x128.webp?auto=format",
+            "src": "/logos/polostone.webp",
             "name": "פולוסטון"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/4a8f0e4769b1736794b657d15d3dbe972848c438-360x128.webp?auto=format",
+            "src": "/logos/anova.webp",
             "name": "אנובה"
            }
           ]
@@ -10868,35 +11006,35 @@
           "direction": "rtl",
           "logos": [
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/1b68ec2a634763126e1207aac31170168f349167-360x128.webp?auto=format",
+            "src": "/logos/blum.webp",
             "name": "בלום"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/77370dc16ac5b71c7727bff9e23ee1bff3f91eec-360x128.webp?auto=format",
+            "src": "/logos/atish.webp",
             "name": "אטיש"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/0056b2acde9b1f031da22ff67d326969e7a09728-360x128.webp?auto=format",
+            "src": "/logos/aquatop.webp",
             "name": "אקווטופ"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/a8e9222c81e7cd1489c6b6807e69b1766b326f81-360x128.webp?auto=format",
+            "src": "/logos/blanco.webp",
             "name": "בלאנקו"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/e45b4a899cb95c306de67648cd64cb0d2ce908ef-360x128.webp?auto=format",
+            "src": "/logos/niga.webp",
             "name": "ניגא"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/bac137c2221ebd2db723e23fbc87cef86e18f606-360x128.webp?auto=format",
+            "src": "/logos/carlos.webp",
             "name": "קארלוס"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/4c12fd987f0a1d30c20582e1714196a22ba474bc-360x128.webp?auto=format",
+            "src": "/logos/shoni.webp",
             "name": "שוני"
            },
            {
-            "src": "https://cdn.sanity.io/images/wn7wudix/production/5946cb724d00358f9cee701e36fca4f481b7ea83-360x128.webp?auto=format",
+            "src": "/logos/dtc.webp",
             "name": "DTC"
            }
           ]
@@ -10929,6 +11067,77 @@
      }
     },
     {
+     "id": "nybn9ic",
+     "type": "section",
+     "tag": "section",
+     "classes": [
+      "hvideos"
+     ],
+     "props": {
+      "attrs": {
+       "class": "",
+       "aria-labelledby": "hvideos-title"
+      }
+     },
+     "children": [
+      {
+       "id": "nawfp15",
+       "type": "container",
+       "tag": "div",
+       "classes": [
+        "tvideos__head"
+       ],
+       "children": [
+        {
+         "id": "ne1tyrn",
+         "type": "heading",
+         "tag": "h2",
+         "classes": [
+          "tvideos__title"
+         ],
+         "props": {
+          "attrs": {
+           "class": "",
+           "id": "hvideos-title"
+          }
+         },
+         "children": [
+          {
+           "id": "ngro4b2",
+           "type": "text",
+           "props": {
+            "text": "סרטונים"
+           }
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "nszrkgv",
+       "type": "container",
+       "tag": "div",
+       "classes": [
+        "tvideos__body"
+       ],
+       "children": [
+        {
+         "id": "njp839h",
+         "type": "widget",
+         "settings": {
+          "widget": "channelVideos",
+          "data": {
+           "initial": 4,
+           "moreHref": "/סרטונים",
+           "showCount": false
+          }
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
      "id": "nrjb27",
      "type": "widget",
      "settings": {
@@ -10955,7 +11164,7 @@
       "widget": "designerCta",
       "data": {
        "content": {
-        "image": "/images/hero-modern.webp",
+        "image": "/images/style-classic.webp",
         "imageAlt": "",
         "eyebrow": "לא בטוחים איך להתחיל?",
         "title": "פגישה עם המעצב/ת שלנו, ללא עלות",
@@ -11032,7 +11241,7 @@
               "attrs": {
                "alt": "א. בית המטבחים",
                "loading": "lazy",
-               "width": "1640",
+               "width": "1936",
                "height": "460",
                "decoding": "async",
                "data-nimg": "1",
@@ -11166,6 +11375,46 @@
                    "aria-hidden": "true"
                   },
                   "svg": "<rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\" stroke-width=\"1.5\"></rect><circle cx=\"12\" cy=\"12\" r=\"4\" stroke-width=\"1.5\"></circle><circle cx=\"17.2\" cy=\"6.8\" r=\"1\" fill=\"currentColor\" stroke=\"none\"></circle>"
+                 }
+                }
+               ]
+              }
+             ]
+            },
+            {
+             "id": "n33mdlv",
+             "type": "text",
+             "tag": "li",
+             "children": [
+              {
+               "id": "nl27lyh",
+               "type": "link",
+               "tag": "a",
+               "classes": [
+                "footer__social-link"
+               ],
+               "props": {
+                "attrs": {
+                 "href": "https://www.youtube.com/@א.ביתהמטבחים",
+                 "class": "",
+                 "aria-label": "יוטיוב",
+                 "target": "_blank",
+                 "rel": "noopener noreferrer"
+                }
+               },
+               "children": [
+                {
+                 "id": "n860ukp",
+                 "type": "icon",
+                 "tag": "svg",
+                 "props": {
+                  "attrs": {
+                   "viewBox": "0 0 24 24",
+                   "fill": "none",
+                   "stroke": "currentColor",
+                   "aria-hidden": "true"
+                  },
+                  "svg": "<rect x=\"2.5\" y=\"5.5\" width=\"19\" height=\"13\" rx=\"4\" stroke-width=\"1.5\"></rect><path d=\"M10.2 9.4v5.2l4.4-2.6z\" stroke-width=\"1.5\" stroke-linejoin=\"round\"></path>"
                  }
                 }
                ]
@@ -11760,7 +12009,8 @@
          "type": "container",
          "tag": "div",
          "classes": [
-          "footer__col"
+          "footer__col",
+          "footer__col--contact"
          ],
          "children": [
           {
@@ -11878,10 +12128,22 @@
                  "tag": "span",
                  "children": [
                   {
-                   "id": "n2hzsk3",
+                   "id": "nw1flq7",
                    "type": "text",
                    "props": {
-                    "text": "bk0552775488@gmail.com"
+                    "text": "bk0552775488@"
+                   }
+                  },
+                  {
+                   "id": "nm9uaf0",
+                   "type": "container",
+                   "tag": "wbr"
+                  },
+                  {
+                   "id": "nvtz39h",
+                   "type": "text",
+                   "props": {
+                    "text": "gmail.com"
                    }
                   }
                  ]
@@ -12023,7 +12285,7 @@
            {
             "href": "/גלריה/קלאסי",
             "label": "מטבח קלאסי",
-            "image": "/images/real-classic-5.webp"
+            "image": "/images/classic-hotspots.webp"
            },
            {
             "href": "/גלריה/מודרני",
@@ -12033,7 +12295,7 @@
            {
             "href": "/גלריה/כפרי",
             "label": "מטבח כפרי",
-            "image": "/images/style-country.webp"
+            "image": "/images/real-rustic-7.webp"
            }
           ]
          },
@@ -12110,12 +12372,12 @@
         "transitionSeconds": 2,
         "slides": [
          {
-          "image": "/images/style-modern.webp",
-          "alt": "מטבח מודרני עם אי שיש מרכזי"
+          "image": "/images/lead-real-2.webp",
+          "alt": "מטבח לבן עם אי מרכזי אפור"
          },
          {
-          "image": "/images/lead-2.webp",
-          "alt": "מטבח לבן עם אי מרכזי ותאורה תלויה"
+          "image": "/images/lead-real-1.webp",
+          "alt": "מטבח עם אי שחור ותאורה תלויה"
          },
          {
           "image": "/images/lead-3.webp",

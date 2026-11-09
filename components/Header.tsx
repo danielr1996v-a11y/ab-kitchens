@@ -94,17 +94,19 @@ export default function Header({ menu = defaultHeaderMenu }: { menu?: HeaderMenu
     <header className={`header container-full${isScrolled ? " header--scrolled" : ""}`}>
       <div className="header__bar">
         <Link href="/" className="header__logo" aria-label="א. בית המטבחים - דף הבית">
-          {/* sizes חובה כאן: הקובץ הוא 1640 רוחב, ובלי sizes
-              Next מייצר srcset של 1x/2x בלבד - וה-2x (3280) נופל
+          {/* sizes חובה כאן: הקובץ הוא 1936 רוחב, ובלי sizes
+              Next מייצר srcset של 1x/2x בלבד - וה-2x (3872) נופל
               לדלי 3840. כלומר הדפדפן הוריד לוגו ברוחב 3840 כדי
               להציג אותו ב-185px. עם sizes נוצר srcset מלא והדפדפן
               בוחר מועמד קטן. */}
           <Image
             src="/logo-dark.png"
             alt="א. בית המטבחים"
-            width={1640}
+            width={1936}
             height={460}
-            sizes="(max-width: 700px) 190px, 230px"
+            /* 21.10: הלוגו הוקטן ל-50% מגובה ההדר - כ-152px. ⚠️ לעדכן
+               יחד עם height ב-.header__logo */
+            sizes="160px"
             priority
             className="header__logo-img"
           />
@@ -211,7 +213,7 @@ export default function Header({ menu = defaultHeaderMenu }: { menu?: HeaderMenu
               <Image
                 src="/logo.png"
                 alt={site.name}
-                width={1640}
+                width={1936}
                 height={460}
                 sizes="160px"
                 className="mnav__logo-img"

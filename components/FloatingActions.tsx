@@ -2,13 +2,14 @@ import { getSettings } from "@/lib/admin/settings";
 import Icon from "./Icon";
 
 /**
- * שני כפתורי פעולה צפים בצד שמאל - חיוג ווואטסאפ.
+ * כפתור צף אחד בצד ימין - וואטסאפ.
  *
- * החליף את WhatsAppButton שהיה בצד ימין. שני כפתורי וואטסאפ
- * באתר אחד הם באג, ולכן הימני הוסר ולא נשאר במקביל.
+ * ⚠️ 19.10: כפתור החיוג הוסר לבקשת הלקוח - שני עיגולים ירוקים
+ * יצרו עומס והסתירו טקסט. חיוג נשאר בהדר ("לחיוג מהיר") ובפוטר.
  *
- * שמאל ולא ימין: בעברית הטקסט זורם ימינה, וכפתור צף בימין
- * נופל בדיוק על סוף השורות. משמאל הוא לא מתחרה בקריאה.
+ * ⚠️ 9.11: עבר משמאל לימין לבקשת דניאל, כדי לפנות את השמאל
+ * לתפריט הנגישות (AccessibilityMenu). שני העיגולים באותה פינה
+ * היו נערמים זה על זה.
  */
 /* שלב 7: הטלפון והוואטסאפ מההגדרות במערכת */
 export default async function FloatingActions() {
@@ -16,14 +17,6 @@ export default async function FloatingActions() {
   const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`שלום, אשמח לקבל פרטים על מטבח מ${site.name}`)}`;
   return (
     <div className="fab">
-      <a
-        href={`tel:${site.phone1.replace(/-/g, "")}`}
-        className="fab__btn"
-        aria-label={`חיוג ל${site.phone1}`}
-      >
-        <Icon id="phone" />
-      </a>
-
       <a
         href={whatsappHref}
         target="_blank"
