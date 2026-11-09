@@ -1,24 +1,34 @@
-import { isValidPhone, type LeadResult } from "@/lib/lead";
+import { isValidPhone, type LeadSaved } from "@/lib/lead";
+import { site } from "@/lib/content";
 import { markEmailed, saveLead } from "@/lib/admin/leads";
 import { rateLimit } from "@/lib/admin/session";
 import { getSettings } from "@/lib/admin/settings";
 
 /**
- * POST /api/lead - שומר כל פנייה מהאתר במערכת, ושולח מייל לאברהם.
+ * POST /api/lead - שומר כל פנייה מהאתר במערכת (מסך "פניות").
+ *
+ * ⚠️ **המייל לא נשלח מכאן (9.11).** FormSubmit לא מקבל בקשות מהשרת
+ * של Vercel - באתר החי כל פנייה החזירה send-failed. הדפדפן שולח את
+ * המייל בעצמו (lib/lead.ts), והנתיב הזה רק:
+ *   1. שומר את הפנייה ומחזיר לאן לשלוח את המייל (מההגדרות במערכת)
+ *   2. מסמן "נשלח במייל" כשהדפדפן מדווח שהמייל עבר ({ emailed: id })
  *
  * ⚠️ שלב 7: **הפנייה נשמרת קודם.** אם היא נשמרה, הגולש מקבל "נשלח"
- * גם כשהמייל נכשל (למשל לפני הפעלת FormSubmit) - הפנייה ממתינה במסך "פניות". רק
- * כשגם השמירה וגם המייל נכשלו - הגולש מקבל וואטסאפ וטלפון.
- *
- * ⚠️ **השליחה דרך FormSubmit (9.11), לא Resend.** דניאל ביקש את
- * הדרך הפשוטה ביותר: בלי חשבון, בלי מפתח ובלי רשומות DNS. המחיר:
- * המייל מגיע מכתובת של FormSubmit, ויש סיכוי גבוה יותר לספאם.
- *
- * FormSubmit דוחה בקשה בלי Referer, ולכן מעבירים את הכתובת
- * של האתר שממנו הגיעה הפנייה.
+ * גם כשהמייל נכשל - הפנייה ממתינה במסך "פניות". רק כשגם השמירה וגם
+ * המייל נכשלו - הגולש מקבל וואטסאפ וטלפון.
  */
-const json = (body: LeadResult, status = 200) =>
+const json = (body: LeadSaved, status = 200) =>
   Response.json(body, { status });
+
+/** "מייל לפניות" מההגדרות, אחרת מייל העסק. מסד לא זמין - מהקוד */
+async function leadEmail() {
+  try {
+    const s = await getSettings();
+    return s.leadEmail || s.email;
+  } catch {
+    return site.email;
+  }
+}
 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
@@ -28,9 +38,16 @@ export async function POST(request: Request) {
     return json({ ok: false, error: "invalid" }, 400);
   }
 
+  /* דיווח מהדפדפן שהמייל עבר. מזהה הוא UUID אקראי - אי אפשר לנחש
+     פנייה של מישהו אחר, והסימון לא חושף ולא משנה שום תוכן */
+  if (typeof body.emailed === "string") {
+    await markEmailed(body.emailed.slice(0, 64)).catch(() => {});
+    return json({ ok: true, id: null, to: "" });
+  }
+
   /* מלכודת לבוטים: שדה חבוי שאדם לא רואה ולא ממלא. בוט שמילא
      אותו מקבל "הצלחה" - כך הוא לא לומד לעקוף. */
-  if (String(body.company ?? "").trim()) return json({ ok: true });
+  if (String(body.company ?? "").trim()) return json({ ok: true, id: null, to: "" });
 
   const name = String(body.name ?? "")
     .trim()
@@ -57,47 +74,12 @@ export async function POST(request: Request) {
     /* מסד לא זמין - לא חוסמים פנייה בגלל זה */
   }
 
-  let storedId: string | null = null;
+  let id: string | null = null;
   try {
-    storedId = await saveLead({ name, phone, message, source });
+    id = await saveLead({ name, phone, message, source });
   } catch (e) {
     console.error("[lead] save failed", e);
   }
 
-  /* היעד: "מייל לפניות" מההגדרות, אחרת מייל העסק */
-  const settings = await getSettings();
-  const to = settings.leadEmail || settings.email;
-  const origin = new URL(request.url).origin;
-
-  try {
-    const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Origin: origin,
-        Referer: `${origin}/`,
-      },
-      body: JSON.stringify({
-        שם: name,
-        טלפון: phone,
-        ...(message && { הודעה: message }),
-        "נשלח מ": source,
-        _subject: `פנייה חדשה מהאתר - ${name}`,
-        _template: "table",
-        _captcha: "false",
-      }),
-    });
-    const data = (await res.json().catch(() => null)) as {
-      success?: string | boolean;
-    } | null;
-    if (!res.ok || String(data?.success) !== "true") {
-      return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
-    }
-  } catch {
-    return storedId ? json({ ok: true }) : json({ ok: false, error: "send-failed" }, 502);
-  }
-
-  if (storedId) await markEmailed(storedId).catch(() => {});
-  return json({ ok: true });
+  return json({ ok: true, id, to: await leadEmail() });
 }
