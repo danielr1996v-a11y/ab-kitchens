@@ -6,7 +6,7 @@
  * ⚠️ לא מקבל סיסמה. מדפיס קישור חד-פעמי, ובו בוחרים סיסמה בדפדפן -
  * כך סיסמה לא עוברת בטרמינל, בהיסטוריה של המעטפת או בצ'אט.
  * רץ מול המסד ש-TURSO_DATABASE_URL מצביע עליו, ובלעדיו מול הקובץ
- * המקומי. אם כבר יש מנהל פעיל - נעצר, כדי שלא יהיה דלת אחורית.
+ * המקומי. אם כבר יש מנהל פעיל עם סיסמה - נעצר, כדי שלא יהיה דלת אחורית.
  */
 import { createClient } from "@libsql/client";
 import { createHash, randomBytes } from "node:crypto";
@@ -31,7 +31,9 @@ await db.execute(`CREATE TABLE IF NOT EXISTS users (
   active INTEGER NOT NULL DEFAULT 1, password_hash TEXT, setup_token TEXT,
   setup_expires TEXT, created_at TEXT NOT NULL)`);
 
-const admins = await db.execute("SELECT email FROM users WHERE role = 'admin' AND active = 1");
+/* מנהל שעוד לא בחר סיסמה לא נחשב - כך אפשר להנפיק לו קישור חדש
+   כשהראשון פג או נתקע (9.11: הגדרת הסיסמה נפלה בתקלת שרת) */
+const admins = await db.execute("SELECT email FROM users WHERE role = 'admin' AND active = 1 AND password_hash IS NOT NULL");
 if (admins.rows.length) {
   console.error(`כבר יש מנהל פעיל (${admins.rows[0].email}). משתמשים נוספים - ממסך המשתמשים.`);
   process.exit(1);
