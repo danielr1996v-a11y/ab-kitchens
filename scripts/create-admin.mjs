@@ -6,7 +6,8 @@
  * ⚠️ לא מקבל סיסמה. מדפיס קישור חד-פעמי, ובו בוחרים סיסמה בדפדפן -
  * כך סיסמה לא עוברת בטרמינל, בהיסטוריה של המעטפת או בצ'אט.
  * רץ מול המסד ש-TURSO_DATABASE_URL מצביע עליו, ובלעדיו מול הקובץ
- * המקומי. אם כבר יש מנהל פעיל עם סיסמה - נעצר, כדי שלא יהיה דלת אחורית.
+ * המקומי. אם כבר יש מנהל פעיל אחר עם סיסמה - נעצר, כדי שלא יהיה דלת
+ * אחורית. לאותו מייל - מנפיק קישור איפוס (מנהל ששכח סיסמה).
  */
 import { createClient } from "@libsql/client";
 import { createHash, randomBytes } from "node:crypto";
@@ -32,8 +33,13 @@ await db.execute(`CREATE TABLE IF NOT EXISTS users (
   setup_expires TEXT, created_at TEXT NOT NULL)`);
 
 /* מנהל שעוד לא בחר סיסמה לא נחשב - כך אפשר להנפיק לו קישור חדש
-   כשהראשון פג או נתקע (9.11: הגדרת הסיסמה נפלה בתקלת שרת) */
-const admins = await db.execute("SELECT email FROM users WHERE role = 'admin' AND active = 1 AND password_hash IS NOT NULL");
+   כשהראשון פג או נתקע (9.11: הגדרת הסיסמה נפלה בתקלת שרת).
+   וגם לא אותו מייל: מנהל יחיד ששכח סיסמה (16.11) מקבל כאן קישור
+   איפוס. זו לא דלת אחורית - מי שמריץ את זה מחזיק כבר את מפתחות המסד */
+const admins = await db.execute({
+  sql: "SELECT email FROM users WHERE role = 'admin' AND active = 1 AND password_hash IS NOT NULL AND email != ?",
+  args: [email.trim().toLowerCase()],
+});
 if (admins.rows.length) {
   console.error(`כבר יש מנהל פעיל (${admins.rows[0].email}). משתמשים נוספים - ממסך המשתמשים.`);
   process.exit(1);
