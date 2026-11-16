@@ -12,7 +12,13 @@ import { createClient, type Client } from "@libsql/client";
  * אליו מהמחשב הזה.
  */
 
-const url = process.env.TURSO_DATABASE_URL || "file:.data/admin.db";
+/* ⚠️ AB_DATABASE_* לפני TURSO_* (16.11). החיבור של Turso ב-Vercel מחליף
+   את TURSO_DATABASE_URL בכל פריסה בעותק חדש של המסד (ענף): נמדד -
+   פנייה שהאתר החי שמר לא הגיעה למסד הראשי, וקישור כניסה שנוצר במסד
+   הראשי לא נמצא באתר. כל פריסה איפסה סיסמאות, פניות ועריכות.
+   AB_DATABASE_* מוגדרים ידנית למסד הראשי, ו-Vercel לא נוגע בהם. */
+const url = process.env.AB_DATABASE_URL || process.env.TURSO_DATABASE_URL || "file:.data/admin.db";
+const authToken = process.env.AB_DATABASE_TOKEN || process.env.TURSO_AUTH_TOKEN;
 
 let client: Client | null = null;
 let ready: Promise<void> | null = null;
@@ -100,7 +106,7 @@ export async function db(): Promise<Client> {
       const { mkdirSync } = await import("node:fs");
       mkdirSync(".data", { recursive: true });
     }
-    client = createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN });
+    client = createClient({ url, authToken });
     ready = migrate(client);
   }
   await ready;
