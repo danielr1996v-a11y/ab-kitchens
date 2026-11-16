@@ -27,7 +27,7 @@ import { deleteLead, leadStats, listLeads, toCsv, updateLead } from "@/lib/admin
 import { getSettings, saveSettings, SETTINGS_TAG } from "@/lib/admin/settings";
 import { revalidateTag } from "next/cache";
 import { defaultHeaderMenu, designerCta, leadBanner } from "@/lib/content";
-import { revalidateEntry, revalidateType } from "@/lib/site/revalidate";
+import { revalidateEntry, revalidateSite, revalidateType } from "@/lib/site/revalidate";
 import {
   checkLogin,
   completeSetup,
@@ -334,6 +334,7 @@ async function handle(req: Request, ctx: Ctx) {
       const settings = await saveSettings(await readBody(req));
       /* ההגדרות נוגעות בכל עמוד (שם, גוגל, פיקסל, טלפון) */
       revalidateTag(SETTINGS_TAG, { expire: 0 });
+      revalidateSite();
       return json({ settings });
     }
   }
